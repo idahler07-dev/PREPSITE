@@ -338,6 +338,7 @@
       "timeUp": "Vaqt tugadi. Javoblaringiz yuborildi."
     },
     "markForReview": "Keyinroq qaytish",
+    "questionId": "ID {code}",
     "marked": "Belgilangan",
     "eliminator": "Variantlarni chizib tashlash",
     "eliminatorOn": "Chizib tashlash yoqilgan",

@@ -48,6 +48,7 @@ describe("content flags", () => {
   it("does not flag math that only names a graph", () => {
     expect(computeContentFlags({ type: "SPR", stem: "The graph of the linear function $f$ passes through $(2, 5)$. What is $f(0)$?", correctAnswers: ["1"] })).toEqual([]);
     expect(computeContentFlags({ type: "SPR", stem: "The scatterplot below shows data.", correctAnswers: ["1"] })).toContain("MISSING_FIGURE");
+    expect(computeContentFlags({ type: "MCQ", stem: "A figure skater must leap into the air.", choices: ["A", "B", "C", "D"].map((key) => ({ key, text: key })), correctAnswers: ["A"] })).not.toContain("MISSING_FIGURE");
   });
 
   it("keeps process flags when content flags are recomputed", () => {

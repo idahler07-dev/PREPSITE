@@ -345,6 +345,7 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
               <div className={cn("mx-auto space-y-5", item.passageHtml ? "max-w-2xl" : "max-w-3xl")}>
                 <div className="flex flex-wrap items-center gap-2 border-b pb-3">
                   <span className="flex h-8 min-w-8 items-center justify-center rounded bg-foreground px-2 text-sm font-bold text-background">{index + 1}</span>
+                  <span className="font-mono text-xs text-muted-foreground">{t("questionId", { code: item.code.toLowerCase() })}</span>
                   <Button variant={item.flagged ? "secondary" : "ghost"} size="sm" onClick={toggleFlag} aria-pressed={item.flagged}>
                     <Bookmark className={cn(item.flagged && "fill-flag text-flag")} aria-hidden />
                     {item.flagged ? t("marked") : t("markForReview")}
