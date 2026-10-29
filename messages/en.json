@@ -1,0 +1,922 @@
+{
+  "metadata": {
+    "title": "{name} — SAT preparation",
+    "description": "Practice for the digital SAT with questions written by our teachers, timed drills and honest progress tracking."
+  },
+  "common": {
+    "loading": "Loading…",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "all": "All",
+    "any": "Any",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "optional": "optional",
+    "actions": "Actions",
+    "continue": "Continue",
+    "retry": "Try again",
+    "view": "View",
+    "open": "Open",
+    "download": "Download",
+    "upload": "Upload",
+    "apply": "Apply",
+    "select": "Select",
+    "selected": "{count} selected",
+    "showing": "Showing {from}–{to} of {total}",
+    "page": "Page {page} of {pages}",
+    "minutesShort": "{count} min",
+    "secondsShort": "{count} s",
+    "durationMinSec": "{min} min {sec} s",
+    "notSet": "Not set",
+    "unknownError": "Something went wrong. Please try again.",
+    "networkError": "Connection problem. Check your internet and try again.",
+    "copied": "Copied",
+    "new": "New",
+    "or": "or",
+    "comingSoon": "Coming soon",
+    "sample": "Sample",
+    "sampleHint": "Development sample — removed before launch",
+    "skipToContent": "Skip to main content"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "practice": "Practice",
+    "history": "History",
+    "resources": "Official resources",
+    "about": "About us",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "admin": "Admin",
+    "settings": "Settings",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "getStarted": "Get started",
+    "account": "Account",
+    "menu": "Menu",
+    "mainNavigation": "Main navigation"
+  },
+  "footer": {
+    "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
+    "copyright": "© {year} {name}",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "refunds": "Refund policy",
+    "contact": "Contact",
+    "about": "About us",
+    "resources": "Official resources"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "home": {
+    "eyebrow": "Digital SAT preparation",
+    "title": "Practice for the SAT with questions written by real teachers",
+    "subtitle": "Timed drills, an exam-like test screen and clear progress tracking. Built by {name} for students in Uzbekistan and Central Asia.",
+    "ctaPrimary": "Start practising",
+    "ctaSecondary": "See official free resources",
+    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
+    "featuresTitle": "What you get",
+    "features": {
+      "bank": {
+        "title": "Our own question bank",
+        "body": "Every question is written by our teachers or used with permission, and checked by a person before it reaches you."
+      },
+      "test": {
+        "title": "Exam-like practice",
+        "body": "A timer, question navigator, flag for review and answer eliminator — the tools you will use on test day."
+      },
+      "drills": {
+        "title": "Focused drills",
+        "body": "Practise one skill at a time, choose the difficulty, and check each answer as you go or at the end."
+      },
+      "progress": {
+        "title": "Honest progress",
+        "body": "Accuracy by domain and skill, time per question and your streak — only real numbers from your own practice."
+      }
+    },
+    "officialTitle": "Use the official free materials too",
+    "officialBody": "The College Board and Khan Academy publish free official practice. We link to them instead of copying them.",
+    "officialCta": "Official resources"
+  },
+  "about": {
+    "title": "About us",
+    "body": "{name} is a learning centre that prepares students for the digital SAT. This site holds the practice materials our teachers write, so you can study between lessons.",
+    "contentTitle": "Where our questions come from",
+    "contentBody": "Questions on this site are written by our teachers, or used with written permission from their authors. Some draft questions may be prepared with AI help, but a teacher checks every question before it is published. We do not copy questions from the College Board or other prep companies.",
+    "scoreTitle": "About score estimates",
+    "scoreBody": "Any score we show is an estimate based on your practice, not an official College Board score."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": {
+      "official": {
+        "q": "Are these official SAT questions?",
+        "a": "No. Our questions are written by our teachers in the style of the digital SAT. For official practice, use the free College Board and Khan Academy materials linked on our Official resources page."
+      },
+      "score": {
+        "q": "Is the score you show my real SAT score?",
+        "a": "No. It is an estimate based on your practice. Only the College Board can give you an official score."
+      },
+      "language": {
+        "q": "Why are the questions in English?",
+        "a": "The real SAT is in English, so our questions are too. Menus, explanations and study plans can be shown in your language."
+      },
+      "device": {
+        "q": "Can I practise on my phone?",
+        "a": "Yes. The real test is taken on a laptop or tablet, so try to do full timed practice on one of those."
+      },
+      "mistake": {
+        "q": "I think a question has a mistake. What do I do?",
+        "a": "Use the “Report a problem” button after you answer. A teacher reviews every report."
+      }
+    }
+  },
+  "resources": {
+    "title": "Official free resources",
+    "subtitle": "Free practice from the organizations behind the SAT. These open on their websites.",
+    "note": "We are not affiliated with these organizations. Links open in a new tab.",
+    "items": {
+      "questionBank": {
+        "title": "SAT Suite Question Bank",
+        "body": "Search official practice questions by domain, skill and difficulty."
+      },
+      "bluebook": {
+        "title": "Bluebook app",
+        "body": "Download the official testing app and take full-length adaptive practice tests."
+      },
+      "practiceTests": {
+        "title": "Official practice tests",
+        "body": "Information about the full-length digital practice tests and how to score them."
+      },
+      "khanAcademy": {
+        "title": "Khan Academy — Digital SAT",
+        "body": "Free official lessons and practice for every SAT skill."
+      }
+    },
+    "visit": "Open website"
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Questions about lessons, the site or your account? Get in touch.",
+    "email": "Email",
+    "phone": "Phone",
+    "telegram": "Telegram",
+    "address": "Address",
+    "hours": "Hours"
+  },
+  "legal": {
+    "draftNotice": "Draft text — the learning centre will publish the final version before launch.",
+    "lastUpdated": "Last updated: {date}",
+    "terms": {
+      "title": "Terms of use"
+    },
+    "privacy": {
+      "title": "Privacy policy"
+    },
+    "refunds": {
+      "title": "Refund policy"
+    }
+  },
+  "cookie": {
+    "message": "We use only essential cookies to keep you signed in and remember your language and theme.",
+    "accept": "OK"
+  },
+  "auth": {
+    "signInTitle": "Sign in or create an account",
+    "signInSubtitle": "Use your email, Google or Telegram. New accounts are created automatically.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "orContinueWith": "or continue with",
+    "google": "Continue with Google",
+    "telegramLoading": "Loading Telegram…",
+    "termsNote": "By continuing you agree to our <terms>Terms of use</terms> and <privacy>Privacy policy</privacy>.",
+    "checkEmailTitle": "Check your email",
+    "checkEmailBody": "We sent a sign-in link to your email address. Open it on this device to continue. The link works for one hour.",
+    "checkEmailSpam": "Can’t find it? Check your spam folder or try again.",
+    "tryAgain": "Use a different email",
+    "signedOut": "You have been signed out.",
+    "errors": {
+      "EmailSignin": "We couldn’t send the email. Check the address and try again in a few minutes.",
+      "OAuthAccountNotLinked": "This email is already registered with another sign-in method. Sign in the way you did before.",
+      "Verification": "This sign-in link has expired or was already used. Request a new one.",
+      "AccessDenied": "Access denied.",
+      "CredentialsSignin": "Telegram sign-in failed. Please try again.",
+      "Configuration": "Sign-in is not configured correctly. Please contact us.",
+      "RateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "InvalidEmail": "Enter a valid email address.",
+      "Default": "Sign-in failed. Please try again."
+    }
+  },
+  "email": {
+    "magicLink": {
+      "subject": "Your sign-in link for {name}",
+      "intro": "Click the button below to sign in to {name}.",
+      "button": "Sign in",
+      "expires": "This link expires in one hour and can be used once.",
+      "ignore": "If you did not request this email, you can safely ignore it."
+    }
+  },
+  "onboarding": {
+    "title": "Let’s set your goal",
+    "subtitle": "This helps us plan your practice. You can change it any time in Settings.",
+    "testDate": "When is your SAT?",
+    "testDateHelp": "Leave empty if you haven’t registered yet.",
+    "targetScore": "Target score",
+    "targetScoreHelp": "Between 400 and 1600.",
+    "currentScore": "Your current score",
+    "currentScoreHelp": "From an official practice test or a real SAT. Leave empty if you don’t know.",
+    "diagnosticHint": "Don’t know your level? Start with a short mixed drill after this step.",
+    "save": "Save and continue",
+    "skip": "Skip for now",
+    "errors": {
+      "score": "Enter a score between 400 and 1600 in steps of 10.",
+      "date": "Choose a date in the future."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {name}!",
+    "welcomeNoName": "Welcome!",
+    "startDrill": "Start a drill",
+    "continueAttempt": "Continue where you left off",
+    "stats": {
+      "answered": "Questions answered",
+      "accuracy": "Accuracy",
+      "streak": "Day streak",
+      "avgTime": "Avg. time per question",
+      "streakDays": "{count, plural, one {# day} other {# days}}"
+    },
+    "goal": {
+      "title": "Your goal",
+      "target": "Target score",
+      "testDate": "Test date",
+      "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+      "testPassed": "Test date has passed",
+      "edit": "Edit goal",
+      "setGoal": "Set your goal"
+    },
+    "estimate": {
+      "title": "Estimated score",
+      "notYet": "Complete a full practice test to see an estimate.",
+      "label": "Estimate, not an official College Board score."
+    },
+    "byDomain": "Accuracy by domain",
+    "bySkill": "Skills to work on",
+    "noData": "No practice yet. Your results will appear here.",
+    "recent": "Recent practice",
+    "viewAll": "View all",
+    "officialScores": "Official practice scores"
+  },
+  "practice": {
+    "title": "Practice",
+    "subtitle": "Build a drill from our published questions.",
+    "section": "Section",
+    "bothSections": "Both sections",
+    "domains": "Domains",
+    "skills": "Skills",
+    "allDomains": "All domains",
+    "allSkills": "All skills",
+    "difficulty": "Difficulty",
+    "count": "Number of questions",
+    "codeRange": "Question code range",
+    "codeFrom": "From code",
+    "codeTo": "To code",
+    "codeRangeHelp": "Optional. For example LC-M-ALG-0001 to LC-M-ALG-0050.",
+    "timing": "Timing",
+    "timed": "Timed",
+    "untimed": "Untimed",
+    "timedHelp": "About {seconds} seconds per question, like the real test.",
+    "feedback": "When to see answers",
+    "feedbackImmediate": "After each question",
+    "feedbackEnd": "At the end",
+    "unseenFirst": "Prefer questions I haven’t seen",
+    "start": "Start drill",
+    "starting": "Starting…",
+    "matching": "{count, plural, =0 {No questions match} one {# question matches} other {# questions match}}",
+    "noQuestions": "No published questions match these filters yet. Try fewer filters.",
+    "lessThanRequested": "Only {count} questions match; the drill will have {count}.",
+    "quickStart": "Quick start",
+    "quickMixed": "10 mixed questions",
+    "quickMath": "10 math questions",
+    "quickRw": "10 reading & writing questions",
+    "inProgress": "In progress",
+    "resume": "Resume"
+  },
+  "test": {
+    "drillTitle": "Practice drill",
+    "moduleTitle": "Section {section}, Module {module}",
+    "questionOf": "Question {current} of {total}",
+    "timer": {
+      "hide": "Hide",
+      "show": "Show timer",
+      "remaining": "Time remaining",
+      "warning": "5 minutes left in this module.",
+      "timeUp": "Time is up. Your answers have been submitted."
+    },
+    "markForReview": "Mark for review",
+    "marked": "Marked for review",
+    "eliminator": "Cross out answer choices",
+    "eliminatorOn": "Cross-out mode on",
+    "crossOut": "Cross out choice {choice}",
+    "undoCrossOut": "Undo cross-out of choice {choice}",
+    "choice": "Choice {choice}",
+    "sprLabel": "Your answer",
+    "sprPreview": "Answer preview",
+    "sprHelp": "Enter a whole number, decimal or fraction. Up to 5 characters (6 if negative). No mixed numbers, commas or symbols.",
+    "sprErrors": {
+      "TOO_LONG": "Too long — up to 5 characters, or 6 with a minus sign.",
+      "MIXED_NUMBER": "Mixed numbers are not allowed. Enter 7/2 or 3.5 instead of 3 1/2.",
+      "INVALID": "Use only digits, one decimal point, “/” and a leading “−”.",
+      "DIVIDE_BY_ZERO": "The denominator can’t be zero.",
+      "EMPTY": ""
+    },
+    "navigator": {
+      "open": "Question navigator",
+      "title": "Questions in this module",
+      "current": "Current",
+      "unanswered": "Unanswered",
+      "forReview": "For review",
+      "answered": "Answered",
+      "goToReview": "Go to review page"
+    },
+    "review": {
+      "title": "Check your work",
+      "body": "You can go back to any question before you submit. Unanswered and marked questions are highlighted.",
+      "unansweredCount": "{count, plural, =0 {All questions answered} one {# question unanswered} other {# questions unanswered}}",
+      "markedCount": "{count, plural, =0 {No questions marked} one {# question marked for review} other {# questions marked for review}}",
+      "submit": "Submit answers",
+      "back": "Back to questions"
+    },
+    "submitConfirm": {
+      "title": "Submit your answers?",
+      "body": "You won’t be able to change your answers after you submit.",
+      "unanswered": "{count, plural, one {# question is} other {# questions are}} still unanswered.",
+      "confirm": "Submit",
+      "cancel": "Keep working"
+    },
+    "check": "Check answer",
+    "checking": "Checking…",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "correctAnswerIs": "Correct answer: {answer}",
+    "acceptedAnswers": "Accepted answers: {answers}",
+    "explanation": "Explanation",
+    "noExplanation": "No written explanation for this question yet.",
+    "yourAnswer": "Your answer: {answer}",
+    "unanswered": "Not answered",
+    "finish": "Finish drill",
+    "save": {
+      "saving": "Saving…",
+      "saved": "All answers saved",
+      "offline": "Offline — answers will be saved when you reconnect",
+      "error": "Couldn’t save. Retrying…"
+    },
+    "exit": "Exit",
+    "exitConfirm": {
+      "title": "Leave this drill?",
+      "body": "Your answers are saved. You can come back and continue later.",
+      "leave": "Leave",
+      "stay": "Stay"
+    },
+    "mobileTip": "Tip: the real SAT is taken on a laptop or tablet. Use one for timed practice when you can.",
+    "dismiss": "Dismiss",
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "choose": "Choose answer A–D",
+      "next": "Next question",
+      "previous": "Previous question",
+      "mark": "Mark for review",
+      "eliminate": "Toggle cross-out mode",
+      "help": "Show shortcuts"
+    },
+    "passage": "Passage",
+    "question": "Question",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "submitted": "Submitted",
+    "alreadyCompleted": "This practice is finished.",
+    "viewResults": "View results"
+  },
+  "results": {
+    "title": "Results",
+    "drillTitle": "Drill results",
+    "score": "{correct} of {total} correct",
+    "accuracy": "Accuracy",
+    "timeSpent": "Time spent",
+    "avgTime": "Average per question",
+    "completedAt": "Completed {date}",
+    "byDomain": "By domain",
+    "questions": "Question by question",
+    "columns": {
+      "number": "#",
+      "code": "Code",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "yourAnswer": "Your answer",
+      "correctAnswer": "Correct answer",
+      "time": "Time",
+      "result": "Result"
+    },
+    "flagged": "Marked for review",
+    "practiceAgain": "Practice again",
+    "practiceMistakes": "Redo my mistakes",
+    "showQuestion": "Show question",
+    "hideQuestion": "Hide question",
+    "report": {
+      "button": "Report a problem",
+      "title": "Report a problem with this question",
+      "body": "A teacher will review it. Thank you for helping us improve.",
+      "reason": "What’s wrong?",
+      "reasons": {
+        "WRONG_ANSWER": "The answer key is wrong",
+        "TYPO": "Typo or formatting error",
+        "UNCLEAR": "The question is unclear",
+        "FIGURE": "Problem with a figure or table",
+        "OTHER": "Something else"
+      },
+      "message": "Details (optional)",
+      "submit": "Send report",
+      "thanks": "Thanks! A teacher will review this question.",
+      "already": "You already reported this question."
+    }
+  },
+  "history": {
+    "title": "Practice history",
+    "empty": "You haven’t practised yet.",
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "questions": "Questions",
+      "score": "Score",
+      "status": "Status"
+    },
+    "kinds": {
+      "DRILL": "Drill",
+      "MOCK": "Practice test",
+      "SECTION": "Section test",
+      "MODULE": "Module test",
+      "DAILY": "Daily question",
+      "REVIEW": "Review"
+    },
+    "statuses": {
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "ABANDONED": "Abandoned"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "telegram": "Telegram",
+    "notConnected": "Not connected",
+    "preferences": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "goal": "Goal",
+    "saved": "Settings saved",
+    "data": "Your data",
+    "exportTitle": "Download your data",
+    "exportBody": "A CSV file with every answer you have submitted.",
+    "exportButton": "Download CSV",
+    "deleteTitle": "Delete account",
+    "deleteBody": "This permanently deletes your account and all practice history. It cannot be undone.",
+    "deleteButton": "Delete my account",
+    "deleteConfirmTitle": "Delete your account?",
+    "deleteConfirmBody": "Type DELETE to confirm. All your data will be removed permanently.",
+    "deleteConfirmWord": "DELETE",
+    "deleteConfirmButton": "Delete permanently"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for doesn’t exist or has moved.",
+    "goHome": "Go to the home page",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please try again. If the problem continues, contact us."
+  },
+  "taxonomy": {
+    "sections": {
+      "RW": "Reading and Writing",
+      "MATH": "Math"
+    },
+    "sectionsShort": {
+      "RW": "R&W",
+      "MATH": "Math"
+    },
+    "domains": {
+      "INFORMATION_AND_IDEAS": "Information and Ideas",
+      "CRAFT_AND_STRUCTURE": "Craft and Structure",
+      "EXPRESSION_OF_IDEAS": "Expression of Ideas",
+      "STANDARD_ENGLISH_CONVENTIONS": "Standard English Conventions",
+      "ALGEBRA": "Algebra",
+      "ADVANCED_MATH": "Advanced Math",
+      "PROBLEM_SOLVING_AND_DATA_ANALYSIS": "Problem-Solving and Data Analysis",
+      "GEOMETRY_AND_TRIGONOMETRY": "Geometry and Trigonometry"
+    },
+    "skills": {
+      "CENTRAL_IDEAS_AND_DETAILS": "Central Ideas and Details",
+      "COMMAND_OF_EVIDENCE_TEXTUAL": "Command of Evidence (Textual)",
+      "COMMAND_OF_EVIDENCE_QUANTITATIVE": "Command of Evidence (Quantitative)",
+      "INFERENCES": "Inferences",
+      "WORDS_IN_CONTEXT": "Words in Context",
+      "TEXT_STRUCTURE_AND_PURPOSE": "Text Structure and Purpose",
+      "CROSS_TEXT_CONNECTIONS": "Cross-Text Connections",
+      "RHETORICAL_SYNTHESIS": "Rhetorical Synthesis",
+      "TRANSITIONS": "Transitions",
+      "BOUNDARIES": "Boundaries",
+      "FORM_STRUCTURE_AND_SENSE": "Form, Structure, and Sense",
+      "LINEAR_EQUATIONS_ONE_VARIABLE": "Linear equations in one variable",
+      "LINEAR_FUNCTIONS": "Linear functions",
+      "LINEAR_EQUATIONS_TWO_VARIABLES": "Linear equations in two variables",
+      "SYSTEMS_OF_LINEAR_EQUATIONS": "Systems of two linear equations in two variables",
+      "LINEAR_INEQUALITIES": "Linear inequalities in one or two variables",
+      "NONLINEAR_FUNCTIONS": "Nonlinear functions",
+      "NONLINEAR_EQUATIONS_AND_SYSTEMS": "Nonlinear equations in one variable and systems of equations in two variables",
+      "EQUIVALENT_EXPRESSIONS": "Equivalent expressions",
+      "RATIOS_RATES_PROPORTIONS_UNITS": "Ratios, rates, proportional relationships, and units",
+      "PERCENTAGES": "Percentages",
+      "ONE_VARIABLE_DATA": "One-variable data: distributions and measures of center and spread",
+      "TWO_VARIABLE_DATA": "Two-variable data: models and scatterplots",
+      "PROBABILITY": "Probability and conditional probability",
+      "INFERENCE_FROM_SAMPLES": "Inference from sample statistics and margin of error",
+      "EVALUATING_STATISTICAL_CLAIMS": "Evaluating statistical claims: observational studies and experiments",
+      "AREA_AND_VOLUME": "Area and volume",
+      "LINES_ANGLES_TRIANGLES": "Lines, angles, and triangles",
+      "RIGHT_TRIANGLES_AND_TRIGONOMETRY": "Right triangles and trigonometry",
+      "CIRCLES": "Circles"
+    }
+  },
+  "enums": {
+    "difficulty": {
+      "EASY": "Easy",
+      "MEDIUM": "Medium",
+      "HARD": "Hard"
+    },
+    "type": {
+      "MCQ": "Multiple choice",
+      "SPR": "Student-produced response"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "IN_REVIEW": "In review",
+      "PUBLISHED": "Published",
+      "RETIRED": "Retired"
+    },
+    "origin": {
+      "IMPORTED": "Imported",
+      "AI_DRAFTED": "AI draft",
+      "MANUAL": "Manual"
+    },
+    "role": {
+      "STUDENT": "Student",
+      "EDITOR": "Editor",
+      "ADMIN": "Admin"
+    }
+  },
+  "flags": {
+    "MISSING_ANSWER": {
+      "label": "Missing answer",
+      "help": "No correct answer is set."
+    },
+    "UNCERTAIN_TEXT": {
+      "label": "Uncertain text",
+      "help": "Some characters were hard to read. Check text marked like [[?this]] and remove the marker."
+    },
+    "CHOICE_COUNT": {
+      "label": "Not 4 choices",
+      "help": "Multiple-choice questions need exactly four filled choices A–D."
+    },
+    "ANSWER_NOT_IN_CHOICES": {
+      "label": "Answer not a choice",
+      "help": "The correct answer must be one of A, B, C or D."
+    },
+    "INVALID_SPR_ANSWER": {
+      "label": "Invalid answer format",
+      "help": "Student-produced answers must be numbers, decimals or fractions, e.g. 3, -1.5, 7/2."
+    },
+    "MISSING_FIGURE": {
+      "label": "Missing figure?",
+      "help": "The text mentions a figure, graph or table but none is attached."
+    },
+    "DUPLICATE_CODE": {
+      "label": "Code reassigned",
+      "help": "The code in the file was already used, so a new one was given."
+    },
+    "NEAR_DUPLICATE": {
+      "label": "Near-duplicate",
+      "help": "Very similar to another question in the bank."
+    },
+    "TAXONOMY_UNCONFIRMED": {
+      "label": "Confirm domain/skill",
+      "help": "The domain and skill were suggested automatically. Confirm or change them."
+    },
+    "STUDENT_REPORT": {
+      "label": "Student report",
+      "help": "A student reported a problem with this question."
+    },
+    "DIFFICULTY_MISMATCH": {
+      "label": "Difficulty mismatch",
+      "help": "Student accuracy doesn’t match the difficulty label."
+    },
+    "blocking": "Must be fixed before publishing",
+    "warning": "Warning"
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "questions": "Questions",
+      "newQuestion": "New question",
+      "review": "Review queue",
+      "import": "Import",
+      "sources": "Sources",
+      "reports": "Reports",
+      "users": "Users",
+      "backToSite": "Back to site"
+    },
+    "overview": {
+      "title": "Overview",
+      "published": "Published questions",
+      "inReview": "Waiting for review",
+      "drafts": "Drafts",
+      "openReports": "Open reports",
+      "students": "Students",
+      "attempts": "Drills completed",
+      "samples": "Sample questions in the bank",
+      "samplesWarning": "Remove sample questions before launch: pnpm samples:remove",
+      "bySection": "Published by section and domain"
+    },
+    "questions": {
+      "title": "Question bank",
+      "searchPlaceholder": "Search code or text…",
+      "status": "Status",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "source": "Source",
+      "flag": "Flag",
+      "origin": "Origin",
+      "anySource": "Any source",
+      "anyFlag": "Any flag",
+      "noFlags": "No flags",
+      "empty": "No questions found.",
+      "columns": {
+        "code": "Code",
+        "section": "Section",
+        "skill": "Skill",
+        "difficulty": "Difficulty",
+        "type": "Type",
+        "status": "Status",
+        "flags": "Flags",
+        "updated": "Updated"
+      },
+      "new": "New question",
+      "importCta": "Import"
+    },
+    "editor": {
+      "newTitle": "New question",
+      "editTitle": "Edit {code}",
+      "content": "Content",
+      "metadata": "Details",
+      "code": "Code",
+      "suggestCode": "Suggest next code",
+      "codePrefix": "Code prefix",
+      "codeHelp": "Unique. Format: {example}",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "type": "Question type",
+      "passage": "Passage",
+      "passageHelp": "Optional. Markdown; math between $…$ or $$…$$.",
+      "stem": "Question",
+      "stemHelp": "Markdown with LaTeX math, e.g. $\\frac{1}{2}x + 3 = 7$.",
+      "choices": "Answer choices",
+      "choice": "Choice {key}",
+      "correct": "Correct",
+      "markCorrect": "Mark {key} as correct",
+      "correctAnswers": "Accepted answers",
+      "correctAnswersHelp": "One per line. Equivalent forms (1/2, .5, 0.5) are accepted automatically.",
+      "explanation": "Explanation",
+      "rationales": "Why each wrong choice is wrong",
+      "rationale": "Choice {key}",
+      "tags": "Tags",
+      "tagsHelp": "Comma-separated.",
+      "source": "Source",
+      "noSource": "No source (written in the editor)",
+      "preview": "Preview",
+      "studentView": "Student view",
+      "insertImage": "Insert image",
+      "uploadingImage": "Uploading image…",
+      "imageAlt": "Figure",
+      "imageTooLarge": "Images must be PNG, JPEG, WebP or GIF and under 5 MB.",
+      "saveDraft": "Save draft",
+      "saveChanges": "Save changes",
+      "submitForReview": "Send to review",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "retire": "Retire",
+      "restoreDraft": "Move to draft",
+      "created": "Question created",
+      "updated": "Question saved",
+      "statusChanged": "Status changed",
+      "versionConflict": "Someone else saved this question. Reload the page to see their changes.",
+      "duplicateCode": "That code is already used. Choose another.",
+      "blockingFlags": "Fix the blocking flags before publishing.",
+      "nearDuplicates": "Similar questions already in the bank:",
+      "status": "Status",
+      "origin": "Origin",
+      "provenance": "Provenance",
+      "provenanceFile": "File: {file}",
+      "provenancePage": "page {page}",
+      "provenanceRow": "row {row}",
+      "provenanceBy": "Uploaded by {name} on {date}",
+      "createdBy": "Created by {name}",
+      "reviewedBy": "Reviewed by {name} on {date}",
+      "stats": "{correct} of {attempts} students answered correctly",
+      "versions": "Version history",
+      "version": "Version {version}",
+      "versionBy": "{name}, {date}",
+      "restoreVersion": "Load into editor",
+      "noVersions": "No earlier versions.",
+      "reports": "Student reports",
+      "errors": {
+        "INVALID_CODE": "Codes use capital letters, digits, “-”, “_” or “.” (2–40 characters).",
+        "REQUIRED": "Required.",
+        "INVALID_DOMAIN": "Choose a domain for this section.",
+        "INVALID_SKILL": "Choose a skill in this domain."
+      }
+    },
+    "sources": {
+      "title": "Sources",
+      "subtitle": "Who owns each set of questions, and who confirmed we may publish them.",
+      "new": "New source",
+      "name": "Source name",
+      "namePlaceholder": "e.g. Centre math worksheets 2026",
+      "owner": "Owner",
+      "ownerPlaceholder": "e.g. our centre, or the author’s name",
+      "notes": "Notes",
+      "rightsStatement": "These questions were written by us, or we have written permission to publish them.",
+      "rightsRequired": "You must confirm the rights before uploading.",
+      "confirmedBy": "Confirmed by {name} on {date}",
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "files": "Files",
+      "noFiles": "No files uploaded.",
+      "withdraw": "Unpublish everything from this source",
+      "withdrawFile": "Unpublish questions from this file",
+      "withdrawConfirmTitle": "Unpublish all questions from “{name}”?",
+      "withdrawConfirmBody": "Use this if permission to publish was withdrawn. All its questions will be retired and hidden from students. This is recorded in the audit log.",
+      "withdrawn": "Withdrawn on {date}",
+      "withdrawDone": "{count, plural, one {# question} other {# questions}} unpublished",
+      "empty": "No sources yet. Create one before importing questions.",
+      "created": "Source created"
+    },
+    "import": {
+      "title": "Import questions",
+      "subtitle": "Upload a spreadsheet of questions. Every imported question goes to the review queue as a draft.",
+      "spreadsheetTab": "CSV / Excel",
+      "pdfTab": "PDF",
+      "pdfComingSoon": "PDF import arrives in the next phase.",
+      "template": "Download the template",
+      "templateCsv": "CSV template",
+      "templateXlsx": "Excel template",
+      "columnsHelp": "Columns: {columns}. Only stem and correct_answer are required; section, difficulty and code fall back to the values below.",
+      "source": "Source",
+      "newSource": "Create a new source",
+      "existingSource": "Existing source",
+      "chooseSource": "Choose a source",
+      "sourceName": "Source name",
+      "owner": "Owner",
+      "rights": "These questions were written by us, or we have written permission to publish them.",
+      "rightsRequired": "Tick the rights confirmation to continue.",
+      "defaultSection": "Default section",
+      "defaultSectionNone": "Taken from each row",
+      "defaultDifficulty": "Default difficulty",
+      "codePrefix": "Question code prefix",
+      "codePrefixHelp": "Used for rows without a code, e.g. LC-M- gives LC-M-ALG-0001.",
+      "file": "Spreadsheet file",
+      "fileHelp": ".csv or .xlsx, up to 5 MB and 2,000 rows.",
+      "dropHere": "Drop a file here or click to choose",
+      "analyze": "Check file",
+      "analyzing": "Checking…",
+      "previewTitle": "Check the rows before importing",
+      "summary": "{total} rows: {ok} ready, {warnings} with flags, {errors} with errors",
+      "rowOk": "Ready",
+      "rowFlagged": "Flagged",
+      "rowError": "Error",
+      "row": "Row",
+      "confirm": "Import {count, plural, one {# question} other {# questions}} as drafts",
+      "importing": "Importing…",
+      "errorRowsSkipped": "Rows with errors are skipped. Fix them in the file and import again.",
+      "done": "{count, plural, one {# question} other {# questions}} imported. Review them before publishing.",
+      "goToReview": "Open review queue",
+      "batches": "Recent imports",
+      "noBatches": "No imports yet.",
+      "batchStatus": {
+        "PENDING": "Waiting for confirmation",
+        "PROCESSING": "Processing",
+        "READY": "Imported",
+        "FAILED": "Failed"
+      },
+      "errors": {
+        "MISSING_COLUMNS": "The file is missing required columns: {columns}.",
+        "TOO_MANY_ROWS": "The file has too many rows (maximum {max}).",
+        "UNSUPPORTED_FILE": "Upload a .csv or .xlsx file.",
+        "FILE_TOO_LARGE": "The file is larger than 5 MB.",
+        "EMPTY_FILE": "The file has no rows.",
+        "INVALID_PREFIX": "The prefix may contain capital letters, digits, “-”, “_” and “.” only.",
+        "SOURCE_REQUIRED": "Choose a source or enter a new source name and owner.",
+        "SOURCE_WITHDRAWN": "This source was withdrawn. Create a new source."
+      },
+      "rowErrors": {
+        "MISSING_STEM": "Missing question text (stem)",
+        "INVALID_SECTION": "Unknown section",
+        "MISSING_SECTION": "No section in the row and no default section",
+        "INVALID_DOMAIN": "Unknown domain, or it doesn’t belong to the section",
+        "INVALID_SKILL": "Unknown skill, or it doesn’t belong to the domain",
+        "MISSING_TAXONOMY": "Domain and skill are required",
+        "INVALID_DIFFICULTY": "Difficulty must be easy, medium or hard",
+        "INVALID_TYPE": "Type must be MCQ or SPR",
+        "INVALID_IMAGE_URL": "image_url must be an https:// link",
+        "IMAGE_FETCH_FAILED": "Could not download the image"
+      },
+      "rowWarnings": {
+        "CODE_REASSIGNED": "Code already used — a new code was given",
+        "CODE_INVALID": "Code format invalid — a new code was given",
+        "CODE_GENERATED": "Code generated",
+        "DIFFICULTY_DEFAULTED": "Default difficulty used",
+        "TYPE_INFERRED": "Type guessed from the choices"
+      }
+    },
+    "review": {
+      "title": "Review queue",
+      "subtitle": "Drafts and questions waiting for review. Only published questions reach students.",
+      "filterFlag": "Flag",
+      "filterBatch": "Import",
+      "allQuestions": "All waiting questions",
+      "clean": "No blocking flags",
+      "bulk": "Bulk actions",
+      "bulkApprove": "Publish selected",
+      "bulkApproveClean": "Publish all clean questions",
+      "bulkSendToReview": "Send to review",
+      "bulkDifficulty": "Set difficulty",
+      "bulkDomainSkill": "Set domain and skill",
+      "bulkRetire": "Retire",
+      "bulkDone": "{updated} updated, {skipped} skipped",
+      "skippedBlocking": "Questions with blocking flags were skipped.",
+      "selectAll": "Select all on this page",
+      "selectRow": "Select {code}",
+      "empty": "Nothing waiting for review."
+    },
+    "reports": {
+      "title": "Student reports",
+      "empty": "No open reports.",
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed",
+      "resolve": "Mark resolved",
+      "dismiss": "Dismiss",
+      "by": "Reported by {name}",
+      "anonymous": "a deleted user",
+      "openQuestion": "Open question"
+    },
+    "users": {
+      "title": "Users",
+      "searchPlaceholder": "Search name or email…",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "joined": "Joined",
+        "attempts": "Drills"
+      },
+      "roleChanged": "Role updated",
+      "cannotChangeOwnRole": "You can’t change your own role."
+    }
+  }
+}
