@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RichText } from "@/components/content/rich-text";
 import { FlagList } from "./flag-badges";
+import { cn } from "@/lib/utils";
 
 export interface EditorQuestion {
   id?: string;
@@ -38,11 +39,14 @@ export function QuestionEditor({
   sources,
   defaultPrefix,
   codeExample,
+  stacked = false,
 }: {
   initial: EditorQuestion;
   sources: { id: string; name: string }[];
   defaultPrefix: Record<SectionKey, string>;
   codeExample: string;
+  /** Preview under the form instead of beside it (used next to the original PDF page). */
+  stacked?: boolean;
 }) {
   const t = useTranslations("admin.editor");
   const tx = useTranslations("taxonomy");
@@ -85,7 +89,8 @@ export function QuestionEditor({
     const processFlags = savedFlags.filter((f) => !["MISSING_ANSWER", "UNCERTAIN_TEXT", "CHOICE_COUNT", "ANSWER_NOT_IN_CHOICES", "INVALID_SPR_ANSWER", "MISSING_FIGURE"].includes(f));
     return [...new Set([...content, ...processFlags])];
   }, [v, correct, savedFlags]);
-  const hasBlocking = liveFlags.some(isBlocking);
+  // Saving in the editor confirms the domain and skill, so that flag doesn't block the buttons here.
+  const hasBlocking = liveFlags.some((f) => isBlocking(f) && f !== "TAXONOMY_UNCONFIRMED");
 
   function changeSection(next: SectionKey) {
     const d = domainsForSection(next)[0]!;
@@ -206,7 +211,7 @@ export function QuestionEditor({
   );
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className={cn("grid gap-6", !stacked && "xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]")}>
       <input
         ref={fileInput}
         type="file"
@@ -515,7 +520,7 @@ export function QuestionEditor({
             </CardContent>
           </Card>
         )}
-        <Card className="xl:sticky xl:top-20">
+        <Card className={cn(!stacked && "xl:sticky xl:top-20")}>
           <CardHeader>
             <CardTitle className="text-base">{t("studentView")}</CardTitle>
           </CardHeader>

@@ -13,7 +13,8 @@ export const FLAGS = {
   MISSING_FIGURE: { blocking: false },
   DUPLICATE_CODE: { blocking: false },
   NEAR_DUPLICATE: { blocking: false },
-  TAXONOMY_UNCONFIRMED: { blocking: false },
+  /** Domain/skill were suggested (or guessed) during import; a person must confirm them. */
+  TAXONOMY_UNCONFIRMED: { blocking: true },
   STUDENT_REPORT: { blocking: false },
   DIFFICULTY_MISMATCH: { blocking: false },
 } as const;

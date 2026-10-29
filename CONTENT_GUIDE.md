@@ -77,7 +77,23 @@ Tips:
 4. The preview shows every row as **Ready**, **Flagged** or **Error**. Rows with errors are skipped — fix them in the file and import again. Click **Import … as drafts**.
 5. You land in the **Review queue**, filtered to this import.
 
-Limits: 5 MB and 2,000 rows per file. PDF import arrives in Phase 2.
+Limits: 5 MB and 2,000 rows per file.
+
+## 5a. Importing PDFs
+
+1. **Admin → Import → PDF**. Choose the source, tick the rights confirmation, pick the section, difficulty and code prefix.
+2. Add one or more question booklets and, optionally, an answer key PDF. Click **Upload and read**. You can leave the page; the import continues in the background.
+3. When it finishes you see how many questions were created, how many answers came from the key and which pages could not be read.
+4. **Review side by side** shows each original page next to the editor. Check the text, math, figures and answer, confirm domain and skill, and save. In the review queue, **Confirm domain and skill** does this for many questions at once once you have checked them.
+
+What works best:
+- **Typed PDFs** exported from Word or Google Docs (selectable text). These work even without an AI key.
+- Questions numbered `1.`, `2.` …; choices labelled `A)` to `D)` (or `(A)`, `A.`); one column.
+- Answer key as a separate PDF with lines like `1. B`, `2. 3/4`. For tests with modules, put a heading (`Module 1`, `Module 2`) above each group.
+- **Scans**: 300 DPI, straight pages, good contrast. Scans need `ANTHROPIC_API_KEY`.
+- No passwords on the files; up to 100 MB and 400 pages per file.
+
+Text the AI could not read clearly is marked `[[?…]]` and flagged **Uncertain text**; fix it before publishing.
 
 ## 6. Reviewing and publishing
 

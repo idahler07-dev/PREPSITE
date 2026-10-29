@@ -9,6 +9,7 @@ import { HttpError } from "@/server/http";
 import {
   bulkSetStatus,
   bulkUpdateMeta,
+  confirmTaxonomy,
   createQuestion,
   setQuestionStatus,
   suggestNextCodes,
@@ -51,7 +52,8 @@ export async function saveQuestion(
     const intent = intentSchema.parse(opts.intent);
     const saveStatus = intent === "draft" ? "DRAFT" : intent === "review" ? "IN_REVIEW" : undefined;
     const result = opts.id
-      ? await updateQuestion(opts.id, input, actor, { expectedVersion: opts.expectedVersion, changeNote: opts.changeNote, status: saveStatus })
+      ? // Saving in the editor means a person has seen and accepted the domain and skill.
+        await updateQuestion(opts.id, input, actor, { expectedVersion: opts.expectedVersion, changeNote: opts.changeNote, status: saveStatus, confirmTaxonomy: true })
       : await createQuestion(input, actor, { origin: "MANUAL", status: saveStatus ?? "DRAFT" });
 
     let question = result.question;
@@ -108,6 +110,15 @@ export async function bulkQuestionMeta(ids: string[], patch: { difficulty?: stri
     await bulkUpdateMeta(parsed.ids, parsed, actor);
     revalidatePath("/[locale]/admin", "layout");
     return { updated: parsed.ids.length };
+  });
+}
+
+export async function bulkConfirmTaxonomy(ids: string[]) {
+  return run(async () => {
+    const actor = await requireApiRole(STAFF_ROLES);
+    const updated = await confirmTaxonomy(z.array(z.string()).max(500).parse(ids), actor);
+    revalidatePath("/[locale]/admin", "layout");
+    return { updated, skipped: [] as string[] };
   });
 }
 

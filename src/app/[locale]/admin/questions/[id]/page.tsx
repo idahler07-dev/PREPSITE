@@ -9,6 +9,7 @@ import { QuestionEditor } from "@/components/admin/question-editor";
 import { ReportsPanel, StatusActions, VersionHistory } from "@/components/admin/question-side-panels";
 import { codeExample } from "@/server/questions/code-example";
 import { nearDuplicatesOf } from "@/server/questions/service";
+import { Link } from "@/i18n/navigation";
 
 export default async function EditQuestionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -71,6 +72,13 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
                 {t("provenanceFile", { file: q.sourceFile.originalName })}
                 {q.sourcePage != null && `, ${t("provenancePage", { page: q.sourcePage })}`}
                 {q.sourceRef && q.sourcePage == null && `, ${t("provenanceRow", { row: q.sourceRef })}`}
+              </p>
+            )}
+            {q.importBatchId && q.sourcePage != null && (
+              <p>
+                <Link className="underline" href={`/admin/import/${q.importBatchId}/review?q=${q.id}`}>
+                  {t("viewOriginal")}
+                </Link>
               </p>
             )}
             {q.sourceFile && (

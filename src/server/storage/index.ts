@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { env } from "@/lib/env";
 
@@ -15,6 +15,10 @@ export interface StorageDriver {
   delete(key: string): Promise<void>;
   /** Short-lived URL for direct download, or null when the driver streams through the app. */
   signedUrl(key: string, opts: { expiresInSec: number; contentType?: string; filename?: string }): Promise<string | null>;
+  /** Short-lived URL the browser can PUT a file to, or null when uploads go through the app. */
+  signedUploadUrl(key: string, opts: { expiresInSec: number; contentType: string }): Promise<string | null>;
+  /** Size in bytes, or null if the file doesn't exist. */
+  size(key: string): Promise<number | null>;
 }
 
 function safeKey(key: string): string {
@@ -47,6 +51,16 @@ class LocalDriver implements StorageDriver {
   }
   async signedUrl() {
     return null;
+  }
+  async signedUploadUrl() {
+    return null;
+  }
+  async size(key: string) {
+    try {
+      return (await stat(this.file(key))).size;
+    } catch {
+      return null;
+    }
   }
 }
 
@@ -94,6 +108,22 @@ class S3Driver implements StorageDriver {
       ResponseContentDisposition: opts.filename ? `inline; filename="${opts.filename.replace(/"/g, "")}"` : undefined,
     });
     return getSignedUrl(await this.clientPromise, cmd, { expiresIn: opts.expiresInSec });
+  }
+  async signedUploadUrl(key: string, opts: { expiresInSec: number; contentType: string }) {
+    const { PutObjectCommand } = await import("@aws-sdk/client-s3");
+    const { getSignedUrl } = await import("@aws-sdk/s3-request-presigner");
+    const cmd = new PutObjectCommand({ Bucket: this.bucket, Key: safeKey(key), ContentType: opts.contentType });
+    return getSignedUrl(await this.clientPromise, cmd, { expiresIn: opts.expiresInSec });
+  }
+  async size(key: string) {
+    const { HeadObjectCommand, NotFound } = await import("@aws-sdk/client-s3");
+    try {
+      const res = await (await this.clientPromise).send(new HeadObjectCommand({ Bucket: this.bucket, Key: safeKey(key) }));
+      return res.ContentLength ?? null;
+    } catch (e) {
+      if (e instanceof NotFound || (e as { name?: string }).name === "NotFound") return null;
+      throw e;
+    }
   }
 }
 

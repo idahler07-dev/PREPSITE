@@ -34,6 +34,9 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Telegram Login (optional): bot created with @BotFather, `/setdomain` set to your domain, `TELEGRAM_BOT_TOKEN` and `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` set.
 - [ ] `ALLOW_DEV_OUTBOX` is **not** set.
 - [ ] Optional: `SENTRY_DSN` for error reports.
+- [ ] `ANTHROPIC_API_KEY` set if you import scanned PDFs; set a monthly spend limit in the Anthropic console.
+- [ ] Background jobs: on a VPS keep `JOBS_MODE=worker`. On serverless hosting set `JOBS_MODE=external`, a random `CRON_SECRET`, and a cron that calls `POST /api/jobs/run` with `Authorization: Bearer <CRON_SECRET>` every minute.
+- [ ] With R2/S3 storage, add a CORS rule on the bucket allowing `PUT` from your site origin (browsers upload PDFs straight to storage).
 
 ## Deploy
 

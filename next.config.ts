@@ -14,7 +14,15 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  serverExternalPackages: ["exceljs"],
+  serverExternalPackages: ["exceljs", "pdfjs-dist", "@napi-rs/canvas", "pg-boss"],
+  // pdf.js loads fonts, character maps and image decoders from these folders at runtime.
+  outputFileTracingIncludes: {
+    "/**": [
+      "./node_modules/pdfjs-dist/standard_fonts/**",
+      "./node_modules/pdfjs-dist/cmaps/**",
+      "./node_modules/pdfjs-dist/wasm/**",
+    ],
+  },
   experimental: {
     serverActions: { bodySizeLimit: "8mb" },
   },

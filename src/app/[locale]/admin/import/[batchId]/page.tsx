@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { FlagList } from "@/components/admin/flag-badges";
 import { ImportConfirm } from "@/components/admin/import-confirm";
+import { PdfBatchView } from "@/components/admin/pdf-batch-view";
 
 interface LoggedRow {
   rowNumber: number;
@@ -34,9 +35,17 @@ export default async function ImportBatchPage({ params }: { params: Promise<{ ba
   const te = await getTranslations("enums");
   const batch = await db.importBatch.findUnique({
     where: { id: batchId },
-    include: { file: { select: { originalName: true } }, source: { select: { name: true } } },
+    include: { file: { select: { originalName: true } }, files: { select: { originalName: true } }, source: { select: { name: true } } },
   });
   if (!batch) notFound();
+  if (batch.kind === "PDF") {
+    return (
+      <div className="space-y-6">
+        <PageHeader title={t("title")} description={`${batch.source.name} · ${batch.files.map((f) => f.originalName).join(", ")}`} />
+        <PdfBatchView batchId={batch.id} />
+      </div>
+    );
+  }
   const rows = ((batch.log as unknown as LoggedRow[] | null) ?? []).slice().sort((a, b) => a.rowNumber - b.rowNumber);
   const errorRows = rows.filter((r) => r.errors.length > 0 && !r.code);
   const flagged = rows.filter((r) => r.code && r.flags.length > 0);

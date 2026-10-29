@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20.18"
+    "node": ">=22.13"
   },
   "scripts": {
     "dev": "next dev",
@@ -25,9 +25,11 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
     "@auth/prisma-adapter": "^2.11.3",
     "@aws-sdk/client-s3": "^3.1159.0",
     "@aws-sdk/s3-request-presigner": "^3.1159.0",
+    "@napi-rs/canvas": "^1.0.13",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
     "@tanstack/react-query": "^5.105.0",
@@ -45,7 +47,9 @@
     "next-themes": "^0.4.6",
     "nodemailer": "^10.3.0",
     "papaparse": "^5.7.0",
+    "pdfjs-dist": "^6.4.299",
     "pg": "^8.23.1",
+    "pg-boss": "^12.38.0",
     "radix-ui": "^1.8.1",
     "react": "19.2",
     "react-dom": "19.2",
@@ -80,6 +84,7 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^15.5.28",
     "intl-messageformat": "^12.1.4",
+    "pdf-lib": "^1.17.1",
     "prisma": "^7.10.1",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
@@ -101,7 +106,8 @@
       "esbuild",
       "sharp",
       "@tailwindcss/oxide",
-      "unrs-resolver"
+      "unrs-resolver",
+      "@napi-rs/canvas"
     ]
   }
 }

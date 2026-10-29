@@ -9,8 +9,8 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | Phase | Scope | State |
 | --- | --- | --- |
 | 1 | Setup, auth, branding, i18n (en/uz/ru), themes, question & source models, manual editor, CSV/Excel import, review queue, drills, basic test interface, dashboard | **Done** |
-| 2 | PDF import (typed + scanned) and side-by-side review | Next |
-| 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | Planned |
+| 2 | PDF import (typed + scanned) and side-by-side review | **Done** |
+| 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | Next |
 | 4 | AI tutor, mock test generator, AI-drafted questions | Planned |
 | 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | Planned |
 | 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Planned |
@@ -52,7 +52,9 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `TELEGRAM_BOT_TOKEN`, `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` | optional | Telegram Login |
 | `STORAGE_DRIVER` | yes | `local` (files on disk) or `s3` (Cloudflare R2 / MinIO) |
 | `S3_*` | if `s3` | Endpoint, bucket and keys for private storage |
-| `ANTHROPIC_API_KEY`, `AI_MODEL_FAST`, `AI_MODEL_SMART` | Phase 2+ | AI features (server-side only) |
+| `ANTHROPIC_API_KEY`, `AI_MODEL_FAST`, `AI_MODEL_SMART` | recommended | AI features (server-side only). Needed to import scanned PDFs, turn math into LaTeX and crop figures |
+| `JOBS_MODE` | optional | `worker` (default; in-process worker), `external` (cron calls `/api/jobs/run`) or `inline` (tests) |
+| `CRON_SECRET` | if `external` | Bearer token for `POST /api/jobs/run` |
 | `DESMOS_API_KEY` | Phase 3 | Desmos calculator (falls back to a basic calculator) |
 | `PAYMENT_PROVIDERS` | Phase 5 | Enabled payment providers |
 | `SENTRY_DSN` | optional | Error monitoring |

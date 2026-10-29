@@ -50,7 +50,8 @@
     "comingSoon": "Tez orada",
     "sample": "Namuna",
     "sampleHint": "Ishlab chiqish uchun namuna — ishga tushirishdan oldin oʻchiriladi",
-    "skipToContent": "Asosiy qismga oʻtish"
+    "skipToContent": "Asosiy qismga oʻtish",
+    "sizeMb": "{value} MB"
   },
   "nav": {
     "home": "Bosh sahifa",
@@ -632,7 +633,7 @@
     },
     "TAXONOMY_UNCONFIRMED": {
       "label": "Yoʻnalish va koʻnikmani tasdiqlang",
-      "help": "Yoʻnalish va koʻnikma avtomatik taklif qilingan. Ularni tasdiqlang yoki oʻzgartiring."
+      "help": "Yoʻnalish va koʻnikma avtomatik taklif qilingan. Ularni tekshirib, savolni saqlang yoki koʻrib chiqish navbatida “Yoʻnalish va koʻnikmani tasdiqlash” tugmasidan foydalaning."
     },
     "STUDENT_REPORT": {
       "label": "Oʻquvchi xabari",
@@ -770,7 +771,8 @@
         "REQUIRED": "Majburiy.",
         "INVALID_DOMAIN": "Ushbu boʻlimga tegishli yoʻnalishni tanlang.",
         "INVALID_SKILL": "Ushbu yoʻnalishga tegishli koʻnikmani tanlang."
-      }
+      },
+      "viewOriginal": "Asl sahifani koʻrish"
     },
     "sources": {
       "title": "Manbalar",
@@ -801,7 +803,6 @@
       "subtitle": "Savollar jadvalini yuklang. Har bir import qilingan savol tekshiruv navbatiga qoralama sifatida tushadi.",
       "spreadsheetTab": "CSV / Excel",
       "pdfTab": "PDF",
-      "pdfComingSoon": "PDF dan import keyingi bosqichda qoʻshiladi.",
       "template": "Shablonni yuklab oling",
       "templateCsv": "CSV shabloni",
       "templateXlsx": "Excel shabloni",
@@ -841,7 +842,8 @@
         "PENDING": "Tasdiqlash kutilmoqda",
         "PROCESSING": "Ishlov berilmoqda",
         "READY": "Import qilindi",
-        "FAILED": "Xato"
+        "FAILED": "Xato",
+        "FINALIZING": "Savollar tuzilmoqda"
       },
       "errors": {
         "MISSING_COLUMNS": "Faylda majburiy ustunlar yoʻq: {columns}.",
@@ -878,6 +880,65 @@
         "question": "Koʻnikma va savol",
         "difficulty": "Qiyinlik",
         "details": "Muammolar va izohlar"
+      },
+      "pdf": {
+        "intro": "Savol toʻplamlarini PDF koʻrinishida yuklang — terilgan yoki skanerlangan — va ixtiyoriy javoblar kalitini qoʻshing. Har bir sahifa siz koʻrib chiqishingiz uchun qoralama savollarga aylantiriladi.",
+        "aiOn": "AI oʻqish yoqilgan: terilgan va skanerlangan sahifalar oʻqiladi, matematika LaTeX ga oʻtkaziladi va rasmlar avtomatik qirqiladi.",
+        "aiOff": "AI oʻqish oʻchiq (ANTHROPIC_API_KEY oʻrnatilmagan). Faqat terilgan PDF oʻqiladi, matematika oddiy matn boʻlib qoladi, rasmlarni qoʻlda qoʻshish kerak. Skanerlangan sahifalar AI talab qiladigan deb belgilanadi.",
+        "section": "Boʻlim",
+        "questionFiles": "Savol toʻplamlari (PDF)",
+        "questionFilesHelp": "Bir yoki bir nechta PDF, har biri 100 MB gacha.",
+        "answerKey": "Javoblar kaliti (PDF, ixtiyoriy)",
+        "answerKeyHelp": "Javoblar savollarga raqami boʻyicha moslashtiriladi.",
+        "dropHere": "PDF fayllarni shu yerga tashlang yoki tanlash uchun bosing",
+        "chooseKey": "Javoblar kalitini tanlash",
+        "remove": "{name} ni olib tashlash",
+        "submit": "Yuklash va oʻqish",
+        "uploading": "{name} yuklanmoqda… {percent}%",
+        "starting": "Boshlanmoqda…",
+        "tipsTitle": "Eng yaxshi natija uchun",
+        "tips": "Word yoki Google Docs dan eksport qilingan terilgan PDF eng yaxshi ishlaydi. Savollarni raqamlang (1., 2., …), variantlarni A) dan D) gacha belgilang va javoblarni “1. B” koʻrinishidagi alohida kalitga yozing. Skanlar uchun: 300 DPI, tekis sahifalar, bitta ustun.",
+        "errors": {
+          "NO_QUESTION_FILE": "Kamida bitta savol toʻplamini qoʻshing.",
+          "NOT_PDF": "Faqat PDF fayllarni import qilish mumkin.",
+          "UPLOAD_FAILED": "{name} yuklanmadi. Internet aloqasini tekshirib, qayta urining.",
+          "UPLOAD_INCOMPLETE": "Barcha fayllar yuklanib boʻlmadi. Qayta urining."
+        }
+      },
+      "progress": {
+        "title": "PDF oʻqilmoqda",
+        "pages": "{total} sahifadan {done} tasi oʻqildi",
+        "failedPages": "{count, plural, other {# sahifani}} oʻqib boʻlmadi",
+        "preparing": "Fayllar tekshirilmoqda…",
+        "finalizing": "Sahifalardan savollar tuzilmoqda…",
+        "keepOpen": "Bu sahifadan chiqib ketishingiz mumkin — import fonda davom etadi."
+      },
+      "result": {
+        "title": "Import yakunlandi",
+        "created": "{count, plural, other {# ta savol}} qoralama sifatida yaratildi",
+        "answersFromKey": "{count, plural, other {# ta javob}} javoblar kalitidan olindi",
+        "withoutAnswer": "{count, plural, =0 {Har bir savolning javobi bor} other {# ta savolning hali javobi yoʻq}}",
+        "unusedKeyEntries": "{count, plural, other {Kalitdagi # ta yozuv}} hech qaysi savolga mos kelmadi",
+        "methods": "AI bilan oʻqildi: {ai} sahifa · matn qatlamidan: {text} sahifa",
+        "failedTitle": "Oʻqib boʻlmagan sahifalar",
+        "failedPage": "{file}, {page}-sahifa",
+        "review": "Yonma-yon koʻrib chiqish",
+        "queue": "Koʻrib chiqish navbatini ochish",
+        "noQuestions": "Savollar topilmadi. Agar PDF skanerlangan boʻlsa, AI oʻqiy olishi uchun ANTHROPIC_API_KEY ni oʻrnating.",
+        "pageErrors": {
+          "NO_TEXT_LAYER": "Skanerlangan sahifa — AI oʻqishi kerak (ANTHROPIC_API_KEY)",
+          "FILE_MISSING": "Fayl xotirada topilmadi",
+          "other": "Oʻqib boʻlmadi: {message}"
+        },
+        "batchErrors": {
+          "NOT_A_PDF": "{file} PDF emas.",
+          "PDF_ENCRYPTED": "{file} parol bilan himoyalangan. Parolni olib tashlab, qayta yuklang.",
+          "PDF_INVALID": "{file} ochilmadi. U shikastlangan boʻlishi mumkin.",
+          "TOO_MANY_PAGES": "{file} da sahifalar juda koʻp (maksimal 400). Uni kichikroq fayllarga boʻling.",
+          "NO_FILES": "Hech qanday fayl yuklanmadi.",
+          "UPLOAD_INCOMPLETE": "Barcha fayllar yuklanib boʻlmadi.",
+          "other": "Import bajarilmadi: {message}"
+        }
       }
     },
     "review": {
@@ -898,7 +959,8 @@
       "skippedBlocking": "Bloklovchi belgili savollar oʻtkazib yuborildi.",
       "selectAll": "Sahifadagi hammasini tanlash",
       "selectRow": "{code} ni tanlash",
-      "empty": "Tekshiruvni kutayotgan savol yoʻq."
+      "empty": "Tekshiruvni kutayotgan savol yoʻq.",
+      "bulkConfirmTaxonomy": "Yoʻnalish va koʻnikmani tasdiqlash"
     },
     "reports": {
       "title": "Oʻquvchilar xabarlari",
@@ -924,6 +986,27 @@
       },
       "roleChanged": "Rol yangilandi",
       "cannotChangeOwnRole": "Oʻz rolingizni oʻzgartira olmaysiz."
+    },
+    "importReview": {
+      "title": "Importni koʻrib chiqish",
+      "original": "Asl sahifa",
+      "pageOf": "{file} — {page}-sahifa",
+      "previousPage": "Oldingi sahifa",
+      "nextPage": "Keyingi sahifa",
+      "noImage": "Bu sahifa uchun rasm yoʻq.",
+      "questions": "Ushbu importdagi savollar",
+      "previous": "Oldingi savol",
+      "next": "Keyingi savol",
+      "position": "{total} tadan {current}-savol",
+      "show": "Koʻrsatish",
+      "all": "Barcha savollar",
+      "flagged": "Belgilangan savollar",
+      "drafts": "Hali nashr qilinmagan",
+      "backToImport": "Importga qaytish",
+      "zoomIn": "Sahifani kattalashtirish",
+      "zoomOut": "Sahifani sigʻdirish",
+      "empty": "Bu yerda koʻrib chiqiladigan savollar yoʻq.",
+      "pick": "Savol"
     }
   }
 }

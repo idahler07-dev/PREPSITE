@@ -75,7 +75,16 @@ Spreadsheets (CSV or XLSX) go through two steps:
 
 Images referenced by `image_url` are downloaded server-side only from public https addresses (private networks are refused), size-limited and type-checked by their bytes.
 
-PDF import (Phase 2) adds a background job queue (pg-boss) and a side-by-side review screen on the same tables.
+### PDF import
+
+1. **Upload** (`/api/admin/imports/pdf`): creates the batch (rights confirmation required) and one `SourceFile` per PDF, and returns upload targets. The browser uploads straight to storage (presigned PUT for S3/R2, `/api/admin/uploads/[fileId]` for local disk), then calls `/start`.
+2. **Jobs** (pg-boss, schema `pgboss`; see `JOBS_MODE`):
+   - `pdf-import-prepare` checks each file (magic bytes, size, encryption, page count ≤ 400) and creates one `ImportPage` per page.
+   - `pdf-import-page` renders the page to PNG (pdf.js + @napi-rs/canvas, `isEvalSupported: false`) and reads it: with `ANTHROPIC_API_KEY`, Claude reads the page image (structured JSON output validated with Zod; usage logged to `AiUsage`); otherwise the text layer is parsed (`src/lib/import/pdf-text.ts`). Scanned pages without a key fail with `NO_TEXT_LAYER`. Retryable AI errors are retried twice.
+   - `pdf-import-finalize` (exclusive, claimed via status `FINALIZING`) merges questions split across pages, matches the answer key by number (in document order, so restarted numbering per module works), crops figures into `QuestionAsset`s, assigns codes, checks near-duplicates and creates `DRAFT` questions with `TAXONOMY_UNCONFIRMED` (blocking until a person confirms domain and skill).
+3. **Review**: `/admin/import/[batchId]/review` shows the original page image next to the editor.
+
+The AI is only asked to transcribe what is on the page; it never writes content.
 
 ## Practice engine
 

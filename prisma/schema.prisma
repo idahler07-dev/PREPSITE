@@ -62,6 +62,7 @@ model User {
   importBatches     ImportBatch[]     @relation("ImportCreatedBy")
   importsConfirmed  ImportBatch[]     @relation("ImportRightsConfirmedBy")
   auditLogs         AuditLog[]
+  aiUsages          AiUsage[]
 }
 
 model Account {
@@ -148,12 +149,20 @@ model SourceFile {
   uploadedById String
   uploadedAt   DateTime       @default(now())
 
+  /// PDF imports: the batch this file was uploaded for (a batch can have several files).
+  importBatchId String?
+  /// false until the browser has finished uploading the file to storage.
+  uploaded      Boolean @default(true)
+
   source        Source        @relation(fields: [sourceId], references: [id], onDelete: Cascade)
   uploadedBy    User          @relation(fields: [uploadedById], references: [id])
   questions     Question[]
   importBatches ImportBatch[]
+  batch         ImportBatch?  @relation("BatchFiles", fields: [importBatchId], references: [id], onDelete: Cascade)
+  pages         ImportPage[]
 
   @@index([sourceId])
+  @@index([importBatchId])
 }
 
 enum ImportKind {
@@ -162,9 +171,10 @@ enum ImportKind {
 }
 
 enum ImportStatus {
-  PENDING
-  PROCESSING
-  READY // parsed, questions are in the review queue
+  PENDING // spreadsheet: waiting for confirmation; PDF: waiting for uploads
+  PROCESSING // PDF: pages being read
+  FINALIZING // PDF: building questions from the pages
+  READY // questions are in the review queue
   FAILED
 }
 
@@ -189,13 +199,57 @@ model ImportBatch {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  source            Source      @relation(fields: [sourceId], references: [id], onDelete: Cascade)
-  file              SourceFile? @relation(fields: [fileId], references: [id], onDelete: SetNull)
-  createdBy         User        @relation("ImportCreatedBy", fields: [createdById], references: [id])
-  rightsConfirmedBy User        @relation("ImportRightsConfirmedBy", fields: [rightsConfirmedById], references: [id])
+  source            Source       @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  file              SourceFile?  @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  files             SourceFile[] @relation("BatchFiles")
+  pages             ImportPage[]
+  createdBy         User         @relation("ImportCreatedBy", fields: [createdById], references: [id])
+  rightsConfirmedBy User         @relation("ImportRightsConfirmedBy", fields: [rightsConfirmedById], references: [id])
   questions         Question[]
 
   @@index([sourceId])
+}
+
+enum ImportPageRole {
+  QUESTIONS
+  ANSWER_KEY
+}
+
+enum ImportPageStatus {
+  PENDING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+/// One page of an imported PDF: its rendered image and what was extracted from it.
+model ImportPage {
+  id          String           @id @default(cuid())
+  batchId     String
+  fileId      String
+  role        ImportPageRole
+  /// 1-based page number in the file
+  pageNumber  Int
+  status      ImportPageStatus @default(PENDING)
+  /// "ai" (Claude read the page image) or "text" (text layer parsed without AI)
+  method      String?
+  /// Text layer from the PDF; empty for scanned pages.
+  textLayer   String?
+  imageKey    String?
+  imageWidth  Int?
+  imageHeight Int?
+  /// Structured result (questions, answer key entries, figures) — see src/lib/import/pdf-schema.ts
+  result      Json?
+  error       String?
+  attempts    Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  batch ImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  file  SourceFile  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@unique([fileId, pageNumber])
+  @@index([batchId, status])
 }
 
 // ─── Questions ──────────────────────────────────────────────────────────────
@@ -470,6 +524,28 @@ model RateLimit {
   resetAt DateTime
 
   @@index([resetAt])
+}
+
+/// Every AI call: tokens and estimated cost, per user and feature.
+model AiUsage {
+  id               String   @id @default(cuid())
+  userId           String?
+  feature          String
+  model            String
+  inputTokens      Int
+  outputTokens     Int
+  cacheReadTokens  Int      @default(0)
+  cacheWriteTokens Int      @default(0)
+  /// Estimated cost in millionths of a US dollar (see src/config/ai-pricing.ts)
+  costMicroUsd     Int
+  /// What the call was for, e.g. an import page id
+  refId            String?
+  createdAt        DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([feature, createdAt])
 }
 
 /// Admin actions worth keeping a record of.

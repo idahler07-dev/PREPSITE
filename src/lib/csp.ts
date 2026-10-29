@@ -18,7 +18,7 @@ export function buildCsp(nonce: string, opts: { dev: boolean; https: boolean; st
       ...(opts.storageOrigin ? [opts.storageOrigin] : []),
     ],
     "font-src": ["'self'", "data:"],
-    "connect-src": ["'self'", ...(opts.dev ? ["ws:"] : [])],
+    "connect-src": ["'self'", ...(opts.storageOrigin ? [opts.storageOrigin] : []), ...(opts.dev ? ["ws:"] : [])],
     "frame-src": ["https://oauth.telegram.org"],
     "frame-ancestors": ["'none'"],
     "form-action": ["'self'", "https://accounts.google.com", "https://oauth.telegram.org"],

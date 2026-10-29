@@ -10,7 +10,7 @@ import { DOMAINS, getDomain } from "@/lib/taxonomy";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { QuestionTable, type QuestionRow } from "./question-table";
-import { bulkQuestionMeta, bulkQuestionStatus, publishCleanInFilter } from "@/server/actions/admin/questions";
+import { bulkConfirmTaxonomy, bulkQuestionMeta, bulkQuestionStatus, publishCleanInFilter } from "@/server/actions/admin/questions";
 
 export function ReviewQueue({ rows }: { rows: QuestionRow[] }) {
   const t = useTranslations("admin.review");
@@ -85,6 +85,9 @@ export function ReviewQueue({ rows }: { rows: QuestionRow[] }) {
             ))}
           </SelectContent>
         </Select>
+        <Button size="sm" variant="secondary" disabled={pending || !selected.length} onClick={() => start(async () => done(await bulkConfirmTaxonomy(selected)))}>
+          {t("bulkConfirmTaxonomy")}
+        </Button>
         <Button size="sm" variant="ghost" disabled={pending || !selected.length} onClick={() => start(async () => done(await bulkQuestionStatus(selected, "RETIRED")))}>
           {t("bulkRetire")}
         </Button>

@@ -18,7 +18,8 @@ test("admin imports a spreadsheet, reviews, publishes, and the question appears 
   const file = path.join(test.info().outputDir, "import.csv");
   writeFileSync(file, CSV);
   await page.goto("/en/admin/import");
-  await page.getByText("Create a new source").click();
+  await page.getByRole("tab", { name: "CSV / Excel" }).click();
+  await page.getByRole("tabpanel").getByText("Create a new source").click();
   await page.getByLabel("Source name").fill("E2E worksheets");
   await page.getByLabel("Owner").fill("Our centre");
   await page.getByText("These questions were written by us").click();

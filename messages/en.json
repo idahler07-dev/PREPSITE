@@ -50,7 +50,8 @@
     "comingSoon": "Coming soon",
     "sample": "Sample",
     "sampleHint": "Development sample — removed before launch",
-    "skipToContent": "Skip to main content"
+    "skipToContent": "Skip to main content",
+    "sizeMb": "{value} MB"
   },
   "nav": {
     "home": "Home",
@@ -632,7 +633,7 @@
     },
     "TAXONOMY_UNCONFIRMED": {
       "label": "Confirm domain/skill",
-      "help": "The domain and skill were suggested automatically. Confirm or change them."
+      "help": "Domain and skill were suggested automatically. Check them and save the question, or use “Confirm domain and skill” in the review queue."
     },
     "STUDENT_REPORT": {
       "label": "Student report",
@@ -770,7 +771,8 @@
         "REQUIRED": "Required.",
         "INVALID_DOMAIN": "Choose a domain for this section.",
         "INVALID_SKILL": "Choose a skill in this domain."
-      }
+      },
+      "viewOriginal": "View original page"
     },
     "sources": {
       "title": "Sources",
@@ -801,7 +803,6 @@
       "subtitle": "Upload a spreadsheet of questions. Every imported question goes to the review queue as a draft.",
       "spreadsheetTab": "CSV / Excel",
       "pdfTab": "PDF",
-      "pdfComingSoon": "PDF import arrives in the next phase.",
       "template": "Download the template",
       "templateCsv": "CSV template",
       "templateXlsx": "Excel template",
@@ -838,10 +839,11 @@
       "batches": "Recent imports",
       "noBatches": "No imports yet.",
       "batchStatus": {
-        "PENDING": "Waiting for confirmation",
+        "PENDING": "Waiting",
         "PROCESSING": "Processing",
         "READY": "Imported",
-        "FAILED": "Failed"
+        "FAILED": "Failed",
+        "FINALIZING": "Building questions"
       },
       "errors": {
         "MISSING_COLUMNS": "The file is missing required columns: {columns}.",
@@ -878,6 +880,65 @@
         "question": "Skill and question",
         "difficulty": "Difficulty",
         "details": "Problems and notes"
+      },
+      "pdf": {
+        "intro": "Upload question booklets as PDF — typed or scanned — and an optional answer key. Every page is read into draft questions for you to review.",
+        "aiOn": "AI reading is on: typed and scanned pages are read, math becomes LaTeX and figures are cropped automatically.",
+        "aiOff": "AI reading is off (ANTHROPIC_API_KEY is not set). Only typed PDFs can be read, math stays as plain text and figures must be added by hand. Scanned pages will be listed as needing AI.",
+        "section": "Section",
+        "questionFiles": "Question booklets (PDF)",
+        "questionFilesHelp": "One or more PDFs, up to 100 MB each.",
+        "answerKey": "Answer key (PDF, optional)",
+        "answerKeyHelp": "Answers are matched to questions by their number.",
+        "dropHere": "Drop PDFs here or click to choose",
+        "chooseKey": "Choose answer key",
+        "remove": "Remove {name}",
+        "submit": "Upload and read",
+        "uploading": "Uploading {name}… {percent}%",
+        "starting": "Starting…",
+        "tipsTitle": "What works best",
+        "tips": "Typed PDFs exported from Word or Google Docs work best. Number the questions (1., 2., …), label choices A) to D), and put the answers in a separate key like “1. B”. For scans: 300 DPI, straight pages, one column.",
+        "errors": {
+          "NO_QUESTION_FILE": "Add at least one question booklet.",
+          "NOT_PDF": "Only PDF files can be imported.",
+          "UPLOAD_FAILED": "Uploading {name} failed. Check your connection and try again.",
+          "UPLOAD_INCOMPLETE": "Not all files finished uploading. Try again."
+        }
+      },
+      "progress": {
+        "title": "Reading the PDF",
+        "pages": "{done} of {total} pages read",
+        "failedPages": "{count, plural, one {# page} other {# pages}} could not be read",
+        "preparing": "Checking the files…",
+        "finalizing": "Building questions from the pages…",
+        "keepOpen": "You can leave this page — the import continues in the background."
+      },
+      "result": {
+        "title": "Import finished",
+        "created": "{count, plural, one {# question} other {# questions}} created as drafts",
+        "answersFromKey": "{count, plural, one {# answer} other {# answers}} taken from the answer key",
+        "withoutAnswer": "{count, plural, =0 {Every question has an answer} one {# question has no answer yet} other {# questions have no answer yet}}",
+        "unusedKeyEntries": "{count, plural, one {# answer-key entry} other {# answer-key entries}} did not match any question",
+        "methods": "Read with AI: {ai} pages · from the text layer: {text} pages",
+        "failedTitle": "Pages that could not be read",
+        "failedPage": "{file}, page {page}",
+        "review": "Review side by side",
+        "queue": "Open review queue",
+        "noQuestions": "No questions were found. If the PDF is scanned, set ANTHROPIC_API_KEY so the AI can read it.",
+        "pageErrors": {
+          "NO_TEXT_LAYER": "Scanned page — needs AI reading (ANTHROPIC_API_KEY)",
+          "FILE_MISSING": "The file is missing from storage",
+          "other": "Could not be read: {message}"
+        },
+        "batchErrors": {
+          "NOT_A_PDF": "{file} is not a PDF.",
+          "PDF_ENCRYPTED": "{file} is password-protected. Remove the password and upload again.",
+          "PDF_INVALID": "{file} could not be opened. It may be damaged.",
+          "TOO_MANY_PAGES": "{file} has too many pages (maximum 400). Split it into smaller files.",
+          "NO_FILES": "No files were uploaded.",
+          "UPLOAD_INCOMPLETE": "Not all files finished uploading.",
+          "other": "The import failed: {message}"
+        }
       }
     },
     "review": {
@@ -898,7 +959,8 @@
       "skippedBlocking": "Questions with blocking flags were skipped.",
       "selectAll": "Select all on this page",
       "selectRow": "Select {code}",
-      "empty": "Nothing waiting for review."
+      "empty": "Nothing waiting for review.",
+      "bulkConfirmTaxonomy": "Confirm domain and skill"
     },
     "reports": {
       "title": "Student reports",
@@ -924,6 +986,27 @@
       },
       "roleChanged": "Role updated",
       "cannotChangeOwnRole": "You can’t change your own role."
+    },
+    "importReview": {
+      "title": "Review import",
+      "original": "Original page",
+      "pageOf": "{file} — page {page}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "noImage": "No image for this page.",
+      "questions": "Questions in this import",
+      "previous": "Previous question",
+      "next": "Next question",
+      "position": "Question {current} of {total}",
+      "show": "Show",
+      "all": "All questions",
+      "flagged": "Questions with flags",
+      "drafts": "Not yet published",
+      "backToImport": "Back to import",
+      "zoomIn": "Enlarge page",
+      "zoomOut": "Fit page",
+      "empty": "No questions to review here.",
+      "pick": "Question"
     }
   }
 }

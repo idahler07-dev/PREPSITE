@@ -23,13 +23,8 @@ export interface Provenance {
   importedAt?: Date | null;
 }
 
-const PROCESS_FLAGS_CLEARED_ON_APPROVAL: readonly Flag[] = [
-  "NEAR_DUPLICATE",
-  "DUPLICATE_CODE",
-  "TAXONOMY_UNCONFIRMED",
-  "STUDENT_REPORT",
-  "DIFFICULTY_MISMATCH",
-];
+// TAXONOMY_UNCONFIRMED is not here: it blocks publishing until someone confirms domain and skill.
+const PROCESS_FLAGS_CLEARED_ON_APPROVAL: readonly Flag[] = ["NEAR_DUPLICATE", "DUPLICATE_CODE", "STUDENT_REPORT", "DIFFICULTY_MISMATCH"];
 
 export function questionFingerprint(q: { passage?: string | null; stem: string; choices?: Choice[] | null }) {
   return fingerprintText([q.passage, q.stem, ...(q.choices ?? []).map((c) => c.text)]);
@@ -129,7 +124,7 @@ export async function updateQuestion(
   id: string,
   input: QuestionInput,
   actor: Actor,
-  opts: { expectedVersion?: number; changeNote?: string; status?: QuestionStatus } = {},
+  opts: { expectedVersion?: number; changeNote?: string; status?: QuestionStatus; confirmTaxonomy?: boolean } = {},
 ) {
   const current = await db.question.findUnique({ where: { id } });
   if (!current) throw new HttpError(404, "NOT_FOUND");
@@ -145,7 +140,8 @@ export async function updateQuestion(
     await assertCodeFree(tx, input.code, id);
     const assetCount = await attachAssets(tx, id, input);
     const linkedAssets = await tx.questionAsset.count({ where: { questionId: id } });
-    let flags = mergeFlags(current.flags, computeContentFlags({ ...input, assetCount: Math.max(assetCount, linkedAssets) }));
+    const previous = opts.confirmTaxonomy ? current.flags.filter((f) => f !== "TAXONOMY_UNCONFIRMED") : current.flags;
+    let flags = mergeFlags(previous, computeContentFlags({ ...input, assetCount: Math.max(assetCount, linkedAssets) }));
     if (dupes.length && !current.flags.includes("NEAR_DUPLICATE") && current.fingerprint !== data.fingerprint) {
       flags = [...new Set([...flags, "NEAR_DUPLICATE"])].sort();
     }
@@ -289,6 +285,16 @@ export function questionToSnapshot(q: {
       status: q.status,
     }),
   );
+}
+
+/** Confirm the suggested domain and skill as they are (bulk review action). */
+export async function confirmTaxonomy(ids: string[], actor: Actor) {
+  const questions = await db.question.findMany({ where: { id: { in: ids }, flags: { has: "TAXONOMY_UNCONFIRMED" } }, select: { id: true, flags: true } });
+  for (const q of questions) {
+    await db.question.update({ where: { id: q.id }, data: { flags: q.flags.filter((f) => f !== "TAXONOMY_UNCONFIRMED") } });
+  }
+  await audit(actor.id, "question.taxonomy.confirm", "Question", null, { count: questions.length });
+  return questions.length;
 }
 
 /** Next free codes for a prefix + domain, following the configured format. */
