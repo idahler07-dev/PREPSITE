@@ -45,8 +45,9 @@ export function blockingFlags(flags: readonly string[]): string[] {
  */
 export const UNCERTAIN_MARKER = /\[\[\?([\s\S]*?)\]\]/g;
 
+/** Phrases that point at a visual (not just "the graph of f", which needs no figure). */
 const FIGURE_WORDS =
-  /\b(figure|graph(ed)?|diagram|table|scatterplot|bar chart|line chart|histogram|dot plot|box plot|shown (above|below|in the))\b/i;
+  /\b(figure|diagram|scatterplot|histogram|dot plot|box plot|bar (chart|graph)|line (chart|graph)|(is|are) shown|as shown|shown (above|below|in)|the (graph|table|chart|map) (above|below|shows|shown))\b/i;
 const HAS_IMAGE = /!\[[^\]]*\]\([^)]+\)/;
 const HAS_TABLE = /^\s*\|.*\|\s*$\n^\s*\|?\s*:?-{3,}/m;
 

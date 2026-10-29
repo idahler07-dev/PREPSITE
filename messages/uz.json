@@ -1,1 +1,929 @@
-{}
+{
+  "metadata": {
+    "title": "{name} — SATga tayyorgarlik",
+    "description": "Raqamli SATga oʻqituvchilarimiz yozgan savollar, vaqtli mashqlar va halol natijalar statistikasi bilan tayyorlaning."
+  },
+  "common": {
+    "loading": "Yuklanmoqda…",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda…",
+    "saved": "Saqlandi",
+    "cancel": "Bekor qilish",
+    "delete": "Oʻchirish",
+    "edit": "Tahrirlash",
+    "back": "Orqaga",
+    "next": "Keyingi",
+    "previous": "Oldingi",
+    "close": "Yopish",
+    "confirm": "Tasdiqlash",
+    "search": "Qidirish",
+    "filter": "Filtr",
+    "filters": "Filtrlar",
+    "clearFilters": "Filtrlarni tozalash",
+    "all": "Hammasi",
+    "any": "Istalgan",
+    "none": "Yoʻq",
+    "yes": "Ha",
+    "no": "Yoʻq",
+    "optional": "ixtiyoriy",
+    "actions": "Amallar",
+    "continue": "Davom etish",
+    "retry": "Qayta urinish",
+    "view": "Koʻrish",
+    "open": "Ochish",
+    "download": "Yuklab olish",
+    "upload": "Yuklash",
+    "apply": "Qoʻllash",
+    "select": "Tanlash",
+    "selected": "{count} ta tanlandi",
+    "showing": "{total} tadan {from}–{to}",
+    "page": "{pages} sahifadan {page}-sahifa",
+    "minutesShort": "{count} daq",
+    "secondsShort": "{count} s",
+    "durationMinSec": "{min} daq {sec} s",
+    "notSet": "Koʻrsatilmagan",
+    "unknownError": "Nimadir xato ketdi. Qaytadan urinib koʻring.",
+    "networkError": "Ulanishda muammo. Internetni tekshirib, qayta urinib koʻring.",
+    "copied": "Nusxa olindi",
+    "new": "Yangi",
+    "or": "yoki",
+    "comingSoon": "Tez orada",
+    "sample": "Namuna",
+    "sampleHint": "Ishlab chiqish uchun namuna — ishga tushirishdan oldin oʻchiriladi",
+    "skipToContent": "Asosiy qismga oʻtish"
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "dashboard": "Mening natijalarim",
+    "practice": "Mashq",
+    "history": "Tarix",
+    "resources": "Rasmiy materiallar",
+    "about": "Biz haqimizda",
+    "faq": "Savol-javoblar",
+    "contact": "Aloqa",
+    "admin": "Admin paneli",
+    "settings": "Sozlamalar",
+    "signIn": "Kirish",
+    "signOut": "Chiqish",
+    "getStarted": "Boshlash",
+    "account": "Hisob",
+    "menu": "Menyu",
+    "mainNavigation": "Asosiy menyu"
+  },
+  "footer": {
+    "disclaimer": "SAT® — College Board tomonidan roʻyxatdan oʻtkazilgan savdo belgisi. College Board ushbu sayt bilan bogʻliq emas va uni qoʻllab-quvvatlamaydi.",
+    "copyright": "© {year} {name}",
+    "terms": "Foydalanish shartlari",
+    "privacy": "Maxfiylik siyosati",
+    "refunds": "Pulni qaytarish siyosati",
+    "contact": "Aloqa",
+    "about": "Biz haqimizda",
+    "resources": "Rasmiy materiallar"
+  },
+  "theme": {
+    "label": "Mavzu",
+    "light": "Yorugʻ",
+    "dark": "Qorongʻi",
+    "system": "Tizimdagidek"
+  },
+  "language": {
+    "label": "Til"
+  },
+  "home": {
+    "eyebrow": "Raqamli SATga tayyorgarlik",
+    "title": "SATga haqiqiy oʻqituvchilar yozgan savollar bilan tayyorlaning",
+    "subtitle": "Vaqtli mashqlar, imtihondagidek test ekrani va tushunarli natijalar. {name} tomonidan Oʻzbekiston va Markaziy Osiyo oʻquvchilari uchun yaratilgan.",
+    "ctaPrimary": "Mashqni boshlash",
+    "ctaSecondary": "Bepul rasmiy materiallar",
+    "publishedCount": "Hozircha bazamizda {count, plural, one {# ta savol} other {# ta savol}} bor",
+    "featuresTitle": "Nimalarga ega boʻlasiz",
+    "features": {
+      "bank": {
+        "title": "Oʻz savollar bazamiz",
+        "body": "Har bir savolni oʻqituvchilarimiz yozgan yoki muallif ruxsati bilan foydalaniladi va sizga yetib borishidan oldin inson tomonidan tekshiriladi."
+      },
+      "test": {
+        "title": "Imtihondagidek mashq",
+        "body": "Taymer, savollar navigatori, «keyinroq qaytish» belgisi va javoblarni chizib tashlash — imtihon kunidagi vositalar."
+      },
+      "drills": {
+        "title": "Mavzuli mashqlar",
+        "body": "Bir vaqtda bitta koʻnikmani mashq qiling, qiyinlikni tanlang va javoblarni darhol yoki oxirida tekshiring."
+      },
+      "progress": {
+        "title": "Halol natijalar",
+        "body": "Boʻlimlar va koʻnikmalar boʻyicha aniqlik, har bir savolga ketgan vaqt va kunlar seriyasi — faqat oʻz mashqingizdagi haqiqiy raqamlar."
+      }
+    },
+    "officialTitle": "Rasmiy bepul materiallardan ham foydalaning",
+    "officialBody": "College Board va Khan Academy bepul rasmiy mashqlarni eʼlon qiladi. Biz ularni nusxalamaymiz, havola beramiz.",
+    "officialCta": "Rasmiy materiallar"
+  },
+  "about": {
+    "title": "Biz haqimizda",
+    "body": "{name} — oʻquvchilarni raqamli SATga tayyorlaydigan oʻquv markazi. Bu saytda oʻqituvchilarimiz tayyorlagan materiallar jamlangan, shunda darslar orasida ham shugʻullanishingiz mumkin.",
+    "contentTitle": "Savollarimiz qayerdan olinadi",
+    "contentBody": "Saytdagi savollarni oʻqituvchilarimiz yozgan yoki mualliflarning yozma ruxsati bilan foydalaniladi. Baʼzi qoralamalar sunʼiy intellekt yordamida tayyorlanishi mumkin, lekin har bir savolni eʼlon qilishdan oldin oʻqituvchi tekshiradi. Biz College Board va boshqa kompaniyalarning savollarini nusxalamaymiz.",
+    "scoreTitle": "Ball baholari haqida",
+    "scoreBody": "Saytdagi har qanday ball — mashqlaringiz asosidagi taxminiy baho, College Boardning rasmiy natijasi emas."
+  },
+  "faq": {
+    "title": "Savol-javoblar",
+    "items": {
+      "official": {
+        "q": "Bular rasmiy SAT savollarimi?",
+        "a": "Yoʻq. Savollarimizni oʻqituvchilarimiz raqamli SAT uslubida yozgan. Rasmiy mashq uchun «Rasmiy materiallar» sahifasidagi College Board va Khan Academy bepul materiallaridan foydalaning."
+      },
+      "score": {
+        "q": "Saytdagi ball mening haqiqiy SAT ballimmi?",
+        "a": "Yoʻq. Bu mashqlaringiz asosidagi taxminiy baho. Rasmiy ballni faqat College Board beradi."
+      },
+      "language": {
+        "q": "Nega savollar ingliz tilida?",
+        "a": "Haqiqiy SAT ingliz tilida oʻtkaziladi, shuning uchun savollarimiz ham ingliz tilida. Menyu, tushuntirishlar va oʻquv rejalari sizning tilingizda boʻlishi mumkin."
+      },
+      "device": {
+        "q": "Telefonda shugʻullansam boʻladimi?",
+        "a": "Ha. Lekin haqiqiy imtihon noutbuk yoki planshetda topshiriladi, shuning uchun toʻliq vaqtli testlarni ularda ishlash yaxshiroq."
+      },
+      "mistake": {
+        "q": "Savolda xato bor shekilli. Nima qilay?",
+        "a": "Javob bergandan keyin «Muammo haqida xabar berish» tugmasini bosing. Har bir xabarni oʻqituvchi koʻrib chiqadi."
+      }
+    }
+  },
+  "resources": {
+    "title": "Rasmiy bepul materiallar",
+    "subtitle": "SAT ortidagi tashkilotlarning bepul mashqlari. Havolalar ularning saytlarida ochiladi.",
+    "note": "Biz bu tashkilotlar bilan bogʻliq emasmiz. Havolalar yangi oynada ochiladi.",
+    "items": {
+      "questionBank": {
+        "title": "SAT Suite Question Bank",
+        "body": "Rasmiy mashq savollarini boʻlim, koʻnikma va qiyinlik boʻyicha qidiring."
+      },
+      "bluebook": {
+        "title": "Bluebook ilovasi",
+        "body": "Rasmiy imtihon ilovasini yuklab oling va toʻliq adaptiv sinov testlarini ishlang."
+      },
+      "practiceTests": {
+        "title": "Rasmiy sinov testlari",
+        "body": "Toʻliq raqamli sinov testlari va ularni qanday baholash haqida maʼlumot."
+      },
+      "khanAcademy": {
+        "title": "Khan Academy — Digital SAT",
+        "body": "Har bir SAT koʻnikmasi boʻyicha bepul rasmiy darslar va mashqlar."
+      }
+    },
+    "visit": "Saytni ochish"
+  },
+  "contact": {
+    "title": "Biz bilan bogʻlaning",
+    "subtitle": "Darslar, sayt yoki hisobingiz haqida savollar bormi? Bizga yozing.",
+    "email": "Elektron pochta",
+    "phone": "Telefon",
+    "telegram": "Telegram",
+    "address": "Manzil",
+    "hours": "Ish vaqti"
+  },
+  "legal": {
+    "draftNotice": "Qoralama matn — oʻquv markazi ishga tushirishdan oldin yakuniy variantni eʼlon qiladi.",
+    "lastUpdated": "Yangilangan: {date}",
+    "terms": {
+      "title": "Foydalanish shartlari"
+    },
+    "privacy": {
+      "title": "Maxfiylik siyosati"
+    },
+    "refunds": {
+      "title": "Pulni qaytarish siyosati"
+    }
+  },
+  "cookie": {
+    "message": "Biz faqat zarur cookie fayllaridan foydalanamiz: hisobingizda qolishingiz hamda til va mavzuni eslab qolish uchun.",
+    "accept": "Tushunarli"
+  },
+  "auth": {
+    "signInTitle": "Kiring yoki hisob yarating",
+    "signInSubtitle": "Elektron pochta, Google yoki Telegramdan foydalaning. Yangi hisob avtomatik yaratiladi.",
+    "emailLabel": "Elektron pochta manzili",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Kirish havolasini yuborish",
+    "sending": "Yuborilmoqda…",
+    "orContinueWith": "yoki quyidagi orqali kiring",
+    "google": "Google orqali kirish",
+    "telegramLoading": "Telegram yuklanmoqda…",
+    "termsNote": "Davom etish orqali <terms>Foydalanish shartlari</terms> va <privacy>Maxfiylik siyosati</privacy>ga rozilik bildirasiz.",
+    "checkEmailTitle": "Pochtangizni tekshiring",
+    "checkEmailBody": "Pochtangizga kirish havolasini yubordik. Uni shu qurilmada oching. Havola bir soat amal qiladi.",
+    "checkEmailSpam": "Topa olmadingizmi? «Spam» jildini tekshiring yoki qayta urinib koʻring.",
+    "tryAgain": "Boshqa manzilni kiritish",
+    "signedOut": "Hisobingizdan chiqdingiz.",
+    "errors": {
+      "EmailSignin": "Xatni yuborib boʻlmadi. Manzilni tekshirib, bir necha daqiqadan keyin qayta urinib koʻring.",
+      "OAuthAccountNotLinked": "Bu manzil boshqa kirish usuli bilan roʻyxatdan oʻtgan. Avvalgidek kiring.",
+      "Verification": "Kirish havolasining muddati tugagan yoki u allaqachon ishlatilgan. Yangisini soʻrang.",
+      "AccessDenied": "Ruxsat yoʻq.",
+      "CredentialsSignin": "Telegram orqali kirib boʻlmadi. Qayta urinib koʻring.",
+      "Configuration": "Kirish notoʻgʻri sozlangan. Biz bilan bogʻlaning.",
+      "RateLimited": "Juda koʻp urinish. Bir necha daqiqa kutib, qayta urinib koʻring.",
+      "InvalidEmail": "Toʻgʻri elektron pochta manzilini kiriting.",
+      "Default": "Kirib boʻlmadi. Qayta urinib koʻring."
+    }
+  },
+  "email": {
+    "magicLink": {
+      "subject": "{name} uchun kirish havolangiz",
+      "intro": "{name} saytiga kirish uchun quyidagi tugmani bosing.",
+      "button": "Kirish",
+      "expires": "Havola bir soat amal qiladi va faqat bir marta ishlatiladi.",
+      "ignore": "Agar bu xatni siz soʻramagan boʻlsangiz, eʼtibor bermang."
+    }
+  },
+  "onboarding": {
+    "title": "Maqsadingizni belgilaylik",
+    "subtitle": "Bu mashqlarni rejalashtirishga yordam beradi. Istalgan vaqtda sozlamalarda oʻzgartirishingiz mumkin.",
+    "testDate": "SAT imtihoningiz qachon?",
+    "testDateHelp": "Hali roʻyxatdan oʻtmagan boʻlsangiz, boʻsh qoldiring.",
+    "targetScore": "Maqsadli ball",
+    "targetScoreHelp": "400 dan 1600 gacha.",
+    "currentScore": "Hozirgi ballingiz",
+    "currentScoreHelp": "Rasmiy sinov testi yoki haqiqiy SAT boʻyicha. Bilmasangiz, boʻsh qoldiring.",
+    "diagnosticHint": "Darajangizni bilmaysizmi? Bu qadamdan keyin qisqa aralash mashqdan boshlang.",
+    "save": "Saqlash va davom etish",
+    "skip": "Hozircha oʻtkazib yuborish",
+    "errors": {
+      "score": "400 dan 1600 gacha, 10 ga karrali ball kiriting.",
+      "date": "Kelajakdagi sanani tanlang."
+    }
+  },
+  "dashboard": {
+    "title": "Mening natijalarim",
+    "welcome": "Xush kelibsiz, {name}!",
+    "welcomeNoName": "Xush kelibsiz!",
+    "startDrill": "Mashqni boshlash",
+    "continueAttempt": "Toʻxtagan joydan davom etish",
+    "stats": {
+      "answered": "Javob berilgan savollar",
+      "accuracy": "Aniqlik",
+      "streak": "Kunlar seriyasi",
+      "avgTime": "Bir savolga oʻrtacha vaqt",
+      "streakDays": "{count, plural, one {# kun} other {# kun}}"
+    },
+    "goal": {
+      "title": "Maqsadingiz",
+      "target": "Maqsadli ball",
+      "testDate": "Imtihon sanasi",
+      "daysLeft": "{count, plural, one {# kun qoldi} other {# kun qoldi}}",
+      "testPassed": "Imtihon sanasi oʻtib ketgan",
+      "edit": "Maqsadni oʻzgartirish",
+      "setGoal": "Maqsad belgilash"
+    },
+    "estimate": {
+      "title": "Taxminiy ball",
+      "notYet": "Baholashni koʻrish uchun toʻliq sinov testini ishlang.",
+      "label": "Bu taxminiy baho, College Boardning rasmiy bali emas."
+    },
+    "byDomain": "Boʻlimlar boʻyicha aniqlik",
+    "bySkill": "Ustida ishlash kerak boʻlgan koʻnikmalar",
+    "noData": "Hali mashq qilinmagan. Natijalaringiz shu yerda koʻrinadi.",
+    "recent": "Soʻnggi mashqlar",
+    "viewAll": "Hammasini koʻrish",
+    "officialScores": "Rasmiy sinov testlari ballari"
+  },
+  "practice": {
+    "title": "Mashq",
+    "subtitle": "Eʼlon qilingan savollardan mashq tuzing.",
+    "section": "Boʻlim",
+    "bothSections": "Ikkala boʻlim",
+    "domains": "Yoʻnalishlar",
+    "skills": "Koʻnikmalar",
+    "allDomains": "Barcha yoʻnalishlar",
+    "allSkills": "Barcha koʻnikmalar",
+    "difficulty": "Qiyinlik",
+    "count": "Savollar soni",
+    "codeRange": "Savol kodlari oraligʻi",
+    "codeFrom": "Qaysi koddan",
+    "codeTo": "Qaysi kodgacha",
+    "codeRangeHelp": "Ixtiyoriy. Masalan, LC-M-ALG-0001 dan LC-M-ALG-0050 gacha.",
+    "timing": "Vaqt",
+    "timed": "Vaqtli",
+    "untimed": "Vaqtsiz",
+    "timedHelp": "Har bir savolga taxminan {seconds} soniya, xuddi imtihondagidek.",
+    "feedback": "Javoblar qachon koʻrsatilsin",
+    "feedbackImmediate": "Har bir savoldan keyin",
+    "feedbackEnd": "Oxirida",
+    "unseenFirst": "Avval men koʻrmagan savollar",
+    "start": "Mashqni boshlash",
+    "starting": "Boshlanmoqda…",
+    "matching": "{count, plural, =0 {Mos savollar yoʻq} one {# ta savol mos keladi} other {# ta savol mos keladi}}",
+    "noQuestions": "Bu filtrlarga mos eʼlon qilingan savollar hali yoʻq. Filtrlarni kamaytirib koʻring.",
+    "lessThanRequested": "Faqat {count} ta savol mos keladi; mashqda {count} ta savol boʻladi.",
+    "quickStart": "Tez boshlash",
+    "quickMixed": "Aralash 10 ta savol",
+    "quickMath": "Matematikadan 10 ta savol",
+    "quickRw": "Oʻqish va yozishdan 10 ta savol",
+    "inProgress": "Tugallanmagan",
+    "resume": "Davom etish"
+  },
+  "test": {
+    "drillTitle": "Mashq",
+    "moduleTitle": "{section} boʻlimi, {module}-modul",
+    "questionOf": "{total} tadan {current}-savol",
+    "timer": {
+      "hide": "Yashirish",
+      "show": "Taymerni koʻrsatish",
+      "remaining": "Qolgan vaqt",
+      "warning": "Modul tugashiga 5 daqiqa qoldi.",
+      "timeUp": "Vaqt tugadi. Javoblaringiz yuborildi."
+    },
+    "markForReview": "Keyinroq qaytish",
+    "marked": "Belgilangan",
+    "eliminator": "Variantlarni chizib tashlash",
+    "eliminatorOn": "Chizib tashlash yoqilgan",
+    "crossOut": "{choice} variantini chizib tashlash",
+    "undoCrossOut": "{choice} variantini qaytarish",
+    "choice": "{choice} varianti",
+    "sprLabel": "Javobingiz",
+    "sprPreview": "Javob qanday yoziladi",
+    "sprHelp": "Butun son, oʻnli kasr yoki oddiy kasr kiriting. 5 belgigacha (manfiy boʻlsa 6). Aralash son, vergul va boshqa belgilar mumkin emas.",
+    "sprErrors": {
+      "TOO_LONG": "Juda uzun — 5 belgigacha, minus bilan 6 belgigacha.",
+      "MIXED_NUMBER": "Aralash son mumkin emas. 3 1/2 oʻrniga 7/2 yoki 3.5 kiriting.",
+      "INVALID": "Faqat raqamlar, bitta nuqta, «/» va boshida «−» ishlating.",
+      "DIVIDE_BY_ZERO": "Maxraj nol boʻlishi mumkin emas.",
+      "EMPTY": ""
+    },
+    "navigator": {
+      "open": "Savollar navigatori",
+      "title": "Ushbu moduldagi savollar",
+      "current": "Joriy",
+      "unanswered": "Javobsiz",
+      "forReview": "Belgilangan",
+      "answered": "Javob berilgan",
+      "goToReview": "Tekshirish sahifasiga oʻtish"
+    },
+    "review": {
+      "title": "Javoblaringizni tekshiring",
+      "body": "Yuborishdan oldin istalgan savolga qaytishingiz mumkin. Javobsiz va belgilangan savollar ajratib koʻrsatilgan.",
+      "unansweredCount": "{count, plural, =0 {Barcha savollarga javob berilgan} one {# ta savol javobsiz} other {# ta savol javobsiz}}",
+      "markedCount": "{count, plural, =0 {Belgilangan savol yoʻq} one {# ta savol belgilangan} other {# ta savol belgilangan}}",
+      "submit": "Javoblarni yuborish",
+      "back": "Savollarga qaytish"
+    },
+    "submitConfirm": {
+      "title": "Javoblarni yuborasizmi?",
+      "body": "Yuborganingizdan keyin javoblarni oʻzgartirib boʻlmaydi.",
+      "unanswered": "{count, plural, one {# ta savol} other {# ta savol}} hali javobsiz.",
+      "confirm": "Yuborish",
+      "cancel": "Ishlashda davom etish"
+    },
+    "check": "Javobni tekshirish",
+    "checking": "Tekshirilmoqda…",
+    "correct": "Toʻgʻri",
+    "incorrect": "Notoʻgʻri",
+    "correctAnswerIs": "Toʻgʻri javob: {answer}",
+    "acceptedAnswers": "Qabul qilinadigan javoblar: {answers}",
+    "explanation": "Tushuntirish",
+    "noExplanation": "Bu savol uchun hali yozma tushuntirish yoʻq.",
+    "yourAnswer": "Javobingiz: {answer}",
+    "unanswered": "Javob berilmagan",
+    "finish": "Mashqni yakunlash",
+    "save": {
+      "saving": "Saqlanmoqda…",
+      "saved": "Barcha javoblar saqlandi",
+      "offline": "Internet yoʻq — ulanish tiklanganda javoblar saqlanadi",
+      "error": "Saqlab boʻlmadi. Qayta urinilmoqda…"
+    },
+    "exit": "Chiqish",
+    "exitConfirm": {
+      "title": "Mashqdan chiqasizmi?",
+      "body": "Javoblaringiz saqlangan. Keyinroq qaytib, davom ettirishingiz mumkin.",
+      "leave": "Chiqish",
+      "stay": "Qolish"
+    },
+    "mobileTip": "Maslahat: haqiqiy SAT noutbuk yoki planshetda topshiriladi. Imkon boʻlsa, vaqtli mashqlarni ularda ishlang.",
+    "dismiss": "Yopish",
+    "shortcuts": {
+      "title": "Klaviatura tugmalari",
+      "choose": "A–D javobni tanlash",
+      "next": "Keyingi savol",
+      "previous": "Oldingi savol",
+      "mark": "«Keyinroq qaytish» belgisi",
+      "eliminate": "Chizib tashlashni yoqish yoki oʻchirish",
+      "help": "Tugmalarni koʻrsatish"
+    },
+    "passage": "Matn",
+    "question": "Savol",
+    "zoomIn": "Kattalashtirish",
+    "zoomOut": "Kichraytirish",
+    "submitted": "Yuborildi",
+    "alreadyCompleted": "Bu mashq yakunlangan.",
+    "viewResults": "Natijalarni koʻrish"
+  },
+  "results": {
+    "title": "Natijalar",
+    "drillTitle": "Mashq natijalari",
+    "score": "{total} tadan {correct} tasi toʻgʻri",
+    "accuracy": "Aniqlik",
+    "timeSpent": "Sarflangan vaqt",
+    "avgTime": "Bir savolga oʻrtacha",
+    "completedAt": "Yakunlangan: {date}",
+    "byDomain": "Yoʻnalishlar boʻyicha",
+    "questions": "Savollar boʻyicha tahlil",
+    "columns": {
+      "number": "№",
+      "code": "Kod",
+      "skill": "Koʻnikma",
+      "difficulty": "Qiyinlik",
+      "yourAnswer": "Javobingiz",
+      "correctAnswer": "Toʻgʻri javob",
+      "time": "Vaqt",
+      "result": "Natija"
+    },
+    "flagged": "«Keyinroq qaytish» bilan belgilangan",
+    "practiceAgain": "Yana mashq qilish",
+    "practiceMistakes": "Xatolar ustida ishlash",
+    "showQuestion": "Savolni koʻrsatish",
+    "hideQuestion": "Savolni yashirish",
+    "report": {
+      "button": "Muammo haqida xabar berish",
+      "title": "Ushbu savoldagi muammo haqida xabar bering",
+      "body": "Oʻqituvchi uni koʻrib chiqadi. Yaxshilanishimizga yordam berganingiz uchun rahmat.",
+      "reason": "Nima notoʻgʻri?",
+      "reasons": {
+        "WRONG_ANSWER": "Javob kaliti notoʻgʻri",
+        "TYPO": "Imlo yoki formatlash xatosi",
+        "UNCLEAR": "Savol tushunarsiz",
+        "FIGURE": "Rasm yoki jadvalda muammo",
+        "OTHER": "Boshqa"
+      },
+      "message": "Tafsilotlar (ixtiyoriy)",
+      "submit": "Yuborish",
+      "thanks": "Rahmat! Oʻqituvchi bu savolni koʻrib chiqadi.",
+      "already": "Siz bu savol haqida allaqachon xabar bergansiz."
+    }
+  },
+  "history": {
+    "title": "Mashqlar tarixi",
+    "empty": "Siz hali mashq qilmagansiz.",
+    "columns": {
+      "date": "Sana",
+      "type": "Turi",
+      "questions": "Savollar",
+      "score": "Natija",
+      "status": "Holat"
+    },
+    "kinds": {
+      "DRILL": "Mashq",
+      "MOCK": "Sinov testi",
+      "SECTION": "Boʻlim testi",
+      "MODULE": "Modul testi",
+      "DAILY": "Kun savoli",
+      "REVIEW": "Takrorlash"
+    },
+    "statuses": {
+      "IN_PROGRESS": "Tugallanmagan",
+      "COMPLETED": "Yakunlangan",
+      "ABANDONED": "Tashlab ketilgan"
+    }
+  },
+  "settings": {
+    "title": "Sozlamalar",
+    "profile": "Profil",
+    "name": "Ism",
+    "email": "Elektron pochta",
+    "telegram": "Telegram",
+    "notConnected": "Ulanmagan",
+    "preferences": "Afzalliklar",
+    "language": "Til",
+    "theme": "Mavzu",
+    "goal": "Maqsad",
+    "saved": "Sozlamalar saqlandi",
+    "data": "Maʼlumotlaringiz",
+    "exportTitle": "Maʼlumotlaringizni yuklab olish",
+    "exportBody": "Siz bergan barcha javoblar bilan CSV fayl.",
+    "exportButton": "CSV yuklab olish",
+    "deleteTitle": "Hisobni oʻchirish",
+    "deleteBody": "Hisobingiz va butun mashqlar tarixi butunlay oʻchiriladi. Buni qaytarib boʻlmaydi.",
+    "deleteButton": "Hisobimni oʻchirish",
+    "deleteConfirmTitle": "Hisobingizni oʻchirasizmi?",
+    "deleteConfirmBody": "Tasdiqlash uchun DELETE deb yozing. Barcha maʼlumotlaringiz butunlay oʻchiriladi.",
+    "deleteConfirmWord": "DELETE",
+    "deleteConfirmButton": "Butunlay oʻchirish"
+  },
+  "errors": {
+    "notFoundTitle": "Sahifa topilmadi",
+    "notFoundBody": "Siz qidirayotgan sahifa mavjud emas yoki koʻchirilgan.",
+    "goHome": "Bosh sahifaga",
+    "errorTitle": "Nimadir xato ketdi",
+    "errorBody": "Qaytadan urinib koʻring. Muammo takrorlansa, biz bilan bogʻlaning."
+  },
+  "taxonomy": {
+    "sections": {
+      "RW": "Oʻqish va yozish",
+      "MATH": "Matematika"
+    },
+    "sectionsShort": {
+      "RW": "Oʻ va Y",
+      "MATH": "Mat."
+    },
+    "domains": {
+      "INFORMATION_AND_IDEAS": "Axborot va gʻoyalar",
+      "CRAFT_AND_STRUCTURE": "Matn mahorati va tuzilishi",
+      "EXPRESSION_OF_IDEAS": "Gʻoyalarni ifodalash",
+      "STANDARD_ENGLISH_CONVENTIONS": "Standart ingliz tili qoidalari",
+      "ALGEBRA": "Algebra",
+      "ADVANCED_MATH": "Murakkab matematika",
+      "PROBLEM_SOLVING_AND_DATA_ANALYSIS": "Masala yechish va maʼlumotlar tahlili",
+      "GEOMETRY_AND_TRIGONOMETRY": "Geometriya va trigonometriya"
+    },
+    "skills": {
+      "CENTRAL_IDEAS_AND_DETAILS": "Asosiy gʻoya va tafsilotlar",
+      "COMMAND_OF_EVIDENCE_TEXTUAL": "Dalillar bilan ishlash (matn)",
+      "COMMAND_OF_EVIDENCE_QUANTITATIVE": "Dalillar bilan ishlash (raqamli maʼlumotlar)",
+      "INFERENCES": "Xulosa chiqarish",
+      "WORDS_IN_CONTEXT": "Kontekstdagi soʻzlar",
+      "TEXT_STRUCTURE_AND_PURPOSE": "Matn tuzilishi va maqsadi",
+      "CROSS_TEXT_CONNECTIONS": "Matnlar orasidagi bogʻliqlik",
+      "RHETORICAL_SYNTHESIS": "Ritorik sintez",
+      "TRANSITIONS": "Bogʻlovchi soʻzlar",
+      "BOUNDARIES": "Gap chegaralari",
+      "FORM_STRUCTURE_AND_SENSE": "Shakl, tuzilish va maʼno",
+      "LINEAR_EQUATIONS_ONE_VARIABLE": "Bir oʻzgaruvchili chiziqli tenglamalar",
+      "LINEAR_FUNCTIONS": "Chiziqli funksiyalar",
+      "LINEAR_EQUATIONS_TWO_VARIABLES": "Ikki oʻzgaruvchili chiziqli tenglamalar",
+      "SYSTEMS_OF_LINEAR_EQUATIONS": "Ikki oʻzgaruvchili ikkita chiziqli tenglama sistemasi",
+      "LINEAR_INEQUALITIES": "Bir yoki ikki oʻzgaruvchili chiziqli tengsizliklar",
+      "NONLINEAR_FUNCTIONS": "Nochiziqli funksiyalar",
+      "NONLINEAR_EQUATIONS_AND_SYSTEMS": "Bir oʻzgaruvchili nochiziqli tenglamalar va ikki oʻzgaruvchili tenglamalar sistemasi",
+      "EQUIVALENT_EXPRESSIONS": "Teng kuchli ifodalar",
+      "RATIOS_RATES_PROPORTIONS_UNITS": "Nisbatlar, tezliklar, proporsiyalar va oʻlchov birliklari",
+      "PERCENTAGES": "Foizlar",
+      "ONE_VARIABLE_DATA": "Bir oʻzgaruvchili maʼlumotlar: taqsimot, markaz va tarqoqlik oʻlchovlari",
+      "TWO_VARIABLE_DATA": "Ikki oʻzgaruvchili maʼlumotlar: modellar va sochilish diagrammalari",
+      "PROBABILITY": "Ehtimollik va shartli ehtimollik",
+      "INFERENCE_FROM_SAMPLES": "Tanlanma asosida xulosa va xatolik chegarasi",
+      "EVALUATING_STATISTICAL_CLAIMS": "Statistik daʼvolarni baholash: kuzatuvlar va tajribalar",
+      "AREA_AND_VOLUME": "Yuz va hajm",
+      "LINES_ANGLES_TRIANGLES": "Toʻgʻri chiziqlar, burchaklar va uchburchaklar",
+      "RIGHT_TRIANGLES_AND_TRIGONOMETRY": "Toʻgʻri burchakli uchburchaklar va trigonometriya",
+      "CIRCLES": "Aylanalar"
+    }
+  },
+  "enums": {
+    "difficulty": {
+      "EASY": "Oson",
+      "MEDIUM": "Oʻrtacha",
+      "HARD": "Qiyin"
+    },
+    "type": {
+      "MCQ": "Variantli",
+      "SPR": "Oʻz javobi"
+    },
+    "status": {
+      "DRAFT": "Qoralama",
+      "IN_REVIEW": "Tekshiruvda",
+      "PUBLISHED": "Eʼlon qilingan",
+      "RETIRED": "Olib tashlangan"
+    },
+    "origin": {
+      "IMPORTED": "Import qilingan",
+      "AI_DRAFTED": "SI qoralamasi",
+      "MANUAL": "Qoʻlda"
+    },
+    "role": {
+      "STUDENT": "Oʻquvchi",
+      "EDITOR": "Muharrir",
+      "ADMIN": "Administrator"
+    }
+  },
+  "flags": {
+    "MISSING_ANSWER": {
+      "label": "Javob yoʻq",
+      "help": "Toʻgʻri javob koʻrsatilmagan."
+    },
+    "UNCERTAIN_TEXT": {
+      "label": "Noaniq matn",
+      "help": "Baʼzi belgilarni oʻqish qiyin boʻldi. [[?shunday]] deb belgilangan matnni tekshirib, belgini olib tashlang."
+    },
+    "CHOICE_COUNT": {
+      "label": "4 ta variant emas",
+      "help": "Variantli savolda aynan toʻrtta toʻldirilgan A–D varianti boʻlishi kerak."
+    },
+    "ANSWER_NOT_IN_CHOICES": {
+      "label": "Javob variantlarda yoʻq",
+      "help": "Toʻgʻri javob A, B, C yoki D dan biri boʻlishi kerak."
+    },
+    "INVALID_SPR_ANSWER": {
+      "label": "Javob formati notoʻgʻri",
+      "help": "Oʻquvchi javobi son, oʻnli yoki oddiy kasr boʻlishi kerak, masalan 3, -1.5, 7/2."
+    },
+    "MISSING_FIGURE": {
+      "label": "Rasm yoʻqmi?",
+      "help": "Matnda rasm, grafik yoki jadval tilga olingan, lekin u biriktirilmagan."
+    },
+    "DUPLICATE_CODE": {
+      "label": "Kod almashtirildi",
+      "help": "Fayldagi kod allaqachon ishlatilgan, shuning uchun yangisi berildi."
+    },
+    "NEAR_DUPLICATE": {
+      "label": "Deyarli takror",
+      "help": "Bazadagi boshqa savolga juda oʻxshash."
+    },
+    "TAXONOMY_UNCONFIRMED": {
+      "label": "Yoʻnalish va koʻnikmani tasdiqlang",
+      "help": "Yoʻnalish va koʻnikma avtomatik taklif qilingan. Ularni tasdiqlang yoki oʻzgartiring."
+    },
+    "STUDENT_REPORT": {
+      "label": "Oʻquvchi xabari",
+      "help": "Oʻquvchi bu savolda muammo borligini xabar qildi."
+    },
+    "DIFFICULTY_MISMATCH": {
+      "label": "Qiyinlik mos emas",
+      "help": "Oʻquvchilar aniqligi koʻrsatilgan qiyinlikka mos kelmaydi."
+    },
+    "blocking": "Eʼlon qilishdan oldin tuzatilishi shart",
+    "warning": "Ogohlantirish"
+  },
+  "admin": {
+    "title": "Admin paneli",
+    "nav": {
+      "overview": "Umumiy koʻrinish",
+      "questions": "Savollar",
+      "newQuestion": "Yangi savol",
+      "review": "Tekshiruv navbati",
+      "import": "Import",
+      "sources": "Manbalar",
+      "reports": "Xabarlar",
+      "users": "Foydalanuvchilar",
+      "backToSite": "Saytga qaytish"
+    },
+    "overview": {
+      "title": "Umumiy koʻrinish",
+      "published": "Eʼlon qilingan savollar",
+      "inReview": "Tekshiruv kutilmoqda",
+      "drafts": "Qoralamalar",
+      "openReports": "Ochiq xabarlar",
+      "students": "Oʻquvchilar",
+      "attempts": "Yakunlangan mashqlar",
+      "samples": "Bazadagi namuna savollar",
+      "samplesWarning": "Ishga tushirishdan oldin namunalarni oʻchiring: pnpm samples:remove",
+      "bySection": "Boʻlim va yoʻnalishlar boʻyicha eʼlon qilinganlar"
+    },
+    "questions": {
+      "title": "Savollar bazasi",
+      "searchPlaceholder": "Kod yoki matn boʻyicha qidirish…",
+      "status": "Holat",
+      "section": "Boʻlim",
+      "domain": "Yoʻnalish",
+      "skill": "Koʻnikma",
+      "difficulty": "Qiyinlik",
+      "source": "Manba",
+      "flag": "Belgi",
+      "origin": "Kelib chiqishi",
+      "anySource": "Istalgan manba",
+      "anyFlag": "Istalgan belgi",
+      "noFlags": "Belgisiz",
+      "empty": "Savollar topilmadi.",
+      "columns": {
+        "code": "Kod",
+        "section": "Boʻlim",
+        "skill": "Koʻnikma",
+        "difficulty": "Qiyinlik",
+        "type": "Turi",
+        "status": "Holat",
+        "flags": "Belgilar",
+        "updated": "Yangilangan"
+      },
+      "new": "Yangi savol",
+      "importCta": "Import"
+    },
+    "editor": {
+      "newTitle": "Yangi savol",
+      "editTitle": "{code} ni tahrirlash",
+      "content": "Mazmun",
+      "metadata": "Parametrlar",
+      "code": "Kod",
+      "suggestCode": "Keyingi kodni taklif qilish",
+      "codePrefix": "Kod prefiksi",
+      "codeHelp": "Takrorlanmas. Format: {example}",
+      "section": "Boʻlim",
+      "domain": "Yoʻnalish",
+      "skill": "Koʻnikma",
+      "difficulty": "Qiyinlik",
+      "type": "Savol turi",
+      "passage": "Matn",
+      "passageHelp": "Ixtiyoriy. Markdown; formulalar $…$ yoki $$…$$ orasida.",
+      "stem": "Savol",
+      "stemHelp": "LaTeX formulali Markdown, masalan $\\frac'{1}{2}'x + 3 = 7$. Dollar belgisini \\$ deb yozing.",
+      "choices": "Javob variantlari",
+      "choice": "{key} varianti",
+      "correct": "Toʻgʻri",
+      "markCorrect": "{key} ni toʻgʻri deb belgilash",
+      "correctAnswers": "Qabul qilinadigan javoblar",
+      "correctAnswersHelp": "Har qatorda bittadan. Teng kuchli yozuvlar (1/2, .5, 0.5) avtomatik qabul qilinadi.",
+      "explanation": "Tushuntirish",
+      "rationales": "Har bir notoʻgʻri variant nega notoʻgʻri",
+      "rationale": "{key} varianti nega notoʻgʻri",
+      "tags": "Teglar",
+      "tagsHelp": "Vergul bilan ajrating.",
+      "source": "Manba",
+      "noSource": "Manbasiz (muharrirda yozilgan)",
+      "preview": "Oldindan koʻrish",
+      "studentView": "Oʻquvchi koʻradigan koʻrinish",
+      "insertImage": "Rasm qoʻshish",
+      "uploadingImage": "Rasm yuklanmoqda…",
+      "imageAlt": "Rasm",
+      "imageTooLarge": "Rasm PNG, JPEG, WebP yoki GIF boʻlishi va 5 MB dan kichik boʻlishi kerak.",
+      "saveDraft": "Qoralamani saqlash",
+      "saveChanges": "Oʻzgarishlarni saqlash",
+      "submitForReview": "Tekshiruvga yuborish",
+      "publish": "Eʼlon qilish",
+      "unpublish": "Eʼlondan olish",
+      "retire": "Foydalanishdan olish",
+      "restoreDraft": "Qoralamaga qaytarish",
+      "created": "Savol yaratildi",
+      "updated": "Savol saqlandi",
+      "statusChanged": "Holat oʻzgartirildi",
+      "versionConflict": "Bu savolni boshqa kishi saqlagan. Uning oʻzgarishlarini koʻrish uchun sahifani yangilang.",
+      "duplicateCode": "Bu kod allaqachon ishlatilgan. Boshqasini tanlang.",
+      "blockingFlags": "Eʼlon qilishdan oldin bloklovchi belgilarni tuzating.",
+      "nearDuplicates": "Bazada oʻxshash savollar bor:",
+      "status": "Holat",
+      "origin": "Kelib chiqishi",
+      "provenance": "Kelib chiqishi",
+      "provenanceFile": "Fayl: {file}",
+      "provenancePage": "{page}-sahifa",
+      "provenanceRow": "{row}-qator",
+      "provenanceBy": "Yukladi: {name}, {date}",
+      "createdBy": "Yaratdi: {name}",
+      "reviewedBy": "Tekshirdi: {name}, {date}",
+      "stats": "{attempts} oʻquvchidan {correct} tasi toʻgʻri javob bergan",
+      "versions": "Versiyalar tarixi",
+      "version": "{version}-versiya",
+      "versionBy": "{name}, {date}",
+      "restoreVersion": "Tiklash",
+      "noVersions": "Oldingi versiyalar yoʻq.",
+      "reports": "Oʻquvchilar xabarlari",
+      "errors": {
+        "INVALID_CODE": "Kodda lotin bosh harflari, raqamlar, «-», «_» yoki «.» boʻlishi mumkin (2–40 belgi).",
+        "REQUIRED": "Majburiy.",
+        "INVALID_DOMAIN": "Ushbu boʻlimga tegishli yoʻnalishni tanlang.",
+        "INVALID_SKILL": "Ushbu yoʻnalishga tegishli koʻnikmani tanlang."
+      }
+    },
+    "sources": {
+      "title": "Manbalar",
+      "subtitle": "Har bir savollar toʻplami kimga tegishli va ularni eʼlon qilishga ruxsatni kim tasdiqlagan.",
+      "new": "Yangi manba",
+      "name": "Manba nomi",
+      "namePlaceholder": "masalan, Markazning matematika varaqalari, 2026",
+      "owner": "Egasi",
+      "ownerPlaceholder": "masalan, markazimiz yoki muallif ismi",
+      "notes": "Izohlar",
+      "rightsStatement": "Bu savollarni biz yozganmiz yoki ularni eʼlon qilish uchun yozma ruxsatimiz bor.",
+      "rightsRequired": "Yuklashdan oldin huquqlarni tasdiqlashingiz kerak.",
+      "confirmedBy": "Tasdiqladi: {name}, {date}",
+      "questions": "{count, plural, one {# ta savol} other {# ta savol}}",
+      "files": "Fayllar",
+      "noFiles": "Fayllar yuklanmagan.",
+      "withdraw": "Bu manbadagi hamma narsani eʼlondan olish",
+      "withdrawFile": "Bu fayldagi savollarni eʼlondan olish",
+      "withdrawConfirmTitle": "«{name}» dagi barcha savollar eʼlondan olinsinmi?",
+      "withdrawConfirmBody": "Eʼlon qilishga ruxsat qaytarib olingan boʻlsa, shundan foydalaning. Uning barcha savollari foydalanishdan olinadi va oʻquvchilardan yashiriladi. Bu audit jurnaliga yoziladi.",
+      "withdrawn": "{date} da qaytarib olingan",
+      "withdrawDone": "Eʼlondan olindi: {count, plural, one {# ta savol} other {# ta savol}}",
+      "empty": "Hali manbalar yoʻq. Savollarni import qilishdan oldin manba yarating.",
+      "created": "Manba yaratildi"
+    },
+    "import": {
+      "title": "Savollarni import qilish",
+      "subtitle": "Savollar jadvalini yuklang. Har bir import qilingan savol tekshiruv navbatiga qoralama sifatida tushadi.",
+      "spreadsheetTab": "CSV / Excel",
+      "pdfTab": "PDF",
+      "pdfComingSoon": "PDF dan import keyingi bosqichda qoʻshiladi.",
+      "template": "Shablonni yuklab oling",
+      "templateCsv": "CSV shabloni",
+      "templateXlsx": "Excel shabloni",
+      "columnsHelp": "Ustunlar: {columns}. Faqat stem va correct_answer majburiy; boʻlim, qiyinlik va kod koʻrsatilmasa, quyidagi qiymatlar olinadi.",
+      "source": "Manba",
+      "newSource": "Yangi manba yaratish",
+      "existingSource": "Mavjud manba",
+      "chooseSource": "Manbani tanlang",
+      "sourceName": "Manba nomi",
+      "owner": "Egasi",
+      "rights": "Bu savollarni biz yozganmiz yoki ularni eʼlon qilish uchun yozma ruxsatimiz bor.",
+      "rightsRequired": "Davom etish uchun huquqlar tasdigʻini belgilang.",
+      "defaultSection": "Standart boʻlim",
+      "defaultSectionNone": "Har bir qatordan olinadi",
+      "defaultDifficulty": "Standart qiyinlik",
+      "codePrefix": "Savol kodi prefiksi",
+      "codePrefixHelp": "Kodsiz qatorlar uchun, masalan LC-M- dan LC-M-ALG-0001 hosil boʻladi.",
+      "file": "Jadval fayli",
+      "fileHelp": ".csv yoki .xlsx, 5 MB va 2000 qatorgacha.",
+      "dropHere": "Faylni shu yerga tashlang yoki tanlash uchun bosing",
+      "analyze": "Faylni tekshirish",
+      "analyzing": "Tekshirilmoqda…",
+      "previewTitle": "Import qilishdan oldin qatorlarni tekshiring",
+      "summary": "{total} ta qator: {ok} tasi tayyor, {warnings} tasida belgi bor, {errors} tasida xato bor",
+      "rowOk": "Tayyor",
+      "rowFlagged": "Belgili",
+      "rowError": "Xato",
+      "row": "Qator",
+      "confirm": "{count, plural, one {# ta savolni} other {# ta savolni}} qoralama sifatida import qilish",
+      "importing": "Import qilinmoqda…",
+      "errorRowsSkipped": "Xatoli qatorlar oʻtkazib yuboriladi. Ularni faylda tuzatib, qayta import qiling.",
+      "done": "{count, plural, one {# ta savol} other {# ta savol}} import qilindi. Eʼlon qilishdan oldin ularni tekshiring.",
+      "goToReview": "Tekshiruv navbatini ochish",
+      "batches": "Soʻnggi importlar",
+      "noBatches": "Hali import qilinmagan.",
+      "batchStatus": {
+        "PENDING": "Tasdiqlash kutilmoqda",
+        "PROCESSING": "Ishlov berilmoqda",
+        "READY": "Import qilindi",
+        "FAILED": "Xato"
+      },
+      "errors": {
+        "MISSING_COLUMNS": "Faylda majburiy ustunlar yoʻq: {columns}.",
+        "TOO_MANY_ROWS": "Faylda qatorlar juda koʻp (koʻpi bilan {max}).",
+        "UNSUPPORTED_FILE": ".csv yoki .xlsx fayl yuklang.",
+        "FILE_TOO_LARGE": "Fayl 5 MB dan katta.",
+        "EMPTY_FILE": "Faylda qatorlar yoʻq.",
+        "INVALID_PREFIX": "Prefiksda faqat lotin bosh harflari, raqamlar, «-», «_» va «.» boʻlishi mumkin.",
+        "SOURCE_REQUIRED": "Manbani tanlang yoki yangi manba nomi va egasini kiriting.",
+        "SOURCE_WITHDRAWN": "Bu manba qaytarib olingan. Yangi manba yarating."
+      },
+      "rowErrors": {
+        "MISSING_STEM": "Savol matni (stem) yoʻq",
+        "INVALID_SECTION": "Nomaʼlum boʻlim",
+        "MISSING_SECTION": "Qatorda ham, standart qiymatda ham boʻlim yoʻq",
+        "INVALID_DOMAIN": "Nomaʼlum yoʻnalish yoki u boʻlimga tegishli emas",
+        "INVALID_SKILL": "Nomaʼlum koʻnikma yoki u yoʻnalishga tegishli emas",
+        "MISSING_TAXONOMY": "Yoʻnalish va koʻnikma koʻrsatilishi shart",
+        "INVALID_DIFFICULTY": "Qiyinlik easy, medium yoki hard boʻlishi kerak",
+        "INVALID_TYPE": "Turi MCQ yoki SPR boʻlishi kerak",
+        "INVALID_IMAGE_URL": "image_url https:// havolasi boʻlishi kerak",
+        "IMAGE_FETCH_FAILED": "Rasmni yuklab boʻlmadi"
+      },
+      "rowWarnings": {
+        "CODE_REASSIGNED": "Kod band — yangi kod berildi",
+        "CODE_INVALID": "Kod formati notoʻgʻri — yangi kod berildi",
+        "CODE_GENERATED": "Kod avtomatik yaratildi",
+        "DIFFICULTY_DEFAULTED": "Standart qiyinlik qoʻllandi",
+        "TYPE_INFERRED": "Turi variantlarga qarab aniqlandi"
+      },
+      "columns": {
+        "status": "Holat",
+        "code": "Kod",
+        "question": "Koʻnikma va savol",
+        "difficulty": "Qiyinlik",
+        "details": "Muammolar va izohlar"
+      }
+    },
+    "review": {
+      "title": "Tekshiruv navbati",
+      "subtitle": "Qoralamalar va tekshiruvni kutayotgan savollar. Oʻquvchilar faqat eʼlon qilingan savollarni koʻradi.",
+      "filterFlag": "Belgi",
+      "filterBatch": "Import",
+      "allQuestions": "Kutayotgan barcha savollar",
+      "clean": "Bloklovchi belgilarsiz",
+      "bulk": "Ommaviy amallar",
+      "bulkApprove": "Tanlanganlarni eʼlon qilish",
+      "bulkApproveClean": "Barcha toza savollarni eʼlon qilish",
+      "bulkSendToReview": "Tekshiruvga yuborish",
+      "bulkDifficulty": "Qiyinlikni belgilash",
+      "bulkDomainSkill": "Yoʻnalish va koʻnikmani belgilash",
+      "bulkRetire": "Foydalanishdan olish",
+      "bulkDone": "{updated} ta yangilandi, {skipped} ta oʻtkazib yuborildi",
+      "skippedBlocking": "Bloklovchi belgili savollar oʻtkazib yuborildi.",
+      "selectAll": "Sahifadagi hammasini tanlash",
+      "selectRow": "{code} ni tanlash",
+      "empty": "Tekshiruvni kutayotgan savol yoʻq."
+    },
+    "reports": {
+      "title": "Oʻquvchilar xabarlari",
+      "empty": "Ochiq xabarlar yoʻq.",
+      "open": "Ochiq",
+      "resolved": "Hal qilingan",
+      "dismissed": "Rad etilgan",
+      "resolve": "Hal qilindi deb belgilash",
+      "dismiss": "Rad etish",
+      "by": "Xabar berdi: {name}",
+      "anonymous": "oʻchirilgan foydalanuvchi",
+      "openQuestion": "Savolni ochish"
+    },
+    "users": {
+      "title": "Foydalanuvchilar",
+      "searchPlaceholder": "Ism yoki pochta boʻyicha qidirish…",
+      "columns": {
+        "name": "Ism",
+        "email": "Elektron pochta",
+        "role": "Rol",
+        "joined": "Roʻyxatdan oʻtgan",
+        "attempts": "Mashqlar"
+      },
+      "roleChanged": "Rol yangilandi",
+      "cannotChangeOwnRole": "Oʻz rolingizni oʻzgartira olmaysiz."
+    }
+  }
+}

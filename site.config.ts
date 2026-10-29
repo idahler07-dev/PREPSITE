@@ -64,6 +64,12 @@ export const siteConfig = {
     youtube: "",
   },
 
+  /**
+   * Shows a "draft text" notice on the terms, privacy and refund pages.
+   * Set to false once the final texts are in content/legal/.
+   */
+  legalPagesAreDrafts: true,
+
   /** Default UI language for visitors whose browser language is not supported. */
   defaultLocale: "en",
 

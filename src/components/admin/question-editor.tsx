@@ -70,7 +70,7 @@ export function QuestionEditor({
   const section = v.section as SectionKey;
   const domains = domainsForSection(section);
   const skills = getDomain(v.domain)?.skills ?? [];
-  const correct = v.correctAnswers ?? [];
+  const correct = useMemo(() => v.correctAnswers ?? [], [v.correctAnswers]);
 
   // Live flags from the current content (process flags come from the server).
   const liveFlags = useMemo(() => {

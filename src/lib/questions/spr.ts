@@ -132,5 +132,9 @@ function reduce(r: Rational): Rational {
   return { num: r.num / g, den: r.den / g };
 }
 
-/** Characters a student may type into an SPR box. */
-export const SPR_ALLOWED_CHARS = /^[0-9./-]*$/;
+/**
+ * Characters a student may type into an SPR box. A space is allowed so that a
+ * mixed number like "3 1/2" can be shown as an error instead of silently
+ * becoming "31/2".
+ */
+export const SPR_ALLOWED_CHARS = /^[0-9./ -]*$/;

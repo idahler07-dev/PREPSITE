@@ -3,7 +3,7 @@
  * (Next.js adds it to its own scripts automatically); 'strict-dynamic' lets
  * those trusted scripts load others (e.g. the Telegram login widget).
  */
-export function buildCsp(nonce: string, opts: { dev: boolean; storageOrigin?: string }): string {
+export function buildCsp(nonce: string, opts: { dev: boolean; https: boolean; storageOrigin?: string }): string {
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
     "script-src": ["'self'", `'nonce-${nonce}'`, "'strict-dynamic'", ...(opts.dev ? ["'unsafe-eval'"] : [])],
@@ -28,7 +28,7 @@ export function buildCsp(nonce: string, opts: { dev: boolean; storageOrigin?: st
     "manifest-src": ["'self'"],
   };
   const parts = Object.entries(directives).map(([k, v]) => `${k} ${v.join(" ")}`);
-  if (!opts.dev) parts.push("upgrade-insecure-requests");
+  if (opts.https) parts.push("upgrade-insecure-requests");
   return parts.join("; ");
 }
 

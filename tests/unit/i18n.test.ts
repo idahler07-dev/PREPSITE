@@ -30,3 +30,20 @@ describe("enabled locales are complete", () => {
     });
   }
 });
+
+describe("every message is valid ICU", () => {
+  it.each(ENABLED_LOCALES)("%s parses", async (code) => {
+    const { IntlMessageFormat } = await import("intl-messageformat");
+    const messages = read(code);
+    const bad: string[] = [];
+    for (const key of flattenKeys(messages)) {
+      const value = key.split(".").reduce((o: Record<string, unknown>, k) => o[k] as Record<string, unknown>, messages) as unknown as string;
+      try {
+        new IntlMessageFormat(value, code === "uz" ? "uz-Latn" : code);
+      } catch (e) {
+        bad.push(`${key}: ${(e as Error).message}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});

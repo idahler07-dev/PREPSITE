@@ -9,6 +9,7 @@ export default function middleware(request: NextRequest) {
   const nonce = btoa(crypto.randomUUID());
   const csp = buildCsp(nonce, {
     dev: process.env.NODE_ENV !== "production",
+    https: (process.env.NEXT_PUBLIC_SITE_URL ?? "").startsWith("https://"),
     storageOrigin: process.env.STORAGE_DRIVER === "s3" ? originOf(process.env.S3_ENDPOINT) : undefined,
   });
 

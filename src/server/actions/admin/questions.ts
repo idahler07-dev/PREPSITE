@@ -159,3 +159,25 @@ export async function resolveReport(reportId: string, status: "RESOLVED" | "DISM
     return { open };
   });
 }
+
+/** Publish every waiting question in the current filter that has no blocking flags. */
+export async function publishCleanInFilter(rawFilters: Record<string, string | undefined>) {
+  return run(async () => {
+    const actor = await requireApiRole(STAFF_ROLES);
+    const { db } = await import("@/lib/db");
+    const { parseQuestionFilters, questionWhere } = await import("@/server/questions/query");
+    const { ALL_FLAGS, isBlocking } = await import("@/lib/questions/flags");
+    const filters = parseQuestionFilters(rawFilters);
+    const blocking = ALL_FLAGS.filter(isBlocking);
+    const ids = (
+      await db.question.findMany({
+        where: questionWhere({ ...filters, status: undefined }, { status: { in: ["DRAFT", "IN_REVIEW"] }, NOT: { flags: { hasSome: blocking } } }),
+        select: { id: true },
+        take: 1000,
+      })
+    ).map((q) => q.id);
+    const res = await bulkSetStatus(ids, "PUBLISHED", actor);
+    revalidatePath("/[locale]/admin", "layout");
+    return res;
+  });
+}

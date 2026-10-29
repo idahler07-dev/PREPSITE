@@ -715,7 +715,7 @@
       "passage": "Passage",
       "passageHelp": "Optional. Markdown; math between $…$ or $$…$$.",
       "stem": "Question",
-      "stemHelp": "Markdown with LaTeX math, e.g. $\\frac{1}{2}x + 3 = 7$.",
+      "stemHelp": "Markdown with LaTeX math, e.g. $\\frac'{1}{2}'x + 3 = 7$. Write a dollar sign as \\$.",
       "choices": "Answer choices",
       "choice": "Choice {key}",
       "correct": "Correct",
@@ -724,7 +724,7 @@
       "correctAnswersHelp": "One per line. Equivalent forms (1/2, .5, 0.5) are accepted automatically.",
       "explanation": "Explanation",
       "rationales": "Why each wrong choice is wrong",
-      "rationale": "Choice {key}",
+      "rationale": "Why choice {key} is wrong",
       "tags": "Tags",
       "tagsHelp": "Comma-separated.",
       "source": "Source",
@@ -762,7 +762,7 @@
       "versions": "Version history",
       "version": "Version {version}",
       "versionBy": "{name}, {date}",
-      "restoreVersion": "Load into editor",
+      "restoreVersion": "Restore",
       "noVersions": "No earlier versions.",
       "reports": "Student reports",
       "errors": {
@@ -871,6 +871,13 @@
         "CODE_GENERATED": "Code generated",
         "DIFFICULTY_DEFAULTED": "Default difficulty used",
         "TYPE_INFERRED": "Type guessed from the choices"
+      },
+      "columns": {
+        "status": "Status",
+        "code": "Code",
+        "question": "Skill and question",
+        "difficulty": "Difficulty",
+        "details": "Problems and notes"
       }
     },
     "review": {

@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: prep
+          POSTGRES_PASSWORD: prep
+          POSTGRES_DB: prepsite
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U prep -d prepsite"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://prep:prep@localhost:5432/prepsite
+      TEST_DATABASE_URL: postgresql://prep:prep@localhost:5432/prepsite_test
+      E2E_DATABASE_URL: postgresql://prep:prep@localhost:5432/prepsite_e2e
+      AUTH_SECRET: ci-secret-ci-secret-ci-secret-ci-secret
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Create test databases
+        run: |
+          PGPASSWORD=prep psql -h localhost -U prep -d prepsite -c "CREATE DATABASE prepsite_test"
+          PGPASSWORD=prep psql -h localhost -U prep -d prepsite -c "CREATE DATABASE prepsite_e2e"
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm i18n:check
+      - run: pnpm test
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm test:e2e
+        env:
+          CI: "true"
+          E2E_SKIP_BUILD: "1"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

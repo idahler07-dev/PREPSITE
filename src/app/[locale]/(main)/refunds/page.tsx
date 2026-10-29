@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import siteConfig from "@site";
 import { Container, PageHeader } from "@/components/layout/page-header";
 import { RichText } from "@/components/content/rich-text";
 import { loadLegalPage } from "@/server/content";
@@ -14,7 +15,7 @@ export default async function LegalPage() {
   return (
     <Container className="max-w-3xl">
       <PageHeader title={t("refunds.title")} />
-      <p className="mb-6 rounded-md border border-dashed bg-warning-muted p-3 text-sm">{t("draftNotice")}</p>
+      {siteConfig.legalPagesAreDrafts && <p className="mb-6 rounded-md border border-dashed bg-warning-muted p-3 text-sm">{t("draftNotice")}</p>}
       <RichText html={html} className="prose prose-neutral max-w-none dark:prose-invert" />
     </Container>
   );
