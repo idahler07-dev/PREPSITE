@@ -12,8 +12,8 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | 2 | PDF import (typed + scanned) and side-by-side review | **Done** |
 | 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | **Done** |
 | 4 | AI tutor, mock test generator, AI-drafted questions | **Done** |
-| 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | Next |
-| 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Planned |
+| 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | **Done** |
+| 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Next |
 | 7 | Admin analytics, security hardening, accessibility audit, performance, docs | Planned |
 
 Scope note: this is an individual-student site plus an admin side. Classes, teacher accounts, parent access and tutoring booking are intentionally **not** built.
@@ -56,7 +56,12 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `JOBS_MODE` | optional | `worker` (default; in-process worker), `external` (cron calls `/api/jobs/run`) or `inline` (tests) |
 | `CRON_SECRET` | if `external` | Bearer token for `POST /api/jobs/run` |
 | `DESMOS_API_KEY` | Phase 3 | Desmos calculator (falls back to a basic calculator) |
-| `PAYMENT_PROVIDERS` | Phase 5 | Enabled payment providers |
+| `PAYMENT_PROVIDERS` | for payments | Enabled providers: `mock`, `payme`, `click`, `octo` |
+| `PAYME_MERCHANT_ID`, `PAYME_KEY`, `PAYME_SANDBOX` | Payme | Merchant id and cabinet key (test key in sandbox) |
+| `CLICK_SERVICE_ID`, `CLICK_MERCHANT_ID`, `CLICK_MERCHANT_USER_ID`, `CLICK_SECRET_KEY` | Click | From the Click merchant cabinet |
+| `OCTO_SHOP_ID`, `OCTO_SECRET`, `OCTO_TEST` | Octo | International cards (USD) |
+| `MOCK_PAYMENT_SECRET`, `ALLOW_MOCK_PAYMENTS` | dev/staging | Test provider; refused in production unless allowed |
+| `MAGIC_LINKS_PER_IP_HOUR` | optional | Sign-in emails per IP per hour (default 10) |
 | `SENTRY_DSN` | optional | Error monitoring |
 
 ## Scripts

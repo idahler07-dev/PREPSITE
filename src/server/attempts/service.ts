@@ -10,6 +10,7 @@ import { renderMarkdown } from "@/lib/markdown/render";
 import { SPR_ALLOWED_CHARS } from "@/lib/questions/spr";
 import { HttpError } from "@/server/http";
 import { afterMockModule, scoreAttempt } from "@/server/mock/service";
+import { assertQuestionAllowance } from "@/server/billing/entitlement";
 
 /** Answers saved this long after the deadline are still accepted (network delays). */
 export const DEADLINE_GRACE_MS = 30_000;
@@ -46,6 +47,7 @@ export async function createDrill(userId: string, raw: unknown, kind: "DRILL" | 
     select: { questionId: true },
     distinct: ["questionId"],
   });
+  await assertQuestionAllowance(userId, Math.min(config.count, candidates.length));
   const seed = randomInt(2 ** 31);
   const picked = selectDrillQuestions(candidates, new Set(seenRows.map((r) => r.questionId)), config.count, {
     unseenFirst: config.unseenFirst,

@@ -2,6 +2,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { buildCsp, originOf } from "./lib/csp";
+import { REF_COOKIE, REF_PATTERN } from "./lib/billing/referral-code";
 
 const intl = createIntlMiddleware(routing);
 
@@ -20,6 +21,11 @@ export default function middleware(request: NextRequest) {
 
   const response = intl(new NextRequest(request, { headers }));
   response.headers.set("Content-Security-Policy", csp);
+  // Referral links (?ref=CODE): remember the code until the visitor signs up.
+  const ref = request.nextUrl.searchParams.get("ref")?.toUpperCase();
+  if (ref && REF_PATTERN.test(ref)) {
+    response.cookies.set(REF_COOKIE, ref, { maxAge: 30 * 86_400, httpOnly: true, sameSite: "lax", path: "/", secure: request.nextUrl.protocol === "https:" });
+  }
   return response;
 }
 

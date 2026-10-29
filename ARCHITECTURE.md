@@ -102,6 +102,20 @@ All calls go through `src/server/ai/` (server-side only) and are logged in `AiUs
 - **Tutor** (`tutor.ts`, `tutor-prompt.ts`, routes `/api/ai/tutor` and `/api/ai/tutor/chat`, NDJSON streams). Modes: hint, explain, why-my-answer-is-wrong, another method, simpler. Access is checked on the server: explanations only after the response is graded (so tests never leak answers), hints only in check-as-you-go drills. The model receives the question (with its images), the answer key, the stored explanation and the student's answer; the student's own text is wrapped in `<student_message>` and treated as content. Every reply starts with a hidden `VERDICT:` line (`src/lib/ai/verdict.ts`): on `DISAGREE` nothing is shown, the question gets the `AI_KEY_DISPUTE` flag and the student sees the stored explanation. Replies are cached per question version, language, mode and chosen choice (`AiExplanation`); cached replies cost nothing and don't count toward the daily limit (`src/config/ai-limits.ts`). Follow-ups are stored in `AiConversation`, capped per question.
 - **Drafted questions** (`draft-questions.ts`, job `ai-draft-questions`). Staff choose section, domain, skill, difficulty and count; optional style examples are our own published questions (never AI drafts or samples). Each draft is solved by a second call that never sees the key (`AI_SOLVER_DISAGREES`, `AI_AMBIGUOUS`), and Math drafts carry an arithmetic expression checked with mathjs (`src/lib/ai/math-check.ts`, whitelisted functions only; `MATH_CHECK_FAILED`). Drafts are saved as `DRAFT` with origin `AI_DRAFTED` and the blocking `AI_UNREVIEWED` flag, which only a save in the editor clears.
 
+## Plans and payments
+
+- **Plans and limits**: `src/config/plans.ts` (prices in UZS and USD, period lengths, free limits, reminder days, grace period, referral rewards). Limits are enforced on the server: `assertQuestionAllowance` in `createDrill`, `assertTestAllowance` in `startMock`, and the AI tier in the tutor (`src/server/billing/entitlement.ts`).
+- **Subscriptions** are prepaid periods (`Subscription`), stacked: a renewal starts where the current period ends. State (`src/lib/billing/subscription.ts`): active → expiring (last 7 days) → grace (3 days after the end, premium still on) → expired. Refunds cancel the order's period.
+- **Orders**: `CREATED → PENDING → PAID | FAILED | CANCELED | REFUNDED` (`src/server/payments/orders.ts`). `markPaid` is idempotent: the first call creates the subscription, the referral bonus and the receipt. Amounts are stored in minor units (tiyin/cents).
+- **Providers** (`src/server/payments/providers/*`, interface in `types.ts`): hosted checkout only. Callbacks arrive at `/api/payments/[provider]/webhook`:
+  - **Payme**: Merchant API JSON-RPC, Basic auth `Paycom:<key>`, amount in tiyin, 12-hour timeout, account field `order_id` = order number. Refunds are made in the Payme cabinet (Payme then calls `CancelTransaction`).
+  - **Click**: SHOP API Prepare/Complete with the MD5 `sign_string`; `merchant_trans_id` = order number. Refund via the Merchant API reversal (if enabled for the service).
+  - **Octo** (USD): `prepare_payment` → `octo_pay_url`; notifications are verified by re-reading the status from Octo's API before anything changes.
+  - **Mock**: HMAC-signed callbacks and our own "hosted" page, for development and tests.
+  Each provider transaction is stored in `PaymentTransaction` (provider retries are answered from it); every callback is logged in `PaymentEvent` (unique per provider event id, so repeats are ignored).
+- **Daily job** (`billing-daily`, 09:17 Tashkent; `src/server/billing/daily.ts`): cancels unpaid orders after 24 h, sends renewal reminders (email + Telegram) 3 and 1 days before the end, and reconciles pending/recent orders with providers that can report a status.
+- **Referrals**: `?ref=CODE` sets a cookie; the account created next is linked to the referrer. The friend's first purchase gets a discount; the referrer gets bonus days when it is paid.
+
 ## Practice engine
 
 `src/server/attempts/service.ts`:

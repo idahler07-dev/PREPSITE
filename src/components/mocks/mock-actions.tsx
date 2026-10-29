@@ -13,12 +13,14 @@ type Scope = "full" | "RW" | "MATH" | "module-RW" | "module-MATH";
 
 function useStart() {
   const t = useTranslations("mocks");
+  const tb = useTranslations("billing");
   const router = useRouter();
   const [pending, start] = useTransition();
   const go = (fn: () => Promise<{ ok: true; id: string } | { ok: false; error: string }>) =>
     start(async () => {
       const res = await fn();
       if (res.ok) router.push(`/test/${res.id}`);
+      else if (res.error === "TEST_LIMIT") toast.error(tb("limits.tests"), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
       else toast.error(t(`errors.${res.error === "NOT_ENOUGH_QUESTIONS" || res.error === "RATE_LIMITED" ? res.error : "other"}`));
     });
   return { pending, go };

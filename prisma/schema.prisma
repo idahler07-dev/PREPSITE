@@ -65,6 +65,15 @@ model User {
   aiUsages          AiUsage[]
   aiConversations   AiConversation[]
   aiDraftBatches    AiDraftBatch[]
+  orders            Order[]
+  subscriptions     Subscription[]
+  reminders         BillingReminder[]
+
+  /// Shared with friends: they get a discount, this user gets bonus days.
+  referralCode String? @unique
+  referredById String?
+  referredBy   User?   @relation("Referrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals    User[]  @relation("Referrals")
 }
 
 model Account {
@@ -349,10 +358,10 @@ model Question {
   createdBy   User?        @relation("QuestionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   reviewedBy  User?        @relation("QuestionReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
-  assets    QuestionAsset[]
-  versions  QuestionVersion[]
-  reports   QuestionReport[]
-  responses Response[]
+  assets         QuestionAsset[]
+  versions       QuestionVersion[]
+  reports        QuestionReport[]
+  responses      Response[]
   aiExplanations AiExplanation[]
 
   @@index([status, section, domain, skill, difficulty])
@@ -704,4 +713,141 @@ model AuditLog {
 
   @@index([entity, entityId])
   @@index([createdAt])
+}
+
+// ─── Billing ────────────────────────────────────────────────────────────────
+
+enum OrderStatus {
+  CREATED // made on our side, student not yet at the provider
+  PENDING // provider transaction exists, waiting for payment
+  PAID
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  /// Short public number for receipts and support, e.g. 100245.
+  number            Int         @unique @default(autoincrement())
+  userId            String
+  planId            String
+  provider          String
+  currency          String
+  /// Amounts in minor units (tiyin / cents).
+  listAmount        Int
+  discountAmount    Int         @default(0)
+  amount            Int
+  promoCodeId       String?
+  /// The referral discount was applied (first purchase of a referred student).
+  referral          Boolean     @default(false)
+  status            OrderStatus @default(CREATED)
+  /// Provider's payment id when known (Payme/Click transaction, Octo UUID).
+  providerRef       String?
+  locale            String      @default("en")
+  paidAt            DateTime?
+  canceledAt        DateTime?
+  refundedAt        DateTime?
+  /// Refund asked for in a provider's own cabinet (Payme): waiting for the provider to confirm.
+  refundRequestedAt DateTime?
+  failureReason     String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promoCode    PromoCode?           @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
+  transactions PaymentTransaction[]
+  subscription Subscription?
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
+/// A provider-side transaction (Payme transaction, Click payment, Octo payment). Provider retries are answered from here.
+model PaymentTransaction {
+  id           String    @id @default(cuid())
+  provider     String
+  externalId   String
+  orderId      String
+  amount       Int
+  /// Provider-specific state, e.g. Payme 1 / 2 / -1 / -2.
+  state        Int
+  reason       Int?
+  createdAt    DateTime  @default(now())
+  /// Provider's own creation time (Payme "time").
+  providerTime DateTime?
+  performedAt  DateTime?
+  canceledAt   DateTime?
+  data         Json?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalId])
+  @@index([orderId])
+}
+
+/// Every webhook/notification received, for audit and to ignore repeats.
+model PaymentEvent {
+  id        String   @id @default(cuid())
+  provider  String
+  eventId   String
+  orderId   String?
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@unique([provider, eventId])
+  @@index([orderId])
+}
+
+model Subscription {
+  id         String    @id @default(cuid())
+  userId     String
+  planId     String
+  /// null for bonus days (referrals) and grants by staff.
+  orderId    String?   @unique
+  source     String    @default("ORDER") // ORDER | REFERRAL | GRANT
+  startsAt   DateTime
+  endsAt     DateTime
+  canceledAt DateTime?
+  note       String?
+  createdAt  DateTime  @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, endsAt])
+}
+
+model PromoCode {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  percentOff     Int?
+  /// Fixed discount per currency in whole units, e.g. { "UZS": 50000, "USD": 5 }.
+  amountOff      Json?
+  /// Empty = every paid plan.
+  planIds        String[]
+  maxRedemptions Int?
+  validFrom      DateTime?
+  validUntil     DateTime?
+  active         Boolean   @default(true)
+  note           String?
+  createdById    String?
+  createdAt      DateTime  @default(now())
+
+  orders Order[]
+}
+
+/// Renewal reminders already sent, so each is sent once.
+model BillingReminder {
+  id         String   @id @default(cuid())
+  userId     String
+  /// The end date the reminder is about (ISO day) and how many days before it.
+  endsOn     String
+  daysBefore Int
+  sentAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, endsOn, daysBefore])
 }

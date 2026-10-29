@@ -70,7 +70,9 @@
     "account": "Hisob",
     "menu": "Menyu",
     "mainNavigation": "Asosiy menyu",
-    "mocks": "Sinov testlari"
+    "mocks": "Sinov testlari",
+    "pricing": "Narxlar",
+    "billing": "Tarif va toʻlovlar"
   },
   "footer": {
     "disclaimer": "SAT® — College Board tomonidan roʻyxatdan oʻtkazilgan savdo belgisi. College Board ushbu sayt bilan bogʻliq emas va uni qoʻllab-quvvatlamaydi.",
@@ -239,6 +241,18 @@
       "button": "Kirish",
       "expires": "Havola bir soat amal qiladi va faqat bir marta ishlatiladi.",
       "ignore": "Agar bu xatni siz soʻramagan boʻlsangiz, eʼtibor bermang."
+    },
+    "receipt": {
+      "subject": "{name}: toʻlov qabul qilindi (buyurtma {number})",
+      "intro": "Rahmat! {name} uchun toʻlovingiz muvaffaqiyatli oʻtdi.",
+      "button": "Kvitansiyani koʻrish",
+      "footer": "{legalName}. Bu xatni kvitansiya sifatida saqlang."
+    },
+    "renewal": {
+      "subject": "{name}: premium {days} kundan keyin tugaydi",
+      "body": "Premium imkoniyatlaringiz {date} kuni tugaydi ({days} kun qoldi). Cheksiz mashq, sinov testlari va AI repetitorni saqlab qolish uchun hozir uzaytiring.",
+      "button": "Uzaytirish",
+      "footer": "Bu xat sizda pullik tarif borligi uchun yuborildi. Uni tugashidan 3 kun va 1 kun oldin yuboramiz."
     }
   },
   "onboarding": {
@@ -765,7 +779,9 @@
       "backToSite": "Saytga qaytish",
       "mocks": "Sinov testlari",
       "aiDrafts": "AI qoralamalari",
-      "aiUsage": "AI sarfi"
+      "aiUsage": "AI sarfi",
+      "orders": "Buyurtmalar",
+      "promos": "Promokodlar"
     },
     "overview": {
       "title": "Umumiy koʻrinish",
@@ -1211,6 +1227,63 @@
         "ai_draft": "Savol yozish",
         "ai_solve": "Qoralamalarni tekshirish"
       }
+    },
+    "orders": {
+      "title": "Buyurtmalar va obunalar",
+      "subtitle": "Barcha toʻlovlar. Yoqilgan toʻlov tizimlari: {providers}.",
+      "activeSubscribers": "Hozir premiumga ega oʻquvchilar",
+      "revenue30": "Soʻnggi 30 kunda toʻlangan ({count} ta buyurtma)",
+      "search": "Buyurtma raqami yoki email",
+      "allStatuses": "Barcha holatlar",
+      "filter": "Filtrlash",
+      "empty": "Buyurtmalar topilmadi.",
+      "referral": "doʻst chegirmasi",
+      "refundRequested": "qaytarish soʻralgan",
+      "refund": "Qaytarish",
+      "refundTitle": "Bu buyurtma pulini qaytarasizmi?",
+      "refundBody": "Pul toʻlov tizimi orqali qaytariladi va bu buyurtma boʻyicha premium darhol toʻxtaydi.",
+      "refundPayme": "Payme toʻlovlari Payme biznes kabinetida qaytariladi. U yerda toʻlovni bekor qilganingizdan soʻng Payme bizga xabar beradi va buyurtma avtomatik ravishda “Qaytarilgan” boʻladi.",
+      "refunded": "Qaytarildi.",
+      "refundPending": "Qaytarish soʻraldi. Toʻlov tizimi tasdiqlaydi.",
+      "refundManual": "Pulni toʻlov tizimi kabinetida qaytaring. Tizim tasdiqlaganda buyurtma yangilanadi yoki bu yerda qaytarilgan deb belgilang.",
+      "refundFailed": "Pulni qaytarib boʻlmadi.",
+      "markRefunded": "Qaytarilgan deb belgilash",
+      "cancel": "Bekor qilish",
+      "grantTitle": "Bepul premium kunlar berish",
+      "email": "Oʻquvchi emaili",
+      "days": "Kunlar",
+      "note": "Sabab",
+      "grant": "Premium berish",
+      "granted": "Premium qoʻshildi.",
+      "userNotFound": "Bunday emailli hisob yoʻq.",
+      "grantFailed": "Premium qoʻshib boʻlmadi."
+    },
+    "promos": {
+      "title": "Promokodlar",
+      "subtitle": "Oʻquvchilar toʻlov paytida kiritadigan chegirma kodlari. Taklif qilingan doʻstlar uchun chegirma src/config/plans.ts da sozlanadi.",
+      "new": "Yangi promokod",
+      "empty": "Hali promokodlar yoʻq.",
+      "code": "Kod",
+      "discount": "Chegirma",
+      "kinds": {
+        "percent": "Foiz",
+        "amount": "Qatʼiy summa"
+      },
+      "percent": "Chegirma foizi",
+      "maxRedemptions": "Ruxsat etilgan foydalanishlar",
+      "validUntil": "Amal qilish muddati",
+      "plans": "Tariflar",
+      "plansHelp": "Barcha tariflar uchun hech birini belgilamang.",
+      "allPlans": "Barcha tariflar",
+      "note": "Izoh (faqat xodimlar uchun)",
+      "used": "Foydalanilgan",
+      "inactive": "nofaol",
+      "create": "Yaratish",
+      "created": "Promokod yaratildi.",
+      "codeTaken": "Bunday kod allaqachon bor.",
+      "invalid": "Kod va chegirmani tekshiring.",
+      "activate": "Faollashtirish",
+      "deactivate": "Oʻchirish"
     }
   },
   "mocks": {
@@ -1266,6 +1339,162 @@
       "chatLimit": "Bu savol boʻyicha qoʻshimcha savollar chegarasiga yetdingiz.",
       "unavailable": "AI repetitor hozir mavjud emas.",
       "other": "AI repetitor javob bera olmadi. Qayta urining."
+    }
+  },
+  "billing": {
+    "plans": {
+      "free": {
+        "name": "Bepul",
+        "tagline": "Saytni sinab koʻring"
+      },
+      "monthly": {
+        "name": "1 oy",
+        "tagline": "Hammasi, 30 kunga"
+      },
+      "quarter": {
+        "name": "3 oy",
+        "tagline": "Hammasi, 90 kunga"
+      },
+      "testday": {
+        "name": "Imtihon kunigacha",
+        "tagline": "Hammasi, SAT imtihoningizdan keyingi kungacha"
+      }
+    },
+    "features": {
+      "questions": "Kuniga {count} ta mashq savoli",
+      "questionsUnlimited": "Cheksiz mashq savollari",
+      "tests": "{count} ta sinov testi",
+      "testsUnlimited": "Cheksiz toʻliq sinov testlari",
+      "ai": "Kuniga {count} ta AI repetitor javobi",
+      "tools": "Imtihonga oʻxshash test ekrani, kalkulyator, belgilash",
+      "progress": "Natijalarni kuzatish va taxminiy ballar"
+    },
+    "receipt": {
+      "title": "Kvitansiya",
+      "number": "Buyurtma",
+      "plan": "Tarif",
+      "amount": "Toʻlangan summa",
+      "list": "Narx",
+      "discount": "Chegirma",
+      "paidAt": "Toʻlangan sana",
+      "validUntil": "Premium muddati",
+      "provider": "Toʻlov usuli",
+      "status": "Holat",
+      "customer": "Mijoz",
+      "seller": "Sotuvchi",
+      "print": "Chop etish",
+      "note": "Narxlar barcha soliqlarni oʻz ichiga oladi. Kvitansiya {legalName} tomonidan berilgan."
+    },
+    "telegram": {
+      "paid": "✅ Toʻlov qabul qilindi. {name} ni tanlaganingiz uchun rahmat!",
+      "renew": "⏰ Premium {days} kundan keyin tugaydi ({date}). Cheklovsiz mashq qilishni davom ettirish uchun uzaytiring:"
+    },
+    "providers": {
+      "mock": "Sinov toʻlovi (haqiqiy pul yechilmaydi)",
+      "payme": "Payme (Uzcard, Humo)",
+      "click": "Click (Uzcard, Humo)",
+      "octo": "Xalqaro karta (Visa, Mastercard)",
+      "free": "Promokod"
+    },
+    "status": {
+      "CREATED": "Yaratilgan",
+      "PENDING": "Toʻlov kutilmoqda",
+      "PAID": "Toʻlangan",
+      "FAILED": "Muvaffaqiyatsiz",
+      "CANCELED": "Bekor qilingan",
+      "REFUNDED": "Qaytarilgan"
+    },
+    "state": {
+      "none": "Bepul tarif",
+      "active": "Premium",
+      "expiring": "Premium — tez orada tugaydi",
+      "grace": "Premium — tugagan, bir necha kun ichida uzaytiring",
+      "expired": "Premium tugagan"
+    },
+    "pricing": {
+      "title": "Tariflar va narxlar",
+      "subtitle": "Bepul boshlang. Cheksiz mashq, toʻliq sinov testlari va AI repetitordan koʻproq yordam kerak boʻlganda tarifni oshiring. Avtomatik yechib olish yoʻq: muddat uchun toʻlaysiz va xohlaganingizda uzaytirasiz.",
+      "currency": "Valyuta",
+      "uzsHint": "Payme yoki Click orqali Uzcard va Humo",
+      "usdHint": "Xalqaro Visa va Mastercard",
+      "choose": "{plan} ni tanlash",
+      "startFree": "Bepul boshlash",
+      "current": "Sizning tarifingiz",
+      "popular": "Eng mashhur",
+      "perDay": "≈ kuniga {amount}",
+      "testdayNote": "Avval sozlamalarda imtihon sanangizni kiriting.",
+      "noProviders": "Onlayn toʻlov hozircha mavjud emas. Toʻlash uchun biz bilan bogʻlaning.",
+      "faq": "Toʻlovlar toʻlov tizimining xavfsiz sahifasida amalga oshiriladi. Biz karta raqamingizni koʻrmaymiz va saqlamaymiz. Foydalanilmagan muddat avtomatik qaytarilmaydi; qaytarish siyosatiga qarang.",
+      "refundPolicy": "Qaytarish siyosati"
+    },
+    "checkout": {
+      "title": "Toʻlov",
+      "plan": "Tarif",
+      "currency": "Valyuta",
+      "provider": "Toʻlov usuli",
+      "promo": "Promokod",
+      "apply": "Qoʻllash",
+      "promoApplied": "Promokod qoʻllandi",
+      "referralApplied": "Doʻst chegirmasi: birinchi xaridga {percent}%",
+      "list": "Narx",
+      "discount": "Chegirma",
+      "total": "Jami",
+      "period": "Premium taxminan {date} gacha",
+      "pay": "{amount} toʻlash",
+      "getFree": "Bepul faollashtirish",
+      "secure": "Siz toʻlov tizimining xavfsiz sahifasiga oʻtasiz. Biz karta raqamingizni hech qachon koʻrmaymiz.",
+      "redirecting": "Toʻlov sahifasiga oʻtmoqdasiz…",
+      "openSettings": "Sozlamalarni ochish",
+      "errors": {
+        "PROMO_INVALID": "Bunday promokod yoʻq.",
+        "PROMO_EXPIRED": "Promokod muddati tugagan.",
+        "PROMO_NOT_FOR_PLAN": "Promokod bu tarif uchun amal qilmaydi.",
+        "PROMO_USED_UP": "Promokod limiti tugagan.",
+        "TEST_DATE_REQUIRED": "Bu tarifni tanlash uchun sozlamalarda SAT imtihon sanangizni kiriting.",
+        "TEST_DATE_PASSED": "Imtihon sanangiz oʻtib ketgan. Uni sozlamalarda yangilang.",
+        "TEST_DATE_TOO_FAR": "Imtihoningizgacha bir yildan koʻp vaqt bor. Oylik tarifni tanlang.",
+        "PROVIDER_UNAVAILABLE": "Bu toʻlov usuli ushbu valyuta uchun mavjud emas.",
+        "RATE_LIMITED": "Urinishlar juda koʻp. Bir necha daqiqa kuting.",
+        "other": "Toʻlovni boshlab boʻlmadi. Qayta urining."
+      }
+    },
+    "return": {
+      "title": "Toʻlov",
+      "waiting": "Toʻlov tizimi toʻlovingizni tasdiqlashini kutmoqdamiz…",
+      "slow": "Bu odatdagidan uzoq davom etmoqda. Sahifani yopishingiz mumkin: toʻlov tizimi tasdiqlashi bilan tarifingiz faollashadi.",
+      "paid": "Toʻlov qabul qilindi. Premium faol — omad!",
+      "failed": "Toʻlov oʻtmadi. Pul yechilmadi.",
+      "canceled": "Toʻlov bekor qilindi.",
+      "toDashboard": "Boshqaruv paneliga",
+      "tryAgain": "Qayta urinish"
+    },
+    "page": {
+      "title": "Tarif va toʻlovlar",
+      "endsAt": "Premium {date} gacha",
+      "endedAt": "{date} da tugagan",
+      "renew": "{plan} ni uzaytirish",
+      "upgrade": "Tariflarni koʻrish",
+      "freeUsage": "Bugun yana {questions} ta mashq savolini boshlashingiz mumkin. Qolgan sinov testlari: {tests}.",
+      "orders": "Toʻlovlar",
+      "noOrders": "Hali toʻlovlar yoʻq.",
+      "receipt": "Kvitansiya",
+      "referralTitle": "Doʻstingizni taklif qiling",
+      "referralBody": "Doʻstingiz birinchi xaridiga {percent}% chegirma oladi, u toʻlaganda esa siz {days} kunlik bepul premium olasiz.",
+      "copy": "Havolani nusxalash",
+      "copied": "Havola nusxalandi",
+      "referred": "{count, plural, =0 {Hali hech kim havolangiz orqali qoʻshilmagan.} other {Havolangiz orqali # ta doʻst qoʻshildi.}}"
+    },
+    "limits": {
+      "daily": "Bugungi bepul mashq savollaridan foydalanib boʻldingiz ({left} ta qoldi). Cheksiz mashq uchun tarifni oshiring yoki ertaga qayting.",
+      "tests": "Bepul tarifda bitta sinov testi bor. Koʻproq topshirish uchun tarifni oshiring.",
+      "upgrade": "Tariflarni koʻrish"
+    },
+    "mock": {
+      "title": "Sinov toʻlov sahifasi",
+      "notice": "Bu sahifa sayt sinovdan oʻtayotganda haqiqiy toʻlov tizimi oʻrnida ishlaydi. Pul yechilmaydi.",
+      "order": "Buyurtma {number}",
+      "pay": "Toʻlash (sinov)",
+      "decline": "Rad etish"
     }
   }
 }

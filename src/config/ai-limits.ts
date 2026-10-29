@@ -1,12 +1,14 @@
 /**
  * Limits on AI features per user. Cached tutor answers are free and don't count.
- * Plans (Phase 5) decide which tier a student is on.
+ * A student's plan (src/config/plans.ts) decides their tier.
  */
+import { freeLimits, premiumLimits } from "./plans";
+
 export type AiTier = "free" | "premium" | "staff";
 
 export const aiLimits = {
   /** New AI tutor answers (explanations, hints, follow-up replies) per day, in the site time zone. */
-  tutorPerDay: { free: 10, premium: 100, staff: 500 } satisfies Record<AiTier, number>,
+  tutorPerDay: { free: freeLimits.aiAnswersPerDay, premium: premiumLimits.aiAnswersPerDay, staff: 500 } satisfies Record<AiTier, number>,
   /** Burst limit across all tutor requests. */
   tutorPerMinute: 6,
   /** Follow-up messages a student can send about one question. */

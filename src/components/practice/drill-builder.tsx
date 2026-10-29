@@ -19,6 +19,7 @@ type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
 export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; domains?: string[]; skills?: string[] } }) {
   const t = useTranslations("practice");
+  const tb = useTranslations("billing");
   const tx = useTranslations("taxonomy");
   const te = useTranslations("enums");
   const c = useTranslations("common");
@@ -62,6 +63,8 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
     start(async () => {
       const res = await startDrill(cfg);
       if (res.ok) router.push(`/test/${res.id}`);
+      else if (res.error === "DAILY_LIMIT")
+        toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
       else toast.error(res.error === "NO_QUESTIONS" ? t("noQuestions") : c("unknownError"));
     });
   }

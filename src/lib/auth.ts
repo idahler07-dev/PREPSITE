@@ -10,6 +10,7 @@ import { verifyTelegramLogin, type TelegramAuthData } from "./telegram";
 import { sendMail } from "@/server/mail";
 import { magicLinkEmail } from "@/server/mail/templates";
 import { rateLimit } from "@/server/rate-limit";
+import { applyReferralFromCookie } from "@/server/billing/referral";
 
 declare module "next-auth" {
   interface Session {
@@ -86,6 +87,7 @@ function providers(): Provider[] {
               accounts: { create: { type: "credentials", provider: "telegram", providerAccountId: tg.id } },
             },
           });
+          await applyReferralFromCookie(user.id);
           return { id: user.id, name: user.name, email: user.email, image: user.image };
         },
       }),
@@ -124,6 +126,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
     },
   },
   events: {
+    async createUser({ user }) {
+      if (user.id) await applyReferralFromCookie(user.id);
+    },
     async signIn({ user }) {
       const email = user.email?.toLowerCase();
       if (user.id && email && env().ADMIN_EMAILS.map((x) => x.toLowerCase()).includes(email)) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
+import { CreditCard, LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +35,11 @@ export function UserMenu({ name, email, isStaff }: { name: string | null; email:
         <DropdownMenuItem asChild>
           <Link href="/dashboard">
             <LayoutDashboard aria-hidden /> {t("dashboard")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/billing">
+            <CreditCard aria-hidden /> {t("billing")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

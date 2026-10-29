@@ -15,6 +15,9 @@ export const e2eEnv = {
   ALLOW_DEV_OUTBOX: "true",
   STORAGE_DRIVER: "local",
   STORAGE_LOCAL_DIR: ".data/e2e-storage",
+  PAYMENT_PROVIDERS: "mock",
+  MAGIC_LINKS_PER_IP_HOUR: "100",
+  ALLOW_MOCK_PAYMENTS: "true",
   PORT: String(PORT),
 };
 

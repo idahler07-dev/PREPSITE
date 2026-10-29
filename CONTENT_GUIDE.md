@@ -116,6 +116,13 @@ To change the mix of topics, difficulty or the score table, edit `src/config/moc
 
 If the tutor thinks an answer key may be wrong, it doesn't tell the student; the question gets the flag **AI questions the answer** and the admin overview shows a count with a link. Open the question (its editor shows the AI's reason), check it, and either fix and save it or approve it as it is. Both clear the flag.
 
+## 5e. Plans, payments and refunds (admins)
+
+- **Admin → Orders** lists every payment with its status. Use **Refund** to return money: Octo and Click (when reversal is enabled) refund directly; for Payme, cancel the payment in the Payme business cabinet and the order updates by itself. Premium from a refunded order stops immediately.
+- **Give free premium days** (same page): enter the student's email, number of days and a reason (e.g. scholarship).
+- **Admin → Promo codes**: percent or fixed-amount codes, optionally limited to some plans, a number of uses and an end date. Deactivate a code to stop it.
+- Prices, plan lengths and free limits are in `src/config/plans.ts`.
+
 ## 6. Reviewing and publishing
 
 Students only ever see **Published** questions. Everything else waits in **Admin → Review queue**.

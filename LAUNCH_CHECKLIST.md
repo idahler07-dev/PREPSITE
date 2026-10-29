@@ -42,6 +42,17 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Background jobs: on a VPS keep `JOBS_MODE=worker`. On serverless hosting set `JOBS_MODE=external`, a random `CRON_SECRET`, and a cron that calls `POST /api/jobs/run` with `Authorization: Bearer <CRON_SECRET>` every minute.
 - [ ] With R2/S3 storage, add a CORS rule on the bucket allowing `PUT` from your site origin (browsers upload PDFs straight to storage).
 
+## Payments
+
+- [ ] Real prices in `src/config/plans.ts` (the defaults are placeholders) and the refund policy text in `content/legal/`.
+- [ ] Fiscal data for receipts: IKPU (MXIK) code, package code and VAT in `billing.fiscal` in `src/config/plans.ts`.
+- [ ] Payme: merchant id and key set, endpoint `https://<domain>/api/payments/payme/webhook` and account field `order_id` set in the Payme cabinet; tested in the Payme sandbox; then `PAYME_SANDBOX=false` with the production key.
+- [ ] Click: service id, merchant id, merchant user id and secret set; Prepare and Complete URLs `https://<domain>/api/payments/click/webhook`; one real test payment.
+- [ ] Octo: shop id and secret; notify URL `https://<domain>/api/payments/octo/webhook`; tested with `OCTO_TEST=true`, then false.
+- [ ] `PAYMENT_PROVIDERS` lists only the real providers (no `mock`), and `ALLOW_MOCK_PAYMENTS` is not set.
+- [ ] One full purchase and one refund per provider before announcing.
+- [ ] Daily billing job runs (worker mode schedules it; with `JOBS_MODE=external` the minute cron triggers it). Check Admin → Orders after the first day.
+
 ## Deploy
 
 - [ ] `pnpm db:deploy` applied all migrations.

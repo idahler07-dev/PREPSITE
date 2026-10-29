@@ -8,6 +8,7 @@ import { assembleMock, type MockCandidate } from "@/lib/mock/assemble";
 import { estimateScores, routeModuleTwo } from "@/lib/mock/scoring";
 import type { SectionKey } from "@/lib/taxonomy";
 import { HttpError } from "@/server/http";
+import { assertTestAllowance } from "@/server/billing/entitlement";
 
 const SECTIONS: SectionKey[] = ["RW", "MATH"];
 
@@ -93,6 +94,7 @@ export async function startMock(userId: string, raw: unknown) {
   const visible = mock && mock.status === "PUBLISHED" && (mock.kind === "CURATED" || mock.forUserId === userId);
   if (!mock || !visible) throw new HttpError(404, "NOT_FOUND");
 
+  await assertTestAllowance(userId);
   const sections: SectionKey[] = scope === "full" ? SECTIONS.filter((s) => mock.sections.includes(s)) : [scope.replace("module-", "") as SectionKey];
   if (!sections.every((s) => mock.sections.includes(s))) throw new HttpError(422, "SECTION_NOT_IN_TEST");
   const moduleOnly = scope.startsWith("module-");

@@ -70,7 +70,9 @@
     "account": "Account",
     "menu": "Menu",
     "mainNavigation": "Main navigation",
-    "mocks": "Practice tests"
+    "mocks": "Practice tests",
+    "pricing": "Pricing",
+    "billing": "Plan and payments"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -239,6 +241,18 @@
       "button": "Sign in",
       "expires": "This link expires in one hour and can be used once.",
       "ignore": "If you did not request this email, you can safely ignore it."
+    },
+    "receipt": {
+      "subject": "{name}: payment received (order {number})",
+      "intro": "Thank you! Your payment to {name} was successful.",
+      "button": "View receipt",
+      "footer": "{legalName}. Keep this email as your receipt."
+    },
+    "renewal": {
+      "subject": "{name}: your premium ends in {days, plural, one {# day} other {# days}}",
+      "body": "Your premium access ends on {date} ({days, plural, one {in # day} other {in # days}}). Renew now to keep unlimited practice, practice tests and the AI tutor.",
+      "button": "Renew",
+      "footer": "You get this email because you have a paid plan. We send it 3 days and 1 day before it ends."
     }
   },
   "onboarding": {
@@ -765,7 +779,9 @@
       "backToSite": "Back to site",
       "mocks": "Practice tests",
       "aiDrafts": "AI drafts",
-      "aiUsage": "AI usage"
+      "aiUsage": "AI usage",
+      "orders": "Orders",
+      "promos": "Promo codes"
     },
     "overview": {
       "title": "Overview",
@@ -1211,6 +1227,63 @@
         "ai_draft": "Question drafting",
         "ai_solve": "Draft checking"
       }
+    },
+    "orders": {
+      "title": "Orders and subscriptions",
+      "subtitle": "All payments. Enabled payment providers: {providers}.",
+      "activeSubscribers": "Students with premium now",
+      "revenue30": "Paid in the last 30 days ({count, plural, one {# order} other {# orders}})",
+      "search": "Order number or email",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "empty": "No orders found.",
+      "referral": "friend discount",
+      "refundRequested": "refund requested",
+      "refund": "Refund",
+      "refundTitle": "Refund this order?",
+      "refundBody": "The money is returned through the payment provider and premium from this order stops right away.",
+      "refundPayme": "Payme refunds are made in the Payme business cabinet. After you cancel the payment there, Payme tells us and the order becomes Refunded automatically.",
+      "refunded": "Refunded.",
+      "refundPending": "Refund requested. The provider will confirm it.",
+      "refundManual": "Make the refund in the provider's cabinet. The order updates when the provider confirms, or mark it refunded here.",
+      "refundFailed": "The refund could not be made.",
+      "markRefunded": "Mark refunded",
+      "cancel": "Cancel",
+      "grantTitle": "Give free premium days",
+      "email": "Student's email",
+      "days": "Days",
+      "note": "Reason",
+      "grant": "Give premium",
+      "granted": "Premium added.",
+      "userNotFound": "No account with this email.",
+      "grantFailed": "Could not add premium."
+    },
+    "promos": {
+      "title": "Promo codes",
+      "subtitle": "Discount codes students enter at checkout. The referral discount for invited friends is set in src/config/plans.ts.",
+      "new": "New promo code",
+      "empty": "No promo codes yet.",
+      "code": "Code",
+      "discount": "Discount",
+      "kinds": {
+        "percent": "Percent",
+        "amount": "Fixed amount"
+      },
+      "percent": "Percent off",
+      "maxRedemptions": "Uses allowed",
+      "validUntil": "Valid until",
+      "plans": "Plans",
+      "plansHelp": "Leave all unticked for every plan.",
+      "allPlans": "All plans",
+      "note": "Note (staff only)",
+      "used": "Used",
+      "inactive": "inactive",
+      "create": "Create",
+      "created": "Promo code created.",
+      "codeTaken": "This code already exists.",
+      "invalid": "Check the code and the discount.",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
     }
   },
   "mocks": {
@@ -1266,6 +1339,162 @@
       "chatLimit": "That's the limit of follow-up questions for this question.",
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
+    }
+  },
+  "billing": {
+    "plans": {
+      "free": {
+        "name": "Free",
+        "tagline": "Try the site"
+      },
+      "monthly": {
+        "name": "1 month",
+        "tagline": "Everything, for 30 days"
+      },
+      "quarter": {
+        "name": "3 months",
+        "tagline": "Everything, for 90 days"
+      },
+      "testday": {
+        "name": "Until test day",
+        "tagline": "Everything, until the day after your SAT"
+      }
+    },
+    "features": {
+      "questions": "{count, plural, one {# practice question} other {# practice questions}} a day",
+      "questionsUnlimited": "Unlimited practice questions",
+      "tests": "{count, plural, one {# practice test} other {# practice tests}}",
+      "testsUnlimited": "Unlimited full practice tests",
+      "ai": "{count} AI tutor answers a day",
+      "tools": "Exam-like test screen, calculator, highlighter",
+      "progress": "Progress tracking and estimated scores"
+    },
+    "receipt": {
+      "title": "Receipt",
+      "number": "Order",
+      "plan": "Plan",
+      "amount": "Amount paid",
+      "list": "Price",
+      "discount": "Discount",
+      "paidAt": "Paid on",
+      "validUntil": "Premium until",
+      "provider": "Paid with",
+      "status": "Status",
+      "customer": "Customer",
+      "seller": "Seller",
+      "print": "Print",
+      "note": "Prices include all taxes. This receipt was issued by {legalName}."
+    },
+    "telegram": {
+      "paid": "✅ Payment received. Thank you for choosing {name}!",
+      "renew": "⏰ Your premium ends in {days, plural, one {# day} other {# days}} ({date}). Renew to keep practising without limits:"
+    },
+    "providers": {
+      "mock": "Test payment (no real money)",
+      "payme": "Payme (Uzcard, Humo)",
+      "click": "Click (Uzcard, Humo)",
+      "octo": "International card (Visa, Mastercard)",
+      "free": "Promo code"
+    },
+    "status": {
+      "CREATED": "Created",
+      "PENDING": "Waiting for payment",
+      "PAID": "Paid",
+      "FAILED": "Failed",
+      "CANCELED": "Cancelled",
+      "REFUNDED": "Refunded"
+    },
+    "state": {
+      "none": "Free plan",
+      "active": "Premium",
+      "expiring": "Premium — ending soon",
+      "grace": "Premium — ended, renew within a few days",
+      "expired": "Premium ended"
+    },
+    "pricing": {
+      "title": "Plans and prices",
+      "subtitle": "Start free. Upgrade when you want unlimited practice, full practice tests and more help from the AI tutor. No automatic charges: you pay for a period and renew when you choose.",
+      "currency": "Currency",
+      "uzsHint": "Uzcard and Humo through Payme or Click",
+      "usdHint": "International Visa and Mastercard",
+      "choose": "Choose {plan}",
+      "startFree": "Start free",
+      "current": "Your plan",
+      "popular": "Most popular",
+      "perDay": "≈ {amount} a day",
+      "testdayNote": "Set your test date in your settings first.",
+      "noProviders": "Online payment is not available yet. Please contact us to pay.",
+      "faq": "Payments are made on the payment provider's secure page. We never see or store your card number. Unused time is not refunded automatically; see the refund policy.",
+      "refundPolicy": "Refund policy"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "plan": "Plan",
+      "currency": "Currency",
+      "provider": "Pay with",
+      "promo": "Promo code",
+      "apply": "Apply",
+      "promoApplied": "Promo code applied",
+      "referralApplied": "Friend discount: {percent}% off your first purchase",
+      "list": "Price",
+      "discount": "Discount",
+      "total": "Total",
+      "period": "Premium until about {date}",
+      "pay": "Pay {amount}",
+      "getFree": "Activate for free",
+      "secure": "You'll be taken to the provider's secure payment page. We never see your card number.",
+      "redirecting": "Taking you to the payment page…",
+      "errors": {
+        "PROMO_INVALID": "This promo code doesn't exist.",
+        "PROMO_EXPIRED": "This promo code has expired.",
+        "PROMO_NOT_FOR_PLAN": "This promo code isn't valid for this plan.",
+        "PROMO_USED_UP": "This promo code has been used up.",
+        "TEST_DATE_REQUIRED": "Add your SAT test date in Settings to choose this plan.",
+        "TEST_DATE_PASSED": "Your test date has passed. Update it in Settings.",
+        "TEST_DATE_TOO_FAR": "Your test date is more than a year away. Choose a monthly plan instead.",
+        "PROVIDER_UNAVAILABLE": "This payment method isn't available for this currency.",
+        "RATE_LIMITED": "Too many attempts. Please wait a few minutes.",
+        "other": "The payment could not be started. Please try again."
+      },
+      "openSettings": "Open settings"
+    },
+    "return": {
+      "title": "Payment",
+      "waiting": "Waiting for the payment provider to confirm your payment…",
+      "slow": "This is taking longer than usual. You can close this page: your plan is activated as soon as the provider confirms.",
+      "paid": "Payment received. Premium is active — enjoy!",
+      "failed": "The payment did not go through. No money was taken.",
+      "canceled": "The payment was cancelled.",
+      "toDashboard": "Go to dashboard",
+      "tryAgain": "Try again"
+    },
+    "page": {
+      "title": "Plan and payments",
+      "endsAt": "Premium until {date}",
+      "endedAt": "Ended on {date}",
+      "renew": "Renew {plan}",
+      "upgrade": "See plans",
+      "freeUsage": "Today you can start {questions} more practice questions. Practice tests left: {tests}.",
+      "orders": "Payments",
+      "noOrders": "No payments yet.",
+      "receipt": "Receipt",
+      "referralTitle": "Invite a friend",
+      "referralBody": "Your friend gets {percent}% off their first purchase, and you get {days} free premium days when they pay.",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "referred": "{count, plural, =0 {No friends have joined yet.} one {# friend joined with your link.} other {# friends joined with your link.}}"
+    },
+    "limits": {
+      "daily": "You've used today's free practice questions ({left} left). Upgrade for unlimited practice, or come back tomorrow.",
+      "tests": "The free plan includes one practice test. Upgrade to take more.",
+      "upgrade": "See plans"
+    },
+    "mock": {
+      "title": "Test payment page",
+      "notice": "This page stands in for a real payment provider while the site is being tested. No money is charged.",
+      "order": "Order {number}",
+      "pay": "Pay (test)",
+      "decline": "Decline"
     }
   }
 }

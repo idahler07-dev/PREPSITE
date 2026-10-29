@@ -1,5 +1,6 @@
 "use server";
 
+import { env } from "@/lib/env";
 import { z } from "zod";
 import { AuthError } from "next-auth";
 import { getLocale } from "next-intl/server";
@@ -18,7 +19,7 @@ export async function requestMagicLink(_prev: LoginState, form: FormData): Promi
   const { email } = parsed.data;
 
   const ip = await clientIp();
-  const byIp = await rateLimit(`magic-link:ip:${ip}`, 10, 3600);
+  const byIp = await rateLimit(`magic-link:ip:${ip}`, env().MAGIC_LINKS_PER_IP_HOUR, 3600);
   if (!byIp.ok) return { error: "RateLimited", email };
 
   const locale = await getLocale();

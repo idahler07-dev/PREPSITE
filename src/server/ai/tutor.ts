@@ -9,6 +9,7 @@ import { ENABLED_LOCALES, LOCALE_ENGLISH_NAMES } from "@/i18n/locales";
 import { splitVerdict } from "@/lib/ai/verdict";
 import { startOfDayInZone } from "@/lib/stats/streak";
 import { HttpError } from "@/server/http";
+import { getEntitlement } from "@/server/billing/entitlement";
 import type { CurrentUser } from "@/server/auth/session";
 import { IMAGE_TYPES, storage } from "@/server/storage";
 import { aiAvailable, logAiUsage, models } from "./client";
@@ -85,14 +86,14 @@ async function loadAccess(userId: string, attemptId: string, questionId: string,
   return { response: r, question: r.question, answered };
 }
 
-export function tierOf(user: Pick<CurrentUser, "role">): AiTier {
-  // Phase 5 adds "premium" for students with an active plan.
-  return user.role === "EDITOR" || user.role === "ADMIN" ? "staff" : "free";
+export async function tierOf(user: Pick<CurrentUser, "id" | "role">): Promise<AiTier> {
+  if (user.role === "EDITOR" || user.role === "ADMIN") return "staff";
+  return (await getEntitlement(user.id)).premium ? "premium" : "free";
 }
 
 /** New AI answers left today (cached answers don't count). */
 export async function remainingToday(user: Pick<CurrentUser, "id" | "role">): Promise<number> {
-  const limit = aiLimits.tutorPerDay[tierOf(user)];
+  const limit = aiLimits.tutorPerDay[await tierOf(user)];
   const used = await db.aiUsage.count({
     where: { userId: user.id, feature: { in: [...TUTOR_FEATURES] }, createdAt: { gte: startOfDayInZone(new Date(), siteConfig.defaultTimeZone) } },
   });

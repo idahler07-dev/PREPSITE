@@ -6,6 +6,7 @@ import { requireApiUser } from "@/server/auth/session";
 import { HttpError } from "@/server/http";
 import { rateLimit } from "@/server/rate-limit";
 import { buildMockTest, startMock } from "@/server/mock/service";
+import { assertTestAllowance } from "@/server/billing/entitlement";
 
 type Result = { ok: true; id: string } | { ok: false; error: string };
 
@@ -31,6 +32,8 @@ export async function generateMockTest(raw: unknown): Promise<Result> {
   if (!(await rateLimit(`mockgen:${user.id}`, 10, 86_400)).ok) return { ok: false, error: "RATE_LIMITED" };
   try {
     const { sections } = z.object({ sections: z.array(z.enum(["RW", "MATH"])).min(1).max(2) }).parse(raw);
+    await assertTestAllowance(user.id); // before spending work on assembling a test
+
     const t = await getTranslations("mocks");
     const mock = await buildMockTest({ title: t("generatedTitle"), sections }, { kind: "GENERATED", forUserId: user.id });
     const scope = sections.length === 2 ? "full" : sections[0]!;

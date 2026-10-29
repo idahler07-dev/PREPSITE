@@ -17,14 +17,14 @@ export async function countMatchingQuestions(config: unknown): Promise<number> {
   }
 }
 
-export async function startDrill(config: unknown): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+export async function startDrill(config: unknown): Promise<{ ok: true; id: string } | { ok: false; error: string; message?: string }> {
   const user = await requireApiUser();
   if (!(await rateLimit(`drill:${user.id}`, 60, 3600)).ok) return { ok: false, error: "RATE_LIMITED" };
   try {
     const attempt = await createDrill(user.id, config);
     return { ok: true, id: attempt.id };
   } catch (e) {
-    if (e instanceof HttpError) return { ok: false, error: e.code };
+    if (e instanceof HttpError) return { ok: false, error: e.code, message: e.message };
     if (e instanceof z.ZodError) return { ok: false, error: "VALIDATION" };
     throw e;
   }
