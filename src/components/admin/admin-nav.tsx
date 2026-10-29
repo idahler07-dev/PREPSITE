@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { BookOpen, ClipboardCheck, FileUp, Flag, Home, LayoutDashboard, Library, Users } from "lucide-react";
+import { BookOpen, ClipboardCheck, FileText, FileUp, Flag, Home, LayoutDashboard, Library, Users } from "lucide-react";
 import { NavLink } from "@/components/layout/nav-link";
 
 export function AdminNav({ isAdmin, counts }: { isAdmin: boolean; counts: { review: number; reports: number } }) {
@@ -10,6 +10,7 @@ export function AdminNav({ isAdmin, counts }: { isAdmin: boolean; counts: { revi
     { href: "/admin", label: t("overview"), icon: LayoutDashboard, exact: true },
     { href: "/admin/questions", label: t("questions"), icon: BookOpen },
     { href: "/admin/review", label: t("review"), icon: ClipboardCheck, badge: counts.review },
+    { href: "/admin/mocks", label: t("mocks"), icon: FileText },
     { href: "/admin/import", label: t("import"), icon: FileUp },
     { href: "/admin/sources", label: t("sources"), icon: Library },
     { href: "/admin/reports", label: t("reports"), icon: Flag, badge: counts.reports },

@@ -9,6 +9,7 @@ import { gradeAnswer } from "@/lib/questions/grading";
 import { renderMarkdown } from "@/lib/markdown/render";
 import { SPR_ALLOWED_CHARS } from "@/lib/questions/spr";
 import { HttpError } from "@/server/http";
+import { afterMockModule, scoreAttempt } from "@/server/mock/service";
 
 /** Answers saved this long after the deadline are still accepted (network delays). */
 export const DEADLINE_GRACE_MS = 30_000;
@@ -153,6 +154,14 @@ export interface RunnerItem {
   feedback: ReturnType<typeof feedbackFor> | null;
 }
 
+export interface BreakState {
+  id: string;
+  onBreak: true;
+  breakEndsAt: string;
+  serverNow: string;
+  nextSection: "RW" | "MATH" | null;
+}
+
 export interface RunnerState {
   id: string;
   kind: string;
@@ -168,6 +177,8 @@ export interface RunnerState {
     moduleNumber: number | null;
     timeLimitSec: number | null;
     deadline: string | null;
+    /** Position among the attempt's modules for this section/test, e.g. "Module 2 of 4". */
+    ordinal: number;
   };
   items: RunnerItem[];
 }
@@ -176,9 +187,17 @@ export interface RunnerState {
  * Everything the test screen needs. Correct answers and explanations are
  * included only for questions already checked (drills with immediate feedback).
  */
-export async function getRunnerState(attemptId: string, userId: string): Promise<RunnerState | { completed: true }> {
+export async function getRunnerState(attemptId: string, userId: string): Promise<RunnerState | BreakState | { completed: true }> {
   let attempt = await loadOwnedAttempt(attemptId, userId);
   if (attempt.status !== "IN_PROGRESS") return { completed: true };
+
+  if (attempt.breakEndsAt) {
+    if (attempt.breakEndsAt.getTime() > Date.now()) {
+      const upcoming = attempt.modules.find((m) => !m.submittedAt);
+      return { id: attempt.id, onBreak: true, breakEndsAt: attempt.breakEndsAt.toISOString(), serverNow: new Date().toISOString(), nextSection: upcoming?.section ?? null };
+    }
+    await db.attempt.update({ where: { id: attemptId }, data: { breakEndsAt: null } });
+  }
 
   let current = attempt.modules.find((m) => !m.submittedAt);
   if (current && isExpired(current)) {
@@ -209,6 +228,7 @@ export async function getRunnerState(attemptId: string, userId: string): Promise
       moduleNumber: current.moduleNumber,
       timeLimitSec: current.timeLimitSec,
       deadline: deadline?.toISOString() ?? null,
+      ordinal: current.index + 1,
     },
     items: current.responses.map((r) => ({
       position: r.position,
@@ -349,6 +369,7 @@ export async function submitModule(attemptId: string, userId: string, moduleId: 
       }),
   );
   await recordQuestionStats(newlyGraded);
+  if (attempt.mockTestId) await afterMockModule(attemptId, m.index);
 
   const isLast = attempt.modules.every((x) => x.id === m.id || x.submittedAt);
   if (isLast) {
@@ -361,13 +382,21 @@ export async function submitModule(attemptId: string, userId: string, moduleId: 
     const total = totals.reduce((s, t) => s + t._count, 0);
     await db.attempt.update({
       where: { id: attemptId },
-      data: { status: "COMPLETED", completedAt: now, correctCount: correct, totalCount: total, currentModule: m.index },
+      data: { status: "COMPLETED", completedAt: now, correctCount: correct, totalCount: total, currentModule: m.index, breakEndsAt: null },
     });
+    await scoreAttempt(attemptId);
     return { completed: true };
   }
   const next = attempt.modules.find((x) => !x.submittedAt && x.id !== m.id);
   await db.attempt.update({ where: { id: attemptId }, data: { currentModule: next?.index ?? m.index } });
   return { completed: false };
+}
+
+/** Leave the break between sections early. */
+export async function endBreak(attemptId: string, userId: string) {
+  const a = await db.attempt.findUnique({ where: { id: attemptId }, select: { userId: true } });
+  if (!a || a.userId !== userId) throw new HttpError(404, "NOT_FOUND");
+  await db.attempt.update({ where: { id: attemptId }, data: { breakEndsAt: null } });
 }
 
 // ─── Results ─────────────────────────────────────────────────────────────────
@@ -404,6 +433,8 @@ export async function getResults(attemptId: string, userId: string) {
     correct: attempt.correctCount ?? items.filter((i) => i.isCorrect).length,
     total: attempt.totalCount ?? items.length,
     config: attempt.config as Record<string, unknown>,
+    scores: attempt.scores as import("@/lib/mock/scoring").ScoreEstimate | null,
+    modules: attempt.modules.map((m) => ({ index: m.index, section: m.section, moduleNumber: m.moduleNumber, variant: m.variant })),
     items,
   };
 }

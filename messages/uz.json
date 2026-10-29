@@ -69,7 +69,8 @@
     "getStarted": "Boshlash",
     "account": "Hisob",
     "menu": "Menyu",
-    "mainNavigation": "Asosiy menyu"
+    "mainNavigation": "Asosiy menyu",
+    "mocks": "Sinov testlari"
   },
   "footer": {
     "disclaimer": "SAT® — College Board tomonidan roʻyxatdan oʻtkazilgan savdo belgisi. College Board ushbu sayt bilan bogʻliq emas va uni qoʻllab-quvvatlamaydi.",
@@ -412,7 +413,12 @@
       "previous": "Oldingi savol",
       "mark": "«Keyinroq qaytish» belgisi",
       "eliminate": "Chizib tashlashni yoqish yoki oʻchirish",
-      "help": "Tugmalarni koʻrsatish"
+      "help": "Tugmalarni koʻrsatish",
+      "highlight": "Belgilash vositasini yoqish/oʻchirish",
+      "lineReader": "Satr oʻquvchini yoqish/oʻchirish (↑ ↓ bilan suring)",
+      "calculator": "Kalkulyatorni ochish yoki yopish (Matematika)",
+      "reference": "Formulalar varagʻini ochish (Matematika)",
+      "fullscreen": "Toʻliq ekran"
     },
     "passage": "Matn",
     "question": "Savol",
@@ -420,7 +426,69 @@
     "zoomOut": "Kichraytirish",
     "submitted": "Yuborildi",
     "alreadyCompleted": "Bu mashq yakunlangan.",
-    "viewResults": "Natijalarni koʻrish"
+    "viewResults": "Natijalarni koʻrish",
+    "tools": {
+      "calculator": "Kalkulyator",
+      "reference": "Formulalar varagʻi",
+      "lineReader": "Satr oʻquvchi",
+      "fullscreen": "Toʻliq ekran",
+      "exitFullscreen": "Toʻliq ekrandan chiqish",
+      "fullscreenFailed": "Bu brauzerda toʻliq ekran mavjud emas.",
+      "highlighter": "Belgilash",
+      "highlighterOn": "Belgilash yoqilgan",
+      "highlighterHelp": "Belgilash uchun matndagi qismni tanlang. Olib tashlash uchun belgini bosing.",
+      "highlightColor": "Belgilash rangi",
+      "colors": {
+        "yellow": "Sariq",
+        "blue": "Koʻk",
+        "pink": "Pushti"
+      },
+      "addNote": "Izoh qoʻshish",
+      "editNote": "Izohni tahrirlash",
+      "note": "Bu savol boʻyicha izohingiz",
+      "noteHelp": "Avtomatik saqlanadi. Faqat siz koʻrasiz."
+    },
+    "calculator": {
+      "title": "Kalkulyator",
+      "graphing": "Grafik kalkulyator",
+      "close": "Kalkulyatorni yopish",
+      "angle": "Burchak birligi",
+      "deg": "Gradus",
+      "rad": "Radian",
+      "clear": "Tozalash",
+      "history": "Oldingi hisoblar",
+      "expression": "Ifoda",
+      "error": "Buni hisoblab boʻlmaydi"
+    },
+    "reference": {
+      "title": "Formulalar varagʻi",
+      "intro": "Matematika boʻlimida foydalanish mumkin boʻlgan formulalar.",
+      "items": {
+        "circleArea": "Doira yuzi",
+        "circumference": "Aylana uzunligi",
+        "rectangleArea": "Toʻgʻri toʻrtburchak yuzi",
+        "triangleArea": "Uchburchak yuzi",
+        "pythagorean": "Pifagor teoremasi",
+        "special30": "Maxsus toʻgʻri burchakli uchburchak",
+        "special45": "Maxsus toʻgʻri burchakli uchburchak",
+        "boxVolume": "Toʻgʻri burchakli parallelepiped hajmi",
+        "cylinderVolume": "Silindr hajmi",
+        "sphereVolume": "Shar hajmi",
+        "coneVolume": "Konus hajmi",
+        "pyramidVolume": "Toʻgʻri burchakli piramida hajmi"
+      },
+      "facts": {
+        "circleDegrees": "Aylana 360 gradusga teng.",
+        "circleRadians": "Aylana 2π radianga teng.",
+        "triangleAngles": "Uchburchak burchaklari yigʻindisi 180 gradus."
+      }
+    },
+    "break": {
+      "title": "Tanaffus",
+      "remaining": "Tanaffus tugashiga qolgan vaqt",
+      "body": "Turing, choʻzilib oling, suv iching. {section} taymer tugaganda boshlanadi yoki hozir davom eting.",
+      "resume": "Testni davom ettirish"
+    }
   },
   "results": {
     "title": "Natijalar",
@@ -463,6 +531,22 @@
       "submit": "Yuborish",
       "thanks": "Rahmat! Oʻqituvchi bu savolni koʻrib chiqadi.",
       "already": "Siz bu savol haqida allaqachon xabar bergansiz."
+    },
+    "testTitle": "Sinov testi",
+    "variant": {
+      "easier": "osonroq modul",
+      "harder": "qiyinroq modul"
+    },
+    "estimate": {
+      "title": "Taxminiy ball",
+      "disclaimer": "Taxminiy ball, College Board rasmiy bali emas. U bizning ball jadvalimiz asosida hisoblanadi va ehtimoliy oraliq bilan koʻrsatiladi.",
+      "total": "Jami (400–1600)",
+      "range": "Ehtimoliy oraliq {low}–{high}",
+      "correct": "{total} tadan {correct} tasi toʻgʻri",
+      "route": {
+        "harder": "2-modul qiyinroq boʻlgan.",
+        "easier": "2-modul osonroq boʻlgan, bu eng yuqori mumkin boʻlgan ballni cheklaydi."
+      }
     }
   },
   "history": {
@@ -658,7 +742,8 @@
       "sources": "Manbalar",
       "reports": "Xabarlar",
       "users": "Foydalanuvchilar",
-      "backToSite": "Saytga qaytish"
+      "backToSite": "Saytga qaytish",
+      "mocks": "Sinov testlari"
     },
     "overview": {
       "title": "Umumiy koʻrinish",
@@ -1008,6 +1093,74 @@
       "zoomOut": "Sahifani sigʻdirish",
       "empty": "Bu yerda koʻrib chiqiladigan savollar yoʻq.",
       "pick": "Savol"
+    },
+    "mocks": {
+      "title": "Sinov testlari",
+      "subtitle": "Nashr qilingan savollardan toʻliq moslashuvchan testlar tuzing. Har bir test har bir boʻlim uchun 1-modul va 2-modulning ikkala variantini saqlaydi.",
+      "new": "Yangi sinov testi",
+      "newHelp": "Savollar haqiqiy testdagi mavzular va qiyinlikka mos ravishda avtomatik tanlanadi. Nashr qilingan savollar: Reading and Writing {rw}, Math {math}. Toʻliq test uchun 81 ta Reading and Writing va 66 ta Math savoli kerak.",
+      "titleLabel": "Nomi",
+      "titlePlaceholder": "Sinov testi 1",
+      "sections": "Boʻlimlar",
+      "create": "Testni tuzish",
+      "empty": "Hali sinov testlari yoʻq.",
+      "status": {
+        "DRAFT": "Qoralama",
+        "PUBLISHED": "Nashr qilingan",
+        "ARCHIVED": "Arxivlangan"
+      },
+      "missing": "{count, plural, other {# ta savol yetishmaydi}}",
+      "missingHelp": "Bu testni toʻldirish uchun bankda nashr qilingan savollar yetarli emas. Koʻproq savol nashr qiling, soʻng yangi test tuzing. Toʻliq boʻlmagan testni nashr qilib boʻlmaydi.",
+      "attempts": "{count, plural, =0 {hali topshirilmagan} other {# marta topshirilgan}}",
+      "shortfalls": "Andoza aniq bajarilmagan joylar",
+      "shortfallLine": "{module}: {domain}, {difficulty} — kerak {wanted}, boshqa qiyinlik yoki yoʻnalishdan {substituted} ta, {missing} ta yetishmaydi",
+      "variant": {
+        "standard": "1-modul",
+        "harder": "Qiyinroq 2-modul",
+        "easier": "Osonroq 2-modul"
+      },
+      "moduleN": "{n}-modul",
+      "questionCount": "{count, plural, other {# ta savol}}",
+      "publish": "Nashr qilish",
+      "archive": "Arxivlash",
+      "delete": "Qoralamani oʻchirish",
+      "errors": {
+        "create": "Testni tuzib boʻlmadi.",
+        "MOCK_INCOMPLETE": "Bu testda savollar yetishmaydi, uni nashr qilib boʻlmaydi.",
+        "IN_USE": "Faqat hech kim topshirmagan qoralamalarni oʻchirish mumkin. Uning oʻrniga arxivlang.",
+        "other": "Xatolik yuz berdi. Qayta urining."
+      }
+    }
+  },
+  "mocks": {
+    "title": "Sinov testlari",
+    "subtitle": "Haqiqiy imtihonga oʻxshash toʻliq moslashuvchan testlar: Reading and Writing ({rw} daq), {breakMin} daqiqalik tanaffus, soʻng Math ({math} daq). Har bir boʻlimning 2-moduli 1-moduldagi natijangizga qarab osonroq yoki qiyinroq boʻladi.",
+    "inProgress": "Davom etayotgan testlar",
+    "resume": "Davom ettirish",
+    "generateTitle": "Yangi test yaratish",
+    "generateHelp": "Nashr qilingan savollarimizdan haqiqiy testdagi mavzular va qiyinlik nisbatiga mos test tuzamiz va siz hali koʻrmagan savollarni tanlaymiz.",
+    "generateWhat": "Nimalar kirsin",
+    "bothSections": "Toʻliq test",
+    "generate": "Yaratish va boshlash",
+    "generatedTitle": "Mening sinov testim",
+    "published": "Oʻqituvchilarimiz tayyorlagan testlar",
+    "none": "Hali sinov testlari nashr qilinmagan.",
+    "startFull": "Toʻliq testni boshlash",
+    "startSection": "{section} ni boshlash",
+    "moreOptions": "Testni topshirishning boshqa usullari",
+    "oneSection": "Faqat bitta boʻlim",
+    "oneModule": "Faqat bitta modul (balsiz)",
+    "moduleOf": "{section}: 1-modul",
+    "lastTaken": "{date} da topshirilgan",
+    "estimatedTotal": "taxminan {score}",
+    "estimatedSection": "boʻlim uchun taxminiy ball {score}",
+    "rawScore": "{total} tadan {correct} tasi toʻgʻri",
+    "history": "Oldingi testlaringiz",
+    "estimateNote": "Barcha ballar taxminiy, College Board rasmiy ballari emas.",
+    "errors": {
+      "NOT_ENOUGH_QUESTIONS": "Toʻliq test tuzish uchun hali yetarli nashr qilingan savollar yoʻq. Bitta boʻlimni sinab koʻring yoki keyinroq qayting.",
+      "RATE_LIMITED": "Yaqinda koʻp test boshladingiz. Keyinroq qayta urining.",
+      "other": "Testni boshlab boʻlmadi. Qayta urining."
     }
   }
 }

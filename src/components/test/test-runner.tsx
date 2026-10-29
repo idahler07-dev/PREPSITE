@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Bookmark, ChevronLeft, ChevronRight, Keyboard, Loader2, LogOut, Minus, Plus, Strikethrough, Wifi, WifiOff, CheckCircle2, XCircle } from "lucide-react";
+import { Bookmark, Calculator, ChevronLeft, ChevronRight, Highlighter, Keyboard, Loader2, LogOut, Maximize, Minimize, Minus, NotebookPen, Plus, ScanLine, Sigma, Strikethrough, Wifi, WifiOff, CheckCircle2, XCircle } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import type { RunnerItem, RunnerState } from "@/server/attempts/service";
 import { testStructure } from "@/config/test-structure";
@@ -28,12 +28,21 @@ import { ChoiceList } from "./choice-list";
 import { SprInput } from "./spr-input";
 import { Legend, NavigatorPopover, QuestionGrid } from "./navigator";
 import { ReportDialog } from "./report-dialog";
+import { CalculatorPanel } from "./calculator";
+import { ReferenceSheet } from "./reference-sheet";
+import { HighlightablePassage, type Highlight, type HighlightColor } from "./highlightable";
+import { LineReader } from "./line-reader";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+
+type Annotations = Record<string, { highlights: Highlight[]; note: string | null }>;
+const HL_COLORS: HighlightColor[] = ["yellow", "blue", "pink"];
 
 const ZOOM_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
 
 type Feedback = NonNullable<RunnerItem["feedback"]>;
 
-export function TestRunner({ initial }: { initial: RunnerState }) {
+export function TestRunner({ initial, annotations: initialAnnotations = {}, desmosKey = null }: { initial: RunnerState; annotations?: Annotations; desmosKey?: string | null }) {
   const t = useTranslations("test");
   const tx = useTranslations("taxonomy");
   const c = useTranslations("common");
@@ -54,6 +63,14 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
   const [checking, setChecking] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [showTip, setShowTip] = useState(false);
+  const [annotations, setAnnotations] = useState<Annotations>(initialAnnotations);
+  const [highlighterOn, setHighlighterOn] = useState(false);
+  const [hlColor, setHlColor] = useState<HighlightColor>("yellow");
+  const [lineReader, setLineReader] = useState(false);
+  const [calcOpen, setCalcOpen] = useState(false);
+  const [refOpen, setRefOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const annotationTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const submittedRef = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
 
@@ -156,7 +173,37 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, view]);
 
+  const saveAnnotation = useCallback(
+    (questionId: string, patch: Partial<Annotations[string]>) => {
+      setAnnotations((prev) => {
+        const next = { highlights: [], note: null, ...prev[questionId], ...patch };
+        clearTimeout(annotationTimers.current[questionId]);
+        annotationTimers.current[questionId] = setTimeout(() => {
+          void fetch(`/api/attempts/${attemptId}/annotations`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ questionId, ...next }),
+          }).catch(() => toast.error(c("networkError")));
+        }, 600);
+        return { ...prev, [questionId]: next };
+      });
+    },
+    [attemptId, c],
+  );
+
+  useEffect(() => {
+    const onFs = () => setFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void document.documentElement.requestFullscreen?.().catch(() => toast.error(t("tools.fullscreenFailed")));
+  };
+
   const item = items[index]!;
+  const isMath = (initial.module.section ?? item.section) === "MATH";
+  const annotation = annotations[item.questionId];
   const update = useCallback(
     (position: number, patch: Partial<Pick<RunnerItem, "answer" | "flagged" | "eliminated">>) => {
       setItems((prev) => prev.map((it) => (it.position === position ? { ...it, ...patch } : it)));
@@ -234,6 +281,21 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
       } else if (k === "e") {
         e.preventDefault();
         setEliminatorOn((x) => !x);
+      } else if (k === "h" && item.passageHtml) {
+        e.preventDefault();
+        setHighlighterOn((x) => !x);
+      } else if (k === "l") {
+        e.preventDefault();
+        setLineReader((x) => !x);
+      } else if (k === "c" && isMath) {
+        e.preventDefault();
+        setCalcOpen((x) => !x);
+      } else if (k === "r" && isMath) {
+        e.preventDefault();
+        setRefOpen(true);
+      } else if (k === "f") {
+        e.preventDefault();
+        toggleFullscreen();
       } else if (k === "?") {
         e.preventDefault();
         setShortcutsOpen(true);
@@ -277,6 +339,22 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
           )}
         </div>
         <div className="flex items-center gap-1">
+          {isMath && (
+            <>
+              <Button variant={calcOpen ? "secondary" : "ghost"} size="icon" onClick={() => setCalcOpen((x) => !x)} aria-pressed={calcOpen} aria-label={t("tools.calculator")} title={t("tools.calculator")}>
+                <Calculator aria-hidden />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setRefOpen(true)} aria-label={t("tools.reference")} title={t("tools.reference")}>
+                <Sigma aria-hidden />
+              </Button>
+            </>
+          )}
+          <Button variant={lineReader ? "secondary" : "ghost"} size="icon" className="hidden sm:inline-flex" onClick={() => setLineReader((x) => !x)} aria-pressed={lineReader} aria-label={t("tools.lineReader")} title={t("tools.lineReader")}>
+            <ScanLine aria-hidden />
+          </Button>
+          <Button variant="ghost" size="icon" className="hidden sm:inline-flex" onClick={toggleFullscreen} aria-pressed={fullscreen} aria-label={fullscreen ? t("tools.exitFullscreen") : t("tools.fullscreen")} title={fullscreen ? t("tools.exitFullscreen") : t("tools.fullscreen")}>
+            {fullscreen ? <Minimize aria-hidden /> : <Maximize aria-hidden />}
+          </Button>
           <Button variant="ghost" size="icon" onClick={() => setZoomLevel(-1)} aria-label={t("zoomOut")} disabled={zoom <= ZOOM_STEPS[0]!}>
             <Minus aria-hidden />
           </Button>
@@ -338,7 +416,55 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
           <div key={item.position} className={cn("grid lg:h-full", item.passageHtml ? "lg:grid-cols-2 lg:divide-x" : "")}>
             {item.passageHtml && (
               <section aria-label={t("passage")} className="border-b p-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
-                <RichText html={item.passageHtml} className="passage" />
+                <div className="mb-3 flex flex-wrap items-center gap-1">
+                  <Button variant={highlighterOn ? "secondary" : "ghost"} size="sm" onClick={() => setHighlighterOn((x) => !x)} aria-pressed={highlighterOn}>
+                    <Highlighter aria-hidden /> {highlighterOn ? t("tools.highlighterOn") : t("tools.highlighter")}
+                  </Button>
+                  {highlighterOn && (
+                    <div role="radiogroup" aria-label={t("tools.highlightColor")} className="flex gap-1">
+                      {HL_COLORS.map((col) => (
+                        <button
+                          key={col}
+                          type="button"
+                          role="radio"
+                          aria-checked={hlColor === col}
+                          aria-label={t(`tools.colors.${col}`)}
+                          onClick={() => setHlColor(col)}
+                          className={cn("hl-swatch size-6 rounded-full border-2", `hl-${col}`, hlColor === col ? "border-foreground" : "border-transparent")}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost" size="sm" className="ms-auto">
+                        <NotebookPen aria-hidden /> {annotation?.note ? t("tools.editNote") : t("tools.addNote")}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-80">
+                      <label htmlFor={`note-${item.questionId}`} className="mb-1 block text-sm font-medium">
+                        {t("tools.note")}
+                      </label>
+                      <Textarea
+                        id={`note-${item.questionId}`}
+                        defaultValue={annotation?.note ?? ""}
+                        maxLength={2000}
+                        rows={5}
+                        onChange={(e) => saveAnnotation(item.questionId, { note: e.target.value || null })}
+                      />
+                      <p className="mt-1 text-xs text-muted-foreground">{t("tools.noteHelp")}</p>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {highlighterOn && <p className="sr-only">{t("tools.highlighterHelp")}</p>}
+                <HighlightablePassage
+                  html={item.passageHtml}
+                  className="passage"
+                  highlights={annotation?.highlights ?? []}
+                  enabled={highlighterOn}
+                  color={hlColor}
+                  onChange={(highlights) => saveAnnotation(item.questionId, { highlights })}
+                />
               </section>
             )}
             <section aria-label={t("question")} className="p-4 sm:p-6 lg:overflow-y-auto">
@@ -452,6 +578,10 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
         </AlertDialogContent>
       </AlertDialog>
 
+      {lineReader && <LineReader />}
+      {calcOpen && <CalculatorPanel desmosKey={desmosKey} attemptId={attemptId} onClose={() => setCalcOpen(false)} />}
+      {isMath && <ReferenceSheet open={refOpen} onOpenChange={setRefOpen} />}
+
       <Dialog open={shortcutsOpen} onOpenChange={setShortcutsOpen}>
         <DialogContent>
           <DialogHeader>
@@ -465,6 +595,11 @@ export function TestRunner({ initial }: { initial: RunnerState }) {
                 ["← / P", "previous"],
                 ["M", "mark"],
                 ["E", "eliminate"],
+                ["H", "highlight"],
+                ["L", "lineReader"],
+                ["C", "calculator"],
+                ["R", "reference"],
+                ["F", "fullscreen"],
                 ["?", "help"],
               ] as const
             ).map(([keys, label]) => (

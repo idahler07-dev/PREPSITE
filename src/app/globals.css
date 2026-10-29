@@ -189,3 +189,19 @@
   font-family: var(--font-serif);
   font-size: 1.05rem;
 }
+
+/* Passage highlights (test screen). Dark text on light tints in both themes. */
+.hl-yellow {
+  background-color: oklch(0.93 0.13 100);
+}
+.hl-blue {
+  background-color: oklch(0.88 0.08 230);
+}
+.hl-pink {
+  background-color: oklch(0.88 0.08 350);
+}
+mark.hl {
+  color: oklch(0.2 0 0);
+  border-radius: 2px;
+  padding: 0 1px;
+}

@@ -10,8 +10,8 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | --- | --- | --- |
 | 1 | Setup, auth, branding, i18n (en/uz/ru), themes, question & source models, manual editor, CSV/Excel import, review queue, drills, basic test interface, dashboard | **Done** |
 | 2 | PDF import (typed + scanned) and side-by-side review | **Done** |
-| 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | Next |
-| 4 | AI tutor, mock test generator, AI-drafted questions | Planned |
+| 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | **Done** |
+| 4 | AI tutor, mock test generator, AI-drafted questions | Next |
 | 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | Planned |
 | 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Planned |
 | 7 | Admin analytics, security hardening, accessibility audit, performance, docs | Planned |

@@ -95,6 +95,16 @@ What works best:
 
 Text the AI could not read clearly is marked `[[?…]]` and flagged **Uncertain text**; fix it before publishing.
 
+## 5b. Building practice tests
+
+1. **Admin → Practice tests → New practice test**. Give it a title and choose the sections.
+2. Questions are picked automatically from **published** questions to match the real test's mix of domains and difficulty. Each section gets module 1 and two versions of module 2 (easier and harder); students get one of them depending on how they do in module 1.
+3. A full test needs 81 Reading and Writing and 66 Math published questions. If the bank is too small, the test is saved as a draft that lists what is missing, and it can't be published. Publish more questions and build a new one.
+4. Open the test to see every module with its question codes. **Publish** makes it visible to students under **Practice tests**; **Archive** hides it again (past results stay).
+5. Students can also generate their own test from questions they haven't seen yet.
+
+To change the mix of topics, difficulty or the score table, edit `src/config/mock-blueprint.ts`. Scores shown to students are always labelled as estimates.
+
 ## 6. Reviewing and publishing
 
 Students only ever see **Published** questions. Everything else waits in **Admin → Review queue**.

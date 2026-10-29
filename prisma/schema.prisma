@@ -463,12 +463,20 @@ model Attempt {
   completedAt   DateTime?
   correctCount  Int?
   totalCount    Int?
+  /// Full and section tests: the test the questions come from.
+  mockTestId    String?
+  /// Estimated scores (see src/lib/mock/scoring.ts), set when the attempt completes.
+  scores        Json?
+  /// Break between sections ends at this time (null when not on a break).
+  breakEndsAt   DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  modules AttemptModule[]
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mockTest    MockTest?       @relation(fields: [mockTestId], references: [id], onDelete: SetNull)
+  modules     AttemptModule[]
+  annotations Annotation[]
 
   @@index([userId, createdAt])
 }
@@ -491,6 +499,70 @@ model AttemptModule {
   responses Response[]
 
   @@unique([attemptId, index])
+}
+
+/// Highlights and a note on one question's passage, per attempt.
+model Annotation {
+  id         String   @id @default(cuid())
+  attemptId  String
+  questionId String
+  /// [{ start, end, color }] character offsets in the passage's visible text
+  highlights Json     @default("[]")
+  note       String?
+  updatedAt  DateTime @updatedAt
+
+  attempt Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+}
+
+enum MockTestKind {
+  CURATED // built and published by staff
+  GENERATED // built for one student on request
+}
+
+enum MockTestStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// A full practice test: module 1 and both module-2 variants per section, stored so results are reproducible.
+model MockTest {
+  id          String         @id @default(cuid())
+  title       String
+  kind        MockTestKind
+  status      MockTestStatus @default(DRAFT)
+  sections    Section[]
+  seed        Int
+  /// Shortfalls reported by the assembler (cells filled from other difficulties or missing).
+  assemblyLog Json?
+  createdById String?
+  /// GENERATED tests belong to one student.
+  forUserId   String?
+  publishedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  modules  MockModule[]
+  attempts Attempt[]
+
+  @@index([status, kind])
+  @@index([forUserId])
+}
+
+model MockModule {
+  id           String   @id @default(cuid())
+  mockTestId   String
+  section      Section
+  moduleNumber Int
+  /// standard (module 1), easier or harder (module 2)
+  variant      String
+  questionIds  String[]
+
+  mockTest MockTest @relation(fields: [mockTestId], references: [id], onDelete: Cascade)
+
+  @@unique([mockTestId, section, moduleNumber, variant])
 }
 
 model Response {

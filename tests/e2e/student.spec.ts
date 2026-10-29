@@ -27,7 +27,7 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
 
   await expect(page).toHaveURL(/\/en\/attempts\//);
   await expect(page.getByRole("heading", { name: "Drill results" })).toBeVisible();
-  await expect(page.getByText(/^SAMPLE-/).first()).toBeVisible(); // question codes are shown
+  await expect(page.getByText(/^(sample|mk)-/).first()).toBeVisible(); // question codes are shown
 
   await page.goto("/en/dashboard");
   const answered = page.locator("[data-slot=card]", { has: page.getByText("Questions answered", { exact: true }) });

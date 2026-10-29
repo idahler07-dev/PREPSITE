@@ -86,6 +86,15 @@ Images referenced by `image_url` are downloaded server-side only from public htt
 
 The AI is only asked to transcribe what is on the page; it never writes content.
 
+## Practice tests (adaptive)
+
+- **Structure** (`src/config/test-structure.ts`): module sizes, times, the break and the 5-minute warning.
+- **Blueprint** (`src/config/mock-blueprint.ts`): questions per domain in a module, difficulty mix for module 1 and the easier/harder module 2, the routing threshold, and the score table.
+- **Assembly** (`src/lib/mock/assemble.ts`): deterministic and seeded. For each section it builds module 1 plus both module-2 versions, never repeats a question in one test, prefers questions the student hasn't seen, fills gaps from the nearest difficulty and then other domains, and reports what it couldn't fill. The result is stored in `MockTest`/`MockModule` with its seed, so a test always has the same questions.
+- **Taking a test** (`src/server/mock/service.ts`): `startMock` creates the attempt (full test, one section, or module 1 only). When module 1 is submitted, `afterMockModule` picks module 2 from the share correct (`routeModuleTwo`) and fills it; between sections it sets `Attempt.breakEndsAt`. On completion `scoreAttempt` stores the estimate in `Attempt.scores`.
+- **Scoring** (`src/lib/mock/scoring.ts`): straight lines between the anchor points of the route's table, rounded to 10, with a ± range. Always labelled an estimate.
+- **Test tools**: highlights and notes are stored per attempt and question (`Annotation`, character offsets into the passage text). The calculator is Desmos when `DESMOS_API_KEY` is set, otherwise our own scientific calculator (`src/lib/calc.ts`, a parser, never `eval`). The reference sheet is our own.
+
 ## Practice engine
 
 `src/server/attempts/service.ts`:

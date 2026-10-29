@@ -16,6 +16,8 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Every published question comes from a source with a rights confirmation (Admin → Sources).
 - [ ] Enough published questions in every domain for drills (Admin → Overview shows counts per domain).
 - [ ] Spot-check questions on a phone and in dark mode.
+- [ ] At least one published practice test (Admin → Practice tests), taken once end to end.
+- [ ] Review the score table in `src/config/mock-blueprint.ts` with your teachers; adjust it as students report real scores.
 
 ## Branding and configuration
 
@@ -34,6 +36,7 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Telegram Login (optional): bot created with @BotFather, `/setdomain` set to your domain, `TELEGRAM_BOT_TOKEN` and `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` set.
 - [ ] `ALLOW_DEV_OUTBOX` is **not** set.
 - [ ] Optional: `SENTRY_DSN` for error reports.
+- [ ] `DESMOS_API_KEY` set (request one from Desmos for your domain); without it students get the basic calculator.
 - [ ] `ANTHROPIC_API_KEY` set if you import scanned PDFs; set a monthly spend limit in the Anthropic console.
 - [ ] Background jobs: on a VPS keep `JOBS_MODE=worker`. On serverless hosting set `JOBS_MODE=external`, a random `CRON_SECRET`, and a cron that calls `POST /api/jobs/run` with `Authorization: Bearer <CRON_SECRET>` every minute.
 - [ ] With R2/S3 storage, add a CORS rule on the bucket allowing `PUT` from your site origin (browsers upload PDFs straight to storage).

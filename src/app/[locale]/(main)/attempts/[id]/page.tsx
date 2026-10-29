@@ -38,12 +38,20 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
     if (i.isCorrect) d.correct++;
     byDomain.set(i.domain, d);
   }
+  const isTest = r.kind === "MOCK" || r.kind === "SECTION" || r.kind === "MODULE";
+  const title = isTest ? String(r.config.mockTitle ?? t("testTitle")) : t("drillTitle");
+  const moduleLabel = (index: number) => {
+    const m = r.modules.find((x) => x.index === index);
+    if (!m?.section) return null;
+    const base = tt("moduleTitle", { section: tx(`sections.${m.section}`), module: m.moduleNumber ?? 1 });
+    return m.moduleNumber === 2 && (m.variant === "easier" || m.variant === "harder") ? `${base} · ${t(`variant.${m.variant}`)}` : base;
+  };
   const dur = (ms: number) => formatDuration(ms, (min, sec) => (min ? c("durationMinSec", { min, sec }) : c("secondsShort", { count: sec })));
 
   return (
     <Container className="max-w-5xl space-y-6">
       <PageHeader
-        title={t("drillTitle")}
+        title={title}
         description={r.completedAt ? t("completedAt", { date: format.dateTime(r.completedAt, { dateStyle: "medium", timeStyle: "short" }) }) : undefined}
         actions={
           <Button asChild>
@@ -51,6 +59,33 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
           </Button>
         }
       />
+      {r.scores && (
+        <Card className="border-primary/40">
+          <CardHeader>
+            <CardTitle className="text-base">{t("estimate.title")}</CardTitle>
+            <p className="text-sm text-muted-foreground">{t("estimate.disclaimer")}</p>
+          </CardHeader>
+          <CardContent className="grid gap-4 sm:grid-cols-3">
+            {r.scores.total && (
+              <div>
+                <p className="text-sm text-muted-foreground">{t("estimate.total")}</p>
+                <p className="text-4xl font-bold tabular-nums">{r.scores.total.score}</p>
+                <p className="text-sm text-muted-foreground">{t("estimate.range", { low: r.scores.total.low, high: r.scores.total.high })}</p>
+              </div>
+            )}
+            {r.scores.sections.map((s) => (
+              <div key={s.section}>
+                <p className="text-sm text-muted-foreground">{tx(`sections.${s.section}`)}</p>
+                <p className="text-3xl font-bold tabular-nums">{s.score}</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("estimate.range", { low: s.low, high: s.high })} · {t("estimate.correct", { correct: s.correct, total: s.total })}
+                </p>
+                <p className="text-xs text-muted-foreground">{t(`estimate.route.${s.route}`)}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[
           { label: t("score", { correct: r.correct, total: r.total }), value: `${r.correct}/${r.total}` },
@@ -98,8 +133,10 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
         <ol className="space-y-3">
           {r.items.map((i, n) => {
             const Icon = !i.answer ? MinusCircle : i.isCorrect ? CheckCircle2 : XCircle;
+            const heading = isTest && (n === 0 || r.items[n - 1]!.moduleIndex !== i.moduleIndex) ? moduleLabel(i.moduleIndex) : null;
             return (
               <li key={`${i.moduleIndex}-${i.position}`} className="rounded-lg border p-4">
+                {heading && <h3 className="-mt-1 mb-3 border-b pb-2 font-semibold">{heading}</h3>}
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
                   <span className="font-semibold tabular-nums">{n + 1}</span>
                   <Icon

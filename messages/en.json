@@ -69,7 +69,8 @@
     "getStarted": "Get started",
     "account": "Account",
     "menu": "Menu",
-    "mainNavigation": "Main navigation"
+    "mainNavigation": "Main navigation",
+    "mocks": "Practice tests"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -328,7 +329,7 @@
   },
   "test": {
     "drillTitle": "Practice drill",
-    "moduleTitle": "Section {section}, Module {module}",
+    "moduleTitle": "{section}: Module {module}",
     "questionOf": "Question {current} of {total}",
     "timer": {
       "hide": "Hide",
@@ -412,7 +413,12 @@
       "previous": "Previous question",
       "mark": "Mark for review",
       "eliminate": "Toggle cross-out mode",
-      "help": "Show shortcuts"
+      "help": "Show shortcuts",
+      "highlight": "Toggle the highlighter",
+      "lineReader": "Toggle the line reader (↑ ↓ to move it)",
+      "calculator": "Open or close the calculator (Math)",
+      "reference": "Open the reference sheet (Math)",
+      "fullscreen": "Full screen"
     },
     "passage": "Passage",
     "question": "Question",
@@ -420,7 +426,69 @@
     "zoomOut": "Zoom out",
     "submitted": "Submitted",
     "alreadyCompleted": "This practice is finished.",
-    "viewResults": "View results"
+    "viewResults": "View results",
+    "tools": {
+      "calculator": "Calculator",
+      "reference": "Reference sheet",
+      "lineReader": "Line reader",
+      "fullscreen": "Full screen",
+      "exitFullscreen": "Exit full screen",
+      "fullscreenFailed": "Full screen is not available in this browser.",
+      "highlighter": "Highlight",
+      "highlighterOn": "Highlighting on",
+      "highlighterHelp": "Select text in the passage to highlight it. Click a highlight to remove it.",
+      "highlightColor": "Highlight color",
+      "colors": {
+        "yellow": "Yellow",
+        "blue": "Blue",
+        "pink": "Pink"
+      },
+      "addNote": "Add note",
+      "editNote": "Edit note",
+      "note": "Your note on this question",
+      "noteHelp": "Saved automatically. Only you can see it."
+    },
+    "calculator": {
+      "title": "Calculator",
+      "graphing": "Graphing calculator",
+      "close": "Close calculator",
+      "angle": "Angle unit",
+      "deg": "Deg",
+      "rad": "Rad",
+      "clear": "Clear",
+      "history": "Previous calculations",
+      "expression": "Expression",
+      "error": "Can't calculate that"
+    },
+    "reference": {
+      "title": "Reference sheet",
+      "intro": "Formulas you may use on the Math section.",
+      "items": {
+        "circleArea": "Area of a circle",
+        "circumference": "Circumference of a circle",
+        "rectangleArea": "Area of a rectangle",
+        "triangleArea": "Area of a triangle",
+        "pythagorean": "Pythagorean theorem",
+        "special30": "Special right triangle",
+        "special45": "Special right triangle",
+        "boxVolume": "Volume of a rectangular box",
+        "cylinderVolume": "Volume of a cylinder",
+        "sphereVolume": "Volume of a sphere",
+        "coneVolume": "Volume of a cone",
+        "pyramidVolume": "Volume of a rectangular pyramid"
+      },
+      "facts": {
+        "circleDegrees": "A circle has 360 degrees.",
+        "circleRadians": "A circle has 2π radians.",
+        "triangleAngles": "The angles of a triangle add up to 180 degrees."
+      }
+    },
+    "break": {
+      "title": "Break",
+      "remaining": "Break time left",
+      "body": "Stand up, stretch, drink some water. {section} starts when the timer ends, or resume now.",
+      "resume": "Resume testing"
+    }
   },
   "results": {
     "title": "Results",
@@ -463,6 +531,22 @@
       "submit": "Send report",
       "thanks": "Thanks! A teacher will review this question.",
       "already": "You already reported this question."
+    },
+    "testTitle": "Practice test",
+    "variant": {
+      "easier": "easier module",
+      "harder": "harder module"
+    },
+    "estimate": {
+      "title": "Estimated score",
+      "disclaimer": "Estimated score, not an official College Board score. It comes from our own scoring table and is shown with a likely range.",
+      "total": "Total (400–1600)",
+      "range": "Likely range {low}–{high}",
+      "correct": "{correct} of {total} correct",
+      "route": {
+        "harder": "Module 2 was the harder one.",
+        "easier": "Module 2 was the easier one, which limits the highest possible score."
+      }
     }
   },
   "history": {
@@ -658,7 +742,8 @@
       "sources": "Sources",
       "reports": "Reports",
       "users": "Users",
-      "backToSite": "Back to site"
+      "backToSite": "Back to site",
+      "mocks": "Practice tests"
     },
     "overview": {
       "title": "Overview",
@@ -1008,6 +1093,74 @@
       "zoomOut": "Fit page",
       "empty": "No questions to review here.",
       "pick": "Question"
+    },
+    "mocks": {
+      "title": "Practice tests",
+      "subtitle": "Build full adaptive tests from published questions. Each test stores module 1 and both versions of module 2 for every section.",
+      "new": "New practice test",
+      "newHelp": "Questions are chosen automatically to match the real test's topics and difficulty. Published questions: Reading and Writing {rw}, Math {math}. A full test needs 81 Reading and Writing and 66 Math questions.",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Practice Test 1",
+      "sections": "Sections",
+      "create": "Build test",
+      "empty": "No practice tests yet.",
+      "status": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Published",
+        "ARCHIVED": "Archived"
+      },
+      "missing": "{count, plural, one {# question missing} other {# questions missing}}",
+      "missingHelp": "The bank does not have enough published questions to fill this test. Publish more questions, then build a new test. Incomplete tests can't be published.",
+      "attempts": "{count, plural, =0 {not taken yet} one {taken once} other {taken # times}}",
+      "shortfalls": "Where the blueprint couldn't be matched exactly",
+      "shortfallLine": "{module}: {domain}, {difficulty} — wanted {wanted}, filled {substituted} from another difficulty or domain, {missing} missing",
+      "variant": {
+        "standard": "Module 1",
+        "harder": "Harder module 2",
+        "easier": "Easier module 2"
+      },
+      "moduleN": "Module {n}",
+      "questionCount": "{count, plural, one {# question} other {# questions}}",
+      "publish": "Publish",
+      "archive": "Archive",
+      "delete": "Delete draft",
+      "errors": {
+        "create": "The test could not be built.",
+        "MOCK_INCOMPLETE": "This test is missing questions and can't be published.",
+        "IN_USE": "Only drafts nobody has taken can be deleted. Archive it instead.",
+        "other": "Something went wrong. Please try again."
+      }
+    }
+  },
+  "mocks": {
+    "title": "Practice tests",
+    "subtitle": "Full adaptive tests like the real exam: Reading and Writing ({rw} min), a {breakMin}-minute break, then Math ({math} min). Module 2 of each section is easier or harder depending on how you do in module 1.",
+    "inProgress": "Tests in progress",
+    "resume": "Resume",
+    "generateTitle": "Generate a new test",
+    "generateHelp": "We build a test from our published questions, following the real test's mix of topics and difficulty, and choose questions you haven't seen yet.",
+    "generateWhat": "What to include",
+    "bothSections": "Full test",
+    "generate": "Generate and start",
+    "generatedTitle": "My practice test",
+    "published": "Practice tests from our teachers",
+    "none": "No practice tests have been published yet.",
+    "startFull": "Start full test",
+    "startSection": "Start {section}",
+    "moreOptions": "More ways to take this test",
+    "oneSection": "One section only",
+    "oneModule": "One module only (no score)",
+    "moduleOf": "{section}: module 1",
+    "lastTaken": "Taken {date}",
+    "estimatedTotal": "estimated {score}",
+    "estimatedSection": "estimated section score {score}",
+    "rawScore": "{correct}/{total} correct",
+    "history": "Your past tests",
+    "estimateNote": "All scores are estimates, not official College Board scores.",
+    "errors": {
+      "NOT_ENOUGH_QUESTIONS": "There aren't enough published questions to build a full test yet. Try one section, or check back soon.",
+      "RATE_LIMITED": "You've started many tests recently. Please try again later.",
+      "other": "The test could not be started. Please try again."
     }
   }
 }
