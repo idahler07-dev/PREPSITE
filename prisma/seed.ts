@@ -8,6 +8,7 @@ import { getDomain } from "../src/lib/taxonomy";
 import { computeContentFlags } from "../src/lib/questions/flags";
 import { fingerprintText } from "../src/lib/questions/fingerprint";
 import { SAMPLE_MATH, SAMPLE_RW, type SampleQuestion } from "./seed-data";
+import { STARTER_VOCAB } from "./vocab-data";
 
 const db = scriptClient();
 
@@ -58,7 +59,22 @@ async function seedSamples() {
   console.log("These are development samples. Remove them before launch with: pnpm samples:remove");
 }
 
+/** Starter vocabulary (real content, kept at launch). Existing words are left as edited. */
+async function seedVocab() {
+  let created = 0;
+  for (const v of STARTER_VOCAB) {
+    const r = await db.vocabWord.upsert({
+      where: { word: v.word },
+      create: { word: v.word, partOfSpeech: v.partOfSpeech, definition: v.definition, example: v.example, translations: { uz: v.uz, ru: v.ru } },
+      update: {},
+    });
+    if (r.createdAt.getTime() > Date.now() - 60_000) created++;
+  }
+  console.log(`Vocabulary: ${created} new words (${STARTER_VOCAB.length} in the starter set).`);
+}
+
 seedSamples()
+  .then(seedVocab)
   .then(() => db.$disconnect())
   .catch(async (e) => {
     console.error(e);

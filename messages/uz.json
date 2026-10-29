@@ -72,7 +72,10 @@
     "mainNavigation": "Asosiy menyu",
     "mocks": "Sinov testlari",
     "pricing": "Narxlar",
-    "billing": "Tarif va toʻlovlar"
+    "billing": "Tarif va toʻlovlar",
+    "plan": "Reja",
+    "review": "Takrorlash",
+    "vocab": "Lugʻat"
   },
   "footer": {
     "disclaimer": "SAT® — College Board tomonidan roʻyxatdan oʻtkazilgan savdo belgisi. College Board ushbu sayt bilan bogʻliq emas va uni qoʻllab-quvvatlamaydi.",
@@ -178,7 +181,19 @@
         "body": "Har bir SAT koʻnikmasi boʻyicha bepul rasmiy darslar va mashqlar."
       }
     },
-    "visit": "Saytni ochish"
+    "visit": "Saytni ochish",
+    "log": {
+      "title": "Rasmiy sinov testlaridagi ballaringiz",
+      "body": "Rasmiy sinov testini topshirdingizmi? Ballaringiz va xato qilgan koʻnikmalaringizni kiriting; boshqaruv paneli va oʻqish rejasi ulardan foydalanadi.",
+      "testName": "Test",
+      "testNamePlaceholder": "masalan, Practice Test 4",
+      "date": "Topshirilgan sana",
+      "missed": "Xato qilgan koʻnikmalar (ixtiyoriy)",
+      "save": "Ballni saqlash",
+      "saved": "Ball saqlandi.",
+      "invalid": "Sana va ballarni tekshiring (200–800, oʻnliklarda).",
+      "delete": "Ballni oʻchirish"
+    }
   },
   "contact": {
     "title": "Biz bilan bogʻlaning",
@@ -247,12 +262,6 @@
       "intro": "Rahmat! {name} uchun toʻlovingiz muvaffaqiyatli oʻtdi.",
       "button": "Kvitansiyani koʻrish",
       "footer": "{legalName}. Bu xatni kvitansiya sifatida saqlang."
-    },
-    "renewal": {
-      "subject": "{name}: premium {days} kundan keyin tugaydi",
-      "body": "Premium imkoniyatlaringiz {date} kuni tugaydi ({days} kun qoldi). Cheksiz mashq, sinov testlari va AI repetitorni saqlab qolish uchun hozir uzaytiring.",
-      "button": "Uzaytirish",
-      "footer": "Bu xat sizda pullik tarif borligi uchun yuborildi. Uni tugashidan 3 kun va 1 kun oldin yuboramiz."
     }
   },
   "onboarding": {
@@ -297,7 +306,9 @@
     "estimate": {
       "title": "Taxminiy ball",
       "notYet": "Baholashni koʻrish uchun toʻliq sinov testini ishlang.",
-      "label": "Bu taxminiy baho, College Boardning rasmiy bali emas."
+      "label": "Bu taxminiy baho, College Boardning rasmiy bali emas.",
+      "official": "rasmiy sinov testi",
+      "practice": "bizning sinov testimiz"
     },
     "byDomain": "Boʻlimlar boʻyicha aniqlik",
     "bySkill": "Ustida ishlash kerak boʻlgan koʻnikmalar",
@@ -609,7 +620,35 @@
     "deleteConfirmTitle": "Hisobingizni oʻchirasizmi?",
     "deleteConfirmBody": "Tasdiqlash uchun DELETE deb yozing. Barcha maʼlumotlaringiz butunlay oʻchiriladi.",
     "deleteConfirmWord": "DELETE",
-    "deleteConfirmButton": "Butunlay oʻchirish"
+    "deleteConfirmButton": "Butunlay oʻchirish",
+    "notifications": {
+      "title": "Bildirishnomalar",
+      "kind": "Xabar",
+      "channels": {
+        "email": "Email",
+        "telegram": "Telegram"
+      },
+      "kinds": {
+        "study": {
+          "label": "Oʻqish eslatmalari",
+          "help": "Kechqurun, agar oʻsha kuni mashq qilmagan boʻlsangiz."
+        },
+        "streak": {
+          "label": "Ketma-ketlik eslatmalari",
+          "help": "Mashq ketma-ketligingiz uzilay deganda."
+        },
+        "newTests": {
+          "label": "Yangi sinov testlari",
+          "help": "Oʻqituvchilarimiz yangi toʻliq test nashr qilganda."
+        },
+        "renewals": {
+          "label": "Tarifni uzaytirish",
+          "help": "Premium tugashidan 3 kun va 1 kun oldin."
+        }
+      },
+      "telegramHint": "Telegram xabarlari uchun Telegram orqali kirish kerak.",
+      "error": "Saqlab boʻlmadi. Qayta urining."
+    }
   },
   "errors": {
     "notFoundTitle": "Sahifa topilmadi",
@@ -781,7 +820,8 @@
       "aiDrafts": "AI qoralamalari",
       "aiUsage": "AI sarfi",
       "orders": "Buyurtmalar",
-      "promos": "Promokodlar"
+      "promos": "Promokodlar",
+      "vocab": "Lugʻat"
     },
     "overview": {
       "title": "Umumiy koʻrinish",
@@ -1284,6 +1324,27 @@
       "invalid": "Kod va chegirmani tekshiring.",
       "activate": "Faollashtirish",
       "deactivate": "Oʻchirish"
+    },
+    "vocab": {
+      "title": "Lugʻat",
+      "subtitle": "Kartalar uchun soʻzlar. Misol gaplarni oʻzingiz yozing — ularni kitob yoki testlardan koʻchirmang.",
+      "new": "Yangi soʻz",
+      "edit": "“{word}” ni tahrirlash",
+      "hidden": "yashirilgan",
+      "learners": "{count, plural, =0 {hali oʻrganilmagan} other {# ta oʻquvchi}}",
+      "saved": "Saqlandi.",
+      "duplicate": "Bu soʻz allaqachon bor.",
+      "invalid": "Soʻz, soʻz turkumi, taʼrif va misolni toʻldiring.",
+      "word": "Soʻz",
+      "partOfSpeech": "Soʻz turkumi",
+      "definition": "Taʼrif (ingliz tilida)",
+      "example": "Misol gap",
+      "exampleHelp": "Maʼnoni kontekstdan koʻrsatadigan bitta gap.",
+      "uz": "Oʻzbekcha tarjima",
+      "ru": "Ruscha tarjima",
+      "save": "Saqlash",
+      "hide": "Yashirish",
+      "show": "Koʻrsatish"
     }
   },
   "mocks": {
@@ -1495,6 +1556,101 @@
       "order": "Buyurtma {number}",
       "pay": "Toʻlash (sinov)",
       "decline": "Rad etish"
+    }
+  },
+  "review": {
+    "title": "Xatolar daftari",
+    "subtitle": "Notoʻgʻri javob bergan yoki belgilagan savollaringiz ularni ketma-ket bir necha marta toʻgʻri yechmaguningizcha oraliqli jadval boʻyicha qaytib keladi.",
+    "dueTitle": "{count, plural, =0 {Bugun takrorlash yoʻq} other {Takrorlash uchun # ta savol}}",
+    "dueHelp": "{total, plural, =0 {Daftaringiz boʻsh.} other {Daftaringizda # ta savol.}}",
+    "start": "Takrorlashni boshlash",
+    "bookmarksTitle": "{count, plural, =0 {Saqlanganlar yoʻq} other {# ta saqlangan}}",
+    "bookmarksHelp": "Qayta koʻrish uchun saqlagan savollaringiz.",
+    "practiceBookmarks": "Saqlanganlarni mashq qilish",
+    "notebook": "Daftaringizda",
+    "empty": "Hali savollar yoʻq. Mashq va testlardagi notoʻgʻri javoblar avtomatik qoʻshiladi.",
+    "reasons": {
+      "WRONG": "notoʻgʻri javob",
+      "FLAGGED": "belgilangan",
+      "BOOKMARK": "saqlangan"
+    },
+    "dueNow": "hozir",
+    "dueOn": "keyingisi {date}",
+    "remove": "Daftardan olib tashlash",
+    "notes": "Saqlanganlar va izohlar",
+    "bookmarked": "Saqlangan",
+    "bookmark": "Saqlash",
+    "myNote": "Mening izohim",
+    "noteSaved": "Saqlandi",
+    "noteUnsaved": "Hali saqlanmagan — saqlash uchun maydondan tashqariga bosing"
+  },
+  "vocab": {
+    "title": "Lugʻat",
+    "subtitle": "Kontekstdagi soʻzlar, oraliqli jadval boʻyicha. Hozir: {due} · oʻrganilmoqda: {learning} · yangi: {unseen}",
+    "doneSession": "Mashgʻulot tugadi! Keyingi kartalar uchun ertaga qayting.",
+    "nothingDue": "Hozir takrorlanadigan kartalar yoʻq.",
+    "back": "Boshqaruv paneliga",
+    "error": "Saqlab boʻlmadi. Qayta urining.",
+    "progress": "{total} tadan {current}-karta",
+    "card": "Karta",
+    "new": "yangi",
+    "show": "Maʼnosini koʻrsatish",
+    "howWell": "Qanchalik yaxshi bildingiz?",
+    "grades": {
+      "again": "Yana",
+      "hard": "Qiyin",
+      "good": "Yaxshi",
+      "easy": "Oson"
+    }
+  },
+  "coach": {
+    "title": "Oʻqish rejasi",
+    "subtitle": "Bu haftalik rejangiz: kuniga taxminan {minutes} daqiqa.",
+    "subtitleDays": "Imtihoningizgacha {days} kun. Bu hafta kuniga taxminan {minutes} daqiqa.",
+    "focus": "Bu haftaning asosiy mavzulari",
+    "noTestDate": "Imtihongacha sanaydigan reja olish uchun imtihon sanangizni kiriting.",
+    "setTestDate": "Imtihon sanasini kiritish",
+    "howItWorks": "Reja imtihon sanangiz, koʻnikmalar boʻyicha aniqligingiz va xatolar daftaringiz asosida tuziladi. U har bir sinov testidan keyin yangilanadi.",
+    "refresh": "Rejani yangilash",
+    "tooOften": "Reja yaqinda yangilangan. Keyinroq urining.",
+    "error": "Rejani yangilab boʻlmadi.",
+    "nothing": "Hech narsa rejalashtirilmagan.",
+    "tasks": {
+      "drill": "{count} ta savol: {skill}",
+      "review": "Daftardagi {count} ta savolni takrorlash",
+      "mock": "Toʻliq sinov testi",
+      "vocab": "Lugʻat kartalari",
+      "rest": "Dam olish kuni"
+    },
+    "minutes": "{count} daq",
+    "today": "Bugungi reja",
+    "seeWeek": "Haftani koʻrish",
+    "quick": "Tezkor mashq",
+    "dailyQuestion": "Kun savoli",
+    "reviewDue": "{count, plural, =0 {Xatolar daftari} other {Takrorlash uchun # ta savol}}",
+    "vocabDue": "{count, plural, =0 {Lugʻat} other {# ta soʻz kartasi}}"
+  },
+  "notifications": {
+    "footer": "{name}. Qaysi xabarlarni olishingizni oʻzgartiring: {settings}",
+    "streak": {
+      "subject": "{count} kunlik ketma-ketligingizni saqlang",
+      "body": "Siz {count} kun ketma-ket mashq qildingiz. Bugun bir nechta savol ketma-ketlikni saqlab qoladi.",
+      "cta": "Hozir mashq qilish"
+    },
+    "study": {
+      "subject": "Bir necha daqiqa SAT mashqi?",
+      "body": "Bugun hali mashq qilmadingiz. Oʻqish rejangizda bugungi vazifalar tayyor.",
+      "cta": "Bugungi rejani ochish"
+    },
+    "newTest": {
+      "subject": "Yangi sinov testi: {title}",
+      "body": "Yangi toʻliq sinov testi mavjud: {title}.",
+      "cta": "Sinov testlarini koʻrish"
+    },
+    "renewal": {
+      "subject": "{name}: premium {days} kundan keyin tugaydi",
+      "body": "Premium imkoniyatlaringiz {date} kuni tugaydi ({days} kun qoldi). Cheksiz mashq, sinov testlari va AI repetitorni saqlab qolish uchun uzaytiring.",
+      "cta": "Uzaytirish"
     }
   }
 }

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
+import { ServiceWorkerRegister } from "@/components/layout/sw-register";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: { default: t("title", { name: siteConfig.name }), template: `%s · ${siteConfig.name}` },
     description: t("description"),
     applicationName: siteConfig.name,
-    icons: { icon: siteConfig.logo.mark },
+    icons: { icon: siteConfig.logo.mark, apple: "/brand/apple-touch-icon.png" },
+    appleWebApp: { capable: true, title: siteConfig.shortName },
     alternates: {
       languages: Object.fromEntries(routing.locales.map((l) => [l, `/${l}`])),
     },
@@ -55,6 +57,7 @@ export default async function LocaleLayout({
       <body className="min-h-dvh font-sans">
         <NextIntlClientProvider>
           <Providers nonce={nonce}>{children}</Providers>
+          <ServiceWorkerRegister />
         </NextIntlClientProvider>
       </body>
     </html>

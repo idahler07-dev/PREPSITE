@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { GoalForm } from "@/components/account/goal-form";
 import { NameForm } from "@/components/account/name-form";
 import { DeleteAccount } from "@/components/account/delete-account";
+import { NotificationSettings } from "@/components/account/notification-settings";
+import { resolvePrefs } from "@/config/notifications";
+import { db } from "@/lib/db";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
@@ -18,6 +21,7 @@ export async function generateMetadata() {
 export default async function SettingsPage() {
   const user = await requireUser("/settings");
   const t = await getTranslations("settings");
+  const prefs = await db.user.findUnique({ where: { id: user.id }, select: { notificationPrefs: true, telegramId: true } });
   return (
     <Container className="max-w-3xl space-y-6">
       <PageHeader title={t("title")} />
@@ -48,6 +52,14 @@ export default async function SettingsPage() {
             <span className="text-sm font-medium">{t("theme")}</span>
             <ThemeToggle signedIn />
           </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("notifications.title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NotificationSettings initial={resolvePrefs(prefs?.notificationPrefs)} hasEmail={!!user.email} hasTelegram={!!user.telegramUsername || !!prefs?.telegramId} />
         </CardContent>
       </Card>
       <Card>

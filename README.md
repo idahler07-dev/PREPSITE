@@ -13,8 +13,8 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | **Done** |
 | 4 | AI tutor, mock test generator, AI-drafted questions | **Done** |
 | 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | **Done** |
-| 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Next |
-| 7 | Admin analytics, security hardening, accessibility audit, performance, docs | Planned |
+| 6 | Mistake notebook (SM-2), daily question, bookmarks and notes, vocabulary, official scores, study coach, notifications, PWA | **Done** (languages stay en/uz/ru by decision) |
+| 7 | Admin analytics, security hardening, accessibility audit, performance, docs | Next |
 
 Scope note: this is an individual-student site plus an admin side. Classes, teacher accounts, parent access and tutoring booking are intentionally **not** built.
 

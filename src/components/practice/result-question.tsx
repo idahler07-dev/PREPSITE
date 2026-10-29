@@ -8,6 +8,7 @@ import { ChoiceList } from "@/components/test/choice-list";
 import { ReportDialog } from "@/components/test/report-dialog";
 import { Button } from "@/components/ui/button";
 import { AiTutor } from "@/components/tutor/ai-tutor";
+import { QuestionNoteControls } from "@/components/learning/review-actions";
 
 export function ResultQuestion({
   attemptId,
@@ -21,6 +22,7 @@ export function ResultQuestion({
   explanationHtml,
   rationaleHtml,
   aiEnabled = false,
+  note = { bookmarked: false, note: null },
 }: {
   attemptId: string;
   questionId: string;
@@ -33,6 +35,7 @@ export function ResultQuestion({
   explanationHtml: string;
   rationaleHtml: string;
   aiEnabled?: boolean;
+  note?: { bookmarked: boolean; note: string | null };
 }) {
   const t = useTranslations("results");
   const tt = useTranslations("test");
@@ -70,6 +73,7 @@ export function ResultQuestion({
           {aiEnabled && (
             <AiTutor attemptId={attemptId} questionId={questionId} answered wrongChoice={type === "MCQ" && !!answer && !correctAnswers.includes(answer)} />
           )}
+          <QuestionNoteControls questionId={questionId} initial={note} />
           <ReportDialog attemptId={attemptId} questionId={questionId} />
         </div>
       )}

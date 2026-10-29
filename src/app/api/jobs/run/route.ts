@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { enqueue, JOBS, runQueuedJobs } from "@/server/jobs/queue";
-import { billingDailyDue } from "@/server/billing/daily";
+import { billingDailyDue, eveningRemindersDue } from "@/server/billing/daily";
 import "@/server/jobs/handlers";
 
 export const maxDuration = 60;
@@ -24,6 +24,7 @@ async function handle(req: Request) {
   if (!authorized(req)) return new NextResponse(null, { status: 401 });
   // Daily jobs: queued by the first cron call of the day (worker mode schedules them itself).
   if (await billingDailyDue()) await enqueue(JOBS.billingDaily, {}, { singletonKey: "billing-daily" });
+  if (await eveningRemindersDue()) await enqueue(JOBS.eveningReminders, {}, { singletonKey: "evening-reminders" });
   const result = await runQueuedJobs(50_000);
   return NextResponse.json(result);
 }

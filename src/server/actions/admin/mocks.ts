@@ -7,6 +7,7 @@ import { requireApiRole, STAFF_ROLES } from "@/server/auth/session";
 import { HttpError } from "@/server/http";
 import { audit } from "@/server/audit";
 import { buildMockTest, setMockStatus } from "@/server/mock/service";
+import { enqueue, JOBS } from "@/server/jobs/queue";
 
 type Result<T = unknown> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -37,6 +38,7 @@ export async function changeMockStatus(id: string, status: "DRAFT" | "PUBLISHED"
     z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).parse(status);
     await setMockStatus(z.string().max(40).parse(id), status);
     await audit(user.id, `mock.${status.toLowerCase()}`, "MockTest", id, {});
+    if (status === "PUBLISHED") await enqueue(JOBS.announceTest, { mockTestId: id }, { singletonKey: `announce-${id}` }).catch((e) => console.error(e));
     revalidatePath("/[locale]/admin/mocks", "layout");
     return null;
   });

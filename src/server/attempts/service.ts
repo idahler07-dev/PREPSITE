@@ -11,6 +11,7 @@ import { SPR_ALLOWED_CHARS } from "@/lib/questions/spr";
 import { HttpError } from "@/server/http";
 import { afterMockModule, scoreAttempt } from "@/server/mock/service";
 import { assertQuestionAllowance } from "@/server/billing/entitlement";
+import { recordOutcomes } from "@/server/review/service";
 
 /** Answers saved this long after the deadline are still accepted (network delays). */
 export const DEADLINE_GRACE_MS = 30_000;
@@ -271,7 +272,7 @@ export const responseUpdateSchema = z.object({
 async function requireOpenModule(attemptId: string, userId: string, moduleId: string) {
   const m = await db.attemptModule.findUnique({
     where: { id: moduleId },
-    select: { id: true, attemptId: true, submittedAt: true, startedAt: true, timeLimitSec: true, attempt: { select: { userId: true, status: true, feedbackMode: true } } },
+    select: { id: true, attemptId: true, submittedAt: true, startedAt: true, timeLimitSec: true, attempt: { select: { userId: true, status: true, feedbackMode: true, kind: true } } },
   });
   if (!m || m.attemptId !== attemptId || m.attempt.userId !== userId) throw new HttpError(404, "NOT_FOUND");
   if (m.attempt.status !== "IN_PROGRESS" || m.submittedAt) throw new HttpError(409, "MODULE_CLOSED");
@@ -345,6 +346,7 @@ export async function checkResponse(attemptId: string, userId: string, moduleId:
     include: { question: { select: responseQuestionSelect } },
   });
   await recordQuestionStats([{ questionId: r.questionId, isCorrect }]);
+  await recordOutcomes(userId, m.attempt.kind, [{ questionId: r.questionId, isCorrect, flagged: r.flagged, answered: true }]);
   return feedbackFor(updated);
 }
 
@@ -371,6 +373,12 @@ export async function submitModule(attemptId: string, userId: string, moduleId: 
       }),
   );
   await recordQuestionStats(newlyGraded);
+  // Checked-as-you-go questions were recorded when checked; the rest are recorded now.
+  await recordOutcomes(
+    userId,
+    attempt.kind,
+    m.responses.filter((r) => !r.gradedAt).map((r) => ({ questionId: r.questionId, isCorrect: gradeAnswer(r.question, r.answer), flagged: r.flagged, answered: !!r.answer })),
+  );
   if (attempt.mockTestId) await afterMockModule(attemptId, m.index);
 
   const isLast = attempt.modules.every((x) => x.id === m.id || x.submittedAt);

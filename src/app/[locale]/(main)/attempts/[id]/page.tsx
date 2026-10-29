@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResultQuestion } from "@/components/practice/result-question";
 import { formatDuration } from "@/lib/format";
 import { aiAvailable } from "@/server/ai/client";
+import { db } from "@/lib/db";
 
 export default async function ResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -30,6 +31,9 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
   }
   if (!results) redirect({ href: `/test/${id}`, locale: await getLocale() });
   const r = results!;
+  const notes = new Map(
+    (await db.questionNote.findMany({ where: { userId: user.id, questionId: { in: r.items.map((i) => i.questionId) } } })).map((n) => [n.questionId, { bookmarked: n.bookmarked, note: n.note }]),
+  );
   const totalMs = r.items.reduce((s, i) => s + i.timeSpentMs, 0);
   const accuracy = r.total ? Math.round((r.correct / r.total) * 100) : 0;
   const byDomain = new Map<string, { correct: number; total: number }>();
@@ -172,6 +176,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                   explanationHtml={i.feedback.explanationHtml}
                   rationaleHtml={i.feedback.rationaleHtml}
                   aiEnabled={aiAvailable()}
+                  note={notes.get(i.questionId)}
                 />
               </li>
             );

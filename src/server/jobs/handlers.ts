@@ -2,6 +2,7 @@ import "server-only";
 import { finalizeBatch, prepareBatch, processPage } from "@/server/import/pdf-pipeline";
 import { runDraftBatch } from "@/server/ai/draft-questions";
 import { runBillingDaily } from "@/server/billing/daily";
+import { announceNewTest, sendEveningReminders } from "@/server/notify/jobs";
 import { JOBS, registerHandler } from "./queue";
 
 registerHandler(JOBS.pdfPrepare, async (data) => prepareBatch(String(data.batchId)));
@@ -10,4 +11,10 @@ registerHandler(JOBS.pdfFinalize, async (data) => finalizeBatch(String(data.batc
 registerHandler(JOBS.aiDraft, async (data) => runDraftBatch(String(data.batchId)));
 registerHandler(JOBS.billingDaily, async () => {
   await runBillingDaily();
+});
+registerHandler(JOBS.eveningReminders, async () => {
+  await sendEveningReminders();
+});
+registerHandler(JOBS.announceTest, async (data) => {
+  await announceNewTest(String(data.mockTestId));
 });

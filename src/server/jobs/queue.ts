@@ -1,5 +1,6 @@
 import "server-only";
 import type { PgBoss, Job } from "pg-boss";
+import { EVENING_REMINDER_CRON } from "@/config/notifications";
 
 /**
  * Background jobs on pg-boss (PostgreSQL). JOBS_MODE chooses how they run:
@@ -15,6 +16,8 @@ export const JOBS = {
   pdfFinalize: "pdf-import-finalize",
   aiDraft: "ai-draft-questions",
   billingDaily: "billing-daily",
+  eveningReminders: "evening-reminders",
+  announceTest: "announce-test",
 } as const;
 
 export type JobName = (typeof JOBS)[keyof typeof JOBS];
@@ -37,10 +40,15 @@ const QUEUES: Record<JobName, { retryLimit: number; retryDelay: number; expireIn
   // A batch records its own failure; it is never retried automatically (that would draft twice).
   [JOBS.aiDraft]: { retryLimit: 0, retryDelay: 60, expireInSeconds: 3600, concurrency: 1 },
   [JOBS.billingDaily]: { retryLimit: 2, retryDelay: 300, expireInSeconds: 1800, concurrency: 1 },
+  [JOBS.eveningReminders]: { retryLimit: 1, retryDelay: 300, expireInSeconds: 1800, concurrency: 1 },
+  [JOBS.announceTest]: { retryLimit: 1, retryDelay: 300, expireInSeconds: 1800, concurrency: 1 },
 };
 
 /** Recurring jobs (worker mode). Times are in the site time zone. */
-const SCHEDULES: { name: JobName; cron: string }[] = [{ name: JOBS.billingDaily, cron: "17 9 * * *" }];
+const SCHEDULES: { name: JobName; cron: string }[] = [
+  { name: JOBS.billingDaily, cron: "17 9 * * *" },
+  { name: JOBS.eveningReminders, cron: EVENING_REMINDER_CRON },
+];
 
 const handlers = new Map<JobName, Handler>();
 
@@ -136,7 +144,7 @@ export async function runQueuedJobs(budgetMs: number): Promise<{ processed: numb
   let processed = 0;
   let failed = 0;
   // Finalize first so finished imports appear quickly, then pages, then new uploads.
-  const order: JobName[] = [JOBS.pdfFinalize, JOBS.pdfPage, JOBS.pdfPrepare, JOBS.aiDraft, JOBS.billingDaily];
+  const order: JobName[] = [JOBS.pdfFinalize, JOBS.pdfPage, JOBS.pdfPrepare, JOBS.aiDraft, JOBS.billingDaily, JOBS.eveningReminders, JOBS.announceTest];
   while (Date.now() < deadline) {
     let didWork = false;
     for (const name of order) {

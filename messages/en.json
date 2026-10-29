@@ -72,7 +72,10 @@
     "mainNavigation": "Main navigation",
     "mocks": "Practice tests",
     "pricing": "Pricing",
-    "billing": "Plan and payments"
+    "billing": "Plan and payments",
+    "plan": "Plan",
+    "review": "Review",
+    "vocab": "Vocabulary"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -178,7 +181,19 @@
         "body": "Free official lessons and practice for every SAT skill."
       }
     },
-    "visit": "Open website"
+    "visit": "Open website",
+    "log": {
+      "title": "Your official practice test scores",
+      "body": "Took an official practice test? Log your scores and the skills you missed; your dashboard and study plan use them.",
+      "testName": "Test",
+      "testNamePlaceholder": "e.g. Practice Test 4",
+      "date": "Date taken",
+      "missed": "Skills you missed (optional)",
+      "save": "Save score",
+      "saved": "Score saved.",
+      "invalid": "Check the date and scores (200–800, in tens).",
+      "delete": "Delete score"
+    }
   },
   "contact": {
     "title": "Contact us",
@@ -247,12 +262,6 @@
       "intro": "Thank you! Your payment to {name} was successful.",
       "button": "View receipt",
       "footer": "{legalName}. Keep this email as your receipt."
-    },
-    "renewal": {
-      "subject": "{name}: your premium ends in {days, plural, one {# day} other {# days}}",
-      "body": "Your premium access ends on {date} ({days, plural, one {in # day} other {in # days}}). Renew now to keep unlimited practice, practice tests and the AI tutor.",
-      "button": "Renew",
-      "footer": "You get this email because you have a paid plan. We send it 3 days and 1 day before it ends."
     }
   },
   "onboarding": {
@@ -297,7 +306,9 @@
     "estimate": {
       "title": "Estimated score",
       "notYet": "Complete a full practice test to see an estimate.",
-      "label": "Estimate, not an official College Board score."
+      "label": "Estimate, not an official College Board score.",
+      "official": "official practice test",
+      "practice": "our practice test"
     },
     "byDomain": "Accuracy by domain",
     "bySkill": "Skills to work on",
@@ -609,7 +620,35 @@
     "deleteConfirmTitle": "Delete your account?",
     "deleteConfirmBody": "Type DELETE to confirm. All your data will be removed permanently.",
     "deleteConfirmWord": "DELETE",
-    "deleteConfirmButton": "Delete permanently"
+    "deleteConfirmButton": "Delete permanently",
+    "notifications": {
+      "title": "Notifications",
+      "kind": "Message",
+      "channels": {
+        "email": "Email",
+        "telegram": "Telegram"
+      },
+      "kinds": {
+        "study": {
+          "label": "Study reminders",
+          "help": "In the evening if you haven't practised that day."
+        },
+        "streak": {
+          "label": "Streak reminders",
+          "help": "When your practice streak is about to end."
+        },
+        "newTests": {
+          "label": "New practice tests",
+          "help": "When our teachers publish a new full test."
+        },
+        "renewals": {
+          "label": "Plan renewals",
+          "help": "3 days and 1 day before premium ends."
+        }
+      },
+      "telegramHint": "Telegram messages need a sign-in with Telegram.",
+      "error": "Could not save. Please try again."
+    }
   },
   "errors": {
     "notFoundTitle": "Page not found",
@@ -781,7 +820,8 @@
       "aiDrafts": "AI drafts",
       "aiUsage": "AI usage",
       "orders": "Orders",
-      "promos": "Promo codes"
+      "promos": "Promo codes",
+      "vocab": "Vocabulary"
     },
     "overview": {
       "title": "Overview",
@@ -1284,6 +1324,27 @@
       "invalid": "Check the code and the discount.",
       "activate": "Activate",
       "deactivate": "Deactivate"
+    },
+    "vocab": {
+      "title": "Vocabulary",
+      "subtitle": "Words for the flashcards. Write your own example sentences — never copy them from books or tests.",
+      "new": "New word",
+      "edit": "Edit “{word}”",
+      "hidden": "hidden",
+      "learners": "{count, plural, =0 {not studied yet} one {# student} other {# students}}",
+      "saved": "Saved.",
+      "duplicate": "This word already exists.",
+      "invalid": "Fill in the word, part of speech, definition and example.",
+      "word": "Word",
+      "partOfSpeech": "Part of speech",
+      "definition": "Definition (English)",
+      "example": "Example sentence",
+      "exampleHelp": "One sentence that shows the meaning from context.",
+      "uz": "Uzbek translation",
+      "ru": "Russian translation",
+      "save": "Save",
+      "hide": "Hide",
+      "show": "Show"
     }
   },
   "mocks": {
@@ -1495,6 +1556,101 @@
       "order": "Order {number}",
       "pay": "Pay (test)",
       "decline": "Decline"
+    }
+  },
+  "review": {
+    "title": "Mistake notebook",
+    "subtitle": "Questions you got wrong or marked come back on a spaced schedule until you get them right several times in a row.",
+    "dueTitle": "{count, plural, =0 {Nothing to review today} one {# question to review} other {# questions to review}}",
+    "dueHelp": "{total, plural, =0 {Your notebook is empty.} one {# question in your notebook.} other {# questions in your notebook.}}",
+    "start": "Start review",
+    "bookmarksTitle": "{count, plural, =0 {No bookmarks} one {# bookmark} other {# bookmarks}}",
+    "bookmarksHelp": "Questions you saved to look at again.",
+    "practiceBookmarks": "Practise bookmarks",
+    "notebook": "In your notebook",
+    "empty": "No questions yet. Wrong answers in drills and tests are added automatically.",
+    "reasons": {
+      "WRONG": "answered wrong",
+      "FLAGGED": "marked for review",
+      "BOOKMARK": "bookmarked"
+    },
+    "dueNow": "due now",
+    "dueOn": "next on {date}",
+    "remove": "Remove from notebook",
+    "notes": "Bookmarks and notes",
+    "bookmarked": "Bookmarked",
+    "bookmark": "Bookmark",
+    "myNote": "My note",
+    "noteSaved": "Saved",
+    "noteUnsaved": "Not saved yet — click outside the box to save"
+  },
+  "vocab": {
+    "title": "Vocabulary",
+    "subtitle": "Words in context, on a spaced schedule. Due now: {due} · learning: {learning} · new: {unseen}",
+    "doneSession": "Session done! Come back tomorrow for the next cards.",
+    "nothingDue": "No cards are due right now.",
+    "back": "Back to dashboard",
+    "error": "Could not save. Please try again.",
+    "progress": "Card {current} of {total}",
+    "card": "Flashcard",
+    "new": "new",
+    "show": "Show meaning",
+    "howWell": "How well did you know it?",
+    "grades": {
+      "again": "Again",
+      "hard": "Hard",
+      "good": "Good",
+      "easy": "Easy"
+    }
+  },
+  "coach": {
+    "title": "Study plan",
+    "subtitle": "Your plan for this week: about {minutes} minutes a day.",
+    "subtitleDays": "{days, plural, one {# day} other {# days}} to your test. About {minutes} minutes a day this week.",
+    "focus": "Focus this week",
+    "noTestDate": "Add your test date to get a plan that counts down to it.",
+    "setTestDate": "Set test date",
+    "howItWorks": "The plan is built from your test date, your accuracy by skill and your mistake notebook. It updates after every practice test.",
+    "refresh": "Update plan",
+    "tooOften": "The plan was updated recently. Try again later.",
+    "error": "The plan could not be updated.",
+    "nothing": "Nothing planned.",
+    "tasks": {
+      "drill": "{count} questions: {skill}",
+      "review": "Review {count} questions from your notebook",
+      "mock": "Full practice test",
+      "vocab": "Vocabulary cards",
+      "rest": "Rest day"
+    },
+    "minutes": "{count} min",
+    "today": "Today's plan",
+    "seeWeek": "See the week",
+    "quick": "Quick practice",
+    "dailyQuestion": "Question of the day",
+    "reviewDue": "{count, plural, =0 {Mistake notebook} one {# question to review} other {# questions to review}}",
+    "vocabDue": "{count, plural, =0 {Vocabulary cards} one {# word card} other {# word cards}}"
+  },
+  "notifications": {
+    "footer": "{name}. Change which messages you get: {settings}",
+    "streak": {
+      "subject": "Keep your {count}-day streak going",
+      "body": "You've practised {count} days in a row. A few questions today keeps the streak alive.",
+      "cta": "Practise now"
+    },
+    "study": {
+      "subject": "A few minutes of SAT practice?",
+      "body": "You haven't practised today. Your study plan has today's tasks ready.",
+      "cta": "Open today's plan"
+    },
+    "newTest": {
+      "subject": "New practice test: {title}",
+      "body": "A new full practice test is available: {title}.",
+      "cta": "See practice tests"
+    },
+    "renewal": {
+      "subject": "{name}: your premium ends in {days, plural, one {# day} other {# days}}",
+      "body": "Your premium access ends on {date} ({days, plural, one {in # day} other {in # days}}). Renew to keep unlimited practice, practice tests and the AI tutor.",
+      "cta": "Renew"
     }
   }
 }

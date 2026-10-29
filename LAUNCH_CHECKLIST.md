@@ -42,6 +42,12 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Background jobs: on a VPS keep `JOBS_MODE=worker`. On serverless hosting set `JOBS_MODE=external`, a random `CRON_SECRET`, and a cron that calls `POST /api/jobs/run` with `Authorization: Bearer <CRON_SECRET>` every minute.
 - [ ] With R2/S3 storage, add a CORS rule on the bucket allowing `PUT` from your site origin (browsers upload PDFs straight to storage).
 
+## Learning tools
+
+- [ ] Review the 30 starter vocabulary words (Admin → Vocabulary) and add your own.
+- [ ] Telegram bot: students must allow the bot to message them in the login widget for Telegram reminders.
+- [ ] Replace the logo in `public/brand/` and run `pnpm tsx scripts/make-icons.ts` for the app icons.
+
 ## Payments
 
 - [ ] Real prices in `src/config/plans.ts` (the defaults are placeholders) and the refund policy text in `content/legal/`.

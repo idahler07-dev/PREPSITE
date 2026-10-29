@@ -54,10 +54,8 @@ export async function receiptEmail(
   return { to, subject: t("subject", { name, number: data.number }), html, text };
 }
 
-export async function renewalReminderEmail(to: string, locale: string, data: { days: number; endsOn: string; url: string }): Promise<MailMessage> {
-  const { t } = await translator(locale, "email.renewal");
-  const name = siteConfig.name;
-  const body = t("body", { days: data.days, date: data.endsOn });
-  const html = layout(`<p>${escapeHtml(body)}</p><p style="margin:24px 0">${button(data.url, t("button"))}</p>`, escapeHtml(t("footer")));
-  return { to, subject: t("subject", { name, days: data.days }), html, text: `${body}\n\n${data.url}` };
+/** A short notification with one button. */
+export async function simpleEmail(to: string, m: { subject: string; body: string; url: string; cta: string; footer: string }): Promise<MailMessage> {
+  const html = layout(`<p>${escapeHtml(m.body)}</p><p style="margin:24px 0">${button(m.url, m.cta)}</p>`, escapeHtml(m.footer));
+  return { to, subject: m.subject, html, text: `${m.body}\n\n${m.url}\n\n${m.footer}` };
 }

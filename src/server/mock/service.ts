@@ -176,5 +176,8 @@ export async function scoreAttempt(attemptId: string) {
   }
   const estimate = estimateScores(SECTIONS.filter((s) => bySection.has(s)).map((section) => ({ section, ...bySection.get(section)! })));
   await db.attempt.update({ where: { id: attemptId }, data: { scores: estimate as unknown as Prisma.InputJsonValue } });
+  // The coach updates the plan after every scored test (never blocks the result).
+  const { generatePlan } = await import("@/server/coach/service");
+  await generatePlan(attempt.userId, "after-test", { withMessage: true }).catch((e) => console.warn("[coach]", e));
   return estimate;
 }

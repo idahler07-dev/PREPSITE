@@ -123,6 +123,10 @@ If the tutor thinks an answer key may be wrong, it doesn't tell the student; the
 - **Admin → Promo codes**: percent or fixed-amount codes, optionally limited to some plans, a number of uses and an end date. Deactivate a code to stop it.
 - Prices, plan lengths and free limits are in `src/config/plans.ts`.
 
+## 5f. Vocabulary
+
+**Admin → Vocabulary**: each word needs a part of speech, an English definition, one example sentence written by your team (never copied from books or tests) and optional Uzbek and Russian translations. Hide a word to take it out of students' cards.
+
 ## 6. Reviewing and publishing
 
 Students only ever see **Published** questions. Everything else waits in **Admin → Review queue**.

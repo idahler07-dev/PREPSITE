@@ -116,6 +116,17 @@ All calls go through `src/server/ai/` (server-side only) and are logged in `AiUs
 - **Daily job** (`billing-daily`, 09:17 Tashkent; `src/server/billing/daily.ts`): cancels unpaid orders after 24 h, sends renewal reminders (email + Telegram) 3 and 1 days before the end, and reconciles pending/recent orders with providers that can report a status.
 - **Referrals**: `?ref=CODE` sets a cookie; the account created next is linked to the referrer. The friend's first purchase gets a discount; the referrer gets bonus days when it is paid.
 
+## Learning tools
+
+- **Mistake notebook** (`src/server/review/service.ts`, SM-2 in `src/lib/srs/sm2.ts`): after grading, wrong answers (and blanks in tests) and marked questions become `ReviewItem`s due tomorrow. Review sessions are `REVIEW` attempts; their answers reschedule the items (right = quality 4, wrong = 1). Items with an interval over 60 days are archived as learned.
+- **Daily question**: one `DAILY` attempt per student per day, a published unseen question chosen with a seed of user id + date.
+- **Bookmarks and notes**: `QuestionNote`, only for questions the student has been given.
+- **Vocabulary**: `VocabWord` (our own sentences; starter set in `prisma/vocab-data.ts`, seeded) and `VocabProgress` (SM-2; again/hard/good/easy = 1/3/4/5). Up to 10 new words per session.
+- **Official scores**: students log official practice test scores and missed skills (`OfficialScore`); the dashboard and coach use them.
+- **Study coach** (`src/lib/coach/plan.ts` rules, `src/server/coach/service.ts`): a weekly plan from the test date, accuracy by skill (last 60 days), due reviews and whether a practice test is allowed. Rebuilt after every scored test and on request; the AI only adds a short note (`coach` feature, fast model).
+- **Notifications** (`src/config/notifications.ts`, `src/server/notify/*`): kinds study / streak / newTests / renewals by email and Telegram, per-student preferences, each sent once (`NotificationLog`). Jobs: `evening-reminders` (18:47 Tashkent), `announce-test` (when a practice test is published), renewals from `billing-daily`.
+- **PWA**: `src/app/manifest.ts`, icons from `scripts/make-icons.ts`, `public/sw.js` (static files cache-first; test pages cached on open so a drill keeps working offline; offline page). Registered only in production.
+
 ## Practice engine
 
 `src/server/attempts/service.ts`:

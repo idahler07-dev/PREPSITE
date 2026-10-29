@@ -7,7 +7,8 @@ import { fromMinor, type Currency } from "@/config/plans";
 import { loadMessages } from "@/i18n/messages";
 import { isEnabledLocale, type AppLocale } from "@/i18n/locales";
 import { sendMail } from "@/server/mail";
-import { receiptEmail, renewalReminderEmail } from "@/server/mail/templates";
+import { receiptEmail } from "@/server/mail/templates";
+import { notify } from "@/server/notify";
 import { sendTelegram } from "@/server/telegram-bot";
 
 export function formatMoney(minor: number, currency: Currency, locale: string): string {
@@ -48,11 +49,19 @@ export async function sendReceipt(orderId: string) {
   if (order.user.telegramId) await sendTelegram(order.user.telegramId, `${tr("telegram.paid", { name: siteConfig.name })}\n${lines.map(([k, v]) => `${k}: ${v}`).join("\n")}`);
 }
 
-/** "Your premium ends in N days" by email and Telegram. */
-export async function sendRenewalReminder(user: { email: string | null; telegramId: string | null; locale: string | null }, days: number, endsAt: Date) {
-  const { loc, t: tr } = await t(user.locale ?? "en");
+/** "Your premium ends in N days" by email and Telegram (as the student allows). */
+export async function sendRenewalReminder(
+  user: { id: string; email: string | null; telegramId: string | null; locale: string | null; notificationPrefs: unknown },
+  days: number,
+  endsAt: Date,
+  key: string,
+) {
+  const loc = user.locale ?? "en";
   const endsOn = new Intl.DateTimeFormat(loc, { dateStyle: "long", timeZone: siteConfig.defaultTimeZone }).format(endsAt);
-  const url = `${siteUrl()}/${loc}/billing`;
-  if (user.email) await sendMail(await renewalReminderEmail(user.email, loc, { days, endsOn, url }));
-  if (user.telegramId) await sendTelegram(user.telegramId, `${tr("telegram.renew", { days, date: endsOn })}\n${url}`);
+  await notify(user, "renewals", key, (t) => ({
+    subject: t("renewal.subject", { name: siteConfig.name, days }),
+    body: t("renewal.body", { days, date: endsOn }),
+    path: "/billing",
+    cta: t("renewal.cta"),
+  }));
 }

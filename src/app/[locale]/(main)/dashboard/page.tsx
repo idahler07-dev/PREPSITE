@@ -8,6 +8,16 @@ import { formatDuration } from "@/lib/format";
 import { Container, PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import siteConfig from "@site";
+import { db } from "@/lib/db";
+import { dayInZone } from "@/lib/stats/streak";
+import type { WeeklyPlan } from "@/lib/coach/plan";
+import type { ScoreEstimate } from "@/lib/mock/scoring";
+import { currentPlan } from "@/server/coach/service";
+import { notebookCounts } from "@/server/review/service";
+import { vocabCounts } from "@/server/vocab/service";
+import { TaskList } from "@/components/learning/plan-view";
+import { DailyQuestionButton } from "@/components/learning/review-actions";
 
 export async function generateMetadata() {
   const t = await getTranslations("dashboard");
@@ -24,6 +34,25 @@ export default async function DashboardPage() {
   const s = await getDashboardStats(user.id, user.timeZone);
   const accuracy = s.graded ? Math.round((s.correct / s.graded) * 100) : null;
   const days = user.testDate ? daysUntil(user.testDate) : null;
+  const tc = await getTranslations("coach");
+  const today = dayInZone(new Date(), siteConfig.defaultTimeZone);
+  const [planRow, notebook, vocab, mocks, official] = await Promise.all([
+    currentPlan(user.id),
+    notebookCounts(user.id),
+    vocabCounts(user.id),
+    db.attempt.findMany({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "desc" }, take: 5, select: { id: true, completedAt: true, scores: true } }),
+    db.officialScore.findMany({ where: { userId: user.id }, orderBy: { takenOn: "desc" }, take: 5 }),
+  ]);
+  const todayTasks = (planRow.plan as unknown as WeeklyPlan).days.find((d) => d.date === today)?.tasks ?? [];
+  const history = [
+    ...mocks.flatMap((m) => {
+      const total = (m.scores as ScoreEstimate | null)?.total;
+      return total && m.completedAt ? [{ key: m.id, date: m.completedAt, score: total.score, range: `${total.low}–${total.high}`, official: false, href: `/attempts/${m.id}` }] : [];
+    }),
+    ...official.map((o) => ({ key: o.id, date: o.takenOn, score: o.total, range: null as string | null, official: true, href: "/resources" })),
+  ]
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, 5);
 
   const tiles = [
     { icon: CheckCircle2, label: t("stats.answered"), value: format.number(s.answered) },
@@ -67,6 +96,38 @@ export default async function DashboardPage() {
             <CardContent className="text-2xl font-bold tabular-nums">{value}</CardContent>
           </Card>
         ))}
+      </div>
+
+      <div className="grid items-start gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base">{tc("today")}</CardTitle>
+            <Link href="/plan" className="text-sm text-primary hover:underline">
+              {tc("seeWeek")}
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <TaskList tasks={todayTasks} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{tc("quick")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <DailyQuestionButton label={tc("dailyQuestion")} />
+            <p>
+              <Link href="/review" className="text-primary hover:underline">
+                {tc("reviewDue", { count: notebook.due })}
+              </Link>
+            </p>
+            <p>
+              <Link href="/vocab" className="text-primary hover:underline">
+                {tc("vocabDue", { count: vocab.due + Math.min(vocab.unseen, 10) })}
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid items-start gap-6 lg:grid-cols-3">
@@ -146,8 +207,24 @@ export default async function DashboardPage() {
             <CardHeader>
               <CardTitle className="text-base">{t("estimate.title")}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-1 text-sm">
-              <p className="text-muted-foreground">{t("estimate.notYet")}</p>
+            <CardContent className="space-y-2 text-sm">
+              {history.length === 0 ? (
+                <p className="text-muted-foreground">{t("estimate.notYet")}</p>
+              ) : (
+                <ul className="space-y-1">
+                  {history.map((h) => (
+                    <li key={h.key} className="flex justify-between gap-2">
+                      <Link href={h.href} className="hover:underline">
+                        {format.dateTime(h.date, { dateStyle: "medium" })} · {h.official ? t("estimate.official") : t("estimate.practice")}
+                      </Link>
+                      <span className="tabular-nums">
+                        <strong>{h.score}</strong>
+                        {h.range && <span className="text-xs text-muted-foreground"> ({h.range})</span>}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
               <p className="text-xs text-muted-foreground">{t("estimate.label")}</p>
             </CardContent>
           </Card>

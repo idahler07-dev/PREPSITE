@@ -68,6 +68,15 @@ model User {
   orders            Order[]
   subscriptions     Subscription[]
   reminders         BillingReminder[]
+  reviewItems       ReviewItem[]
+  questionNotes     QuestionNote[]
+  vocabProgress     VocabProgress[]
+  officialScores    OfficialScore[]
+  studyPlans        StudyPlan[]
+  notifications     NotificationLog[]
+
+  /// { email: { study, streak, newTests, renewals }, telegram: { ... } } — missing keys use defaults (src/config/notifications.ts)
+  notificationPrefs Json @default("{}")
 
   /// Shared with friends: they get a discount, this user gets bonus days.
   referralCode String? @unique
@@ -363,6 +372,8 @@ model Question {
   reports        QuestionReport[]
   responses      Response[]
   aiExplanations AiExplanation[]
+  reviewItems    ReviewItem[]
+  notes          QuestionNote[]
 
   @@index([status, section, domain, skill, difficulty])
   @@index([sourceId])
@@ -850,4 +861,129 @@ model BillingReminder {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, endsOn, daysBefore])
+}
+
+// ─── Learning tools ─────────────────────────────────────────────────────────
+
+/// Mistake notebook: a question to see again on an SM-2 schedule.
+model ReviewItem {
+  id             String    @id @default(cuid())
+  userId         String
+  questionId     String
+  /// WRONG | FLAGGED | BOOKMARK
+  reason         String
+  ease           Float     @default(2.5)
+  intervalDays   Int       @default(0)
+  repetitions    Int       @default(0)
+  lapses         Int       @default(0)
+  dueAt          DateTime
+  lastReviewedAt DateTime?
+  /// Set when the student removes it or it is learned (interval over the limit).
+  archivedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, dueAt])
+}
+
+/// A student's bookmark and private note on a question.
+model QuestionNote {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  bookmarked Boolean  @default(false)
+  note       String?
+  updatedAt  DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, bookmarked])
+}
+
+/// Words-in-context flashcards. Sentences are written by our team.
+model VocabWord {
+  id           String   @id @default(cuid())
+  word         String   @unique
+  partOfSpeech String
+  definition   String
+  /// An original example sentence using the word.
+  example      String
+  /// { "uz": "…", "ru": "…" }
+  translations Json     @default("{}")
+  published    Boolean  @default(true)
+  createdById  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  progress VocabProgress[]
+}
+
+model VocabProgress {
+  id             String    @id @default(cuid())
+  userId         String
+  wordId         String
+  ease           Float     @default(2.5)
+  intervalDays   Int       @default(0)
+  repetitions    Int       @default(0)
+  lapses         Int       @default(0)
+  dueAt          DateTime
+  lastReviewedAt DateTime?
+
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word VocabWord @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId])
+  @@index([userId, dueAt])
+}
+
+/// Scores a student got on official practice tests (entered by the student).
+model OfficialScore {
+  id           String   @id @default(cuid())
+  userId       String
+  testName     String
+  takenOn      DateTime @db.Date
+  rw           Int?
+  math         Int?
+  total        Int
+  missedSkills String[]
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, takenOn])
+}
+
+/// The study coach's plan for one week (Monday, site time zone).
+model StudyPlan {
+  id          String   @id @default(cuid())
+  userId      String
+  weekStart   String
+  /// See src/lib/coach/plan.ts (WeeklyPlan)
+  plan        Json
+  /// Optional AI-written note for the student.
+  message     String?
+  reason      String
+  generatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekStart])
+}
+
+/// Notifications already sent (so each is sent once).
+model NotificationLog {
+  id     String   @id @default(cuid())
+  userId String
+  kind   String
+  key    String
+  sentAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, key])
 }

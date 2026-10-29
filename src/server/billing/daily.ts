@@ -34,8 +34,8 @@ export async function sendRenewalReminders(now = new Date()) {
     } catch {
       continue; // already sent for this end date
     }
-    const user = await db.user.findUniqueOrThrow({ where: { id: userId }, select: { email: true, telegramId: true, locale: true } });
-    await sendRenewalReminder(user, daysLeft, end).catch((e) => console.error("[billing] reminder", e));
+    const user = await db.user.findUniqueOrThrow({ where: { id: userId }, select: { id: true, email: true, telegramId: true, locale: true, notificationPrefs: true } });
+    await sendRenewalReminder(user, daysLeft, end, `${endsOn}:${due}`).catch((e) => console.error("[billing] reminder", e));
     sent++;
   }
   return sent;
@@ -94,4 +94,13 @@ export async function billingDailyDue(now = new Date()): Promise<boolean> {
   const today = dayInZone(now, siteConfig.defaultTimeZone);
   const done = await db.auditLog.count({ where: { action: "jobs.billing-daily", entityId: today } });
   return done === 0;
+}
+
+/** Cron-only hosting: evening reminders once a day, after 18:45 site time. */
+export async function eveningRemindersDue(now = new Date()): Promise<boolean> {
+  const hour = Number(new Intl.DateTimeFormat("en-GB", { timeZone: siteConfig.defaultTimeZone, hour: "2-digit", hourCycle: "h23" }).format(now));
+  const minute = now.getUTCMinutes();
+  if (hour < 18 || (hour === 18 && minute < 45)) return false;
+  const today = dayInZone(now, siteConfig.defaultTimeZone);
+  return (await db.auditLog.count({ where: { action: "jobs.evening-reminders", entityId: today } })) === 0;
 }
