@@ -11,8 +11,8 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | 1 | Setup, auth, branding, i18n (en/uz/ru), themes, question & source models, manual editor, CSV/Excel import, review queue, drills, basic test interface, dashboard | **Done** |
 | 2 | PDF import (typed + scanned) and side-by-side review | **Done** |
 | 3 | Full adaptive mock tests, Desmos, highlighter, reference sheet, scoring, reports | **Done** |
-| 4 | AI tutor, mock test generator, AI-drafted questions | Next |
-| 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | Planned |
+| 4 | AI tutor, mock test generator, AI-drafted questions | **Done** |
+| 5 | Plans and payments (mock, Payme, Click, international cards), subscriptions | Next |
 | 6 | Spaced repetition, vocabulary, study coach, notifications, remaining languages, PWA | Planned |
 | 7 | Admin analytics, security hardening, accessibility audit, performance, docs | Planned |
 
@@ -52,7 +52,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `TELEGRAM_BOT_TOKEN`, `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` | optional | Telegram Login |
 | `STORAGE_DRIVER` | yes | `local` (files on disk) or `s3` (Cloudflare R2 / MinIO) |
 | `S3_*` | if `s3` | Endpoint, bucket and keys for private storage |
-| `ANTHROPIC_API_KEY`, `AI_MODEL_FAST`, `AI_MODEL_SMART` | recommended | AI features (server-side only). Needed to import scanned PDFs, turn math into LaTeX and crop figures |
+| `ANTHROPIC_API_KEY`, `AI_MODEL_FAST`, `AI_MODEL_SMART` | recommended | AI features (server-side only): scanned-PDF import, the AI tutor, AI-drafted questions. Without it the site works, minus these |
 | `JOBS_MODE` | optional | `worker` (default; in-process worker), `external` (cron calls `/api/jobs/run`) or `inline` (tests) |
 | `CRON_SECRET` | if `external` | Bearer token for `POST /api/jobs/run` |
 | `DESMOS_API_KEY` | Phase 3 | Desmos calculator (falls back to a basic calculator) |

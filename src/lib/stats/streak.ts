@@ -26,3 +26,11 @@ export function computeStreak(activeDays: Iterable<string>, today: string): numb
   }
   return streak;
 }
+
+/** The moment the current day began in a time zone (for daily limits). */
+export function startOfDayInZone(date: Date, timeZone: string): Date {
+  const utcMidnight = new Date(`${dayInZone(date, timeZone)}T00:00:00Z`);
+  const asLocal = new Date(utcMidnight.toLocaleString("en-US", { timeZone }));
+  const asUtc = new Date(utcMidnight.toLocaleString("en-US", { timeZone: "UTC" }));
+  return new Date(utcMidnight.getTime() - (asLocal.getTime() - asUtc.getTime()));
+}

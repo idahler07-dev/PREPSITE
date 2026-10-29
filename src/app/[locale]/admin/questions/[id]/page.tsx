@@ -24,6 +24,7 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
       reviewedBy: { select: { name: true, email: true } },
       versions: { orderBy: { version: "desc" }, take: 30, include: { editedBy: { select: { name: true, email: true } } } },
       reports: { orderBy: { createdAt: "desc" }, take: 20, include: { user: { select: { name: true, email: true } } } },
+      aiExplanations: { where: { verdict: "DISAGREE" }, orderBy: { createdAt: "desc" }, take: 5, select: { id: true, content: true, questionVersion: true, mode: true } },
     },
   });
   if (!q) notFound();
@@ -58,6 +59,22 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
         defaultPrefix={siteConfig.questionCodes.defaultPrefix}
         codeExample={codeExample()}
       />
+      {q.aiExplanations.length > 0 && q.flags.includes("AI_KEY_DISPUTE") && (
+        <Card className="border-warning">
+          <CardHeader>
+            <CardTitle className="text-base">{t("aiConcerns")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="list-disc space-y-1 pl-5 text-sm">
+              {q.aiExplanations.map((e) => (
+                <li key={e.id}>
+                  {e.content || "—"} <span className="text-muted-foreground">({t("aiConcernVersion", { version: e.questionVersion })})</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
       <div className="grid gap-6 lg:grid-cols-3">
         <Card>
           <CardHeader>

@@ -105,6 +105,17 @@ Text the AI could not read clearly is marked `[[?…]]` and flagged **Uncertain 
 
 To change the mix of topics, difficulty or the score table, edit `src/config/mock-blueprint.ts`. Scores shown to students are always labelled as estimates.
 
+## 5c. AI-drafted questions
+
+1. **Admin → AI drafts**. Pick section, domain, skill, difficulty and how many (up to 20). Tick "match our style" to show the AI up to three of our own published questions for that skill.
+2. Drafting takes a minute or two. Each draft is then solved by a second AI pass that doesn't see the answer, and Math answers are recalculated.
+3. Drafts appear in the review queue (filter: origin = AI drafted) with the flag **AI draft — needs reading**. Open each one in the editor, check every sentence, the facts, the answer and the explanation, and **save**. Saving clears that flag; only then can the question be published. Pay special attention to drafts also flagged **Solver got another answer**, **Possibly ambiguous** or **Math check failed**.
+4. AI drafts never have figures. Add one in the editor if a question needs it.
+
+## 5d. When the AI tutor questions an answer
+
+If the tutor thinks an answer key may be wrong, it doesn't tell the student; the question gets the flag **AI questions the answer** and the admin overview shows a count with a link. Open the question (its editor shows the AI's reason), check it, and either fix and save it or approve it as it is. Both clear the flag.
+
 ## 6. Reviewing and publishing
 
 Students only ever see **Published** questions. Everything else waits in **Admin → Review queue**.

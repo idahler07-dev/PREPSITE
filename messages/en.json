@@ -729,7 +729,27 @@
       "help": "Student accuracy doesn’t match the difficulty label."
     },
     "blocking": "Must be fixed before publishing",
-    "warning": "Warning"
+    "warning": "Warning",
+    "AI_KEY_DISPUTE": {
+      "label": "AI questions the answer",
+      "help": "When explaining this question to a student, the AI tutor thought the answer key might be wrong. Check the answer; approving or saving the question clears this flag."
+    },
+    "AI_UNREVIEWED": {
+      "label": "AI draft — needs reading",
+      "help": "Written by AI. Open it in the editor, check every word, the answer and the explanation, then save. It can't be published before that."
+    },
+    "AI_SOLVER_DISAGREES": {
+      "label": "Solver got another answer",
+      "help": "A second, independent AI pass solved this draft without the key and got a different answer."
+    },
+    "AI_AMBIGUOUS": {
+      "label": "Possibly ambiguous",
+      "help": "The independent solver thought the question is unclear or has more than one correct answer."
+    },
+    "MATH_CHECK_FAILED": {
+      "label": "Math check failed",
+      "help": "The automatic calculation of this draft's answer did not match the key."
+    }
   },
   "admin": {
     "title": "Admin",
@@ -743,7 +763,9 @@
       "reports": "Reports",
       "users": "Users",
       "backToSite": "Back to site",
-      "mocks": "Practice tests"
+      "mocks": "Practice tests",
+      "aiDrafts": "AI drafts",
+      "aiUsage": "AI usage"
     },
     "overview": {
       "title": "Overview",
@@ -755,7 +777,9 @@
       "attempts": "Drills completed",
       "samples": "Sample questions in the bank",
       "samplesWarning": "Remove sample questions before launch: pnpm samples:remove",
-      "bySection": "Published by section and domain"
+      "bySection": "Published by section and domain",
+      "disputed": "{count, plural, one {# question} other {# questions}} where the AI tutor questioned the answer key.",
+      "disputedLink": "Check them"
     },
     "questions": {
       "title": "Question bank",
@@ -858,7 +882,9 @@
         "INVALID_DOMAIN": "Choose a domain for this section.",
         "INVALID_SKILL": "Choose a skill in this domain."
       },
-      "viewOriginal": "View original page"
+      "viewOriginal": "View original page",
+      "aiConcerns": "The AI tutor questioned this answer key",
+      "aiConcernVersion": "version {version}"
     },
     "sources": {
       "title": "Sources",
@@ -1130,6 +1156,61 @@
         "IN_USE": "Only drafts nobody has taken can be deleted. Archive it instead.",
         "other": "Something went wrong. Please try again."
       }
+    },
+    "aiDrafts": {
+      "title": "AI-drafted questions",
+      "subtitle": "Ask the AI to write new, original practice questions for one skill. Every draft is checked by a second AI pass that solves it without the key (and, for Math, by a calculator), then waits in the review queue until a person has read and saved it.",
+      "new": "New drafts",
+      "rules": "Drafts are written from the skill description and, if you choose, in the style of our own published questions. The AI is told never to copy or imitate College Board, Khan Academy or other companies' questions. Drafts have no figures.",
+      "disabled": "AI drafting is off because ANTHROPIC_API_KEY is not set.",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "count": "How many (up to {max})",
+      "codePrefix": "Question code prefix",
+      "useStyle": "Match the style of our own published questions for this skill (up to three are shown to the AI as examples)",
+      "submit": "Draft questions",
+      "started": "Drafting started. This takes a minute or two.",
+      "empty": "No drafts requested yet.",
+      "countShort": "{count, plural, one {# question} other {# questions}}",
+      "status": {
+        "QUEUED": "Waiting",
+        "RUNNING": "Drafting…",
+        "DONE": "Done",
+        "FAILED": "Failed"
+      },
+      "skipped": "{count, plural, one {# draft was} other {# drafts were}} unusable and skipped.",
+      "openQueue": "Open AI drafts in the review queue",
+      "errors": {
+        "AI_UNAVAILABLE": "AI drafting is off because ANTHROPIC_API_KEY is not set.",
+        "RATE_LIMITED": "Too many requests. Try again later.",
+        "other": "Drafting could not be started."
+      }
+    },
+    "aiUsage": {
+      "title": "AI usage and cost",
+      "subtitle": "Estimated cost of every AI call in the last {days} days, from the prices in src/config/ai-pricing.ts.",
+      "disabled": "ANTHROPIC_API_KEY is not set, so no AI features are running.",
+      "today": "Today",
+      "period": "Last {days} days",
+      "calls": "AI calls (last {days} days)",
+      "perDay": "Cost per day",
+      "byFeature": "By feature",
+      "topUsers": "Top users by cost",
+      "feature": "Feature",
+      "callsShort": "Calls",
+      "tokens": "Tokens",
+      "cost": "Cost",
+      "user": "User",
+      "note": "Costs are estimates; your Anthropic console shows the exact bill. Cached tutor answers cost nothing and are not counted.",
+      "features": {
+        "tutor": "Tutor explanations",
+        "tutor_chat": "Tutor follow-ups",
+        "pdf_extract": "PDF reading",
+        "ai_draft": "Question drafting",
+        "ai_solve": "Draft checking"
+      }
     }
   },
   "mocks": {
@@ -1161,6 +1242,30 @@
       "NOT_ENOUGH_QUESTIONS": "There aren't enough published questions to build a full test yet. Try one section, or check back soon.",
       "RATE_LIMITED": "You've started many tests recently. Please try again later.",
       "other": "The test could not be started. Please try again."
+    }
+  },
+  "tutor": {
+    "title": "AI tutor",
+    "modes": {
+      "hint": "Give me a hint",
+      "explain": "Explain step by step",
+      "whyWrong": "Why is my answer wrong?",
+      "another": "Another way to solve it",
+      "simpler": "Explain more simply"
+    },
+    "thinking": "Thinking…",
+    "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
+    "followUp": "Ask a follow-up question",
+    "followUpPlaceholder": "Ask about this question…",
+    "send": "Send",
+    "disclaimer": "AI answers can contain mistakes. The answer key comes from our teachers.",
+    "remaining": "{count, plural, =0 {No new AI answers left today.} one {# new AI answer left today.} other {# new AI answers left today.}}",
+    "errors": {
+      "quota": "You've used today's AI answers. Answers other students already asked for still work, and you get new ones tomorrow.",
+      "rateLimited": "Too many requests at once. Wait a minute and try again.",
+      "chatLimit": "That's the limit of follow-up questions for this question.",
+      "unavailable": "The AI tutor is not available right now.",
+      "other": "The AI tutor couldn't answer. Please try again."
     }
   }
 }

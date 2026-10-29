@@ -90,7 +90,7 @@ export function QuestionEditor({
     return [...new Set([...content, ...processFlags])];
   }, [v, correct, savedFlags]);
   // Saving in the editor confirms the domain and skill, so that flag doesn't block the buttons here.
-  const hasBlocking = liveFlags.some((f) => isBlocking(f) && f !== "TAXONOMY_UNCONFIRMED");
+  const hasBlocking = liveFlags.some((f) => isBlocking(f) && f !== "TAXONOMY_UNCONFIRMED" && f !== "AI_UNREVIEWED");
 
   function changeSection(next: SectionKey) {
     const d = domainsForSection(next)[0]!;

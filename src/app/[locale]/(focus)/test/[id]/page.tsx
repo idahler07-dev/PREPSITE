@@ -7,6 +7,7 @@ import { loadAnnotations } from "@/server/attempts/annotations";
 import { HttpError } from "@/server/http";
 import { TestRunner } from "@/components/test/test-runner";
 import { BreakScreen } from "@/components/test/break-screen";
+import { aiAvailable } from "@/server/ai/client";
 
 export async function generateMetadata() {
   const t = await getTranslations("test");
@@ -26,5 +27,7 @@ export default async function TestPage({ params }: { params: Promise<{ id: strin
   if ("completed" in state) return redirect({ href: `/attempts/${id}`, locale: await getLocale() });
   if ("onBreak" in state) return <BreakScreen key={state.breakEndsAt} state={state} />;
   // Desmos API keys are meant to be used in the browser; the key is limited to our domain by Desmos.
-  return <TestRunner key={state.module.id} initial={state} annotations={await loadAnnotations(id, user.id)} desmosKey={process.env.DESMOS_API_KEY || null} />;
+  return <TestRunner key={state.module.id} initial={state} annotations={await loadAnnotations(id, user.id)} desmosKey={process.env.DESMOS_API_KEY || null}
+      aiEnabled={aiAvailable()}
+    />;
 }

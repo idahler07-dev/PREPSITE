@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { BookOpen, ClipboardCheck, FileText, FileUp, Flag, Home, LayoutDashboard, Library, Users } from "lucide-react";
+import { BarChart3, BookOpen, ClipboardCheck, FileText, FileUp, Flag, Home, LayoutDashboard, Library, Sparkles, Users } from "lucide-react";
 import { NavLink } from "@/components/layout/nav-link";
 
 export function AdminNav({ isAdmin, counts }: { isAdmin: boolean; counts: { review: number; reports: number } }) {
@@ -12,9 +12,15 @@ export function AdminNav({ isAdmin, counts }: { isAdmin: boolean; counts: { revi
     { href: "/admin/review", label: t("review"), icon: ClipboardCheck, badge: counts.review },
     { href: "/admin/mocks", label: t("mocks"), icon: FileText },
     { href: "/admin/import", label: t("import"), icon: FileUp },
+    { href: "/admin/ai-drafts", label: t("aiDrafts"), icon: Sparkles },
     { href: "/admin/sources", label: t("sources"), icon: Library },
     { href: "/admin/reports", label: t("reports"), icon: Flag, badge: counts.reports },
-    ...(isAdmin ? [{ href: "/admin/users", label: t("users"), icon: Users }] : []),
+    ...(isAdmin
+      ? [
+          { href: "/admin/users", label: t("users"), icon: Users },
+          { href: "/admin/ai-usage", label: t("aiUsage"), icon: BarChart3 },
+        ]
+      : []),
   ];
   return (
     <nav className="flex gap-1 overflow-x-auto md:flex-col" aria-label={t("overview")}>

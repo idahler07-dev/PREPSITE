@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResultQuestion } from "@/components/practice/result-question";
 import { formatDuration } from "@/lib/format";
+import { aiAvailable } from "@/server/ai/client";
 
 export default async function ResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -170,6 +171,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                   correctAnswers={i.feedback.correctAnswers}
                   explanationHtml={i.feedback.explanationHtml}
                   rationaleHtml={i.feedback.rationaleHtml}
+                  aiEnabled={aiAvailable()}
                 />
               </li>
             );

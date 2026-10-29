@@ -1,13 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { DOMAINS } from "@/lib/taxonomy";
+import { Link } from "@/i18n/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function AdminOverview() {
   const t = await getTranslations("admin.overview");
   const tx = await getTranslations("taxonomy");
-  const [published, inReview, drafts, openReports, students, attempts, samples, byDomain] = await Promise.all([
+  const [published, inReview, drafts, openReports, students, attempts, samples, byDomain, disputed] = await Promise.all([
     db.question.count({ where: { status: "PUBLISHED" } }),
     db.question.count({ where: { status: "IN_REVIEW" } }),
     db.question.count({ where: { status: "DRAFT" } }),
@@ -16,6 +17,7 @@ export default async function AdminOverview() {
     db.attempt.count({ where: { status: "COMPLETED" } }),
     db.question.count({ where: { isSample: true } }),
     db.question.groupBy({ by: ["domain"], where: { status: "PUBLISHED" }, _count: true }),
+    db.question.count({ where: { flags: { has: "AI_KEY_DISPUTE" }, status: { not: "RETIRED" } } }),
   ]);
   const domainCount = new Map(byDomain.map((d) => [d.domain, d._count]));
   const stats = [
@@ -32,6 +34,14 @@ export default async function AdminOverview() {
       {samples > 0 && (
         <p role="status" className="rounded-md border border-warning/50 bg-warning-muted p-3 text-sm">
           <strong>{t("samples")}: {samples}.</strong> {t("samplesWarning")}
+        </p>
+      )}
+      {disputed > 0 && (
+        <p role="status" className="rounded-md border border-warning/50 bg-warning-muted p-3 text-sm">
+          <strong>{t("disputed", { count: disputed })}</strong>{" "}
+          <Link href="/admin/questions?flag=AI_KEY_DISPUTE" className="underline">
+            {t("disputedLink")}
+          </Link>
         </p>
       )}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">

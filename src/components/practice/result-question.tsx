@@ -7,6 +7,7 @@ import { RichText } from "@/components/content/rich-text";
 import { ChoiceList } from "@/components/test/choice-list";
 import { ReportDialog } from "@/components/test/report-dialog";
 import { Button } from "@/components/ui/button";
+import { AiTutor } from "@/components/tutor/ai-tutor";
 
 export function ResultQuestion({
   attemptId,
@@ -19,6 +20,7 @@ export function ResultQuestion({
   correctAnswers,
   explanationHtml,
   rationaleHtml,
+  aiEnabled = false,
 }: {
   attemptId: string;
   questionId: string;
@@ -30,6 +32,7 @@ export function ResultQuestion({
   correctAnswers: string[];
   explanationHtml: string;
   rationaleHtml: string;
+  aiEnabled?: boolean;
 }) {
   const t = useTranslations("results");
   const tt = useTranslations("test");
@@ -64,6 +67,9 @@ export function ResultQuestion({
             <h4 className="mb-1 text-sm font-semibold">{tt("explanation")}</h4>
             {explanationHtml ? <RichText html={explanationHtml} className="text-sm" /> : <p className="text-sm text-muted-foreground">{tt("noExplanation")}</p>}
           </div>
+          {aiEnabled && (
+            <AiTutor attemptId={attemptId} questionId={questionId} answered wrongChoice={type === "MCQ" && !!answer && !correctAnswers.includes(answer)} />
+          )}
           <ReportDialog attemptId={attemptId} questionId={questionId} />
         </div>
       )}

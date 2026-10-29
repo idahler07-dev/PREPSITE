@@ -13,6 +13,7 @@ export const JOBS = {
   pdfPrepare: "pdf-import-prepare",
   pdfPage: "pdf-import-page",
   pdfFinalize: "pdf-import-finalize",
+  aiDraft: "ai-draft-questions",
 } as const;
 
 export type JobName = (typeof JOBS)[keyof typeof JOBS];
@@ -32,6 +33,8 @@ const QUEUES: Record<JobName, { retryLimit: number; retryDelay: number; expireIn
   // AI page reads can be slow; several pages are read in parallel.
   [JOBS.pdfPage]: { retryLimit: 2, retryDelay: 20, expireInSeconds: 900, concurrency: 3 },
   [JOBS.pdfFinalize]: { retryLimit: 1, retryDelay: 30, expireInSeconds: 1800, policy: "exclusive", concurrency: 1 },
+  // A batch records its own failure; it is never retried automatically (that would draft twice).
+  [JOBS.aiDraft]: { retryLimit: 0, retryDelay: 60, expireInSeconds: 3600, concurrency: 1 },
 };
 
 const handlers = new Map<JobName, Handler>();
@@ -127,7 +130,7 @@ export async function runQueuedJobs(budgetMs: number): Promise<{ processed: numb
   let processed = 0;
   let failed = 0;
   // Finalize first so finished imports appear quickly, then pages, then new uploads.
-  const order: JobName[] = [JOBS.pdfFinalize, JOBS.pdfPage, JOBS.pdfPrepare];
+  const order: JobName[] = [JOBS.pdfFinalize, JOBS.pdfPage, JOBS.pdfPrepare, JOBS.aiDraft];
   while (Date.now() < deadline) {
     let didWork = false;
     for (const name of order) {

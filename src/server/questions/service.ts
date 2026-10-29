@@ -24,7 +24,16 @@ export interface Provenance {
 }
 
 // TAXONOMY_UNCONFIRMED is not here: it blocks publishing until someone confirms domain and skill.
-const PROCESS_FLAGS_CLEARED_ON_APPROVAL: readonly Flag[] = ["NEAR_DUPLICATE", "DUPLICATE_CODE", "STUDENT_REPORT", "DIFFICULTY_MISMATCH"];
+const PROCESS_FLAGS_CLEARED_ON_APPROVAL: readonly Flag[] = [
+  "NEAR_DUPLICATE",
+  "DUPLICATE_CODE",
+  "STUDENT_REPORT",
+  "DIFFICULTY_MISMATCH",
+  "AI_KEY_DISPUTE",
+  "AI_SOLVER_DISAGREES",
+  "AI_AMBIGUOUS",
+  "MATH_CHECK_FAILED",
+];
 
 export function questionFingerprint(q: { passage?: string | null; stem: string; choices?: Choice[] | null }) {
   return fingerprintText([q.passage, q.stem, ...(q.choices ?? []).map((c) => c.text)]);
@@ -140,7 +149,8 @@ export async function updateQuestion(
     await assertCodeFree(tx, input.code, id);
     const assetCount = await attachAssets(tx, id, input);
     const linkedAssets = await tx.questionAsset.count({ where: { questionId: id } });
-    const previous = opts.confirmTaxonomy ? current.flags.filter((f) => f !== "TAXONOMY_UNCONFIRMED") : current.flags;
+    // Saving in the editor means a person has read the question: it confirms the taxonomy and clears the AI-draft hold.
+    const previous = opts.confirmTaxonomy ? current.flags.filter((f) => f !== "TAXONOMY_UNCONFIRMED" && f !== "AI_UNREVIEWED") : current.flags;
     let flags = mergeFlags(previous, computeContentFlags({ ...input, assetCount: Math.max(assetCount, linkedAssets) }));
     if (dupes.length && !current.flags.includes("NEAR_DUPLICATE") && current.fingerprint !== data.fingerprint) {
       flags = [...new Set([...flags, "NEAR_DUPLICATE"])].sort();

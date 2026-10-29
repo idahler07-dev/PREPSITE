@@ -63,6 +63,8 @@ model User {
   importsConfirmed  ImportBatch[]     @relation("ImportRightsConfirmedBy")
   auditLogs         AuditLog[]
   aiUsages          AiUsage[]
+  aiConversations   AiConversation[]
+  aiDraftBatches    AiDraftBatch[]
 }
 
 model Account {
@@ -351,6 +353,7 @@ model Question {
   versions  QuestionVersion[]
   reports   QuestionReport[]
   responses Response[]
+  aiExplanations AiExplanation[]
 
   @@index([status, section, domain, skill, difficulty])
   @@index([sourceId])
@@ -599,6 +602,73 @@ model RateLimit {
 }
 
 /// Every AI call: tokens and estimated cost, per user and feature.
+enum AiDraftStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
+}
+
+/// A request by staff for AI-drafted questions. Drafts land in the review queue as DRAFT with AI_UNREVIEWED.
+model AiDraftBatch {
+  id          String        @id @default(cuid())
+  createdById String
+  section     Section
+  domain      String
+  skill       String
+  difficulty  Difficulty
+  count       Int
+  /// Show the model a few of our own published questions for this skill as style examples.
+  useStyle    Boolean       @default(false)
+  codePrefix  String
+  status      AiDraftStatus @default(QUEUED)
+  /// { created: [{id, code, flags}], skipped: [{reason}], ... }
+  log         Json?
+  error       String?
+  createdAt   DateTime      @default(now())
+  finishedAt  DateTime?
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
+
+/// AI tutor answers, cached per question version, language, mode and (for "why is my answer wrong") the chosen choice.
+model AiExplanation {
+  id              String   @id @default(cuid())
+  questionId      String
+  questionVersion Int
+  locale          String
+  mode            String
+  choice          String   @default("")
+  /// AGREE: content is the explanation. DISAGREE: the AI thinks the key is wrong; content is its reason (staff only).
+  verdict         String
+  content         String
+  model           String
+  createdAt       DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, questionVersion, locale, mode, choice])
+}
+
+/// Follow-up chat with the AI tutor about one question in one attempt.
+model AiConversation {
+  id         String   @id @default(cuid())
+  userId     String
+  attemptId  String
+  questionId String
+  locale     String
+  /// [{ role: "user" | "assistant", content }]
+  messages   Json     @default("[]")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, attemptId, questionId])
+}
+
 model AiUsage {
   id               String   @id @default(cuid())
   userId           String?

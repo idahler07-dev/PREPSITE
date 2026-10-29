@@ -95,6 +95,13 @@ The AI is only asked to transcribe what is on the page; it never writes content.
 - **Scoring** (`src/lib/mock/scoring.ts`): straight lines between the anchor points of the route's table, rounded to 10, with a ± range. Always labelled an estimate.
 - **Test tools**: highlights and notes are stored per attempt and question (`Annotation`, character offsets into the passage text). The calculator is Desmos when `DESMOS_API_KEY` is set, otherwise our own scientific calculator (`src/lib/calc.ts`, a parser, never `eval`). The reference sheet is our own.
 
+## AI features
+
+All calls go through `src/server/ai/` (server-side only) and are logged in `AiUsage` with tokens and an estimated cost (Admin → AI usage).
+
+- **Tutor** (`tutor.ts`, `tutor-prompt.ts`, routes `/api/ai/tutor` and `/api/ai/tutor/chat`, NDJSON streams). Modes: hint, explain, why-my-answer-is-wrong, another method, simpler. Access is checked on the server: explanations only after the response is graded (so tests never leak answers), hints only in check-as-you-go drills. The model receives the question (with its images), the answer key, the stored explanation and the student's answer; the student's own text is wrapped in `<student_message>` and treated as content. Every reply starts with a hidden `VERDICT:` line (`src/lib/ai/verdict.ts`): on `DISAGREE` nothing is shown, the question gets the `AI_KEY_DISPUTE` flag and the student sees the stored explanation. Replies are cached per question version, language, mode and chosen choice (`AiExplanation`); cached replies cost nothing and don't count toward the daily limit (`src/config/ai-limits.ts`). Follow-ups are stored in `AiConversation`, capped per question.
+- **Drafted questions** (`draft-questions.ts`, job `ai-draft-questions`). Staff choose section, domain, skill, difficulty and count; optional style examples are our own published questions (never AI drafts or samples). Each draft is solved by a second call that never sees the key (`AI_SOLVER_DISAGREES`, `AI_AMBIGUOUS`), and Math drafts carry an arithmetic expression checked with mathjs (`src/lib/ai/math-check.ts`, whitelisted functions only; `MATH_CHECK_FAILED`). Drafts are saved as `DRAFT` with origin `AI_DRAFTED` and the blocking `AI_UNREVIEWED` flag, which only a save in the editor clears.
+
 ## Practice engine
 
 `src/server/attempts/service.ts`:

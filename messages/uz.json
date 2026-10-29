@@ -729,7 +729,27 @@
       "help": "Oʻquvchilar aniqligi koʻrsatilgan qiyinlikka mos kelmaydi."
     },
     "blocking": "Eʼlon qilishdan oldin tuzatilishi shart",
-    "warning": "Ogohlantirish"
+    "warning": "Ogohlantirish",
+    "AI_KEY_DISPUTE": {
+      "label": "AI javobga shubha qildi",
+      "help": "Bu savolni oʻquvchiga tushuntirayotganda AI repetitor javoblar kaliti notoʻgʻri boʻlishi mumkin deb hisobladi. Javobni tekshiring; savolni tasdiqlash yoki saqlash bu belgini olib tashlaydi."
+    },
+    "AI_UNREVIEWED": {
+      "label": "AI qoralamasi — oʻqib chiqish kerak",
+      "help": "AI tomonidan yozilgan. Uni muharrirda oching, har bir soʻzni, javob va tushuntirishni tekshiring, soʻng saqlang. Shundan oldin nashr qilib boʻlmaydi."
+    },
+    "AI_SOLVER_DISAGREES": {
+      "label": "Yechuvchi boshqa javob topdi",
+      "help": "Ikkinchi, mustaqil AI bu qoralamani kalitsiz yechib, boshqa javob oldi."
+    },
+    "AI_AMBIGUOUS": {
+      "label": "Noaniq boʻlishi mumkin",
+      "help": "Mustaqil yechuvchi savolni noaniq yoki bir nechta toʻgʻri javobli deb hisobladi."
+    },
+    "MATH_CHECK_FAILED": {
+      "label": "Matematik tekshiruv oʻtmadi",
+      "help": "Bu qoralama javobini avtomatik hisoblash kalit bilan mos kelmadi."
+    }
   },
   "admin": {
     "title": "Admin paneli",
@@ -743,7 +763,9 @@
       "reports": "Xabarlar",
       "users": "Foydalanuvchilar",
       "backToSite": "Saytga qaytish",
-      "mocks": "Sinov testlari"
+      "mocks": "Sinov testlari",
+      "aiDrafts": "AI qoralamalari",
+      "aiUsage": "AI sarfi"
     },
     "overview": {
       "title": "Umumiy koʻrinish",
@@ -755,7 +777,9 @@
       "attempts": "Yakunlangan mashqlar",
       "samples": "Bazadagi namuna savollar",
       "samplesWarning": "Ishga tushirishdan oldin namunalarni oʻchiring: pnpm samples:remove",
-      "bySection": "Boʻlim va yoʻnalishlar boʻyicha eʼlon qilinganlar"
+      "bySection": "Boʻlim va yoʻnalishlar boʻyicha eʼlon qilinganlar",
+      "disputed": "AI repetitor javoblar kalitiga shubha qilgan savollar: {count}.",
+      "disputedLink": "Tekshirish"
     },
     "questions": {
       "title": "Savollar bazasi",
@@ -858,7 +882,9 @@
         "INVALID_DOMAIN": "Ushbu boʻlimga tegishli yoʻnalishni tanlang.",
         "INVALID_SKILL": "Ushbu yoʻnalishga tegishli koʻnikmani tanlang."
       },
-      "viewOriginal": "Asl sahifani koʻrish"
+      "viewOriginal": "Asl sahifani koʻrish",
+      "aiConcerns": "AI repetitor bu javoblar kalitiga shubha qildi",
+      "aiConcernVersion": "{version}-versiya"
     },
     "sources": {
       "title": "Manbalar",
@@ -1130,6 +1156,61 @@
         "IN_USE": "Faqat hech kim topshirmagan qoralamalarni oʻchirish mumkin. Uning oʻrniga arxivlang.",
         "other": "Xatolik yuz berdi. Qayta urining."
       }
+    },
+    "aiDrafts": {
+      "title": "AI yozgan savollar",
+      "subtitle": "AIdan bitta koʻnikma boʻyicha yangi, original mashq savollarini yozishni soʻrang. Har bir qoralamani ikkinchi AI kalitsiz yechib tekshiradi (Matematikada kalkulyator ham), soʻng u koʻrib chiqish navbatida inson oʻqib, saqlaguncha kutadi.",
+      "new": "Yangi qoralamalar",
+      "rules": "Qoralamalar koʻnikma tavsifi asosida va xohlasangiz, oʻzimizning nashr qilingan savollarimiz uslubida yoziladi. AIga College Board, Khan Academy yoki boshqa kompaniyalar savollarini nusxa qilmaslik va ularga taqlid qilmaslik buyurilgan. Qoralamalarda rasm boʻlmaydi.",
+      "disabled": "ANTHROPIC_API_KEY oʻrnatilmagani uchun AI qoralamalari oʻchiq.",
+      "section": "Boʻlim",
+      "domain": "Yoʻnalish",
+      "skill": "Koʻnikma",
+      "difficulty": "Qiyinlik",
+      "count": "Nechta (koʻpi bilan {max})",
+      "codePrefix": "Savol kodi prefiksi",
+      "useStyle": "Bu koʻnikma boʻyicha oʻzimizning nashr qilingan savollarimiz uslubiga moslash (AIga namuna sifatida uchtagacha koʻrsatiladi)",
+      "submit": "Savollarni yozish",
+      "started": "Yozish boshlandi. Bu bir-ikki daqiqa oladi.",
+      "empty": "Hali qoralama soʻralmagan.",
+      "countShort": "{count, plural, other {# ta savol}}",
+      "status": {
+        "QUEUED": "Kutmoqda",
+        "RUNNING": "Yozilmoqda…",
+        "DONE": "Tayyor",
+        "FAILED": "Xatolik"
+      },
+      "skipped": "{count, plural, other {# ta qoralama}} yaroqsiz boʻlib, oʻtkazib yuborildi.",
+      "openQueue": "AI qoralamalarini koʻrib chiqish navbatida ochish",
+      "errors": {
+        "AI_UNAVAILABLE": "ANTHROPIC_API_KEY oʻrnatilmagani uchun AI qoralamalari oʻchiq.",
+        "RATE_LIMITED": "Soʻrovlar juda koʻp. Keyinroq urining.",
+        "other": "Yozishni boshlab boʻlmadi."
+      }
+    },
+    "aiUsage": {
+      "title": "AI sarfi va xarajati",
+      "subtitle": "Soʻnggi {days} kundagi har bir AI chaqiruvining taxminiy narxi (src/config/ai-pricing.ts dagi narxlar boʻyicha).",
+      "disabled": "ANTHROPIC_API_KEY oʻrnatilmagan, shuning uchun AI funksiyalari ishlamayapti.",
+      "today": "Bugun",
+      "period": "Soʻnggi {days} kun",
+      "calls": "AI chaqiruvlari (soʻnggi {days} kun)",
+      "perDay": "Kunlik xarajat",
+      "byFeature": "Funksiyalar boʻyicha",
+      "topUsers": "Eng koʻp xarajat qilgan foydalanuvchilar",
+      "feature": "Funksiya",
+      "callsShort": "Chaqiruvlar",
+      "tokens": "Tokenlar",
+      "cost": "Xarajat",
+      "user": "Foydalanuvchi",
+      "note": "Xarajatlar taxminiy; aniq hisobni Anthropic konsolida koʻrasiz. Keshdagi repetitor javoblari bepul va hisobga olinmaydi.",
+      "features": {
+        "tutor": "Repetitor tushuntirishlari",
+        "tutor_chat": "Repetitorga qoʻshimcha savollar",
+        "pdf_extract": "PDF oʻqish",
+        "ai_draft": "Savol yozish",
+        "ai_solve": "Qoralamalarni tekshirish"
+      }
     }
   },
   "mocks": {
@@ -1161,6 +1242,30 @@
       "NOT_ENOUGH_QUESTIONS": "Toʻliq test tuzish uchun hali yetarli nashr qilingan savollar yoʻq. Bitta boʻlimni sinab koʻring yoki keyinroq qayting.",
       "RATE_LIMITED": "Yaqinda koʻp test boshladingiz. Keyinroq qayta urining.",
       "other": "Testni boshlab boʻlmadi. Qayta urining."
+    }
+  },
+  "tutor": {
+    "title": "AI repetitor",
+    "modes": {
+      "hint": "Maslahat bering",
+      "explain": "Bosqichma-bosqich tushuntiring",
+      "whyWrong": "Javobim nega notoʻgʻri?",
+      "another": "Boshqa yechim usuli",
+      "simpler": "Soddaroq tushuntiring"
+    },
+    "thinking": "Oʻylayapti…",
+    "flagged": "Oʻqituvchilarimiz bu savolni qayta tekshiradi. Hozircha yuqoridagi tushuntirishdan foydalaning.",
+    "followUp": "Qoʻshimcha savol bering",
+    "followUpPlaceholder": "Shu savol haqida soʻrang…",
+    "send": "Yuborish",
+    "disclaimer": "AI javoblarida xatolar boʻlishi mumkin. Javoblar kaliti oʻqituvchilarimizniki.",
+    "remaining": "{count, plural, =0 {Bugun yangi AI javoblari qolmadi.} other {Bugun yana # ta yangi AI javobi qoldi.}}",
+    "errors": {
+      "quota": "Bugungi AI javoblaridan foydalanib boʻldingiz. Boshqa oʻquvchilar soʻragan javoblar ishlayveradi, ertaga yangilari beriladi.",
+      "rateLimited": "Bir vaqtda juda koʻp soʻrov. Bir daqiqa kutib, qayta urining.",
+      "chatLimit": "Bu savol boʻyicha qoʻshimcha savollar chegarasiga yetdingiz.",
+      "unavailable": "AI repetitor hozir mavjud emas.",
+      "other": "AI repetitor javob bera olmadi. Qayta urining."
     }
   }
 }

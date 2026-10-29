@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeStreak, dayInZone } from "@/lib/stats/streak";
+import { computeStreak, dayInZone, startOfDayInZone } from "@/lib/stats/streak";
 
 describe("streaks", () => {
   it("counts consecutive days ending today", () => {
@@ -19,5 +19,13 @@ describe("streaks", () => {
     const lateEvening = new Date("2026-10-29T20:30:00Z"); // 01:30 next day in Tashkent (UTC+5)
     expect(dayInZone(lateEvening, "Asia/Tashkent")).toBe("2026-10-30");
     expect(dayInZone(lateEvening, "UTC")).toBe("2026-10-29");
+  });
+});
+
+describe("startOfDayInZone", () => {
+  it("finds local midnight", () => {
+    // 2026-10-29 03:00 in Tashkent (UTC+5) is 2026-10-28 22:00 UTC.
+    expect(startOfDayInZone(new Date("2026-10-28T22:00:00Z"), "Asia/Tashkent").toISOString()).toBe("2026-10-28T19:00:00.000Z");
+    expect(startOfDayInZone(new Date("2026-10-28T18:59:00Z"), "Asia/Tashkent").toISOString()).toBe("2026-10-27T19:00:00.000Z");
   });
 });

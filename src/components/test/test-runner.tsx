@@ -34,6 +34,7 @@ import { HighlightablePassage, type Highlight, type HighlightColor } from "./hig
 import { LineReader } from "./line-reader";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { AiTutor } from "@/components/tutor/ai-tutor";
 
 type Annotations = Record<string, { highlights: Highlight[]; note: string | null }>;
 const HL_COLORS: HighlightColor[] = ["yellow", "blue", "pink"];
@@ -42,7 +43,17 @@ const ZOOM_STEPS = [0.9, 1, 1.15, 1.3, 1.5];
 
 type Feedback = NonNullable<RunnerItem["feedback"]>;
 
-export function TestRunner({ initial, annotations: initialAnnotations = {}, desmosKey = null }: { initial: RunnerState; annotations?: Annotations; desmosKey?: string | null }) {
+export function TestRunner({
+  initial,
+  annotations: initialAnnotations = {},
+  desmosKey = null,
+  aiEnabled = false,
+}: {
+  initial: RunnerState;
+  annotations?: Annotations;
+  desmosKey?: string | null;
+  aiEnabled?: boolean;
+}) {
   const t = useTranslations("test");
   const tx = useTranslations("taxonomy");
   const c = useTranslations("common");
@@ -516,7 +527,9 @@ export function TestRunner({ initial, annotations: initialAnnotations = {}, desm
                   </Button>
                 )}
 
-                {item.feedback && <FeedbackPanel item={item} feedback={item.feedback} attemptId={attemptId} />}
+                {immediate && !item.feedback && aiEnabled && <AiTutor key={`hint-${item.position}`} attemptId={attemptId} questionId={item.questionId} answered={false} wrongChoice={false} />}
+
+                {item.feedback && <FeedbackPanel item={item} feedback={item.feedback} attemptId={attemptId} aiEnabled={aiEnabled} />}
               </div>
             </section>
           </div>
@@ -617,7 +630,7 @@ export function TestRunner({ initial, annotations: initialAnnotations = {}, desm
   );
 }
 
-function FeedbackPanel({ item, feedback, attemptId }: { item: RunnerItem; feedback: Feedback; attemptId: string }) {
+function FeedbackPanel({ item, feedback, attemptId, aiEnabled }: { item: RunnerItem; feedback: Feedback; attemptId: string; aiEnabled: boolean }) {
   const t = useTranslations("test");
   return (
     <div
@@ -640,6 +653,15 @@ function FeedbackPanel({ item, feedback, attemptId }: { item: RunnerItem; feedba
         <h3 className="mb-1 text-sm font-semibold">{t("explanation")}</h3>
         {feedback.explanationHtml ? <RichText html={feedback.explanationHtml} className="text-sm" /> : <p className="text-sm text-muted-foreground">{t("noExplanation")}</p>}
       </div>
+      {aiEnabled && (
+        <AiTutor
+          key={`explain-${item.position}`}
+          attemptId={attemptId}
+          questionId={item.questionId}
+          answered
+          wrongChoice={item.type === "MCQ" && !!item.answer && !feedback.isCorrect}
+        />
+      )}
       <ReportDialog attemptId={attemptId} questionId={item.questionId} />
     </div>
   );

@@ -17,6 +17,16 @@ export const FLAGS = {
   TAXONOMY_UNCONFIRMED: { blocking: true },
   STUDENT_REPORT: { blocking: false },
   DIFFICULTY_MISMATCH: { blocking: false },
+  /** The AI tutor thinks the answer key may be wrong; a person should check. */
+  AI_KEY_DISPUTE: { blocking: false },
+  /** Drafted by AI; a person must read and save it in the editor before it can be published. */
+  AI_UNREVIEWED: { blocking: true },
+  /** AI-drafted: an independent AI solver got a different answer. */
+  AI_SOLVER_DISAGREES: { blocking: false },
+  /** AI-drafted: the solver found the question ambiguous or with more than one correct answer. */
+  AI_AMBIGUOUS: { blocking: false },
+  /** AI-drafted: the math check (mathjs) did not confirm the answer. */
+  MATH_CHECK_FAILED: { blocking: false },
 } as const;
 
 export type Flag = keyof typeof FLAGS;
