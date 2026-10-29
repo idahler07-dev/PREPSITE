@@ -157,7 +157,7 @@ export function BasicCalculator() {
       <div className="grid grid-cols-5 gap-1">
         {KEYS.flat().map((k) => (
           <Button key={k} type="button" variant={k === "=" ? "default" : "outline"} size="sm" className="h-9 px-0 font-mono" onClick={() => press(k === "ans" ? "ans" : k)}>
-            {k.replace("(", "")}
+            {k.length > 1 ? k.replace("(", "") : k}
           </Button>
         ))}
       </div>
