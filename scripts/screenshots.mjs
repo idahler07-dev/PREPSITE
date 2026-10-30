@@ -96,7 +96,7 @@ for (const v of VARIANTS) {
     for (const p of PAGES.filter((x) => x.auth === auth)) {
       await page.goto(p.url, { waitUntil: "networkidle" });
       await dismissCookies(page);
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(1500);
       await page.screenshot({ path: path.join(OUT, `${p.name}-${v.name}.png`) });
     }
     await ctx.close();
