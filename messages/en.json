@@ -1,0 +1,1696 @@
+{
+  "metadata": {
+    "title": "{name} — SAT preparation",
+    "description": "Practice for the digital SAT with questions written by our teachers, timed drills and honest progress tracking."
+  },
+  "common": {
+    "loading": "Loading…",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "all": "All",
+    "any": "Any",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "optional": "optional",
+    "actions": "Actions",
+    "continue": "Continue",
+    "retry": "Try again",
+    "view": "View",
+    "open": "Open",
+    "download": "Download",
+    "upload": "Upload",
+    "apply": "Apply",
+    "select": "Select",
+    "selected": "{count} selected",
+    "showing": "Showing {from}–{to} of {total}",
+    "page": "Page {page} of {pages}",
+    "minutesShort": "{count} min",
+    "secondsShort": "{count} s",
+    "durationMinSec": "{min} min {sec} s",
+    "notSet": "Not set",
+    "unknownError": "Something went wrong. Please try again.",
+    "networkError": "Connection problem. Check your internet and try again.",
+    "copied": "Copied",
+    "new": "New",
+    "or": "or",
+    "comingSoon": "Coming soon",
+    "sample": "Sample",
+    "sampleHint": "Development sample — removed before launch",
+    "skipToContent": "Skip to main content",
+    "sizeMb": "{value} MB"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "practice": "Practice",
+    "history": "History",
+    "resources": "Official resources",
+    "about": "About us",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "admin": "Admin",
+    "settings": "Settings",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "getStarted": "Get started",
+    "account": "Account",
+    "menu": "Menu",
+    "mainNavigation": "Main navigation",
+    "mocks": "Practice tests",
+    "pricing": "Pricing",
+    "billing": "Plan and payments",
+    "plan": "Plan",
+    "review": "Review",
+    "vocab": "Vocabulary"
+  },
+  "footer": {
+    "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
+    "copyright": "© {year} {name}",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "refunds": "Refund policy",
+    "contact": "Contact",
+    "about": "About us",
+    "resources": "Official resources"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "home": {
+    "eyebrow": "Digital SAT preparation",
+    "title": "Practice for the SAT with questions written by real teachers",
+    "subtitle": "Timed drills, an exam-like test screen and clear progress tracking. Built by {name} for students in Uzbekistan and Central Asia.",
+    "ctaPrimary": "Start practising",
+    "ctaSecondary": "See official free resources",
+    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
+    "featuresTitle": "What you get",
+    "features": {
+      "bank": {
+        "title": "Our own question bank",
+        "body": "Every question is written by our teachers or used with permission, and checked by a person before it reaches you."
+      },
+      "test": {
+        "title": "Exam-like practice",
+        "body": "A timer, question navigator, flag for review and answer eliminator — the tools you will use on test day."
+      },
+      "drills": {
+        "title": "Focused drills",
+        "body": "Practise one skill at a time, choose the difficulty, and check each answer as you go or at the end."
+      },
+      "progress": {
+        "title": "Honest progress",
+        "body": "Accuracy by domain and skill, time per question and your streak — only real numbers from your own practice."
+      }
+    },
+    "officialTitle": "Use the official free materials too",
+    "officialBody": "The College Board and Khan Academy publish free official practice. We link to them instead of copying them.",
+    "officialCta": "Official resources"
+  },
+  "about": {
+    "title": "About us",
+    "body": "{name} is a learning centre that prepares students for the digital SAT. This site holds the practice materials our teachers write, so you can study between lessons.",
+    "contentTitle": "Where our questions come from",
+    "contentBody": "Questions on this site are written by our teachers, or used with written permission from their authors. Some draft questions may be prepared with AI help, but a teacher checks every question before it is published. We do not copy questions from the College Board or other prep companies.",
+    "scoreTitle": "About score estimates",
+    "scoreBody": "Any score we show is an estimate based on your practice, not an official College Board score."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": {
+      "official": {
+        "q": "Are these official SAT questions?",
+        "a": "No. Our questions are written by our teachers in the style of the digital SAT. For official practice, use the free College Board and Khan Academy materials linked on our Official resources page."
+      },
+      "score": {
+        "q": "Is the score you show my real SAT score?",
+        "a": "No. It is an estimate based on your practice. Only the College Board can give you an official score."
+      },
+      "language": {
+        "q": "Why are the questions in English?",
+        "a": "The real SAT is in English, so our questions are too. Menus, explanations and study plans can be shown in your language."
+      },
+      "device": {
+        "q": "Can I practise on my phone?",
+        "a": "Yes. The real test is taken on a laptop or tablet, so try to do full timed practice on one of those."
+      },
+      "mistake": {
+        "q": "I think a question has a mistake. What do I do?",
+        "a": "Use the “Report a problem” button after you answer. A teacher reviews every report."
+      }
+    }
+  },
+  "resources": {
+    "title": "Official free resources",
+    "subtitle": "Free practice from the organizations behind the SAT. These open on their websites.",
+    "note": "We are not affiliated with these organizations. Links open in a new tab.",
+    "items": {
+      "questionBank": {
+        "title": "SAT Suite Question Bank",
+        "body": "Search official practice questions by domain, skill and difficulty."
+      },
+      "bluebook": {
+        "title": "Bluebook app",
+        "body": "Download the official testing app and take full-length adaptive practice tests."
+      },
+      "practiceTests": {
+        "title": "Official practice tests",
+        "body": "Information about the full-length digital practice tests and how to score them."
+      },
+      "khanAcademy": {
+        "title": "Khan Academy — Digital SAT",
+        "body": "Free official lessons and practice for every SAT skill."
+      }
+    },
+    "visit": "Open website",
+    "log": {
+      "title": "Your official practice test scores",
+      "body": "Took an official practice test? Log your scores and the skills you missed; your dashboard and study plan use them.",
+      "testName": "Test",
+      "testNamePlaceholder": "e.g. Practice Test 4",
+      "date": "Date taken",
+      "missed": "Skills you missed (optional)",
+      "save": "Save score",
+      "saved": "Score saved.",
+      "invalid": "Check the date and scores (200–800, in tens).",
+      "delete": "Delete score"
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Questions about lessons, the site or your account? Get in touch.",
+    "email": "Email",
+    "phone": "Phone",
+    "telegram": "Telegram",
+    "address": "Address",
+    "hours": "Hours"
+  },
+  "legal": {
+    "draftNotice": "Draft text — the learning centre will publish the final version before launch.",
+    "lastUpdated": "Last updated: {date}",
+    "terms": {
+      "title": "Terms of use"
+    },
+    "privacy": {
+      "title": "Privacy policy"
+    },
+    "refunds": {
+      "title": "Refund policy"
+    }
+  },
+  "cookie": {
+    "message": "We use only essential cookies to keep you signed in and remember your language and theme.",
+    "accept": "OK"
+  },
+  "auth": {
+    "signInTitle": "Sign in or create an account",
+    "signInSubtitle": "Use your email, Google or Telegram. New accounts are created automatically.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "orContinueWith": "or continue with",
+    "google": "Continue with Google",
+    "telegramLoading": "Loading Telegram…",
+    "termsNote": "By continuing you agree to our <terms>Terms of use</terms> and <privacy>Privacy policy</privacy>.",
+    "checkEmailTitle": "Check your email",
+    "checkEmailBody": "We sent a sign-in link to your email address. Open it on this device to continue. The link works for one hour.",
+    "checkEmailSpam": "Can’t find it? Check your spam folder or try again.",
+    "tryAgain": "Use a different email",
+    "signedOut": "You have been signed out.",
+    "errors": {
+      "EmailSignin": "We couldn’t send the email. Check the address and try again in a few minutes.",
+      "OAuthAccountNotLinked": "This email is already registered with another sign-in method. Sign in the way you did before.",
+      "Verification": "This sign-in link has expired or was already used. Request a new one.",
+      "AccessDenied": "Access denied.",
+      "CredentialsSignin": "Telegram sign-in failed. Please try again.",
+      "Configuration": "Sign-in is not configured correctly. Please contact us.",
+      "RateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "InvalidEmail": "Enter a valid email address.",
+      "Default": "Sign-in failed. Please try again."
+    }
+  },
+  "email": {
+    "magicLink": {
+      "subject": "Your sign-in link for {name}",
+      "intro": "Click the button below to sign in to {name}.",
+      "button": "Sign in",
+      "expires": "This link expires in one hour and can be used once.",
+      "ignore": "If you did not request this email, you can safely ignore it."
+    },
+    "receipt": {
+      "subject": "{name}: payment received (order {number})",
+      "intro": "Thank you! Your payment to {name} was successful.",
+      "button": "View receipt",
+      "footer": "{legalName}. Keep this email as your receipt."
+    }
+  },
+  "onboarding": {
+    "title": "Let’s set your goal",
+    "subtitle": "This helps us plan your practice. You can change it any time in Settings.",
+    "testDate": "When is your SAT?",
+    "testDateHelp": "Leave empty if you haven’t registered yet.",
+    "targetScore": "Target score",
+    "targetScoreHelp": "Between 400 and 1600.",
+    "currentScore": "Your current score",
+    "currentScoreHelp": "From an official practice test or a real SAT. Leave empty if you don’t know.",
+    "diagnosticHint": "Don’t know your level? Start with a short mixed drill after this step.",
+    "save": "Save and continue",
+    "skip": "Skip for now",
+    "errors": {
+      "score": "Enter a score between 400 and 1600 in steps of 10.",
+      "date": "Choose a date in the future."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {name}!",
+    "welcomeNoName": "Welcome!",
+    "startDrill": "Start a drill",
+    "continueAttempt": "Continue where you left off",
+    "stats": {
+      "answered": "Questions answered",
+      "accuracy": "Accuracy",
+      "streak": "Day streak",
+      "avgTime": "Avg. time per question",
+      "streakDays": "{count, plural, one {# day} other {# days}}"
+    },
+    "goal": {
+      "title": "Your goal",
+      "target": "Target score",
+      "testDate": "Test date",
+      "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+      "testPassed": "Test date has passed",
+      "edit": "Edit goal",
+      "setGoal": "Set your goal"
+    },
+    "estimate": {
+      "title": "Estimated score",
+      "notYet": "Complete a full practice test to see an estimate.",
+      "label": "Estimate, not an official College Board score.",
+      "official": "official practice test",
+      "practice": "our practice test"
+    },
+    "byDomain": "Accuracy by domain",
+    "bySkill": "Skills to work on",
+    "noData": "No practice yet. Your results will appear here.",
+    "recent": "Recent practice",
+    "viewAll": "View all",
+    "officialScores": "Official practice scores"
+  },
+  "practice": {
+    "title": "Practice",
+    "subtitle": "Build a drill from our published questions.",
+    "section": "Section",
+    "bothSections": "Both sections",
+    "domains": "Domains",
+    "skills": "Skills",
+    "allDomains": "All domains",
+    "allSkills": "All skills",
+    "difficulty": "Difficulty",
+    "count": "Number of questions",
+    "codeRange": "Question code range",
+    "codeFrom": "From code",
+    "codeTo": "To code",
+    "codeRangeHelp": "Optional. For example LC-M-ALG-0001 to LC-M-ALG-0050.",
+    "timing": "Timing",
+    "timed": "Timed",
+    "untimed": "Untimed",
+    "timedHelp": "About {seconds} seconds per question, like the real test.",
+    "feedback": "When to see answers",
+    "feedbackImmediate": "After each question",
+    "feedbackEnd": "At the end",
+    "unseenFirst": "Prefer questions I haven’t seen",
+    "start": "Start drill",
+    "starting": "Starting…",
+    "matching": "{count, plural, =0 {No questions match} one {# question matches} other {# questions match}}",
+    "noQuestions": "No published questions match these filters yet. Try fewer filters.",
+    "lessThanRequested": "Only {count} questions match; the drill will have {count}.",
+    "quickStart": "Quick start",
+    "quickMixed": "10 mixed questions",
+    "quickMath": "10 math questions",
+    "quickRw": "10 reading & writing questions",
+    "inProgress": "In progress",
+    "resume": "Resume"
+  },
+  "test": {
+    "drillTitle": "Practice drill",
+    "moduleTitle": "{section}: Module {module}",
+    "questionOf": "Question {current} of {total}",
+    "timer": {
+      "hide": "Hide",
+      "show": "Show timer",
+      "remaining": "Time remaining",
+      "warning": "5 minutes left in this module.",
+      "timeUp": "Time is up. Your answers have been submitted."
+    },
+    "markForReview": "Mark for review",
+    "questionId": "ID {code}",
+    "marked": "Marked for review",
+    "eliminator": "Cross out answer choices",
+    "eliminatorOn": "Cross-out mode on",
+    "crossOut": "Cross out choice {choice}",
+    "undoCrossOut": "Undo cross-out of choice {choice}",
+    "choice": "Choice {choice}",
+    "sprLabel": "Your answer",
+    "sprPreview": "Answer preview",
+    "sprHelp": "Enter a whole number, decimal or fraction. Up to 5 characters (6 if negative). No mixed numbers, commas or symbols.",
+    "sprErrors": {
+      "TOO_LONG": "Too long — up to 5 characters, or 6 with a minus sign.",
+      "MIXED_NUMBER": "Mixed numbers are not allowed. Enter 7/2 or 3.5 instead of 3 1/2.",
+      "INVALID": "Use only digits, one decimal point, “/” and a leading “−”.",
+      "DIVIDE_BY_ZERO": "The denominator can’t be zero.",
+      "EMPTY": ""
+    },
+    "navigator": {
+      "open": "Question navigator",
+      "title": "Questions in this module",
+      "current": "Current",
+      "unanswered": "Unanswered",
+      "forReview": "For review",
+      "answered": "Answered",
+      "goToReview": "Go to review page"
+    },
+    "review": {
+      "title": "Check your work",
+      "body": "You can go back to any question before you submit. Unanswered and marked questions are highlighted.",
+      "unansweredCount": "{count, plural, =0 {All questions answered} one {# question unanswered} other {# questions unanswered}}",
+      "markedCount": "{count, plural, =0 {No questions marked} one {# question marked for review} other {# questions marked for review}}",
+      "submit": "Submit answers",
+      "back": "Back to questions"
+    },
+    "submitConfirm": {
+      "title": "Submit your answers?",
+      "body": "You won’t be able to change your answers after you submit.",
+      "unanswered": "{count, plural, one {# question is} other {# questions are}} still unanswered.",
+      "confirm": "Submit",
+      "cancel": "Keep working"
+    },
+    "check": "Check answer",
+    "checking": "Checking…",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "correctAnswerIs": "Correct answer: {answer}",
+    "acceptedAnswers": "Accepted answers: {answers}",
+    "explanation": "Explanation",
+    "noExplanation": "No written explanation for this question yet.",
+    "yourAnswer": "Your answer: {answer}",
+    "unanswered": "Not answered",
+    "finish": "Finish drill",
+    "save": {
+      "saving": "Saving…",
+      "saved": "All answers saved",
+      "offline": "Offline — answers will be saved when you reconnect",
+      "error": "Couldn’t save. Retrying…"
+    },
+    "exit": "Exit",
+    "exitConfirm": {
+      "title": "Leave this drill?",
+      "body": "Your answers are saved. You can come back and continue later.",
+      "leave": "Leave",
+      "stay": "Stay"
+    },
+    "mobileTip": "Tip: the real SAT is taken on a laptop or tablet. Use one for timed practice when you can.",
+    "dismiss": "Dismiss",
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "choose": "Choose answer A–D",
+      "next": "Next question",
+      "previous": "Previous question",
+      "mark": "Mark for review",
+      "eliminate": "Toggle cross-out mode",
+      "help": "Show shortcuts",
+      "highlight": "Toggle the highlighter",
+      "lineReader": "Toggle the line reader (↑ ↓ to move it)",
+      "calculator": "Open or close the calculator (Math)",
+      "reference": "Open the reference sheet (Math)",
+      "fullscreen": "Full screen"
+    },
+    "passage": "Passage",
+    "question": "Question",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "submitted": "Submitted",
+    "alreadyCompleted": "This practice is finished.",
+    "viewResults": "View results",
+    "tools": {
+      "calculator": "Calculator",
+      "reference": "Reference sheet",
+      "lineReader": "Line reader",
+      "fullscreen": "Full screen",
+      "exitFullscreen": "Exit full screen",
+      "fullscreenFailed": "Full screen is not available in this browser.",
+      "highlighter": "Highlight",
+      "highlighterOn": "Highlighting on",
+      "highlighterHelp": "Select text in the passage to highlight it. Click a highlight to remove it.",
+      "highlightColor": "Highlight color",
+      "colors": {
+        "yellow": "Yellow",
+        "blue": "Blue",
+        "pink": "Pink"
+      },
+      "addNote": "Add note",
+      "editNote": "Edit note",
+      "note": "Your note on this question",
+      "noteHelp": "Saved automatically. Only you can see it."
+    },
+    "calculator": {
+      "title": "Calculator",
+      "graphing": "Graphing calculator",
+      "close": "Close calculator",
+      "angle": "Angle unit",
+      "deg": "Deg",
+      "rad": "Rad",
+      "clear": "Clear",
+      "history": "Previous calculations",
+      "expression": "Expression",
+      "error": "Can't calculate that"
+    },
+    "reference": {
+      "title": "Reference sheet",
+      "intro": "Formulas you may use on the Math section.",
+      "items": {
+        "circleArea": "Area of a circle",
+        "circumference": "Circumference of a circle",
+        "rectangleArea": "Area of a rectangle",
+        "triangleArea": "Area of a triangle",
+        "pythagorean": "Pythagorean theorem",
+        "special30": "Special right triangle",
+        "special45": "Special right triangle",
+        "boxVolume": "Volume of a rectangular box",
+        "cylinderVolume": "Volume of a cylinder",
+        "sphereVolume": "Volume of a sphere",
+        "coneVolume": "Volume of a cone",
+        "pyramidVolume": "Volume of a rectangular pyramid"
+      },
+      "facts": {
+        "circleDegrees": "A circle has 360 degrees.",
+        "circleRadians": "A circle has 2π radians.",
+        "triangleAngles": "The angles of a triangle add up to 180 degrees."
+      }
+    },
+    "break": {
+      "title": "Break",
+      "remaining": "Break time left",
+      "body": "Stand up, stretch, drink some water. {section} starts when the timer ends, or resume now.",
+      "resume": "Resume testing"
+    }
+  },
+  "results": {
+    "title": "Results",
+    "drillTitle": "Drill results",
+    "score": "{correct} of {total} correct",
+    "accuracy": "Accuracy",
+    "timeSpent": "Time spent",
+    "avgTime": "Average per question",
+    "completedAt": "Completed {date}",
+    "byDomain": "By domain",
+    "questions": "Question by question",
+    "columns": {
+      "number": "#",
+      "code": "Code",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "yourAnswer": "Your answer",
+      "correctAnswer": "Correct answer",
+      "time": "Time",
+      "result": "Result"
+    },
+    "flagged": "Marked for review",
+    "practiceAgain": "Practice again",
+    "practiceMistakes": "Redo my mistakes",
+    "showQuestion": "Show question",
+    "hideQuestion": "Hide question",
+    "report": {
+      "button": "Report a problem",
+      "title": "Report a problem with this question",
+      "body": "A teacher will review it. Thank you for helping us improve.",
+      "reason": "What’s wrong?",
+      "reasons": {
+        "WRONG_ANSWER": "The answer key is wrong",
+        "TYPO": "Typo or formatting error",
+        "UNCLEAR": "The question is unclear",
+        "FIGURE": "Problem with a figure or table",
+        "OTHER": "Something else"
+      },
+      "message": "Details (optional)",
+      "submit": "Send report",
+      "thanks": "Thanks! A teacher will review this question.",
+      "already": "You already reported this question."
+    },
+    "testTitle": "Practice test",
+    "variant": {
+      "easier": "easier module",
+      "harder": "harder module"
+    },
+    "estimate": {
+      "title": "Estimated score",
+      "disclaimer": "Estimated score, not an official College Board score. It comes from our own scoring table and is shown with a likely range.",
+      "total": "Total (400–1600)",
+      "range": "Likely range {low}–{high}",
+      "correct": "{correct} of {total} correct",
+      "route": {
+        "harder": "Module 2 was the harder one.",
+        "easier": "Module 2 was the easier one, which limits the highest possible score."
+      }
+    }
+  },
+  "history": {
+    "title": "Practice history",
+    "empty": "You haven’t practised yet.",
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "questions": "Questions",
+      "score": "Score",
+      "status": "Status"
+    },
+    "kinds": {
+      "DRILL": "Drill",
+      "MOCK": "Practice test",
+      "SECTION": "Section test",
+      "MODULE": "Module test",
+      "DAILY": "Daily question",
+      "REVIEW": "Review"
+    },
+    "statuses": {
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "ABANDONED": "Abandoned"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "telegram": "Telegram",
+    "notConnected": "Not connected",
+    "preferences": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "goal": "Goal",
+    "saved": "Settings saved",
+    "data": "Your data",
+    "exportTitle": "Download your data",
+    "exportBody": "A CSV file with every answer you have submitted.",
+    "exportButton": "Download CSV",
+    "deleteTitle": "Delete account",
+    "deleteBody": "This permanently deletes your account and all practice history. It cannot be undone.",
+    "deleteButton": "Delete my account",
+    "deleteConfirmTitle": "Delete your account?",
+    "deleteConfirmBody": "Type DELETE to confirm. All your data will be removed permanently.",
+    "deleteConfirmWord": "DELETE",
+    "deleteConfirmButton": "Delete permanently",
+    "notifications": {
+      "title": "Notifications",
+      "kind": "Message",
+      "channels": {
+        "email": "Email",
+        "telegram": "Telegram"
+      },
+      "kinds": {
+        "study": {
+          "label": "Study reminders",
+          "help": "In the evening if you haven't practised that day."
+        },
+        "streak": {
+          "label": "Streak reminders",
+          "help": "When your practice streak is about to end."
+        },
+        "newTests": {
+          "label": "New practice tests",
+          "help": "When our teachers publish a new full test."
+        },
+        "renewals": {
+          "label": "Plan renewals",
+          "help": "3 days and 1 day before premium ends."
+        }
+      },
+      "telegramHint": "Telegram messages need a sign-in with Telegram.",
+      "error": "Could not save. Please try again."
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for doesn’t exist or has moved.",
+    "goHome": "Go to the home page",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please try again. If the problem continues, contact us."
+  },
+  "taxonomy": {
+    "sections": {
+      "RW": "Reading and Writing",
+      "MATH": "Math"
+    },
+    "sectionsShort": {
+      "RW": "R&W",
+      "MATH": "Math"
+    },
+    "domains": {
+      "INFORMATION_AND_IDEAS": "Information and Ideas",
+      "CRAFT_AND_STRUCTURE": "Craft and Structure",
+      "EXPRESSION_OF_IDEAS": "Expression of Ideas",
+      "STANDARD_ENGLISH_CONVENTIONS": "Standard English Conventions",
+      "ALGEBRA": "Algebra",
+      "ADVANCED_MATH": "Advanced Math",
+      "PROBLEM_SOLVING_AND_DATA_ANALYSIS": "Problem-Solving and Data Analysis",
+      "GEOMETRY_AND_TRIGONOMETRY": "Geometry and Trigonometry"
+    },
+    "skills": {
+      "CENTRAL_IDEAS_AND_DETAILS": "Central Ideas and Details",
+      "COMMAND_OF_EVIDENCE_TEXTUAL": "Command of Evidence (Textual)",
+      "COMMAND_OF_EVIDENCE_QUANTITATIVE": "Command of Evidence (Quantitative)",
+      "INFERENCES": "Inferences",
+      "WORDS_IN_CONTEXT": "Words in Context",
+      "TEXT_STRUCTURE_AND_PURPOSE": "Text Structure and Purpose",
+      "CROSS_TEXT_CONNECTIONS": "Cross-Text Connections",
+      "RHETORICAL_SYNTHESIS": "Rhetorical Synthesis",
+      "TRANSITIONS": "Transitions",
+      "BOUNDARIES": "Boundaries",
+      "FORM_STRUCTURE_AND_SENSE": "Form, Structure, and Sense",
+      "LINEAR_EQUATIONS_ONE_VARIABLE": "Linear equations in one variable",
+      "LINEAR_FUNCTIONS": "Linear functions",
+      "LINEAR_EQUATIONS_TWO_VARIABLES": "Linear equations in two variables",
+      "SYSTEMS_OF_LINEAR_EQUATIONS": "Systems of two linear equations in two variables",
+      "LINEAR_INEQUALITIES": "Linear inequalities in one or two variables",
+      "NONLINEAR_FUNCTIONS": "Nonlinear functions",
+      "NONLINEAR_EQUATIONS_AND_SYSTEMS": "Nonlinear equations in one variable and systems of equations in two variables",
+      "EQUIVALENT_EXPRESSIONS": "Equivalent expressions",
+      "RATIOS_RATES_PROPORTIONS_UNITS": "Ratios, rates, proportional relationships, and units",
+      "PERCENTAGES": "Percentages",
+      "ONE_VARIABLE_DATA": "One-variable data: distributions and measures of center and spread",
+      "TWO_VARIABLE_DATA": "Two-variable data: models and scatterplots",
+      "PROBABILITY": "Probability and conditional probability",
+      "INFERENCE_FROM_SAMPLES": "Inference from sample statistics and margin of error",
+      "EVALUATING_STATISTICAL_CLAIMS": "Evaluating statistical claims: observational studies and experiments",
+      "AREA_AND_VOLUME": "Area and volume",
+      "LINES_ANGLES_TRIANGLES": "Lines, angles, and triangles",
+      "RIGHT_TRIANGLES_AND_TRIGONOMETRY": "Right triangles and trigonometry",
+      "CIRCLES": "Circles"
+    }
+  },
+  "enums": {
+    "difficulty": {
+      "EASY": "Easy",
+      "MEDIUM": "Medium",
+      "HARD": "Hard"
+    },
+    "type": {
+      "MCQ": "Multiple choice",
+      "SPR": "Student-produced response"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "IN_REVIEW": "In review",
+      "PUBLISHED": "Published",
+      "RETIRED": "Retired"
+    },
+    "origin": {
+      "IMPORTED": "Imported",
+      "AI_DRAFTED": "AI draft",
+      "MANUAL": "Manual"
+    },
+    "role": {
+      "STUDENT": "Student",
+      "EDITOR": "Editor",
+      "ADMIN": "Admin"
+    }
+  },
+  "flags": {
+    "MISSING_ANSWER": {
+      "label": "Missing answer",
+      "help": "No correct answer is set."
+    },
+    "UNCERTAIN_TEXT": {
+      "label": "Uncertain text",
+      "help": "Some characters were hard to read. Check text marked like [[?this]] and remove the marker."
+    },
+    "CHOICE_COUNT": {
+      "label": "Not 4 choices",
+      "help": "Multiple-choice questions need exactly four filled choices A–D."
+    },
+    "ANSWER_NOT_IN_CHOICES": {
+      "label": "Answer not a choice",
+      "help": "The correct answer must be one of A, B, C or D."
+    },
+    "INVALID_SPR_ANSWER": {
+      "label": "Invalid answer format",
+      "help": "Student-produced answers must be numbers, decimals or fractions, e.g. 3, -1.5, 7/2."
+    },
+    "MISSING_FIGURE": {
+      "label": "Missing figure?",
+      "help": "The text mentions a figure, graph or table but none is attached."
+    },
+    "DUPLICATE_CODE": {
+      "label": "Code reassigned",
+      "help": "The code in the file was already used, so a new one was given."
+    },
+    "NEAR_DUPLICATE": {
+      "label": "Near-duplicate",
+      "help": "Very similar to another question in the bank."
+    },
+    "TAXONOMY_UNCONFIRMED": {
+      "label": "Confirm domain/skill",
+      "help": "Domain and skill were suggested automatically. Check them and save the question, or use “Confirm domain and skill” in the review queue."
+    },
+    "STUDENT_REPORT": {
+      "label": "Student report",
+      "help": "A student reported a problem with this question."
+    },
+    "DIFFICULTY_MISMATCH": {
+      "label": "Difficulty mismatch",
+      "help": "Student accuracy doesn’t match the difficulty label."
+    },
+    "blocking": "Must be fixed before publishing",
+    "warning": "Warning",
+    "AI_KEY_DISPUTE": {
+      "label": "AI questions the answer",
+      "help": "When explaining this question to a student, the AI tutor thought the answer key might be wrong. Check the answer; approving or saving the question clears this flag."
+    },
+    "AI_UNREVIEWED": {
+      "label": "AI draft — needs reading",
+      "help": "Written by AI. Open it in the editor, check every word, the answer and the explanation, then save. It can't be published before that."
+    },
+    "AI_SOLVER_DISAGREES": {
+      "label": "Solver got another answer",
+      "help": "A second, independent AI pass solved this draft without the key and got a different answer."
+    },
+    "AI_AMBIGUOUS": {
+      "label": "Possibly ambiguous",
+      "help": "The independent solver thought the question is unclear or has more than one correct answer."
+    },
+    "MATH_CHECK_FAILED": {
+      "label": "Math check failed",
+      "help": "The automatic calculation of this draft's answer did not match the key."
+    },
+    "ANSWER_PATTERN": {
+      "label": "Students prefer another answer",
+      "help": "With 30+ answers, one wrong choice is picked more often than the keyed answer. Check the key and the wording; approving clears this flag."
+    }
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "questions": "Questions",
+      "newQuestion": "New question",
+      "review": "Review queue",
+      "import": "Import",
+      "sources": "Sources",
+      "reports": "Reports",
+      "users": "Users",
+      "backToSite": "Back to site",
+      "mocks": "Practice tests",
+      "aiDrafts": "AI drafts",
+      "aiUsage": "AI usage",
+      "orders": "Orders",
+      "promos": "Promo codes",
+      "vocab": "Vocabulary",
+      "analytics": "Analytics"
+    },
+    "overview": {
+      "title": "Overview",
+      "published": "Published questions",
+      "inReview": "Waiting for review",
+      "drafts": "Drafts",
+      "openReports": "Open reports",
+      "students": "Students",
+      "attempts": "Drills completed",
+      "samples": "Sample questions in the bank",
+      "samplesWarning": "Remove sample questions before launch: pnpm samples:remove",
+      "bySection": "Published by section and domain",
+      "disputed": "{count, plural, one {# question} other {# questions}} where the AI tutor questioned the answer key.",
+      "disputedLink": "Check them"
+    },
+    "questions": {
+      "title": "Question bank",
+      "searchPlaceholder": "Search code or text…",
+      "status": "Status",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "source": "Source",
+      "flag": "Flag",
+      "origin": "Origin",
+      "anySource": "Any source",
+      "anyFlag": "Any flag",
+      "noFlags": "No flags",
+      "empty": "No questions found.",
+      "columns": {
+        "code": "Code",
+        "section": "Section",
+        "skill": "Skill",
+        "difficulty": "Difficulty",
+        "type": "Type",
+        "status": "Status",
+        "flags": "Flags",
+        "updated": "Updated"
+      },
+      "new": "New question",
+      "importCta": "Import"
+    },
+    "editor": {
+      "newTitle": "New question",
+      "editTitle": "Edit {code}",
+      "content": "Content",
+      "metadata": "Details",
+      "code": "Code",
+      "suggestCode": "Suggest next code",
+      "codePrefix": "Code prefix",
+      "codeHelp": "Unique. Format: {example}",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "type": "Question type",
+      "passage": "Passage",
+      "passageHelp": "Optional. Markdown; math between $…$ or $$…$$.",
+      "stem": "Question",
+      "stemHelp": "Markdown with LaTeX math, e.g. $\\frac'{1}{2}'x + 3 = 7$. Write a dollar sign as \\$.",
+      "choices": "Answer choices",
+      "choice": "Choice {key}",
+      "correct": "Correct",
+      "markCorrect": "Mark {key} as correct",
+      "correctAnswers": "Accepted answers",
+      "correctAnswersHelp": "One per line. Equivalent forms (1/2, .5, 0.5) are accepted automatically.",
+      "explanation": "Explanation",
+      "rationales": "Why each wrong choice is wrong",
+      "rationale": "Why choice {key} is wrong",
+      "tags": "Tags",
+      "tagsHelp": "Comma-separated.",
+      "source": "Source",
+      "noSource": "No source (written in the editor)",
+      "preview": "Preview",
+      "studentView": "Student view",
+      "insertImage": "Insert image",
+      "uploadingImage": "Uploading image…",
+      "imageAlt": "Figure",
+      "imageTooLarge": "Images must be PNG, JPEG, WebP or GIF and under 5 MB.",
+      "saveDraft": "Save draft",
+      "saveChanges": "Save changes",
+      "submitForReview": "Send to review",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "retire": "Retire",
+      "restoreDraft": "Move to draft",
+      "created": "Question created",
+      "updated": "Question saved",
+      "statusChanged": "Status changed",
+      "versionConflict": "Someone else saved this question. Reload the page to see their changes.",
+      "duplicateCode": "That code is already used. Choose another.",
+      "blockingFlags": "Fix the blocking flags before publishing.",
+      "nearDuplicates": "Similar questions already in the bank:",
+      "status": "Status",
+      "origin": "Origin",
+      "provenance": "Provenance",
+      "provenanceFile": "File: {file}",
+      "provenancePage": "page {page}",
+      "provenanceRow": "row {row}",
+      "provenanceBy": "Uploaded by {name} on {date}",
+      "createdBy": "Created by {name}",
+      "reviewedBy": "Reviewed by {name} on {date}",
+      "stats": "{correct} of {attempts} students answered correctly",
+      "versions": "Version history",
+      "version": "Version {version}",
+      "versionBy": "{name}, {date}",
+      "restoreVersion": "Restore",
+      "noVersions": "No earlier versions.",
+      "reports": "Student reports",
+      "errors": {
+        "INVALID_CODE": "Codes use capital letters, digits, “-”, “_” or “.” (2–40 characters).",
+        "REQUIRED": "Required.",
+        "INVALID_DOMAIN": "Choose a domain for this section.",
+        "INVALID_SKILL": "Choose a skill in this domain."
+      },
+      "viewOriginal": "View original page",
+      "aiConcerns": "The AI tutor questioned this answer key",
+      "aiConcernVersion": "version {version}"
+    },
+    "sources": {
+      "title": "Sources",
+      "subtitle": "Who owns each set of questions, and who confirmed we may publish them.",
+      "new": "New source",
+      "name": "Source name",
+      "namePlaceholder": "e.g. Centre math worksheets 2026",
+      "owner": "Owner",
+      "ownerPlaceholder": "e.g. our centre, or the author’s name",
+      "notes": "Notes",
+      "rightsStatement": "These questions were written by us, or we have written permission to publish them.",
+      "rightsRequired": "You must confirm the rights before uploading.",
+      "confirmedBy": "Confirmed by {name} on {date}",
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "files": "Files",
+      "noFiles": "No files uploaded.",
+      "withdraw": "Unpublish everything from this source",
+      "withdrawFile": "Unpublish questions from this file",
+      "withdrawConfirmTitle": "Unpublish all questions from “{name}”?",
+      "withdrawConfirmBody": "Use this if permission to publish was withdrawn. All its questions will be retired and hidden from students. This is recorded in the audit log.",
+      "withdrawn": "Withdrawn on {date}",
+      "withdrawDone": "{count, plural, one {# question} other {# questions}} unpublished",
+      "empty": "No sources yet. Create one before importing questions.",
+      "created": "Source created"
+    },
+    "import": {
+      "title": "Import questions",
+      "subtitle": "Upload a spreadsheet of questions. Every imported question goes to the review queue as a draft.",
+      "spreadsheetTab": "CSV / Excel",
+      "pdfTab": "PDF",
+      "template": "Download the template",
+      "templateCsv": "CSV template",
+      "templateXlsx": "Excel template",
+      "columnsHelp": "Columns: {columns}. Only stem and correct_answer are required; section, difficulty and code fall back to the values below.",
+      "source": "Source",
+      "newSource": "Create a new source",
+      "existingSource": "Existing source",
+      "chooseSource": "Choose a source",
+      "sourceName": "Source name",
+      "owner": "Owner",
+      "rights": "These questions were written by us, or we have written permission to publish them.",
+      "rightsRequired": "Tick the rights confirmation to continue.",
+      "defaultSection": "Default section",
+      "defaultSectionNone": "Taken from each row",
+      "defaultDifficulty": "Default difficulty",
+      "codePrefix": "Question code prefix",
+      "codePrefixHelp": "Used for rows without a code, e.g. LC-M- gives LC-M-ALG-0001.",
+      "file": "Spreadsheet file",
+      "fileHelp": ".csv or .xlsx, up to 5 MB and 2,000 rows.",
+      "dropHere": "Drop a file here or click to choose",
+      "analyze": "Check file",
+      "analyzing": "Checking…",
+      "previewTitle": "Check the rows before importing",
+      "summary": "{total} rows: {ok} ready, {warnings} with flags, {errors} with errors",
+      "rowOk": "Ready",
+      "rowFlagged": "Flagged",
+      "rowError": "Error",
+      "row": "Row",
+      "confirm": "Import {count, plural, one {# question} other {# questions}} as drafts",
+      "importing": "Importing…",
+      "errorRowsSkipped": "Rows with errors are skipped. Fix them in the file and import again.",
+      "done": "{count, plural, one {# question} other {# questions}} imported. Review them before publishing.",
+      "goToReview": "Open review queue",
+      "batches": "Recent imports",
+      "noBatches": "No imports yet.",
+      "batchStatus": {
+        "PENDING": "Waiting",
+        "PROCESSING": "Processing",
+        "READY": "Imported",
+        "FAILED": "Failed",
+        "FINALIZING": "Building questions"
+      },
+      "errors": {
+        "MISSING_COLUMNS": "The file is missing required columns: {columns}.",
+        "TOO_MANY_ROWS": "The file has too many rows (maximum {max}).",
+        "UNSUPPORTED_FILE": "Upload a .csv or .xlsx file.",
+        "FILE_TOO_LARGE": "The file is larger than 5 MB.",
+        "EMPTY_FILE": "The file has no rows.",
+        "INVALID_PREFIX": "The prefix may contain capital letters, digits, “-”, “_” and “.” only.",
+        "SOURCE_REQUIRED": "Choose a source or enter a new source name and owner.",
+        "SOURCE_WITHDRAWN": "This source was withdrawn. Create a new source."
+      },
+      "rowErrors": {
+        "MISSING_STEM": "Missing question text (stem)",
+        "INVALID_SECTION": "Unknown section",
+        "MISSING_SECTION": "No section in the row and no default section",
+        "INVALID_DOMAIN": "Unknown domain, or it doesn’t belong to the section",
+        "INVALID_SKILL": "Unknown skill, or it doesn’t belong to the domain",
+        "MISSING_TAXONOMY": "Domain and skill are required",
+        "INVALID_DIFFICULTY": "Difficulty must be easy, medium or hard",
+        "INVALID_TYPE": "Type must be MCQ or SPR",
+        "INVALID_IMAGE_URL": "image_url must be an https:// link",
+        "IMAGE_FETCH_FAILED": "Could not download the image"
+      },
+      "rowWarnings": {
+        "CODE_REASSIGNED": "Code already used — a new code was given",
+        "CODE_INVALID": "Code format invalid — a new code was given",
+        "CODE_GENERATED": "Code generated",
+        "DIFFICULTY_DEFAULTED": "Default difficulty used",
+        "TYPE_INFERRED": "Type guessed from the choices"
+      },
+      "columns": {
+        "status": "Status",
+        "code": "Code",
+        "question": "Skill and question",
+        "difficulty": "Difficulty",
+        "details": "Problems and notes"
+      },
+      "pdf": {
+        "intro": "Upload question booklets as PDF — typed or scanned — and an optional answer key. Every page is read into draft questions for you to review.",
+        "aiOn": "AI reading is on: typed and scanned pages are read, math becomes LaTeX and figures are cropped automatically.",
+        "aiOff": "AI reading is off (ANTHROPIC_API_KEY is not set). Only typed PDFs can be read, math stays as plain text and figures must be added by hand. Scanned pages will be listed as needing AI.",
+        "section": "Section",
+        "questionFiles": "Question booklets (PDF)",
+        "questionFilesHelp": "One or more PDFs, up to 100 MB each.",
+        "answerKey": "Answer key (PDF, optional)",
+        "answerKeyHelp": "Answers are matched to questions by their number.",
+        "dropHere": "Drop PDFs here or click to choose",
+        "chooseKey": "Choose answer key",
+        "remove": "Remove {name}",
+        "submit": "Upload and read",
+        "uploading": "Uploading {name}… {percent}%",
+        "starting": "Starting…",
+        "tipsTitle": "What works best",
+        "tips": "Typed PDFs exported from Word or Google Docs work best. Number the questions (1., 2., …), label choices A) to D), and put the answers in a separate key like “1. B”. For scans: 300 DPI, straight pages, one column.",
+        "errors": {
+          "NO_QUESTION_FILE": "Add at least one question booklet.",
+          "NOT_PDF": "Only PDF files can be imported.",
+          "UPLOAD_FAILED": "Uploading {name} failed. Check your connection and try again.",
+          "UPLOAD_INCOMPLETE": "Not all files finished uploading. Try again."
+        }
+      },
+      "progress": {
+        "title": "Reading the PDF",
+        "pages": "{done} of {total} pages read",
+        "failedPages": "{count, plural, one {# page} other {# pages}} could not be read",
+        "preparing": "Checking the files…",
+        "finalizing": "Building questions from the pages…",
+        "keepOpen": "You can leave this page — the import continues in the background."
+      },
+      "result": {
+        "title": "Import finished",
+        "created": "{count, plural, one {# question} other {# questions}} created as drafts",
+        "answersFromKey": "{count, plural, one {# answer} other {# answers}} taken from the answer key",
+        "withoutAnswer": "{count, plural, =0 {Every question has an answer} one {# question has no answer yet} other {# questions have no answer yet}}",
+        "unusedKeyEntries": "{count, plural, one {# answer-key entry} other {# answer-key entries}} did not match any question",
+        "methods": "Read with AI: {ai} pages · from the text layer: {text} pages",
+        "failedTitle": "Pages that could not be read",
+        "failedPage": "{file}, page {page}",
+        "review": "Review side by side",
+        "queue": "Open review queue",
+        "noQuestions": "No questions were found. If the PDF is scanned, set ANTHROPIC_API_KEY so the AI can read it.",
+        "pageErrors": {
+          "NO_TEXT_LAYER": "Scanned page — needs AI reading (ANTHROPIC_API_KEY)",
+          "FILE_MISSING": "The file is missing from storage",
+          "other": "Could not be read: {message}"
+        },
+        "batchErrors": {
+          "NOT_A_PDF": "{file} is not a PDF.",
+          "PDF_ENCRYPTED": "{file} is password-protected. Remove the password and upload again.",
+          "PDF_INVALID": "{file} could not be opened. It may be damaged.",
+          "TOO_MANY_PAGES": "{file} has too many pages (maximum 400). Split it into smaller files.",
+          "NO_FILES": "No files were uploaded.",
+          "UPLOAD_INCOMPLETE": "Not all files finished uploading.",
+          "other": "The import failed: {message}"
+        }
+      }
+    },
+    "review": {
+      "title": "Review queue",
+      "subtitle": "Drafts and questions waiting for review. Only published questions reach students.",
+      "filterFlag": "Flag",
+      "filterBatch": "Import",
+      "allQuestions": "All waiting questions",
+      "clean": "No blocking flags",
+      "bulk": "Bulk actions",
+      "bulkApprove": "Publish selected",
+      "bulkApproveClean": "Publish all clean questions",
+      "bulkSendToReview": "Send to review",
+      "bulkDifficulty": "Set difficulty",
+      "bulkDomainSkill": "Set domain and skill",
+      "bulkRetire": "Retire",
+      "bulkDone": "{updated} updated, {skipped} skipped",
+      "skippedBlocking": "Questions with blocking flags were skipped.",
+      "selectAll": "Select all on this page",
+      "selectRow": "Select {code}",
+      "empty": "Nothing waiting for review.",
+      "bulkConfirmTaxonomy": "Confirm domain and skill"
+    },
+    "reports": {
+      "title": "Student reports",
+      "empty": "No open reports.",
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed",
+      "resolve": "Mark resolved",
+      "dismiss": "Dismiss",
+      "by": "Reported by {name}",
+      "anonymous": "a deleted user",
+      "openQuestion": "Open question"
+    },
+    "users": {
+      "title": "Users",
+      "searchPlaceholder": "Search name or email…",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "joined": "Joined",
+        "attempts": "Drills"
+      },
+      "roleChanged": "Role updated",
+      "cannotChangeOwnRole": "You can’t change your own role."
+    },
+    "importReview": {
+      "title": "Review import",
+      "original": "Original page",
+      "pageOf": "{file} — page {page}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "noImage": "No image for this page.",
+      "questions": "Questions in this import",
+      "previous": "Previous question",
+      "next": "Next question",
+      "position": "Question {current} of {total}",
+      "show": "Show",
+      "all": "All questions",
+      "flagged": "Questions with flags",
+      "drafts": "Not yet published",
+      "backToImport": "Back to import",
+      "zoomIn": "Enlarge page",
+      "zoomOut": "Fit page",
+      "empty": "No questions to review here.",
+      "pick": "Question"
+    },
+    "mocks": {
+      "title": "Practice tests",
+      "subtitle": "Build full adaptive tests from published questions. Each test stores module 1 and both versions of module 2 for every section.",
+      "new": "New practice test",
+      "newHelp": "Questions are chosen automatically to match the real test's topics and difficulty. Published questions: Reading and Writing {rw}, Math {math}. A full test needs 81 Reading and Writing and 66 Math questions.",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Practice Test 1",
+      "sections": "Sections",
+      "create": "Build test",
+      "empty": "No practice tests yet.",
+      "status": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Published",
+        "ARCHIVED": "Archived"
+      },
+      "missing": "{count, plural, one {# question missing} other {# questions missing}}",
+      "missingHelp": "The bank does not have enough published questions to fill this test. Publish more questions, then build a new test. Incomplete tests can't be published.",
+      "attempts": "{count, plural, =0 {not taken yet} one {taken once} other {taken # times}}",
+      "shortfalls": "Where the blueprint couldn't be matched exactly",
+      "shortfallLine": "{module}: {domain}, {difficulty} — wanted {wanted}, filled {substituted} from another difficulty or domain, {missing} missing",
+      "variant": {
+        "standard": "Module 1",
+        "harder": "Harder module 2",
+        "easier": "Easier module 2"
+      },
+      "moduleN": "Module {n}",
+      "questionCount": "{count, plural, one {# question} other {# questions}}",
+      "publish": "Publish",
+      "archive": "Archive",
+      "delete": "Delete draft",
+      "errors": {
+        "create": "The test could not be built.",
+        "MOCK_INCOMPLETE": "This test is missing questions and can't be published.",
+        "IN_USE": "Only drafts nobody has taken can be deleted. Archive it instead.",
+        "other": "Something went wrong. Please try again."
+      }
+    },
+    "aiDrafts": {
+      "title": "AI-drafted questions",
+      "subtitle": "Ask the AI to write new, original practice questions for one skill. Every draft is checked by a second AI pass that solves it without the key (and, for Math, by a calculator), then waits in the review queue until a person has read and saved it.",
+      "new": "New drafts",
+      "rules": "Drafts are written from the skill description and, if you choose, in the style of our own published questions. The AI is told never to copy or imitate College Board, Khan Academy or other companies' questions. Drafts have no figures.",
+      "disabled": "AI drafting is off because ANTHROPIC_API_KEY is not set.",
+      "section": "Section",
+      "domain": "Domain",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "count": "How many (up to {max})",
+      "codePrefix": "Question code prefix",
+      "useStyle": "Match the style of our own published questions for this skill (up to three are shown to the AI as examples)",
+      "submit": "Draft questions",
+      "started": "Drafting started. This takes a minute or two.",
+      "empty": "No drafts requested yet.",
+      "countShort": "{count, plural, one {# question} other {# questions}}",
+      "status": {
+        "QUEUED": "Waiting",
+        "RUNNING": "Drafting…",
+        "DONE": "Done",
+        "FAILED": "Failed"
+      },
+      "skipped": "{count, plural, one {# draft was} other {# drafts were}} unusable and skipped.",
+      "openQueue": "Open AI drafts in the review queue",
+      "errors": {
+        "AI_UNAVAILABLE": "AI drafting is off because ANTHROPIC_API_KEY is not set.",
+        "RATE_LIMITED": "Too many requests. Try again later.",
+        "other": "Drafting could not be started."
+      }
+    },
+    "aiUsage": {
+      "title": "AI usage and cost",
+      "subtitle": "Estimated cost of every AI call in the last {days} days, from the prices in src/config/ai-pricing.ts.",
+      "disabled": "ANTHROPIC_API_KEY is not set, so no AI features are running.",
+      "today": "Today",
+      "period": "Last {days} days",
+      "calls": "AI calls (last {days} days)",
+      "perDay": "Cost per day",
+      "byFeature": "By feature",
+      "topUsers": "Top users by cost",
+      "feature": "Feature",
+      "callsShort": "Calls",
+      "tokens": "Tokens",
+      "cost": "Cost",
+      "user": "User",
+      "note": "Costs are estimates; your Anthropic console shows the exact bill. Cached tutor answers cost nothing and are not counted.",
+      "features": {
+        "tutor": "Tutor explanations",
+        "tutor_chat": "Tutor follow-ups",
+        "pdf_extract": "PDF reading",
+        "ai_draft": "Question drafting",
+        "ai_solve": "Draft checking"
+      }
+    },
+    "orders": {
+      "title": "Orders and subscriptions",
+      "subtitle": "All payments. Enabled payment providers: {providers}.",
+      "activeSubscribers": "Students with premium now",
+      "revenue30": "Paid in the last 30 days ({count, plural, one {# order} other {# orders}})",
+      "search": "Order number or email",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "empty": "No orders found.",
+      "referral": "friend discount",
+      "refundRequested": "refund requested",
+      "refund": "Refund",
+      "refundTitle": "Refund this order?",
+      "refundBody": "The money is returned through the payment provider and premium from this order stops right away.",
+      "refundPayme": "Payme refunds are made in the Payme business cabinet. After you cancel the payment there, Payme tells us and the order becomes Refunded automatically.",
+      "refunded": "Refunded.",
+      "refundPending": "Refund requested. The provider will confirm it.",
+      "refundManual": "Make the refund in the provider's cabinet. The order updates when the provider confirms, or mark it refunded here.",
+      "refundFailed": "The refund could not be made.",
+      "markRefunded": "Mark refunded",
+      "cancel": "Cancel",
+      "grantTitle": "Give free premium days",
+      "email": "Student's email",
+      "days": "Days",
+      "note": "Reason",
+      "grant": "Give premium",
+      "granted": "Premium added.",
+      "userNotFound": "No account with this email.",
+      "grantFailed": "Could not add premium."
+    },
+    "promos": {
+      "title": "Promo codes",
+      "subtitle": "Discount codes students enter at checkout. The referral discount for invited friends is set in src/config/plans.ts.",
+      "new": "New promo code",
+      "empty": "No promo codes yet.",
+      "code": "Code",
+      "discount": "Discount",
+      "kinds": {
+        "percent": "Percent",
+        "amount": "Fixed amount"
+      },
+      "percent": "Percent off",
+      "maxRedemptions": "Uses allowed",
+      "validUntil": "Valid until",
+      "plans": "Plans",
+      "plansHelp": "Leave all unticked for every plan.",
+      "allPlans": "All plans",
+      "note": "Note (staff only)",
+      "used": "Used",
+      "inactive": "inactive",
+      "create": "Create",
+      "created": "Promo code created.",
+      "codeTaken": "This code already exists.",
+      "invalid": "Check the code and the discount.",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "vocab": {
+      "title": "Vocabulary",
+      "subtitle": "Words for the flashcards. Write your own example sentences — never copy them from books or tests.",
+      "new": "New word",
+      "edit": "Edit “{word}”",
+      "hidden": "hidden",
+      "learners": "{count, plural, =0 {not studied yet} one {# student} other {# students}}",
+      "saved": "Saved.",
+      "duplicate": "This word already exists.",
+      "invalid": "Fill in the word, part of speech, definition and example.",
+      "word": "Word",
+      "partOfSpeech": "Part of speech",
+      "definition": "Definition (English)",
+      "example": "Example sentence",
+      "exampleHelp": "One sentence that shows the meaning from context.",
+      "uz": "Uzbek translation",
+      "ru": "Russian translation",
+      "save": "Save",
+      "hide": "Hide",
+      "show": "Show"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "How students use the site and how the questions perform. Last 30 days unless noted.",
+      "students": "Students",
+      "newThisWeek": "{count} new this week",
+      "active": "Active: today / 7 days / 30 days",
+      "activeNote": "Students who started any practice",
+      "premium": "Premium now",
+      "conversion": "{pct} of students",
+      "mocks": "Practice tests completed",
+      "avgEstimate": "Average estimate {score}",
+      "answeredPerDay": "Questions answered per day",
+      "signups": "New students per week",
+      "weakSkills": "Hardest skills for students (accuracy · answers)",
+      "noData": "Not enough answers yet.",
+      "calibration": "Question calibration",
+      "calibrationHelp": "Questions with at least 30 answers whose difficulty label doesn't match how students do, or where one wrong choice beats the key. Flags are updated every night.",
+      "calibrationNone": "{checked, plural, =0 {No question has enough answers yet.} one {# question checked — all fine.} other {# questions checked — all fine.}}",
+      "code": "Code",
+      "label": "Label",
+      "accuracy": "Correct (answers)",
+      "finding": "Finding",
+      "status": {
+        "tooEasy": "Easier than labelled (suggest {suggested})",
+        "tooHard": "Harder than labelled (suggest {suggested})"
+      },
+      "suspect": "Choice {choice} is picked more than the key — check the question"
+    }
+  },
+  "mocks": {
+    "title": "Practice tests",
+    "subtitle": "Full adaptive tests like the real exam: Reading and Writing ({rw} min), a {breakMin}-minute break, then Math ({math} min). Module 2 of each section is easier or harder depending on how you do in module 1.",
+    "inProgress": "Tests in progress",
+    "resume": "Resume",
+    "generateTitle": "Generate a new test",
+    "generateHelp": "We build a test from our published questions, following the real test's mix of topics and difficulty, and choose questions you haven't seen yet.",
+    "generateWhat": "What to include",
+    "bothSections": "Full test",
+    "generate": "Generate and start",
+    "generatedTitle": "My practice test",
+    "published": "Practice tests from our teachers",
+    "none": "No practice tests have been published yet.",
+    "startFull": "Start full test",
+    "startSection": "Start {section}",
+    "moreOptions": "More ways to take this test",
+    "oneSection": "One section only",
+    "oneModule": "One module only (no score)",
+    "moduleOf": "{section}: module 1",
+    "lastTaken": "Taken {date}",
+    "estimatedTotal": "estimated {score}",
+    "estimatedSection": "estimated section score {score}",
+    "rawScore": "{correct}/{total} correct",
+    "history": "Your past tests",
+    "estimateNote": "All scores are estimates, not official College Board scores.",
+    "errors": {
+      "NOT_ENOUGH_QUESTIONS": "There aren't enough published questions to build a full test yet. Try one section, or check back soon.",
+      "RATE_LIMITED": "You've started many tests recently. Please try again later.",
+      "other": "The test could not be started. Please try again."
+    }
+  },
+  "tutor": {
+    "title": "AI tutor",
+    "modes": {
+      "hint": "Give me a hint",
+      "explain": "Explain step by step",
+      "whyWrong": "Why is my answer wrong?",
+      "another": "Another way to solve it",
+      "simpler": "Explain more simply"
+    },
+    "thinking": "Thinking…",
+    "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
+    "followUp": "Ask a follow-up question",
+    "followUpPlaceholder": "Ask about this question…",
+    "send": "Send",
+    "disclaimer": "AI answers can contain mistakes. The answer key comes from our teachers.",
+    "remaining": "{count, plural, =0 {No new AI answers left today.} one {# new AI answer left today.} other {# new AI answers left today.}}",
+    "errors": {
+      "quota": "You've used today's AI answers. Answers other students already asked for still work, and you get new ones tomorrow.",
+      "rateLimited": "Too many requests at once. Wait a minute and try again.",
+      "chatLimit": "That's the limit of follow-up questions for this question.",
+      "unavailable": "The AI tutor is not available right now.",
+      "other": "The AI tutor couldn't answer. Please try again."
+    }
+  },
+  "billing": {
+    "plans": {
+      "free": {
+        "name": "Free",
+        "tagline": "Try the site"
+      },
+      "monthly": {
+        "name": "1 month",
+        "tagline": "Everything, for 30 days"
+      },
+      "quarter": {
+        "name": "3 months",
+        "tagline": "Everything, for 90 days"
+      },
+      "testday": {
+        "name": "Until test day",
+        "tagline": "Everything, until the day after your SAT"
+      }
+    },
+    "features": {
+      "questions": "{count, plural, one {# practice question} other {# practice questions}} a day",
+      "questionsUnlimited": "Unlimited practice questions",
+      "tests": "{count, plural, one {# practice test} other {# practice tests}}",
+      "testsUnlimited": "Unlimited full practice tests",
+      "ai": "{count} AI tutor answers a day",
+      "tools": "Exam-like test screen, calculator, highlighter",
+      "progress": "Progress tracking and estimated scores"
+    },
+    "receipt": {
+      "title": "Receipt",
+      "number": "Order",
+      "plan": "Plan",
+      "amount": "Amount paid",
+      "list": "Price",
+      "discount": "Discount",
+      "paidAt": "Paid on",
+      "validUntil": "Premium until",
+      "provider": "Paid with",
+      "status": "Status",
+      "customer": "Customer",
+      "seller": "Seller",
+      "print": "Print",
+      "note": "Prices include all taxes. This receipt was issued by {legalName}."
+    },
+    "telegram": {
+      "paid": "✅ Payment received. Thank you for choosing {name}!",
+      "renew": "⏰ Your premium ends in {days, plural, one {# day} other {# days}} ({date}). Renew to keep practising without limits:"
+    },
+    "providers": {
+      "mock": "Test payment (no real money)",
+      "payme": "Payme (Uzcard, Humo)",
+      "click": "Click (Uzcard, Humo)",
+      "octo": "International card (Visa, Mastercard)",
+      "free": "Promo code"
+    },
+    "status": {
+      "CREATED": "Created",
+      "PENDING": "Waiting for payment",
+      "PAID": "Paid",
+      "FAILED": "Failed",
+      "CANCELED": "Cancelled",
+      "REFUNDED": "Refunded"
+    },
+    "state": {
+      "none": "Free plan",
+      "active": "Premium",
+      "expiring": "Premium — ending soon",
+      "grace": "Premium — ended, renew within a few days",
+      "expired": "Premium ended"
+    },
+    "pricing": {
+      "title": "Plans and prices",
+      "subtitle": "Start free. Upgrade when you want unlimited practice, full practice tests and more help from the AI tutor. No automatic charges: you pay for a period and renew when you choose.",
+      "currency": "Currency",
+      "uzsHint": "Uzcard and Humo through Payme or Click",
+      "usdHint": "International Visa and Mastercard",
+      "choose": "Choose {plan}",
+      "startFree": "Start free",
+      "current": "Your plan",
+      "popular": "Most popular",
+      "perDay": "≈ {amount} a day",
+      "testdayNote": "Set your test date in your settings first.",
+      "noProviders": "Online payment is not available yet. Please contact us to pay.",
+      "faq": "Payments are made on the payment provider's secure page. We never see or store your card number. Unused time is not refunded automatically; see the refund policy.",
+      "refundPolicy": "Refund policy"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "plan": "Plan",
+      "currency": "Currency",
+      "provider": "Pay with",
+      "promo": "Promo code",
+      "apply": "Apply",
+      "promoApplied": "Promo code applied",
+      "referralApplied": "Friend discount: {percent}% off your first purchase",
+      "list": "Price",
+      "discount": "Discount",
+      "total": "Total",
+      "period": "Premium until about {date}",
+      "pay": "Pay {amount}",
+      "getFree": "Activate for free",
+      "secure": "You'll be taken to the provider's secure payment page. We never see your card number.",
+      "redirecting": "Taking you to the payment page…",
+      "errors": {
+        "PROMO_INVALID": "This promo code doesn't exist.",
+        "PROMO_EXPIRED": "This promo code has expired.",
+        "PROMO_NOT_FOR_PLAN": "This promo code isn't valid for this plan.",
+        "PROMO_USED_UP": "This promo code has been used up.",
+        "TEST_DATE_REQUIRED": "Add your SAT test date in Settings to choose this plan.",
+        "TEST_DATE_PASSED": "Your test date has passed. Update it in Settings.",
+        "TEST_DATE_TOO_FAR": "Your test date is more than a year away. Choose a monthly plan instead.",
+        "PROVIDER_UNAVAILABLE": "This payment method isn't available for this currency.",
+        "RATE_LIMITED": "Too many attempts. Please wait a few minutes.",
+        "other": "The payment could not be started. Please try again."
+      },
+      "openSettings": "Open settings"
+    },
+    "return": {
+      "title": "Payment",
+      "waiting": "Waiting for the payment provider to confirm your payment…",
+      "slow": "This is taking longer than usual. You can close this page: your plan is activated as soon as the provider confirms.",
+      "paid": "Payment received. Premium is active — enjoy!",
+      "failed": "The payment did not go through. No money was taken.",
+      "canceled": "The payment was cancelled.",
+      "toDashboard": "Go to dashboard",
+      "tryAgain": "Try again"
+    },
+    "page": {
+      "title": "Plan and payments",
+      "endsAt": "Premium until {date}",
+      "endedAt": "Ended on {date}",
+      "renew": "Renew {plan}",
+      "upgrade": "See plans",
+      "freeUsage": "Today you can start {questions} more practice questions. Practice tests left: {tests}.",
+      "orders": "Payments",
+      "noOrders": "No payments yet.",
+      "receipt": "Receipt",
+      "referralTitle": "Invite a friend",
+      "referralBody": "Your friend gets {percent}% off their first purchase, and you get {days} free premium days when they pay.",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "referred": "{count, plural, =0 {No friends have joined yet.} one {# friend joined with your link.} other {# friends joined with your link.}}"
+    },
+    "limits": {
+      "daily": "You've used today's free practice questions ({left} left). Upgrade for unlimited practice, or come back tomorrow.",
+      "tests": "The free plan includes one practice test. Upgrade to take more.",
+      "upgrade": "See plans"
+    },
+    "mock": {
+      "title": "Test payment page",
+      "notice": "This page stands in for a real payment provider while the site is being tested. No money is charged.",
+      "order": "Order {number}",
+      "pay": "Pay (test)",
+      "decline": "Decline"
+    }
+  },
+  "review": {
+    "title": "Mistake notebook",
+    "subtitle": "Questions you got wrong or marked come back on a spaced schedule until you get them right several times in a row.",
+    "dueTitle": "{count, plural, =0 {Nothing to review today} one {# question to review} other {# questions to review}}",
+    "dueHelp": "{total, plural, =0 {Your notebook is empty.} one {# question in your notebook.} other {# questions in your notebook.}}",
+    "start": "Start review",
+    "bookmarksTitle": "{count, plural, =0 {No bookmarks} one {# bookmark} other {# bookmarks}}",
+    "bookmarksHelp": "Questions you saved to look at again.",
+    "practiceBookmarks": "Practise bookmarks",
+    "notebook": "In your notebook",
+    "empty": "No questions yet. Wrong answers in drills and tests are added automatically.",
+    "reasons": {
+      "WRONG": "answered wrong",
+      "FLAGGED": "marked for review",
+      "BOOKMARK": "bookmarked"
+    },
+    "dueNow": "due now",
+    "dueOn": "next on {date}",
+    "remove": "Remove from notebook",
+    "notes": "Bookmarks and notes",
+    "bookmarked": "Bookmarked",
+    "bookmark": "Bookmark",
+    "myNote": "My note",
+    "noteSaved": "Saved",
+    "noteUnsaved": "Not saved yet — click outside the box to save"
+  },
+  "vocab": {
+    "title": "Vocabulary",
+    "subtitle": "Words in context, on a spaced schedule. Due now: {due} · learning: {learning} · new: {unseen}",
+    "doneSession": "Session done! Come back tomorrow for the next cards.",
+    "nothingDue": "No cards are due right now.",
+    "back": "Back to dashboard",
+    "error": "Could not save. Please try again.",
+    "progress": "Card {current} of {total}",
+    "card": "Flashcard",
+    "new": "new",
+    "show": "Show meaning",
+    "howWell": "How well did you know it?",
+    "grades": {
+      "again": "Again",
+      "hard": "Hard",
+      "good": "Good",
+      "easy": "Easy"
+    }
+  },
+  "coach": {
+    "title": "Study plan",
+    "subtitle": "Your plan for this week: about {minutes} minutes a day.",
+    "subtitleDays": "{days, plural, one {# day} other {# days}} to your test. About {minutes} minutes a day this week.",
+    "focus": "Focus this week",
+    "noTestDate": "Add your test date to get a plan that counts down to it.",
+    "setTestDate": "Set test date",
+    "howItWorks": "The plan is built from your test date, your accuracy by skill and your mistake notebook. It updates after every practice test.",
+    "refresh": "Update plan",
+    "tooOften": "The plan was updated recently. Try again later.",
+    "error": "The plan could not be updated.",
+    "nothing": "Nothing planned.",
+    "tasks": {
+      "drill": "{count} questions: {skill}",
+      "review": "Review {count} questions from your notebook",
+      "mock": "Full practice test",
+      "vocab": "Vocabulary cards",
+      "rest": "Rest day"
+    },
+    "minutes": "{count} min",
+    "today": "Today's plan",
+    "seeWeek": "See the week",
+    "quick": "Quick practice",
+    "dailyQuestion": "Question of the day",
+    "reviewDue": "{count, plural, =0 {Mistake notebook} one {# question to review} other {# questions to review}}",
+    "vocabDue": "{count, plural, =0 {Vocabulary cards} one {# word card} other {# word cards}}"
+  },
+  "notifications": {
+    "footer": "{name}. Change which messages you get: {settings}",
+    "streak": {
+      "subject": "Keep your {count}-day streak going",
+      "body": "You've practised {count} days in a row. A few questions today keeps the streak alive.",
+      "cta": "Practise now"
+    },
+    "study": {
+      "subject": "A few minutes of SAT practice?",
+      "body": "You haven't practised today. Your study plan has today's tasks ready.",
+      "cta": "Open today's plan"
+    },
+    "newTest": {
+      "subject": "New practice test: {title}",
+      "body": "A new full practice test is available: {title}.",
+      "cta": "See practice tests"
+    },
+    "renewal": {
+      "subject": "{name}: your premium ends in {days, plural, one {# day} other {# days}}",
+      "body": "Your premium access ends on {date} ({days, plural, one {in # day} other {in # days}}). Renew to keep unlimited practice, practice tests and the AI tutor.",
+      "cta": "Renew"
+    }
+  },
+  "demo": {
+    "title": "Demo site",
+    "body": "Try it without signing up. Each student visit gets a fresh account; the admin account is shared, so others may see your changes. Data can be reset at any time.",
+    "student": "Try as a student",
+    "admin": "Try as admin",
+    "banner": "Demo site — test payments only, data may be reset."
+  }
+}

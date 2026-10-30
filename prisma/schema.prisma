@@ -1,0 +1,989 @@
+// Database schema. After editing run: pnpm db:migrate
+// Docs: https://www.prisma.io/docs/orm/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Users & auth ───────────────────────────────────────────────────────────
+
+enum Role {
+  STUDENT
+  EDITOR // enters, imports and reviews questions
+  ADMIN // everything, including users, settings and payments
+}
+
+enum ThemePreference {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+model User {
+  id               String          @id @default(cuid())
+  name             String?
+  email            String?         @unique
+  emailVerified    DateTime?
+  image            String?
+  role             Role            @default(STUDENT)
+  /// null = the user has not picked a language yet (browser language is used)
+  locale           String?
+  theme            ThemePreference @default(SYSTEM)
+  timeZone         String          @default("Asia/Tashkent")
+  telegramId       String?         @unique
+  telegramUsername String?
+
+  // Onboarding / goals
+  testDate     DateTime? @db.Date
+  targetScore  Int?
+  currentScore Int?
+  onboardedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts          Account[]
+  sessions          Session[]
+  attempts          Attempt[]
+  questionReports   QuestionReport[]  @relation("ReportAuthor")
+  resolvedReports   QuestionReport[]  @relation("ReportResolver")
+  createdQuestions  Question[]        @relation("QuestionCreatedBy")
+  reviewedQuestions Question[]        @relation("QuestionReviewedBy")
+  importedQuestions Question[]        @relation("QuestionImportedBy")
+  questionVersions  QuestionVersion[]
+  sourcesConfirmed  Source[]
+  sourceFiles       SourceFile[]
+  questionAssets    QuestionAsset[]
+  importBatches     ImportBatch[]     @relation("ImportCreatedBy")
+  importsConfirmed  ImportBatch[]     @relation("ImportRightsConfirmedBy")
+  auditLogs         AuditLog[]
+  aiUsages          AiUsage[]
+  aiConversations   AiConversation[]
+  aiDraftBatches    AiDraftBatch[]
+  orders            Order[]
+  subscriptions     Subscription[]
+  reminders         BillingReminder[]
+  reviewItems       ReviewItem[]
+  questionNotes     QuestionNote[]
+  vocabProgress     VocabProgress[]
+  officialScores    OfficialScore[]
+  studyPlans        StudyPlan[]
+  notifications     NotificationLog[]
+
+  /// { email: { study, streak, newTests, renewals }, telegram: { ... } } — missing keys use defaults (src/config/notifications.ts)
+  notificationPrefs Json @default("{}")
+
+  /// Shared with friends: they get a discount, this user gets bonus days.
+  referralCode String? @unique
+  referredById String?
+  referredBy   User?   @relation("Referrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals    User[]  @relation("Referrals")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// ─── Content sources & files ────────────────────────────────────────────────
+
+/// Who owns a set of questions and who confirmed we may publish them.
+model Source {
+  id                  String    @id @default(cuid())
+  name                String
+  owner               String
+  notes               String?
+  /// Exact wording of the rights confirmation the user ticked.
+  rightsStatement     String
+  rightsConfirmedById String
+  rightsConfirmedAt   DateTime
+  /// Set when permission is withdrawn; all its questions are unpublished.
+  withdrawnAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rightsConfirmedBy User          @relation(fields: [rightsConfirmedById], references: [id])
+  files             SourceFile[]
+  questions         Question[]
+  importBatches     ImportBatch[]
+}
+
+enum SourceFileKind {
+  QUESTIONS_PDF
+  ANSWER_KEY_PDF
+  SPREADSHEET
+}
+
+/// An original uploaded file. Stored privately; never publicly downloadable.
+model SourceFile {
+  id           String         @id @default(cuid())
+  sourceId     String
+  kind         SourceFileKind
+  storageKey   String         @unique
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  pageCount    Int?
+  uploadedById String
+  uploadedAt   DateTime       @default(now())
+
+  /// PDF imports: the batch this file was uploaded for (a batch can have several files).
+  importBatchId String?
+  /// false until the browser has finished uploading the file to storage.
+  uploaded      Boolean @default(true)
+
+  source        Source        @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  uploadedBy    User          @relation(fields: [uploadedById], references: [id])
+  questions     Question[]
+  importBatches ImportBatch[]
+  batch         ImportBatch?  @relation("BatchFiles", fields: [importBatchId], references: [id], onDelete: Cascade)
+  pages         ImportPage[]
+
+  @@index([sourceId])
+  @@index([importBatchId])
+}
+
+enum ImportKind {
+  SPREADSHEET
+  PDF
+}
+
+enum ImportStatus {
+  PENDING // spreadsheet: waiting for confirmation; PDF: waiting for uploads
+  PROCESSING // PDF: pages being read
+  FINALIZING // PDF: building questions from the pages
+  READY // questions are in the review queue
+  FAILED
+}
+
+model ImportBatch {
+  id                  String       @id @default(cuid())
+  kind                ImportKind
+  status              ImportStatus @default(PENDING)
+  sourceId            String
+  fileId              String?
+  section             Section?
+  defaultDifficulty   Difficulty?
+  codePrefix          String?
+  totalItems          Int          @default(0)
+  processedItems      Int          @default(0)
+  /// Per-row / per-page messages produced while parsing.
+  log                 Json?
+  error               String?
+  /// Every upload repeats the rights confirmation; who ticked it and when.
+  rightsConfirmedById String
+  rightsConfirmedAt   DateTime
+  createdById         String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  source            Source       @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  file              SourceFile?  @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  files             SourceFile[] @relation("BatchFiles")
+  pages             ImportPage[]
+  createdBy         User         @relation("ImportCreatedBy", fields: [createdById], references: [id])
+  rightsConfirmedBy User         @relation("ImportRightsConfirmedBy", fields: [rightsConfirmedById], references: [id])
+  questions         Question[]
+
+  @@index([sourceId])
+}
+
+enum ImportPageRole {
+  QUESTIONS
+  ANSWER_KEY
+}
+
+enum ImportPageStatus {
+  PENDING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+/// One page of an imported PDF: its rendered image and what was extracted from it.
+model ImportPage {
+  id          String           @id @default(cuid())
+  batchId     String
+  fileId      String
+  role        ImportPageRole
+  /// 1-based page number in the file
+  pageNumber  Int
+  status      ImportPageStatus @default(PENDING)
+  /// "ai" (Claude read the page image) or "text" (text layer parsed without AI)
+  method      String?
+  /// Text layer from the PDF; empty for scanned pages.
+  textLayer   String?
+  imageKey    String?
+  imageWidth  Int?
+  imageHeight Int?
+  /// Structured result (questions, answer key entries, figures) — see src/lib/import/pdf-schema.ts
+  result      Json?
+  error       String?
+  attempts    Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  batch ImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  file  SourceFile  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@unique([fileId, pageNumber])
+  @@index([batchId, status])
+}
+
+// ─── Questions ──────────────────────────────────────────────────────────────
+
+enum Section {
+  RW
+  MATH
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestionType {
+  MCQ
+  SPR // student-produced response
+}
+
+enum QuestionStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  RETIRED
+}
+
+enum QuestionOrigin {
+  IMPORTED
+  AI_DRAFTED
+  MANUAL
+}
+
+model Question {
+  id                    String         @id @default(cuid())
+  /// The centre's own code, e.g. LC-M-ALG-0001. Unique.
+  code                  String         @unique
+  section               Section
+  /// Domain key from src/lib/taxonomy.ts, e.g. "ALGEBRA"
+  domain                String
+  /// Skill key from src/lib/taxonomy.ts, e.g. "LINEAR_EQUATIONS_ONE_VAR"
+  skill                 String
+  difficulty            Difficulty
+  /// Numeric difficulty, calibrated from student results later (0..1, higher = harder).
+  difficultyRating      Float?
+  type                  QuestionType
+  /// Markdown (+ LaTeX). Questions stay in English like the real SAT.
+  passage               String?
+  stem                  String
+  /// MCQ only: [{ "key": "A", "text": "..." }, ...] (exactly four)
+  choices               Json?
+  /// MCQ: ["B"]. SPR: every accepted form, e.g. ["1/2", ".5", "0.5"].
+  correctAnswers        String[]
+  explanation           String?
+  /// { "A": "why A is wrong", ... }
+  wrongChoiceRationales Json?
+  tags                  String[]
+  status                QuestionStatus @default(DRAFT)
+  origin                QuestionOrigin
+  /// Automatic review flags, e.g. MISSING_ANSWER (see src/lib/questions/flags.ts)
+  flags                 String[]
+  /// Normalized text for near-duplicate detection.
+  fingerprint           String         @default("")
+  /// Development sample — removed by `pnpm samples:remove` before launch.
+  isSample              Boolean        @default(false)
+
+  // Provenance
+  sourceId      String?
+  sourceFileId  String?
+  sourcePage    Int?
+  importBatchId String?
+  /// Row number (spreadsheet) or question number (PDF) in the original file.
+  sourceRef     String?
+  importedById  String?
+  importedAt    DateTime?
+
+  version      Int       @default(1)
+  createdById  String?
+  reviewedById String?
+  reviewedAt   DateTime?
+  publishedAt  DateTime?
+  reportCount  Int       @default(0)
+
+  // Running stats for calibration
+  attemptCount Int @default(0)
+  correctCount Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  source      Source?      @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  sourceFile  SourceFile?  @relation(fields: [sourceFileId], references: [id], onDelete: SetNull)
+  importBatch ImportBatch? @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  importedBy  User?        @relation("QuestionImportedBy", fields: [importedById], references: [id], onDelete: SetNull)
+  createdBy   User?        @relation("QuestionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy  User?        @relation("QuestionReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  assets         QuestionAsset[]
+  versions       QuestionVersion[]
+  reports        QuestionReport[]
+  responses      Response[]
+  aiExplanations AiExplanation[]
+  reviewItems    ReviewItem[]
+  notes          QuestionNote[]
+
+  @@index([status, section, domain, skill, difficulty])
+  @@index([sourceId])
+  @@index([importBatchId])
+  @@index([isSample])
+}
+
+/// Image attached to a question (figure, graph, table). Referenced from Markdown as ![alt](asset:<id>).
+model QuestionAsset {
+  id           String   @id @default(cuid())
+  questionId   String?
+  storageKey   String   @unique
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  alt          String?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  uploadedBy User?     @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([questionId])
+}
+
+/// Full snapshot after every save.
+model QuestionVersion {
+  id         String   @id @default(cuid())
+  questionId String
+  version    Int
+  snapshot   Json
+  changeNote String?
+  editedById String?
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  editedBy User?    @relation(fields: [editedById], references: [id], onDelete: SetNull)
+
+  @@unique([questionId, version])
+}
+
+enum ReportReason {
+  WRONG_ANSWER
+  TYPO
+  UNCLEAR
+  FIGURE
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+model QuestionReport {
+  id           String       @id @default(cuid())
+  questionId   String
+  userId       String?
+  reason       ReportReason
+  message      String?
+  status       ReportStatus @default(OPEN)
+  resolvedById String?
+  resolvedAt   DateTime?
+  resolution   String?
+  createdAt    DateTime     @default(now())
+
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User?    @relation("ReportAuthor", fields: [userId], references: [id], onDelete: SetNull)
+  resolvedBy User?    @relation("ReportResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@unique([questionId, userId])
+  @@index([status])
+}
+
+// ─── Practice & tests ───────────────────────────────────────────────────────
+
+enum AttemptKind {
+  DRILL
+  MOCK
+  SECTION
+  MODULE
+  DAILY
+  REVIEW
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum FeedbackMode {
+  IMMEDIATE // check each answer as you go (drills)
+  END // see results when the module ends (tests)
+}
+
+model Attempt {
+  id            String        @id @default(cuid())
+  userId        String
+  kind          AttemptKind
+  status        AttemptStatus @default(IN_PROGRESS)
+  /// Snapshot of the options used to build it (filters, counts, timing).
+  config        Json
+  feedbackMode  FeedbackMode  @default(END)
+  timed         Boolean       @default(false)
+  currentModule Int           @default(0)
+  startedAt     DateTime      @default(now())
+  completedAt   DateTime?
+  correctCount  Int?
+  totalCount    Int?
+  /// Full and section tests: the test the questions come from.
+  mockTestId    String?
+  /// Estimated scores (see src/lib/mock/scoring.ts), set when the attempt completes.
+  scores        Json?
+  /// Break between sections ends at this time (null when not on a break).
+  breakEndsAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mockTest    MockTest?       @relation(fields: [mockTestId], references: [id], onDelete: SetNull)
+  modules     AttemptModule[]
+  annotations Annotation[]
+
+  @@index([userId, createdAt])
+}
+
+model AttemptModule {
+  id           String    @id @default(cuid())
+  attemptId    String
+  /// Order inside the attempt (0-based)
+  index        Int
+  section      Section?
+  /// 1 or 2 for adaptive tests
+  moduleNumber Int?
+  /// Adaptive module-2 path, e.g. "lower" | "upper" (Phase 3)
+  variant      String?
+  timeLimitSec Int?
+  startedAt    DateTime?
+  submittedAt  DateTime?
+
+  attempt   Attempt    @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  responses Response[]
+
+  @@unique([attemptId, index])
+}
+
+/// Highlights and a note on one question's passage, per attempt.
+model Annotation {
+  id         String   @id @default(cuid())
+  attemptId  String
+  questionId String
+  /// [{ start, end, color }] character offsets in the passage's visible text
+  highlights Json     @default("[]")
+  note       String?
+  updatedAt  DateTime @updatedAt
+
+  attempt Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+}
+
+enum MockTestKind {
+  CURATED // built and published by staff
+  GENERATED // built for one student on request
+}
+
+enum MockTestStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// A full practice test: module 1 and both module-2 variants per section, stored so results are reproducible.
+model MockTest {
+  id          String         @id @default(cuid())
+  title       String
+  kind        MockTestKind
+  status      MockTestStatus @default(DRAFT)
+  sections    Section[]
+  seed        Int
+  /// Shortfalls reported by the assembler (cells filled from other difficulties or missing).
+  assemblyLog Json?
+  createdById String?
+  /// GENERATED tests belong to one student.
+  forUserId   String?
+  publishedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  modules  MockModule[]
+  attempts Attempt[]
+
+  @@index([status, kind])
+  @@index([forUserId])
+}
+
+model MockModule {
+  id           String   @id @default(cuid())
+  mockTestId   String
+  section      Section
+  moduleNumber Int
+  /// standard (module 1), easier or harder (module 2)
+  variant      String
+  questionIds  String[]
+
+  mockTest MockTest @relation(fields: [mockTestId], references: [id], onDelete: Cascade)
+
+  @@unique([mockTestId, section, moduleNumber, variant])
+}
+
+model Response {
+  id          String    @id @default(cuid())
+  moduleId    String
+  questionId  String
+  position    Int
+  answer      String?
+  isCorrect   Boolean?
+  flagged     Boolean   @default(false)
+  eliminated  String[]
+  timeSpentMs Int       @default(0)
+  answeredAt  DateTime?
+  /// When the answer was checked (immediate feedback) or graded (module end).
+  gradedAt    DateTime?
+
+  module   AttemptModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  question Question      @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@unique([moduleId, position])
+  @@unique([moduleId, questionId])
+  @@index([questionId])
+}
+
+// ─── Platform ───────────────────────────────────────────────────────────────
+
+/// Fixed-window counters for rate limiting (works across serverless instances).
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+
+  @@index([resetAt])
+}
+
+/// Every AI call: tokens and estimated cost, per user and feature.
+enum AiDraftStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
+}
+
+/// A request by staff for AI-drafted questions. Drafts land in the review queue as DRAFT with AI_UNREVIEWED.
+model AiDraftBatch {
+  id          String        @id @default(cuid())
+  createdById String
+  section     Section
+  domain      String
+  skill       String
+  difficulty  Difficulty
+  count       Int
+  /// Show the model a few of our own published questions for this skill as style examples.
+  useStyle    Boolean       @default(false)
+  codePrefix  String
+  status      AiDraftStatus @default(QUEUED)
+  /// { created: [{id, code, flags}], skipped: [{reason}], ... }
+  log         Json?
+  error       String?
+  createdAt   DateTime      @default(now())
+  finishedAt  DateTime?
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
+
+/// AI tutor answers, cached per question version, language, mode and (for "why is my answer wrong") the chosen choice.
+model AiExplanation {
+  id              String   @id @default(cuid())
+  questionId      String
+  questionVersion Int
+  locale          String
+  mode            String
+  choice          String   @default("")
+  /// AGREE: content is the explanation. DISAGREE: the AI thinks the key is wrong; content is its reason (staff only).
+  verdict         String
+  content         String
+  model           String
+  createdAt       DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, questionVersion, locale, mode, choice])
+}
+
+/// Follow-up chat with the AI tutor about one question in one attempt.
+model AiConversation {
+  id         String   @id @default(cuid())
+  userId     String
+  attemptId  String
+  questionId String
+  locale     String
+  /// [{ role: "user" | "assistant", content }]
+  messages   Json     @default("[]")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, attemptId, questionId])
+}
+
+model AiUsage {
+  id               String   @id @default(cuid())
+  userId           String?
+  feature          String
+  model            String
+  inputTokens      Int
+  outputTokens     Int
+  cacheReadTokens  Int      @default(0)
+  cacheWriteTokens Int      @default(0)
+  /// Estimated cost in millionths of a US dollar (see src/config/ai-pricing.ts)
+  costMicroUsd     Int
+  /// What the call was for, e.g. an import page id
+  refId            String?
+  createdAt        DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([feature, createdAt])
+}
+
+/// Admin actions worth keeping a record of.
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  data      Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// ─── Billing ────────────────────────────────────────────────────────────────
+
+enum OrderStatus {
+  CREATED // made on our side, student not yet at the provider
+  PENDING // provider transaction exists, waiting for payment
+  PAID
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  /// Short public number for receipts and support, e.g. 100245.
+  number            Int         @unique @default(autoincrement())
+  userId            String
+  planId            String
+  provider          String
+  currency          String
+  /// Amounts in minor units (tiyin / cents).
+  listAmount        Int
+  discountAmount    Int         @default(0)
+  amount            Int
+  promoCodeId       String?
+  /// The referral discount was applied (first purchase of a referred student).
+  referral          Boolean     @default(false)
+  status            OrderStatus @default(CREATED)
+  /// Provider's payment id when known (Payme/Click transaction, Octo UUID).
+  providerRef       String?
+  locale            String      @default("en")
+  paidAt            DateTime?
+  canceledAt        DateTime?
+  refundedAt        DateTime?
+  /// Refund asked for in a provider's own cabinet (Payme): waiting for the provider to confirm.
+  refundRequestedAt DateTime?
+  failureReason     String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promoCode    PromoCode?           @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
+  transactions PaymentTransaction[]
+  subscription Subscription?
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
+/// A provider-side transaction (Payme transaction, Click payment, Octo payment). Provider retries are answered from here.
+model PaymentTransaction {
+  id           String    @id @default(cuid())
+  provider     String
+  externalId   String
+  orderId      String
+  amount       Int
+  /// Provider-specific state, e.g. Payme 1 / 2 / -1 / -2.
+  state        Int
+  reason       Int?
+  createdAt    DateTime  @default(now())
+  /// Provider's own creation time (Payme "time").
+  providerTime DateTime?
+  performedAt  DateTime?
+  canceledAt   DateTime?
+  data         Json?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalId])
+  @@index([orderId])
+}
+
+/// Every webhook/notification received, for audit and to ignore repeats.
+model PaymentEvent {
+  id        String   @id @default(cuid())
+  provider  String
+  eventId   String
+  orderId   String?
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@unique([provider, eventId])
+  @@index([orderId])
+}
+
+model Subscription {
+  id         String    @id @default(cuid())
+  userId     String
+  planId     String
+  /// null for bonus days (referrals) and grants by staff.
+  orderId    String?   @unique
+  source     String    @default("ORDER") // ORDER | REFERRAL | GRANT
+  startsAt   DateTime
+  endsAt     DateTime
+  canceledAt DateTime?
+  note       String?
+  createdAt  DateTime  @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, endsAt])
+}
+
+model PromoCode {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  percentOff     Int?
+  /// Fixed discount per currency in whole units, e.g. { "UZS": 50000, "USD": 5 }.
+  amountOff      Json?
+  /// Empty = every paid plan.
+  planIds        String[]
+  maxRedemptions Int?
+  validFrom      DateTime?
+  validUntil     DateTime?
+  active         Boolean   @default(true)
+  note           String?
+  createdById    String?
+  createdAt      DateTime  @default(now())
+
+  orders Order[]
+}
+
+/// Renewal reminders already sent, so each is sent once.
+model BillingReminder {
+  id         String   @id @default(cuid())
+  userId     String
+  /// The end date the reminder is about (ISO day) and how many days before it.
+  endsOn     String
+  daysBefore Int
+  sentAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, endsOn, daysBefore])
+}
+
+// ─── Learning tools ─────────────────────────────────────────────────────────
+
+/// Mistake notebook: a question to see again on an SM-2 schedule.
+model ReviewItem {
+  id             String    @id @default(cuid())
+  userId         String
+  questionId     String
+  /// WRONG | FLAGGED | BOOKMARK
+  reason         String
+  ease           Float     @default(2.5)
+  intervalDays   Int       @default(0)
+  repetitions    Int       @default(0)
+  lapses         Int       @default(0)
+  dueAt          DateTime
+  lastReviewedAt DateTime?
+  /// Set when the student removes it or it is learned (interval over the limit).
+  archivedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, dueAt])
+}
+
+/// A student's bookmark and private note on a question.
+model QuestionNote {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  bookmarked Boolean  @default(false)
+  note       String?
+  updatedAt  DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, bookmarked])
+}
+
+/// Words-in-context flashcards. Sentences are written by our team.
+model VocabWord {
+  id           String   @id @default(cuid())
+  word         String   @unique
+  partOfSpeech String
+  definition   String
+  /// An original example sentence using the word.
+  example      String
+  /// { "uz": "…", "ru": "…" }
+  translations Json     @default("{}")
+  published    Boolean  @default(true)
+  createdById  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  progress VocabProgress[]
+}
+
+model VocabProgress {
+  id             String    @id @default(cuid())
+  userId         String
+  wordId         String
+  ease           Float     @default(2.5)
+  intervalDays   Int       @default(0)
+  repetitions    Int       @default(0)
+  lapses         Int       @default(0)
+  dueAt          DateTime
+  lastReviewedAt DateTime?
+
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word VocabWord @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId])
+  @@index([userId, dueAt])
+}
+
+/// Scores a student got on official practice tests (entered by the student).
+model OfficialScore {
+  id           String   @id @default(cuid())
+  userId       String
+  testName     String
+  takenOn      DateTime @db.Date
+  rw           Int?
+  math         Int?
+  total        Int
+  missedSkills String[]
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, takenOn])
+}
+
+/// The study coach's plan for one week (Monday, site time zone).
+model StudyPlan {
+  id          String   @id @default(cuid())
+  userId      String
+  weekStart   String
+  /// See src/lib/coach/plan.ts (WeeklyPlan)
+  plan        Json
+  /// Optional AI-written note for the student.
+  message     String?
+  reason      String
+  generatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekStart])
+}
+
+/// Notifications already sent (so each is sent once).
+model NotificationLog {
+  id     String   @id @default(cuid())
+  userId String
+  kind   String
+  key    String
+  sentAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, key])
+}

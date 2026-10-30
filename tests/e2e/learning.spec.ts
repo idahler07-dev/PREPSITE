@@ -1,0 +1,35 @@
+import { expect, test } from "@playwright/test";
+import { signIn, uniqueEmail } from "./helpers";
+
+test("plan, mistake notebook, vocabulary and notification settings", async ({ page }) => {
+  await signIn(page, uniqueEmail("learner"));
+  await page.getByRole("button", { name: "Skip for now" }).click();
+
+  // Dashboard: today's plan and the question of the day.
+  await page.goto("/en/dashboard");
+  await expect(page.getByText("Today's plan", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Question of the day" }).click();
+  await expect(page).toHaveURL(/\/en\/test\//);
+  await page.getByRole("radio").first().check({ force: true }).catch(async () => page.getByLabel("Your answer").fill("0"));
+  await page.getByRole("button", { name: "Check answer" }).click();
+  await expect(page.getByRole("status").filter({ hasText: /Correct|Incorrect/ })).toBeVisible();
+
+  await page.goto("/en/plan");
+  await expect(page.getByRole("heading", { name: "Study plan" })).toBeVisible();
+  await expect(page.getByText("Vocabulary cards").first()).toBeVisible();
+
+  await page.goto("/en/review");
+  await expect(page.getByRole("heading", { name: "Mistake notebook" })).toBeVisible();
+
+  await page.goto("/en/vocab");
+  await page.getByRole("button", { name: "Show meaning" }).click();
+  await page.getByRole("button", { name: "Good" }).click();
+  await expect(page.getByText(/Card 2 of/)).toBeVisible();
+
+  await page.goto("/en/settings");
+  const box = page.getByRole("checkbox", { name: "Study reminders — Email" });
+  await expect(box).not.toBeChecked();
+  await box.check();
+  await page.reload();
+  await expect(page.getByRole("checkbox", { name: "Study reminders — Email" })).toBeChecked();
+});

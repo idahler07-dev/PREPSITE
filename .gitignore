@@ -1,0 +1,37 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# builds
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# generated
+/src/generated/
+
+# env
+.env
+.env*.local
+!.env.example
+
+# local data (dev storage, dev mail outbox)
+/.data/
+
+# testing
+/coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests/e2e/.auth/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+pnpm-debug.log*
+.vercel
