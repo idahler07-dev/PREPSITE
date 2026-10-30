@@ -49,7 +49,7 @@ test("admin imports a spreadsheet, reviews, publishes, and the question appears 
   await expect(student.getByText("2 questions match")).toBeVisible();
   await student.getByRole("button", { name: "Start drill" }).click();
   await expect(student).toHaveURL(/\/test\//);
-  await expect(student.getByText(/E2E-UNIQUE-STEM-(ONE|TWO)/)).toBeVisible();
+  await expect(student.getByText(/E2E-UNIQUE-STEM-(ONE|TWO)/).filter({ visible: true })).toBeVisible();
   await student.close();
 });
 

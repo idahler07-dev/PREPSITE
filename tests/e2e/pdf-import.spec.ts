@@ -26,8 +26,15 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
 
   await page.goto("/manage/import");
   const panel = page.getByRole("tabpanel");
-  const newSource = panel.getByText("Create a new source");
-  if (await newSource.isVisible()) await newSource.click();
+  await expect(panel.getByRole("button", { name: "Upload and read" })).toBeVisible();
+  // Once other tests have added a source, choose "new"; retried until the page has hydrated.
+  const newSource = panel.getByRole("radio", { name: "Create a new source" });
+  if (await newSource.isVisible()) {
+    await expect(async () => {
+      await newSource.check({ timeout: 2_000 });
+      await expect(newSource).toBeChecked({ timeout: 1_000 });
+    }).toPass();
+  }
   await panel.getByLabel("Source name").fill("E2E booklet");
   await panel.getByLabel("Owner").fill("Our centre");
   await panel.getByText("These questions were written by us").click();
@@ -57,6 +64,6 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
   await student.getByLabel("To code").fill("E2E-P-ALG-0001");
   await expect(student.getByText("1 question matches")).toBeVisible();
   await student.getByRole("button", { name: "Start drill" }).click();
-  await expect(student.getByText(/PDF-E2E-STEM/)).toBeVisible();
+  await expect(student.getByText(/PDF-E2E-STEM/).filter({ visible: true })).toBeVisible();
   await student.close();
 });

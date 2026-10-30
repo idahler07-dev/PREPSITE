@@ -10,7 +10,8 @@ export const e2eEnv = {
   NEXT_PUBLIC_SITE_URL: BASE_URL,
   AUTH_URL: BASE_URL,
   AUTH_SECRET: "e2e-secret-e2e-secret-e2e-secret-e2e",
-  OWNER_EMAILS: "owner@e2e.test",
+  // Two owners: the suite signs an owner in more often than the 5 emails per hour one address may get.
+  OWNER_EMAILS: "owner@e2e.test, owner2@e2e.test",
   EMAIL_TRANSPORT: "outbox",
   ALLOW_DEV_OUTBOX: "true",
   STORAGE_DRIVER: "local",

@@ -89,7 +89,7 @@ test("a normal user gets 404 from every manage page and API, and sees no Manage 
 });
 
 test("the owner sees Manage and can open it", async ({ page }) => {
-  await signIn(page, "owner@e2e.test");
+  await signIn(page, "owner2@e2e.test");
   if (page.url().includes("onboarding"))
     await page.getByRole("button", { name: "Skip for now" }).click();
   await page.goto("/dashboard");
