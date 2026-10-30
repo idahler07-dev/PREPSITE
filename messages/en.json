@@ -96,34 +96,88 @@
     "system": "System"
   },
   "home": {
-    "eyebrow": "Digital SAT preparation",
-    "title": "Practice for the SAT with questions written by real teachers",
-    "subtitle": "Timed drills, an exam-like test screen and clear progress tracking. Built by {name} for students in Uzbekistan and Central Asia.",
-    "ctaPrimary": "Start practising",
-    "ctaSecondary": "See official free resources",
-    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
-    "featuresTitle": "What you get",
-    "features": {
-      "bank": {
-        "title": "Our own question bank",
-        "body": "Every question is written by our teachers or used with permission, and checked by a person before it reaches you."
-      },
-      "test": {
-        "title": "Exam-like practice",
-        "body": "A timer, question navigator, flag for review and answer eliminator — the tools you will use on test day."
-      },
-      "drills": {
-        "title": "Focused drills",
-        "body": "Practise one skill at a time, choose the difficulty, and check each answer as you go or at the end."
-      },
-      "progress": {
-        "title": "Honest progress",
-        "body": "Accuracy by domain and skill, time per question and your streak — only real numbers from your own practice."
+    "eyebrow": "Digital SAT prep, made calm",
+    "title": "Your SAT score, <grad>planned and proven.</grad>",
+    "subtitle": "Teacher-written questions, an exam-like test screen and progress you can trust. Practise a little every day and watch your estimate climb.",
+    "ctaPrimary": "Start free practice",
+    "ctaSecondary": "See how it works",
+    "noCard": "Free to start. No card needed.",
+    "tryIt": "Try a real question",
+    "question": {
+      "label": "Sample question",
+      "check": "Check answer",
+      "correct": "Correct!",
+      "incorrect": "Not quite. The answer is {key}.",
+      "explanation": "Why",
+      "more": "Practise 10 more",
+      "again": "Try again",
+      "choice": "Choice {key}",
+      "pick": "Pick an answer, then check it."
+    },
+    "stats": {
+      "title": "Real numbers, <i>straight</i> from our database",
+      "questions": "{count, plural, one {# question} other {# questions}} written and checked by teachers",
+      "students": "{count, plural, one {# student} other {# students}} practising",
+      "answers": "{count, plural, one {# answer} other {# answers}} checked so far"
+    },
+    "how": {
+      "title": "How it <i>works</i>",
+      "subtitle": "Three steps, repeated a little every day.",
+      "steps": {
+        "goal": {
+          "title": "Set your goal",
+          "body": "Tell us your target score and test date. You get a weekly plan that fits the days you have."
+        },
+        "practice": {
+          "title": "Practise in focus",
+          "body": "Short drills and full adaptive tests on an exam-like screen, with explanations when you need them."
+        },
+        "progress": {
+          "title": "Watch it add up",
+          "body": "Accuracy by skill, an estimated score with a range and a notebook of mistakes to revisit."
+        }
       }
+    },
+    "features": {
+      "title": "Everything you need, <i>nothing</i> you don't",
+      "subtitle": "Built for focus: the tools of test day, plus the feedback you can't get from a paper book.",
+      "test": {
+        "title": "An exam-like test screen",
+        "body": "Timer, navigator, flag for review, answer eliminator, highlighter and calculator, the tools you'll use on test day."
+      },
+      "ai": {
+        "title": "Explanations that answer back",
+        "body": "Ask why your answer was wrong, get a hint, or see another way to solve it. Every explanation is checked against the answer key."
+      },
+      "analytics": {
+        "title": "Progress you can trust",
+        "body": "Accuracy by domain and skill, time per question and an estimated score with a range, only from your own practice."
+      },
+      "mocks": {
+        "title": "Full adaptive practice tests",
+        "body": "Two modules per section, the second one adapting to how you did, with breaks and a score estimate at the end."
+      },
+      "aiSample": {
+        "student": "Why isn't it B?",
+        "tutor": "B doubles the flour, but the ratio is 3 : 2. For 8 cups of milk you need 8 × 3⁄2 = 12 cups."
+      }
+    },
+    "pricing": {
+      "title": "Simple <i>pricing</i>",
+      "subtitle": "Start free. Upgrade when you're ready for unlimited practice.",
+      "cta": "Compare plans",
+      "recommended": "Recommended"
+    },
+    "faqTitle": "Questions, <i>answered</i>",
+    "final": {
+      "title": "Your next point starts <hl>today</hl>.",
+      "body": "Ten questions a day is enough to see the difference in two weeks.",
+      "cta": "Start free practice"
     },
     "officialTitle": "Use the official free materials too",
     "officialBody": "The College Board and Khan Academy publish free official practice. We link to them instead of copying them.",
-    "officialCta": "Official resources"
+    "officialCta": "Official resources",
+    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far"
   },
   "about": {
     "title": "About us",
@@ -145,8 +199,8 @@
         "a": "No. It is an estimate based on your practice. Only the College Board can give you an official score."
       },
       "language": {
-        "q": "Why are the questions in English?",
-        "a": "The real SAT is in English, so our questions are too. Menus, explanations and study plans can be shown in your language."
+        "q": "Is everything in English?",
+        "a": "Yes. The real SAT is in English, and so is Satify: questions, explanations, study plans and messages."
       },
       "device": {
         "q": "Can I practise on my phone?",
@@ -1528,7 +1582,7 @@
       "expired": "Premium ended"
     },
     "pricing": {
-      "title": "Plans and prices",
+      "title": "Simple <i>pricing</i>",
       "subtitle": "Start free. Upgrade when you want unlimited practice, full practice tests and more help from the AI tutor. No automatic charges: you pay for a period and renew when you choose.",
       "currency": "Currency",
       "uzsHint": "Uzcard and Humo through Payme or Click",
@@ -1541,7 +1595,26 @@
       "testdayNote": "Set your test date in your settings first.",
       "noProviders": "Online payment is not available yet. Please contact us to pay.",
       "faq": "Payments are made on the payment provider's secure page. We never see or store your card number. Unused time is not refunded automatically; see the refund policy.",
-      "refundPolicy": "Refund policy"
+      "refundPolicy": "Refund policy",
+      "titlePlain": "Plans and prices",
+      "recommended": "Recommended",
+      "freeTitle": "Not ready to pay? Start free.",
+      "freeBody": "{questions} practice questions a day, {tests, plural, one {# practice test} other {# practice tests}} and {ai} AI tutor answers a day. No card needed.",
+      "compare": {
+        "title": "Compare plans",
+        "feature": "Feature",
+        "free": "Free",
+        "questions": "Practice questions",
+        "tests": "Full practice tests",
+        "ai": "AI tutor answers a day",
+        "tools": "Exam-like test screen and tools",
+        "progress": "Progress tracking and score estimates",
+        "review": "Mistake notebook and study plan",
+        "unlimited": "Unlimited",
+        "included": "Included",
+        "perDayCount": "{count} a day",
+        "total": "{count} in total"
+      }
     },
     "checkout": {
       "title": "Checkout",

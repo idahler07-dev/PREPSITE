@@ -55,6 +55,12 @@ export const siteConfig = {
    */
   legalPagesAreDrafts: true,
 
+  /**
+   * Real numbers on the landing page. Each figure is shown only once it is at
+   * least this big; below that the whole section is hidden (never invented).
+   */
+  publicStats: { minQuestions: 300, minStudents: 100, minAnswers: 5000 },
+
   /** Time zone used for streaks, daily questions and reminders. */
   defaultTimeZone: "Asia/Tashkent",
 
