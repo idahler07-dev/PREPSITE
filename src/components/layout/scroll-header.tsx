@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 /**
  * Sticky marketing bar: as you scroll, a blurred surface and border fade in
@@ -15,10 +15,10 @@ export function ScrollHeader({ children }: { children: ReactNode }) {
   const scale = useTransform(scrollY, [0, 48], [1, reduce ? 1 : 0.97]);
   return (
     <header className="sticky top-0 z-40 h-16">
-      <motion.div aria-hidden className="glass absolute inset-0 border-b" style={{ opacity: backdrop, y }} />
-      <motion.div className="relative h-full" style={{ y, scale }}>
+      <m.div aria-hidden className="glass absolute inset-0 border-b" style={{ opacity: backdrop, y }} />
+      <m.div className="relative h-full" style={{ y, scale }}>
         {children}
-      </motion.div>
+      </m.div>
     </header>
   );
 }

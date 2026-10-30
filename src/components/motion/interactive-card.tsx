@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ComponentProps, type PointerEvent } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { m, useMotionValue, useSpring } from "motion/react";
 import { spring, useLiteMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +38,7 @@ export function SpotlightCard({ className, tilt = false, children, ...props }: C
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
@@ -47,10 +47,10 @@ export function SpotlightCard({ className, tilt = false, children, ...props }: C
         "spotlight rounded-lg border bg-surface shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-primary/30 hover:shadow-lg",
         className,
       )}
-      {...(props as ComponentProps<typeof motion.div>)}
+      {...(props as ComponentProps<typeof m.div>)}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -62,7 +62,7 @@ export function Magnetic({ children, className }: { children: React.ReactNode; c
   const sx = useSpring(x, spring.snappy);
   const sy = useSpring(y, spring.snappy);
   return (
-    <motion.div
+    <m.div
       className={cn("inline-flex", className)}
       style={lite ? undefined : { x: sx, y: sy }}
       onPointerMove={(e) => {
@@ -79,6 +79,6 @@ export function Magnetic({ children, className }: { children: React.ReactNode; c
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

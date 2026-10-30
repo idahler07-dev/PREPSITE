@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import {
   BarChart3,
   BookOpen,
@@ -107,11 +107,11 @@ export function AppShell({
           active ? "text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
         )}
       >
-        {active && <motion.span layoutId="sidebar-active" className="absolute inset-0 rounded-[var(--radius-input)] bg-primary-soft" transition={transition} aria-hidden />}
+        {active && <m.span layoutId="sidebar-active" className="absolute inset-0 rounded-[var(--radius-input)] bg-primary-soft" transition={transition} aria-hidden />}
         <Icon className="relative size-[18px] shrink-0" aria-hidden />
-        <motion.span className="relative truncate" animate={{ opacity: collapsed ? 0 : 1 }} transition={transition}>
+        <m.span className="relative truncate" animate={{ opacity: collapsed ? 0 : 1 }} transition={transition}>
           {i.label}
-        </motion.span>
+        </m.span>
       </Link>
     );
     return collapsed ? (
@@ -127,7 +127,7 @@ export function AppShell({
   return (
     <div className="flex min-h-dvh flex-col">
       <div className="flex flex-1">
-        <motion.aside
+        <m.aside
           layout
           transition={transition}
           className={cn(
@@ -154,15 +154,15 @@ export function AppShell({
             {collapsed ? <PanelLeftOpen className="size-[18px]" aria-hidden /> : <PanelLeftClose className="size-[18px]" aria-hidden />}
             {!collapsed && <span>{t("collapse")}</span>}
           </button>
-        </motion.aside>
+        </m.aside>
 
-        <motion.div layout transition={transition} className="flex min-w-0 flex-1 flex-col">
+        <m.div layout transition={transition} className="flex min-w-0 flex-1 flex-col">
           {banner}
           {topBar}
           <main id="main" className="flex flex-1 flex-col pb-20 lg:pb-0">
             {children}
           </main>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Phones: bottom tab bar. */}
@@ -181,7 +181,7 @@ export function AppShell({
                   aria-current={active ? "page" : undefined}
                   className={cn("relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium", active ? "text-primary" : "text-muted-foreground")}
                 >
-                  {active && <motion.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
+                  {active && <m.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
                   <Icon className="relative size-5" aria-hidden />
                   <span className="relative">{i.label}</span>
                 </Link>
@@ -195,7 +195,7 @@ export function AppShell({
               className={cn("relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[11px] font-medium", moreActive ? "text-primary" : "text-muted-foreground")}
               aria-haspopup="dialog"
             >
-              {moreActive && <motion.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
+              {moreActive && <m.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
               <MoreHorizontal className="relative size-5" aria-hidden />
               <span className="relative">{t("more")}</span>
             </button>

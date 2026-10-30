@@ -14,6 +14,8 @@ export const geistMono = Geist_Mono({
   weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-geist-mono",
+  // Not needed for the first paint; keeps the critical path to one family.
+  preload: false,
 });
 
 /** Emphasis words in marketing headlines only (italic). */
@@ -23,4 +25,5 @@ export const instrumentSerif = Instrument_Serif({
   style: "italic",
   display: "swap",
   variable: "--font-instrument-serif",
+  preload: false,
 });

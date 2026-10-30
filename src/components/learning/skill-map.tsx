@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -24,11 +24,11 @@ export function SkillMap({ tiles, onPick, columns = "grid-cols-3 sm:grid-cols-4 
   return (
     <ul className={cn("grid gap-2", columns, className)}>
       {tiles.map((t, i) => {
-        const m = t.mastery;
-        const pct = m == null ? 0 : Math.round(12 + m * 88);
+        const mastery = t.mastery;
+        const pct = mastery == null ? 0 : Math.round(12 + mastery * 88);
         // White text only on the deep tiles, where it stays AA.
-        const dark = m != null && m >= 0.75;
-        const style = { backgroundColor: m == null ? "var(--surface-2)" : `color-mix(in oklab, var(--primary) ${pct}%, var(--primary-soft))` };
+        const dark = mastery != null && mastery >= 0.75;
+        const style = { backgroundColor: mastery == null ? "var(--surface-2)" : `color-mix(in oklab, var(--primary) ${pct}%, var(--primary-soft))` };
         const body = (
           <>
             <span className="line-clamp-2 text-[0.8125rem] leading-tight font-medium">{t.label}</span>
@@ -40,7 +40,7 @@ export function SkillMap({ tiles, onPick, columns = "grid-cols-3 sm:grid-cols-4 
           dark ? "text-primary-foreground" : "text-foreground",
         );
         return (
-          <motion.li
+          <m.li
             key={t.key}
             layoutId={onPick ? `skill-${t.key}` : undefined}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
@@ -57,7 +57,7 @@ export function SkillMap({ tiles, onPick, columns = "grid-cols-3 sm:grid-cols-4 
                 {body}
               </div>
             )}
-          </motion.li>
+          </m.li>
         );
       })}
     </ul>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { X } from "lucide-react";
 import { DrawCheck, RadialFill, shake } from "./answer-effects";
 import { RichText } from "@/components/content/rich-text";
@@ -43,7 +43,7 @@ export function ChoiceList({
         const wrongPick = correctAnswers && selected && !isCorrect;
         return (
           <div key={c.key} className="flex items-stretch gap-2">
-            <motion.label
+            <m.label
               onPointerDown={(e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 setOrigin((o) => ({ ...o, [c.key]: { x: e.clientX - r.left, y: e.clientY - r.top } }));
@@ -88,7 +88,7 @@ export function ChoiceList({
                 </span>
               )}
               {wrongPick && <X className="relative mt-1 size-5 shrink-0 text-danger-ink" aria-label={t("incorrect")} />}
-            </motion.label>
+            </m.label>
             {eliminatorOn && !disabled && (
               <button
                 type="button"

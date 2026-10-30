@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 
 /**
@@ -14,7 +14,7 @@ export function RadialFill({ origin }: { origin: { x: number; y: number } | null
   const x = origin?.x ?? 24;
   const y = origin?.y ?? 24;
   return (
-    <motion.span
+    <m.span
       aria-hidden
       className="pointer-events-none absolute -z-0 size-[260%] rounded-full bg-primary-soft"
       style={{ left: x, top: y, translateX: "-50%", translateY: "-50%" }}
@@ -32,7 +32,7 @@ export function DrawCheck({ className = "size-5" }: { className?: string }) {
   return (
     <span className="relative inline-flex">
       {!reduce && (
-        <motion.span
+        <m.span
           aria-hidden
           className="absolute inset-[-6px] rounded-full bg-correct/40 blur-md"
           initial={{ opacity: 0, scale: 0.6 }}
@@ -41,7 +41,7 @@ export function DrawCheck({ className = "size-5" }: { className?: string }) {
         />
       )}
       <svg viewBox="0 0 24 24" className={className} aria-hidden>
-        <motion.path
+        <m.path
           d="M5 12.5l4.5 4.5L19 7.5"
           fill="none"
           strokeWidth={3}

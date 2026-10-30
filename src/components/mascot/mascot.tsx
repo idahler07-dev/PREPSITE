@@ -1,8 +1,4 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -265,32 +261,23 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
 
 /**
  * <Mascot pose="wave" /> — decorative by default (aria-hidden); pass `label`
- * when Otto carries meaning. Idle blink and arm wiggle; pose changes
- * cross-fade; reduced motion turns the idle loops off.
+ * when Otto carries meaning. Plain SVG (no client JavaScript): idle blink and
+ * arm wiggle, a short fade when the pose changes and a hover reaction are
+ * CSS animations, all off with reduced motion.
  */
 export function Mascot({ pose, className, label, hoverReact = false }: { pose: MascotPose; className?: string; label?: string; hoverReact?: boolean }) {
-  const reduce = useReducedMotion();
   return (
-    <motion.svg
+    <svg
       viewBox="0 0 200 200"
-      className={cn("otto h-auto w-32 overflow-visible", className)}
+      className={cn("otto h-auto w-32 overflow-visible", hoverReact && "otto-react", className)}
       role={label ? "img" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
-      whileHover={hoverReact && !reduce ? { scale: 1.04, rotate: -3 } : undefined}
-      transition={spring.bouncy}
     >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.g
-          key={pose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0.1 : 0.18 }}
-        >
-          <Pose pose={pose} />
-        </motion.g>
-      </AnimatePresence>
-    </motion.svg>
+      {/* Keyed by pose: a new pose remounts and fades in. */}
+      <g key={pose} className="otto-pose">
+        <Pose pose={pose} />
+      </g>
+    </svg>
   );
 }

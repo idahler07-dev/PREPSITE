@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { Link } from "@/i18n/navigation";
 import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ export function CurrencySwitch({ value, options, label }: { value: string; optio
             aria-current={active ? "true" : undefined}
             className={cn("relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors", active ? "text-foreground" : "text-muted-foreground hover:text-foreground")}
           >
-            {active && <motion.span layoutId="currency-pill" className="absolute inset-0 rounded-full bg-surface shadow-sm dark:border" transition={spring.snappy} aria-hidden />}
+            {active && <m.span layoutId="currency-pill" className="absolute inset-0 rounded-full bg-surface shadow-sm dark:border" transition={spring.snappy} aria-hidden />}
             <span className="relative">{o.label}</span>
           </Link>
         );

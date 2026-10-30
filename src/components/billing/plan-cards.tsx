@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { Check } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ export function PlanCards({ plans, compact = false }: { plans: PlanCardData[]; c
     <Reveal className="grid items-stretch gap-4 md:grid-cols-3">
       {plans.map((p) => (
         <RevealItem key={p.id} className="flex">
-          <motion.article
+          <m.article
             layoutId={`plan-card-${p.id}`}
             transition={spring.soft}
             className={cn(
@@ -67,7 +67,7 @@ export function PlanCards({ plans, compact = false }: { plans: PlanCardData[]; c
                 <p className="text-sm text-muted-foreground">{p.disabledNote}</p>
               )}
             </div>
-          </motion.article>
+          </m.article>
         </RevealItem>
       ))}
     </Reveal>
@@ -77,7 +77,7 @@ export function PlanCards({ plans, compact = false }: { plans: PlanCardData[]; c
 /** Checkout summary: same layoutId as the chosen plan card, so the card morphs into it. */
 export function PlanSummary({ id, name, price, children }: { id: string; name: string; price: string; children?: React.ReactNode }) {
   return (
-    <motion.div layoutId={`plan-card-${id}`} transition={spring.soft} className="border-gradient mb-6 rounded-lg p-5 shadow-md">
+    <m.div layoutId={`plan-card-${id}`} transition={spring.soft} className="border-gradient mb-6 rounded-lg p-5 shadow-md">
       <div className="flex items-baseline justify-between gap-4">
         <p className="text-h3 font-semibold">{name}</p>
         <p className="font-mono text-xl font-semibold tabular-nums" data-numeric>
@@ -85,6 +85,6 @@ export function PlanSummary({ id, name, price, children }: { id: string; name: s
         </p>
       </div>
       {children}
-    </motion.div>
+    </m.div>
   );
 }

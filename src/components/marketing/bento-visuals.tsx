@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { Flag } from "lucide-react";
 import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,7 @@ export function TrendVisual() {
           <stop offset="100%" className="[stop-color:var(--primary)]" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <motion.path
+      <m.path
         d={`${line} L${w} ${h + 4} L0 ${h + 4} Z`}
         fill="url(#trend-fill)"
         initial={reduce ? false : { opacity: 0 }}
@@ -84,7 +84,7 @@ export function TrendVisual() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.4 }}
       />
-      <motion.path
+      <m.path
         d={line}
         fill="none"
         strokeWidth="2.5"

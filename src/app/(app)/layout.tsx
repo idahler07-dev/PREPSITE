@@ -6,7 +6,8 @@ import { getCurrentUser, isStaff } from "@/server/auth/session";
 import { AppShell, SIDEBAR_COOKIE, type ShellItem } from "@/components/layout/app-shell";
 import { Logo } from "@/components/layout/logo";
 import { CountdownChip } from "@/components/layout/countdown-chip";
-import { CommandPalette, CommandPaletteButton } from "@/components/layout/command-palette";
+import { CommandPaletteButton } from "@/components/layout/command-palette-button";
+import { CommandPaletteHost } from "@/components/layout/command-palette-host";
 import { ThemeSync, ThemeToggle } from "@/components/layout/theme-toggle";
 import { UserMenu } from "@/components/layout/user-menu";
 import { PageTransition } from "@/components/motion/page-transition";
@@ -80,7 +81,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   return (
     <AppShell items={items} initialCollapsed={collapsed} topBar={topBar} banner={demo}>
       <PageTransition>{children}</PageTransition>
-      <CommandPalette signedIn />
+      <CommandPaletteHost signedIn />
     </AppShell>
   );
 }

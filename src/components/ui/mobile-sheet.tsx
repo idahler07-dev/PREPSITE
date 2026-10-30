@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "motion/react";
+import { AnimatePresence, m, useReducedMotion, type PanInfo } from "motion/react";
 import { fade, spring } from "@/lib/motion";
 
 /**
@@ -20,10 +20,10 @@ export function MobileSheet({ open, onOpenChange, title, children }: { open: boo
         {open && (
           <DialogPrimitive.Portal forceMount>
             <DialogPrimitive.Overlay asChild forceMount>
-              <motion.div className="fixed inset-0 z-50 bg-overlay backdrop-blur-[3px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade} />
+              <m.div className="fixed inset-0 z-50 bg-overlay backdrop-blur-[3px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade} />
             </DialogPrimitive.Overlay>
             <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
-              <motion.div
+              <m.div
                 className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-2xl border-t bg-surface px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-lg outline-none"
                 initial={reduce ? { opacity: 0 } : { y: "100%" }}
                 animate={reduce ? { opacity: 1 } : { y: 0 }}
@@ -37,7 +37,7 @@ export function MobileSheet({ open, onOpenChange, title, children }: { open: boo
                 <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-border" aria-hidden />
                 <DialogPrimitive.Title className="mb-2 px-2 text-small font-semibold text-muted-foreground">{title}</DialogPrimitive.Title>
                 {children}
-              </motion.div>
+              </m.div>
             </DialogPrimitive.Content>
           </DialogPrimitive.Portal>
         )}

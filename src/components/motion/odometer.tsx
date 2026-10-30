@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,7 @@ export function Odometer({ value, className, format }: { value: number; classNam
           // Keyed by position from the right, so changing 980 → 1010 keeps columns aligned.
           return (
             <span key={text.length - i} className="relative inline-block h-[1em] w-[1ch] overflow-hidden">
-              <motion.span
+              <m.span
                 className="absolute inset-x-0 top-0 flex flex-col"
                 initial={reduce ? false : { y: "0em" }}
                 animate={{ y: `${-d}em` }}
@@ -35,7 +35,7 @@ export function Odometer({ value, className, format }: { value: number; classNam
                     {n}
                   </span>
                 ))}
-              </motion.span>
+              </m.span>
             </span>
           );
         })}

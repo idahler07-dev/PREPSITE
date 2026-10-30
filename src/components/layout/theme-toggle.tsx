@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { Monitor, Moon, Sun } from "lucide-react";
 import siteConfig from "@site";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,7 @@ export function ThemeToggle({ signedIn }: { signedIn: boolean }) {
       <DropdownMenuTrigger asChild>
         <Button ref={ref} variant="ghost" size="icon" aria-label={t("label")} className="overflow-hidden">
           <AnimatePresence mode="popLayout" initial={false}>
-            <motion.span
+            <m.span
               key={icon}
               initial={{ rotate: -90, scale: 0.4, opacity: 0 }}
               animate={{ rotate: 0, scale: 1, opacity: 1 }}
@@ -81,7 +81,7 @@ export function ThemeToggle({ signedIn }: { signedIn: boolean }) {
               className="inline-flex"
             >
               <Icon className="size-5" aria-hidden />
-            </motion.span>
+            </m.span>
           </AnimatePresence>
         </Button>
       </DropdownMenuTrigger>

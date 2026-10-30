@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { Tabs as TabsPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { spring } from "@/lib/motion"
@@ -65,7 +65,7 @@ function TabsTrigger({ className, children, value, ...props }: React.ComponentPr
       {...props}
     >
       {active && (
-        <motion.span
+        <m.span
           layoutId={`tab-pill-${ctx.id}`}
           className="absolute inset-0 rounded-full bg-surface shadow-sm dark:border dark:border-border"
           transition={spring.snappy}

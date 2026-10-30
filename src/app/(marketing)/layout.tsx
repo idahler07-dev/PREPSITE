@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CookieNotice } from "@/components/layout/cookie-notice";
 import { DemoBanner } from "@/components/layout/demo-banner";
-import { CommandPalette } from "@/components/layout/command-palette";
+import { CommandPaletteHost } from "@/components/layout/command-palette-host";
 import { PageTransition } from "@/components/motion/page-transition";
 
 export default async function MarketingLayout({ children }: { children: ReactNode }) {
@@ -19,7 +19,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
       </main>
       <SiteFooter />
       <CookieNotice />
-      <CommandPalette signedIn={!!user} />
+      <CommandPaletteHost signedIn={!!user} />
     </div>
   );
 }

@@ -1,8 +1,4 @@
-"use client";
-
-import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { spring } from "@/lib/motion";
+import type { CSSProperties, ReactNode } from "react";
 import { emphasis } from "@/components/motion/emphasis-tags";
 
 type Tag = keyof typeof emphasis;
@@ -25,10 +21,10 @@ function parse(raw: string): Seg[] {
 /**
  * Hero headline: words fade and rise in one by one (40ms stagger) on first
  * load; emphasized words (en.json tags) arrive last, then the underline
- * draws in. Screen readers get the plain sentence once.
+ * draws in. CSS animation (server-rendered, so the headline paints without
+ * waiting for JavaScript). Screen readers get the plain sentence once.
  */
 export function HeroHeadline({ raw, className }: { raw: string; className?: string }) {
-  const reduce = useReducedMotion();
   const segs = parse(raw);
   const plainCount = segs.filter((s) => !s.tag).reduce((n, s) => n + s.text.split(/\s+/).filter(Boolean).length, 0);
   let plainIndex = 0;
@@ -36,15 +32,9 @@ export function HeroHeadline({ raw, className }: { raw: string; className?: stri
   const plain = segs.map((s) => s.text).join("").replace(/\s+/g, " ").trim();
 
   const rise = (key: string, i: number, child: ReactNode) => (
-    <motion.span
-      key={key}
-      className="inline-block"
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20, filter: "blur(4px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.08 + i * 0.04 }}
-    >
+    <span key={key} className="hero-word" style={{ "--i": i } as CSSProperties}>
       {child}
-    </motion.span>
+    </span>
   );
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,7 @@ export function SpringBar({ value, label, className, tone = "primary" }: { value
   const v = Math.max(0, Math.min(100, value));
   return (
     <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(v)} className={cn("h-2 overflow-hidden rounded-full bg-surface-2", className)}>
-      <motion.div
+      <m.div
         className={cn("h-full origin-left rounded-full", tone === "accent" ? "bg-accent" : tone === "correct" ? "bg-correct" : "bg-primary")}
         initial={reduce ? false : { scaleX: 0 }}
         whileInView={{ scaleX: v / 100 }}
@@ -29,7 +29,7 @@ export function SpringRing({ value, label, size = 56, stroke = 6, className }: {
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className={cn("-rotate-90", className)} role="img" aria-label={label}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth={stroke} className="stroke-surface-2" />
-      <motion.circle
+      <m.circle
         cx={size / 2}
         cy={size / 2}
         r={r}

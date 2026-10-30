@@ -8,7 +8,7 @@ import { MobileNav } from "./mobile-nav";
 import { ThemeToggle, ThemeSync } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 import { ScrollHeader } from "./scroll-header";
-import { CommandPaletteButton } from "./command-palette";
+import { CommandPaletteButton } from "./command-palette-button";
 
 /** Marketing pages' top bar: sticky, gains blur and shrinks a little on scroll. */
 export async function SiteHeader() {

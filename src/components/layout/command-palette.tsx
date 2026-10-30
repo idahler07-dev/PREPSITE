@@ -9,14 +9,11 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { useRouter } from "@/i18n/navigation";
 import { DOMAINS } from "@/lib/taxonomy";
 import { useStartDrill } from "@/components/practice/use-start-drill";
-import { cn } from "@/lib/utils";
 
 const KEY_ESC = "Esc";
-const KEY_MAC = "⌘K";
-const KEY_PC = "Ctrl K";
 
 /** Ctrl/Cmd + K: jump to pages, start a drill on any domain, change settings. */
-export function CommandPalette({ signedIn }: { signedIn: boolean }) {
+export function CommandPalette({ signedIn, openOnMount = false }: { signedIn: boolean; openOnMount?: boolean }) {
   const t = useTranslations("command");
   const nav = useTranslations("nav");
   const tx = useTranslations("taxonomy");
@@ -24,7 +21,7 @@ export function CommandPalette({ signedIn }: { signedIn: boolean }) {
   const router = useRouter();
   const { setTheme } = useTheme();
   const { launch } = useStartDrill();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(openOnMount);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -132,24 +129,3 @@ export function CommandPalette({ signedIn }: { signedIn: boolean }) {
   );
 }
 
-/** Opens the palette; shows the shortcut on wide screens. */
-export function CommandPaletteButton({ className }: { className?: string }) {
-  const t = useTranslations("command");
-  const [mac, setMac] = useState(false);
-  useEffect(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
-  return (
-    <button
-      type="button"
-      onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
-      className={cn(
-        "inline-flex h-9 items-center gap-2 rounded-full border bg-surface px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
-        className,
-      )}
-      aria-label={t("open")}
-    >
-      <Search className="size-4" aria-hidden />
-      <span className="hidden lg:inline">{t("placeholderShort")}</span>
-      <kbd className="hidden lg:inline-flex">{mac ? KEY_MAC : KEY_PC}</kbd>
-    </button>
-  );
-}

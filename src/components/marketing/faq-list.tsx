@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, LayoutGroup, m, useReducedMotion } from "motion/react";
 import { Plus } from "lucide-react";
 import { fade, spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -14,11 +14,11 @@ export function FaqList({ items, className }: { items: { q: string; a: string }[
   const t = reduce ? { duration: 0 } : spring.soft;
   return (
     <LayoutGroup>
-      <motion.ul layout transition={t} className={cn("divide-y overflow-hidden rounded-lg border bg-surface shadow-sm", className)}>
+      <m.ul layout transition={t} className={cn("divide-y overflow-hidden rounded-lg border bg-surface shadow-sm", className)}>
         {items.map((item, i) => {
           const isOpen = open === i;
           return (
-            <motion.li key={item.q} layout="position" transition={t}>
+            <m.li key={item.q} layout="position" transition={t}>
               <h3>
                 <button
                   type="button"
@@ -29,14 +29,14 @@ export function FaqList({ items, className }: { items: { q: string; a: string }[
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-start font-semibold transition-colors hover:bg-surface-2/60 focus-visible:bg-surface-2 focus-visible:outline-none"
                 >
                   {item.q}
-                  <motion.span animate={{ rotate: isOpen ? 45 : 0 }} transition={reduce ? { duration: 0 } : spring.snappy} className="shrink-0 text-muted-foreground">
+                  <m.span animate={{ rotate: isOpen ? 45 : 0 }} transition={reduce ? { duration: 0 } : spring.snappy} className="shrink-0 text-muted-foreground">
                     <Plus className="size-5" aria-hidden />
-                  </motion.span>
+                  </m.span>
                 </button>
               </h3>
               <AnimatePresence initial={false}>
                 {isOpen && (
-                  <motion.div
+                  <m.div
                     id={`${id}-a${i}`}
                     role="region"
                     aria-labelledby={`${id}-q${i}`}
@@ -46,13 +46,13 @@ export function FaqList({ items, className }: { items: { q: string; a: string }[
                     transition={reduce ? fade : spring.soft}
                   >
                     <p className="max-w-[70ch] px-5 pb-5 text-muted-foreground">{item.a}</p>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
-            </motion.li>
+            </m.li>
           );
         })}
-      </motion.ul>
+      </m.ul>
     </LayoutGroup>
   );
 }

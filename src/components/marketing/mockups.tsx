@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Calculator, CalendarDays, Check, ChevronLeft, ChevronRight, Flag, Flame, Highlighter, Sparkles, Timer } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Mascot } from "@/components/mascot/mascot";
@@ -24,11 +24,11 @@ export function Floating({ children, className, delay = 0, drift = 0.08 }: { chi
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, (v) => -v * drift);
   return (
-    <motion.div className={cn("absolute z-20", className)} style={lite ? undefined : { y }}>
-      <motion.div animate={reduce ? undefined : { y: [0, -8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}>
+    <m.div className={cn("absolute z-20", className)} style={lite ? undefined : { y }}>
+      <m.div animate={reduce ? undefined : { y: [0, -8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}>
         {children}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -194,7 +194,7 @@ export function TutorMockup() {
           <p className="mb-3 ms-auto w-fit rounded-2xl rounded-br-md bg-primary px-3 py-2 text-small text-primary-foreground">{SAMPLE.ask}</p>
           <ol className="space-y-2">
             {SAMPLE.steps.map((s, i) => (
-              <motion.li
+              <m.li
                 key={s}
                 className="flex gap-3 rounded-[12px] bg-surface-2 p-3 text-small"
                 initial={{ opacity: 0, y: 8 }}
@@ -204,7 +204,7 @@ export function TutorMockup() {
               >
                 <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-soft font-mono text-label font-semibold text-primary">{i + 1}</span>
                 {s}
-              </motion.li>
+              </m.li>
             ))}
           </ol>
         </div>
@@ -276,7 +276,7 @@ export function CountdownMock({ days = 38 }: { days?: number }) {
       </p>
       <p className="mt-2 text-small text-muted-foreground">{t("days", { count: days })}</p>
       <div className="mt-4 h-2 overflow-hidden rounded-full bg-surface-2">
-        <motion.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: 0.62 }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26 }} />
+        <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: 0.62 }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26 }} />
       </div>
     </div>
   );
@@ -320,7 +320,7 @@ export function PacingMock() {
             <span className="font-mono tabular-nums">{t("secs", { count: p.s })}</span>
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-surface-2">
-            <motion.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: p.s / p.max }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26, delay: p.n * 0.1 }} />
+            <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: p.s / p.max }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26, delay: p.n * 0.1 }} />
           </div>
         </li>
       ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 
 /**
@@ -14,7 +14,7 @@ export function Highlight({ children }: { children: ReactNode }) {
     <span className="relative inline-block whitespace-nowrap">
       <strong className="relative z-10 font-bold">{children}</strong>
       <svg aria-hidden viewBox="0 0 200 20" preserveAspectRatio="none" className="absolute inset-x-[-0.04em] -bottom-[0.18em] h-[0.32em] w-[calc(100%+0.08em)] overflow-visible">
-        <motion.path
+        <m.path
           d="M3 13 C 40 6, 90 4, 130 8 S 185 14, 197 7"
           fill="none"
           strokeWidth={7}

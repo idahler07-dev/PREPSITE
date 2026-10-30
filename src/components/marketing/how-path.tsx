@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { CalendarDays, Stethoscope, Zap } from "lucide-react";
 import { spring } from "@/lib/motion";
 
@@ -12,7 +12,7 @@ export function HowPath({ steps }: { steps: { title: string; body: string }[] })
   return (
     <div className="relative">
       <svg aria-hidden className="absolute top-8 left-[16%] hidden h-4 w-[68%] overflow-visible lg:block" viewBox="0 0 100 4" preserveAspectRatio="none">
-        <motion.path
+        <m.path
           d="M0 2 L 100 2"
           fill="none"
           strokeWidth={2.5}
@@ -28,7 +28,7 @@ export function HowPath({ steps }: { steps: { title: string; body: string }[] })
         {steps.map((s, i) => {
           const Icon = ICONS[i] ?? Zap;
           return (
-            <motion.li
+            <m.li
               key={s.title}
               className="flex gap-5 lg:flex-col lg:items-center lg:text-center"
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
@@ -43,7 +43,7 @@ export function HowPath({ steps }: { steps: { title: string; body: string }[] })
                 <h3 className="text-h3 font-semibold">{s.title}</h3>
                 <p className="max-w-[34ch] text-muted-foreground">{s.body}</p>
               </div>
-            </motion.li>
+            </m.li>
           );
         })}
       </ol>

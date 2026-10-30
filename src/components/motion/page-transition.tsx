@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useRef, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { fade, pageVariants } from "@/lib/motion";
@@ -23,7 +23,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div
+      <m.div
         key={pathname}
         variants={reduce ? { initial: { opacity: 0 }, enter: { opacity: 1, transition: fade }, exit: { opacity: 0, transition: fade } } : pageVariants}
         initial="initial"
@@ -32,7 +32,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
         className="flex flex-1 flex-col"
       >
         <FrozenRouter>{children}</FrozenRouter>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }

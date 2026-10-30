@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, m, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, Loader2, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -52,8 +52,8 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
   }
 
   return (
-    <motion.div style={lite ? undefined : { y }} className="relative">
-      <motion.section
+    <m.div style={lite ? undefined : { y }} className="relative">
+      <m.section
         aria-label={t("label")}
         className="rounded-2xl border bg-surface p-5 shadow-lg sm:p-6"
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
@@ -71,7 +71,7 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
             const isCorrect = result && c.key === result.correctKey;
             const isWrong = result && selected && !result.correct;
             return (
-              <motion.button
+              <m.button
                 key={c.key}
                 ref={(el) => {
                   refs.current[c.key] = el;
@@ -100,22 +100,22 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
                 </span>
                 <RichText html={c.html} className="relative flex-1" />
                 {isCorrect && <DrawCheck />}
-              </motion.button>
+              </m.button>
             );
           })}
         </div>
 
-        <motion.div layout transition={spring.soft} className="mt-4">
+        <m.div layout transition={spring.soft} className="mt-4">
           <AnimatePresence mode="popLayout" initial={false}>
             {!result ? (
-              <motion.div key="check" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <m.div key="check" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <Button className="w-full" onClick={check} disabled={!picked || pending}>
                   {pending && <Loader2 className="animate-spin" aria-hidden />}
                   {t("check")}
                 </Button>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div key="result" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={spring.soft} className="space-y-3">
+              <m.div key="result" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={spring.soft} className="space-y-3">
                 <p role="status" className={cn("font-semibold", result.correct ? "text-correct-ink" : "text-danger-ink")}>
                   {result.correct ? t("correct") : t("incorrect", { key: result.correctKey })}
                 </p>
@@ -135,11 +135,11 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
                     <RotateCcw aria-hidden />
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
-        </motion.div>
-      </motion.section>
-    </motion.div>
+        </m.div>
+      </m.section>
+    </m.div>
   );
 }
