@@ -39,16 +39,18 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const items: ShellItem[] = [
     { key: "dashboard", href: "/dashboard", label: t("dashboard"), group: "main" },
     { key: "practice", href: "/practice", label: t("practice"), group: "main" },
-    { key: "mocks", href: "/mocks", label: t("mocks"), group: "main" },
-    { key: "review", href: "/review", label: t("review"), group: "main" },
+    { key: "mocks", href: "/mocks", label: t("mockTests"), group: "main" },
+    { key: "mistakes", href: "/review", label: t("mistakes"), group: "main" },
+    { key: "analytics", href: "/analytics", label: t("analytics"), group: "main" },
     { key: "plan", href: "/plan", label: t("plan"), group: "main" },
-    { key: "vocab", href: "/vocab", label: t("vocab"), group: "main" },
-    { key: "history", href: "/history", label: t("history"), group: "main" },
+    { key: "settings", href: "/settings", label: t("settings"), group: "main" },
+    { key: "vocab", href: "/vocab", label: t("vocab"), group: "more" },
+    { key: "history", href: "/history", label: t("history"), group: "more" },
     { key: "resources", href: "/resources", label: t("resources"), group: "more" },
     { key: "billing", href: "/billing", label: t("billing"), group: "more" },
-    { key: "settings", href: "/settings", label: t("settings"), group: "more" },
     ...(isStaff(user) ? [{ key: "admin", href: "/admin", label: t("admin"), group: "more" } as const] : []),
   ];
+
   const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "collapsed";
   const c = await getTranslations("common");
 

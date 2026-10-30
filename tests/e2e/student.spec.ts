@@ -82,7 +82,7 @@ test("Telegram sign-in: coming back from Telegram's page signs the student in", 
 test("students cannot open the admin area", async ({ page }) => {
   await signIn(page, uniqueEmail("nosy"));
   await page.goto("/admin");
-  await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Otto can't find that page" })).toBeVisible();
   const res = await page.request.get("/api/admin/imports/template");
   expect(res.status()).toBe(403);
 });

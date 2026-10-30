@@ -77,7 +77,10 @@
     "plan": "Plan",
     "review": "Review",
     "vocab": "Vocabulary",
-    "howItWorks": "How it works"
+    "howItWorks": "How it works",
+    "mistakes": "Mistakes",
+    "analytics": "Analytics",
+    "mockTests": "Mock tests"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -384,7 +387,8 @@
     "errors": {
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
-    }
+    },
+    "tip": "Tip from Otto: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -420,7 +424,26 @@
     "noData": "No practice yet. Your results will appear here.",
     "recent": "Recent practice",
     "viewAll": "View all",
-    "officialScores": "Official practice scores"
+    "officialScores": "Official practice scores",
+    "greeting": "Hi, {name}!",
+    "greetingNoName": "Hi there!",
+    "greetingSub": "Here's your plan for today. A little every day adds up.",
+    "skillMap": "Skill map",
+    "skillMapHint": "Tap a skill to start a 10-question drill on it.",
+    "weakest": "Weakest skills",
+    "practiceNow": "Practice now",
+    "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
+    "streakTitle": "Day streak",
+    "streakReminder": "Otto misses you. Ten questions keeps your streak alive.",
+    "daysToTest": "Days to test",
+    "noTestDate": "Set your test date",
+    "estimateEmpty": "Take a practice test to see your estimate.",
+    "takeTest": "Take a practice test",
+    "recentEmpty": "Your finished drills and tests will appear here.",
+    "firstDrill": "Start your first drill",
+    "quick": "Quick practice",
+    "mastery": "{pct}% correct",
+    "range": "Range {low}–{high}"
   },
   "practice": {
     "title": "Practice",
@@ -678,7 +701,8 @@
         "harder": "Module 2 was the harder one.",
         "easier": "Module 2 was the easier one, which limits the highest possible score."
       }
-    }
+    },
+    "reviewMistakes": "Review mistakes"
   },
   "history": {
     "title": "Practice history",
@@ -702,7 +726,8 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed",
       "ABANDONED": "Abandoned"
-    }
+    },
+    "emptyCta": "Start your first drill"
   },
   "settings": {
     "title": "Settings",
@@ -756,11 +781,13 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Page not found",
-    "notFoundBody": "The page you are looking for doesn’t exist or has moved.",
+    "notFoundTitle": "Otto can't find that page",
+    "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Please try again. If the problem continues, contact us."
+    "errorBody": "Otto dropped a few things. Try again, and if it keeps happening, let us know.",
+    "goDashboard": "Go to my dashboard",
+    "tryAgain": "Try again"
   },
   "taxonomy": {
     "sections": {
@@ -1517,7 +1544,7 @@
     }
   },
   "tutor": {
-    "title": "AI tutor",
+    "title": "Ask Otto",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1525,7 +1552,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Thinking…",
+    "thinking": "Otto is thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1741,7 +1768,8 @@
     "bookmark": "Bookmark",
     "myNote": "My note",
     "noteSaved": "Saved",
-    "noteUnsaved": "Not saved yet — click outside the box to save"
+    "noteUnsaved": "Not saved yet — click outside the box to save",
+    "emptyCta": "Start a drill"
   },
   "vocab": {
     "title": "Vocabulary",
@@ -1847,5 +1875,23 @@
     "countdownShort": "{days, plural, =0 {Today} other {#d}}",
     "countdownLabel": "Your SAT is on {date}",
     "closeMenu": "Close menu"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Where you stand in every skill, and how your practice is trending.",
+    "practice": "Start a drill",
+    "skills": "Skill map",
+    "skillsHint": "Shaded by how often you answer correctly. Tap a skill to drill it.",
+    "trend": "Score trend",
+    "trendHint": "Estimated total from your full practice tests.",
+    "trendEmpty": "Finish two practice tests to see a trend.",
+    "byDomain": "Accuracy by domain",
+    "pacing": "Pacing",
+    "pacingHint": "Average time per answered question.",
+    "perQuestion": "{seconds}s per question",
+    "target": "Real SAT: about {seconds}s",
+    "empty": "Answer a few questions and your analytics will appear here.",
+    "emptyCta": "Start your first drill",
+    "answered": "{count, plural, one {# answer} other {# answers}}"
   }
 }

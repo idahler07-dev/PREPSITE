@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { motion, useReducedMotion } from "motion/react";
 import {
+  BarChart3,
   BookOpen,
   CalendarDays,
   ClipboardList,
@@ -41,6 +42,8 @@ const ICONS: Record<string, LucideIcon> = {
   billing: CreditCard,
   settings: Settings,
   admin: Shield,
+  mistakes: NotebookPen,
+  analytics: BarChart3,
 };
 
 export interface ShellItem {

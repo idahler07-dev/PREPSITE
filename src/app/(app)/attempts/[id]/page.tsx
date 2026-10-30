@@ -6,6 +6,8 @@ import { requireUser } from "@/server/auth/session";
 import { getResults } from "@/server/attempts/service";
 import { HttpError } from "@/server/http";
 import { Container, PageHeader } from "@/components/layout/page-header";
+import { Odometer } from "@/components/motion/odometer";
+import { Celebration } from "@/components/mascot/celebrate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResultQuestion } from "@/components/practice/result-question";
@@ -51,6 +53,8 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
     const base = tt("moduleTitle", { section: tx(`sections.${m.section}`), module: m.moduleNumber ?? 1 });
     return m.moduleNumber === 2 && (m.variant === "easier" || m.variant === "harder") ? `${base} · ${t(`variant.${m.variant}`)}` : base;
   };
+  // Celebrate only right after finishing, not when coming back to old results.
+  const justFinished = !!r.completedAt && Date.now() - r.completedAt.getTime() < 10 * 60_000;
   const dur = (ms: number) => formatDuration(ms, (min, sec) => (min ? c("durationMinSec", { min, sec }) : c("secondsShort", { count: sec })));
 
   return (
@@ -59,29 +63,41 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
         title={title}
         description={r.completedAt ? t("completedAt", { date: format.dateTime(r.completedAt, { dateStyle: "medium", timeStyle: "short" }) }) : undefined}
         actions={
-          <Button asChild>
-            <Link href="/practice">{t("practiceAgain")}</Link>
-          </Button>
+          <>
+            {r.correct < r.total && (
+              <Button asChild variant="secondary">
+                <Link href="/review">{t("reviewMistakes")}</Link>
+              </Button>
+            )}
+            <Button asChild>
+              <Link href="/practice">{t("practiceAgain")}</Link>
+            </Button>
+          </>
         }
       />
       {r.scores && (
-        <Card className="border-primary/40">
+        <Card className="overflow-visible border-primary/30">
           <CardHeader>
             <CardTitle className="text-base">{t("estimate.title")}</CardTitle>
             <p className="text-sm text-muted-foreground">{t("estimate.disclaimer")}</p>
           </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-3">
+          <CardContent className="grid items-center gap-6 sm:grid-cols-3">
+            {justFinished && <Celebration className="sm:col-span-3" />}
             {r.scores.total && (
               <div>
                 <p className="text-sm text-muted-foreground">{t("estimate.total")}</p>
-                <p className="text-4xl font-bold tabular-nums">{r.scores.total.score}</p>
+                <p className="text-[4rem] leading-none font-bold">
+                  <Odometer value={r.scores.total.score} className="font-mono" />
+                </p>
                 <p className="text-sm text-muted-foreground">{t("estimate.range", { low: r.scores.total.low, high: r.scores.total.high })}</p>
               </div>
             )}
             {r.scores.sections.map((s) => (
               <div key={s.section}>
                 <p className="text-sm text-muted-foreground">{tx(`sections.${s.section}`)}</p>
-                <p className="text-3xl font-bold tabular-nums">{s.score}</p>
+                <p className="text-[2rem] leading-none font-bold">
+                  <Odometer value={s.score} className="font-mono" />
+                </p>
                 <p className="text-sm text-muted-foreground">
                   {t("estimate.range", { low: s.low, high: s.high })} · {t("estimate.correct", { correct: s.correct, total: s.total })}
                 </p>

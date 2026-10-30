@@ -23,13 +23,13 @@ export function QuestionGrid({ items, current, onGo }: { items: NavItem[]; curre
             aria-current={i === current ? "step" : undefined}
             aria-label={`${t("questionOf", { current: i + 1, total: items.length })}${it.answered ? `, ${t("navigator.answered")}` : `, ${t("navigator.unanswered")}`}${it.flagged ? `, ${t("navigator.forReview")}` : ""}`}
             className={cn(
-              "relative flex size-10 items-center justify-center rounded-md border-2 text-sm font-semibold",
-              it.answered ? "border-primary bg-primary text-primary-foreground" : "border-dashed border-foreground/40",
+              "relative flex size-11 items-center justify-center rounded-[10px] border-2 font-mono text-sm font-semibold transition-colors",
+              it.flagged ? "border-flagged bg-flagged text-on-fill" : it.answered ? "border-primary bg-primary text-primary-foreground" : "border-dashed border-input",
               i === current && "ring-2 ring-ring ring-offset-2 ring-offset-background",
             )}
           >
             {i + 1}
-            {it.flagged && <Bookmark className="absolute -end-1.5 -top-1.5 size-4 fill-flag text-flag" aria-hidden />}
+            {it.flagged && <Bookmark className="absolute -end-1.5 -top-1.5 size-4 fill-flagged text-warning-ink" aria-hidden />}
           </button>
         </li>
       ))}
@@ -48,7 +48,7 @@ export function Legend() {
         <span className="size-3 rounded-sm border-2 border-dashed border-foreground/40" aria-hidden /> {t("unanswered")}
       </span>
       <span className="flex items-center gap-1.5">
-        <Bookmark className="size-3 fill-flag text-flag" aria-hidden /> {t("forReview")}
+        <Bookmark className="size-3 fill-flagged text-warning-ink" aria-hidden /> {t("forReview")}
       </span>
     </div>
   );

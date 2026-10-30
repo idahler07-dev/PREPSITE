@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/layout/empty-state";
+import { Button } from "@/components/ui/button";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -34,7 +36,15 @@ export default async function HistoryPage({ searchParams }: { searchParams: Prom
     <Container className="max-w-4xl">
       <PageHeader title={t("title")} />
       {attempts.length === 0 ? (
-        <p className="text-muted-foreground">{t("empty")}</p>
+        <EmptyState
+          pose="point"
+          body={t("empty")}
+          action={
+            <Button asChild>
+              <Link href="/practice">{t("emptyCta")}</Link>
+            </Button>
+          }
+        />
       ) : (
         <div className="overflow-x-auto rounded-md border">
           <Table>

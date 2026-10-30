@@ -1,3 +1,6 @@
+import { EmptyState } from "@/components/layout/empty-state";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { requireUser } from "@/server/auth/session";
@@ -61,7 +64,15 @@ export default async function ReviewPage() {
       <section>
         <h2 className="mb-3 text-lg font-semibold">{t("notebook")}</h2>
         {items.length === 0 ? (
-          <p className="text-muted-foreground">{t("empty")}</p>
+          <EmptyState
+            pose="cheer"
+            body={t("empty")}
+            action={
+              <Button asChild>
+                <Link href="/practice">{t("emptyCta")}</Link>
+              </Button>
+            }
+          />
         ) : (
           <ul className="divide-y rounded-lg border">
             {items.map((i) => (

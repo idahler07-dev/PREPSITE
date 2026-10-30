@@ -1,27 +1,45 @@
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Flame, Target, Timer, CheckCircle2, CalendarDays, Play } from "lucide-react";
+import { CalendarDays, Flame, Play, Target } from "lucide-react";
+import siteConfig from "@site";
 import { requireUser } from "@/server/auth/session";
 import { getDashboardStats } from "@/server/stats/dashboard";
 import { Link } from "@/i18n/navigation";
 import { daysUntil } from "@/lib/goals";
-import { formatDuration } from "@/lib/format";
-import { Container, PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import siteConfig from "@site";
 import { db } from "@/lib/db";
+import { DOMAINS } from "@/lib/taxonomy";
 import { dayInZone } from "@/lib/stats/streak";
 import type { WeeklyPlan } from "@/lib/coach/plan";
 import type { ScoreEstimate } from "@/lib/mock/scoring";
 import { currentPlan } from "@/server/coach/service";
 import { notebookCounts } from "@/server/review/service";
 import { vocabCounts } from "@/server/vocab/service";
+import { Container } from "@/components/layout/page-header";
+import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/mascot/mascot";
+import { Odometer } from "@/components/motion/odometer";
+import { SpotlightCard } from "@/components/motion/interactive-card";
 import { TaskList } from "@/components/learning/plan-view";
 import { DailyQuestionButton } from "@/components/learning/review-actions";
+import { DrillSkillMap, PracticeSkillButton } from "@/components/learning/practice-skill";
 
 export async function generateMetadata() {
   const t = await getTranslations("dashboard");
   return { title: t("title") };
+}
+
+/** A bento card: 14px radius, 20/32px padding, cursor spotlight on desktop. */
+function Tile({ title, action, className, children }: { title?: React.ReactNode; action?: React.ReactNode; className?: string; children: React.ReactNode }) {
+  return (
+    <SpotlightCard className={`rounded-[20px] p-5 lg:p-8 ${className ?? ""}`}>
+      {(title || action) && (
+        <div className="mb-5 flex items-center justify-between gap-3">
+          {title && <h2 className="font-semibold">{title}</h2>}
+          {action}
+        </div>
+      )}
+      {children}
+    </SpotlightCard>
+  );
 }
 
 export default async function DashboardPage() {
@@ -29,256 +47,194 @@ export default async function DashboardPage() {
   const t = await getTranslations("dashboard");
   const tx = await getTranslations("taxonomy");
   const th = await getTranslations("history");
-  const c = await getTranslations("common");
+  const tc = await getTranslations("coach");
   const format = await getFormatter();
   const s = await getDashboardStats(user.id, user.timeZone);
-  const accuracy = s.graded ? Math.round((s.correct / s.graded) * 100) : null;
   const days = user.testDate ? daysUntil(user.testDate) : null;
-  const tc = await getTranslations("coach");
   const today = dayInZone(new Date(), siteConfig.defaultTimeZone);
-  const [planRow, notebook, vocab, mocks, official] = await Promise.all([
+  const [planRow, notebook, vocab, lastMock] = await Promise.all([
     currentPlan(user.id),
     notebookCounts(user.id),
     vocabCounts(user.id),
-    db.attempt.findMany({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "desc" }, take: 5, select: { id: true, completedAt: true, scores: true } }),
-    db.officialScore.findMany({ where: { userId: user.id }, orderBy: { takenOn: "desc" }, take: 5 }),
+    db.attempt.findFirst({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "desc" }, select: { scores: true } }),
   ]);
-  const todayTasks = (planRow.plan as unknown as WeeklyPlan).days.find((d) => d.date === today)?.tasks ?? [];
-  const history = [
-    ...mocks.flatMap((m) => {
-      const total = (m.scores as ScoreEstimate | null)?.total;
-      return total && m.completedAt ? [{ key: m.id, date: m.completedAt, score: total.score, range: `${total.low}–${total.high}`, official: false, href: `/attempts/${m.id}` }] : [];
+  const todayTasks = ((planRow.plan as unknown as WeeklyPlan).days.find((d) => d.date === today)?.tasks ?? []).slice(0, 3);
+  const estimate = (lastMock?.scores as ScoreEstimate | null)?.total ?? null;
+  const skillRows = new Map(s.bySkill.map((r) => [r.key, r]));
+  const tiles = DOMAINS.flatMap((d) =>
+    d.skills.map((k) => {
+      const r = skillRows.get(k);
+      const m = r && r.total > 0 ? r.correct / r.total : null;
+      return { key: k, label: tx(`skills.${k as "INFERENCES"}`), mastery: m, detail: m == null ? undefined : `${Math.round(m * 100)}%` };
     }),
-    ...official.map((o) => ({ key: o.id, date: o.takenOn, score: o.total, range: null as string | null, official: true, href: "/resources" })),
-  ]
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, 5);
-
-  const tiles = [
-    { icon: CheckCircle2, label: t("stats.answered"), value: format.number(s.answered) },
-    { icon: Target, label: t("stats.accuracy"), value: accuracy === null ? "—" : `${accuracy}%` },
-    { icon: Flame, label: t("stats.streak"), value: t("stats.streakDays", { count: s.streak }) },
-    {
-      icon: Timer,
-      label: t("stats.avgTime"),
-      value: s.avgMs ? formatDuration(s.avgMs, (min, sec) => (min ? c("durationMinSec", { min, sec }) : c("secondsShort", { count: sec }))) : "—",
-    },
-  ];
+  );
+  const first = user.name?.split(" ")[0];
 
   return (
-    <Container className="space-y-6">
-      <PageHeader
-        title={user.name ? t("welcome", { name: user.name.split(" ")[0]! }) : t("welcomeNoName")}
-        actions={
-          <>
-            {s.openAttemptId && (
-              <Button asChild variant="outline">
-                <Link href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</Link>
-              </Button>
-            )}
-            <Button asChild>
-              <Link href="/practice">
-                <Play aria-hidden /> {t("startDrill")}
-              </Link>
-            </Button>
-          </>
-        }
-      />
+    <Container>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Greeting */}
+        <Tile className="lg:col-span-2">
+          <div className="flex items-center gap-6">
+            <div className="flex-1 space-y-3">
+              <h1 className="text-h2 font-semibold lg:text-h1">{first ? t("greeting", { name: first }) : t("greetingNoName")}</h1>
+              <p className="max-w-[50ch] text-muted-foreground">{t("greetingSub")}</p>
+              <div className="flex flex-wrap gap-2 pt-2">
+                {s.openAttemptId && (
+                  <Button asChild variant="secondary">
+                    <Link href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</Link>
+                  </Button>
+                )}
+                <Button asChild>
+                  <Link href="/practice">
+                    <Play aria-hidden /> {t("startDrill")}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            <Mascot pose={s.streak === 0 && s.answered > 0 ? "sleepy" : "wave"} className="hidden w-32 shrink-0 sm:block lg:w-40" />
+          </div>
+        </Tile>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {tiles.map(({ icon: Icon, label, value }) => (
-          <Card key={label}>
-            <CardHeader className="pb-1">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <Icon className="size-4" aria-hidden /> {label}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-2xl font-bold tabular-nums">{value}</CardContent>
-          </Card>
-        ))}
-      </div>
+        {/* Estimated score */}
+        <Tile title={t("estimate.title")}>
+          {estimate ? (
+            <div>
+              <p className="text-[3.5rem] leading-none font-bold">
+                <Odometer value={estimate.score} className="font-mono" />
+              </p>
+              <p className="mt-2 font-mono text-small text-muted-foreground">{t("range", { low: estimate.low, high: estimate.high })}</p>
+              <p className="mt-3 text-label text-muted-foreground">{t("estimate.label")}</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Mascot pose="think" className="w-20 shrink-0" />
+              <div className="space-y-3">
+                <p className="text-small text-muted-foreground">{t("estimateEmpty")}</p>
+                <Button asChild size="sm" variant="secondary">
+                  <Link href="/mocks">{t("takeTest")}</Link>
+                </Button>
+                <p className="text-label text-muted-foreground">{t("estimate.label")}</p>
+              </div>
+            </div>
+          )}
+        </Tile>
 
-      <div className="grid items-start gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">{tc("today")}</CardTitle>
-            <Link href="/plan" className="text-sm text-primary hover:underline">
+        {/* Today's tasks */}
+        <Tile
+          className="lg:col-span-2"
+          title={tc("today")}
+          action={
+            <Link href="/plan" className="text-small font-medium text-primary hover:underline">
               {tc("seeWeek")}
             </Link>
-          </CardHeader>
-          <CardContent>
-            <TaskList tasks={todayTasks} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{tc("quick")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <DailyQuestionButton label={tc("dailyQuestion")} />
-            <p>
-              <Link href="/review" className="text-primary hover:underline">
-                {tc("reviewDue", { count: notebook.due })}
-              </Link>
-            </p>
-            <p>
-              <Link href="/vocab" className="text-primary hover:underline">
-                {tc("vocabDue", { count: vocab.due + Math.min(vocab.unseen, 10) })}
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+          }
+        >
+          <TaskList tasks={todayTasks} />
+        </Tile>
 
-      <div className="grid items-start gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">{t("byDomain")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {s.byDomain.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("noData")}</p>
+        {/* Streak + days to test */}
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-1">
+          <Tile>
+            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
+              <Flame className="size-4 text-accent-ink" aria-hidden /> {t("streakTitle")}
+            </p>
+            <p className="mt-2 text-[2.5rem] leading-none font-bold">
+              <Odometer value={s.streak} className="font-mono" />
+            </p>
+            {s.streak === 0 && <p className="mt-2 text-label text-muted-foreground">{t("streakReminder")}</p>}
+          </Tile>
+          <Tile>
+            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
+              <CalendarDays className="size-4 text-primary" aria-hidden /> {t("daysToTest")}
+            </p>
+            {days !== null && days >= 0 ? (
+              <p className="mt-2 text-[2.5rem] leading-none font-bold">
+                <Odometer value={days} className="font-mono" />
+              </p>
             ) : (
-              <ul className="space-y-3">
-                {s.byDomain
-                  .sort((a, b) => a.section.localeCompare(b.section) || b.total - a.total)
-                  .map((d) => {
-                    const pct = Math.round((d.correct / d.total) * 100);
-                    return (
-                      <li key={d.key} className="space-y-1">
-                        <div className="flex justify-between gap-2 text-sm">
-                          <span>
-                            <span className="me-2 text-xs text-muted-foreground">{tx(`sectionsShort.${d.section}`)}</span>
-                            {tx(`domains.${d.key as "ALGEBRA"}`)}
-                          </span>
-                          <span className="tabular-nums text-muted-foreground">
-                            {pct}% · {d.correct}/{d.total}
-                          </span>
-                        </div>
-                        <div className="h-2 overflow-hidden rounded-full bg-muted" role="img" aria-label={`${pct}%`}>
-                          <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
-                        </div>
-                      </li>
-                    );
-                  })}
-              </ul>
+              <Link href="/settings" className="mt-3 inline-flex min-h-11 items-center text-small font-medium text-primary hover:underline">
+                {t("noTestDate")}
+              </Link>
             )}
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("goal.title")}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              {user.targetScore || user.testDate ? (
-                <>
-                  {user.targetScore && (
-                    <p className="flex justify-between">
-                      <span className="text-muted-foreground">{t("goal.target")}</span>
-                      <strong className="tabular-nums">{user.targetScore}</strong>
-                    </p>
-                  )}
-                  {user.testDate && (
-                    <p className="flex justify-between gap-2">
-                      <span className="flex items-center gap-1 text-muted-foreground">
-                        <CalendarDays className="size-4" aria-hidden /> {t("goal.testDate")}
-                      </span>
-                      <span className="text-end">
-                        <strong>{format.dateTime(user.testDate, { dateStyle: "medium", timeZone: "UTC" })}</strong>
-                        <br />
-                        <span className="text-muted-foreground">{days !== null && days >= 0 ? t("goal.daysLeft", { count: days }) : t("goal.testPassed")}</span>
-                      </span>
-                    </p>
-                  )}
-                  <Link href="/settings" className="text-primary hover:underline">
-                    {t("goal.edit")}
-                  </Link>
-                </>
-              ) : (
-                <Link href="/onboarding" className="text-primary hover:underline">
-                  {t("goal.setGoal")}
-                </Link>
-              )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("estimate.title")}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              {history.length === 0 ? (
-                <p className="text-muted-foreground">{t("estimate.notYet")}</p>
-              ) : (
-                <ul className="space-y-1">
-                  {history.map((h) => (
-                    <li key={h.key} className="flex justify-between gap-2">
-                      <Link href={h.href} className="hover:underline">
-                        {format.dateTime(h.date, { dateStyle: "medium" })} · {h.official ? t("estimate.official") : t("estimate.practice")}
-                      </Link>
-                      <span className="tabular-nums">
-                        <strong>{h.score}</strong>
-                        {h.range && <span className="text-xs text-muted-foreground"> ({h.range})</span>}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <p className="text-xs text-muted-foreground">{t("estimate.label")}</p>
-            </CardContent>
-          </Card>
+          </Tile>
         </div>
-      </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("bySkill")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {s.weakSkills.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("noData")}</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
-                {s.weakSkills.map((sk) => (
-                  <li key={sk.key} className="flex items-center justify-between gap-3">
-                    <span>{tx(`skills.${sk.key as "INFERENCES"}`)}</span>
-                    <Link href={`/practice?skill=${sk.key}`} className="shrink-0 tabular-nums text-primary hover:underline">
-                      {Math.round((sk.correct / sk.total) * 100)}%
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">{t("recent")}</CardTitle>
-            <Link href="/history" className="text-sm text-primary hover:underline">
+        {/* Weakest skills */}
+        <Tile title={t("weakest")}>
+          {s.weakSkills.length === 0 ? (
+            <p className="text-small text-muted-foreground">{t("weakestEmpty")}</p>
+          ) : (
+            <ul className="space-y-3">
+              {s.weakSkills.slice(0, 3).map((sk) => (
+                <li key={sk.key} className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-small font-medium">{tx(`skills.${sk.key as "INFERENCES"}`)}</p>
+                    <p className="font-mono text-label text-muted-foreground">{t("mastery", { pct: Math.round((sk.correct / sk.total) * 100) })}</p>
+                  </div>
+                  <PracticeSkillButton skill={sk.key} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Tile>
+
+        {/* Skill map */}
+        <Tile className="lg:col-span-2" title={t("skillMap")} action={<span className="hidden text-label text-muted-foreground sm:inline">{t("skillMapHint")}</span>}>
+          <DrillSkillMap tiles={tiles} />
+        </Tile>
+
+        {/* Recent tests */}
+        <Tile
+          className="lg:col-span-2"
+          title={t("recent")}
+          action={
+            <Link href="/history" className="text-small font-medium text-primary hover:underline">
               {t("viewAll")}
             </Link>
-          </CardHeader>
-          <CardContent>
-            {s.recent.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("noData")}</p>
-            ) : (
-              <ul className="divide-y text-sm">
-                {s.recent.map((a) => (
-                  <li key={a.id} className="flex items-center justify-between gap-2 py-2">
-                    <Link href={`/attempts/${a.id}`} className="hover:underline">
-                      {th(`kinds.${a.kind}`)} · {a.completedAt && format.dateTime(a.completedAt, { dateStyle: "medium" })}
-                    </Link>
-                    <span className="tabular-nums">
+          }
+        >
+          {s.recent.length === 0 ? (
+            <div className="flex items-center gap-4">
+              <Mascot pose="point" className="w-20 shrink-0" />
+              <div className="space-y-3">
+                <p className="text-small text-muted-foreground">{t("recentEmpty")}</p>
+                <Button asChild size="sm">
+                  <Link href="/practice">{t("firstDrill")}</Link>
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <ul className="divide-y">
+              {s.recent.map((a) => (
+                <li key={a.id}>
+                  <Link href={`/attempts/${a.id}`} className="flex min-h-12 items-center justify-between gap-3 py-2 hover:text-primary">
+                    <span className="text-small">
+                      <span className="font-medium">{th(`kinds.${a.kind}`)}</span>
+                      <span className="text-muted-foreground"> · {a.completedAt && format.dateTime(a.completedAt, { dateStyle: "medium" })}</span>
+                    </span>
+                    <span className="font-mono text-small font-semibold tabular-nums">
                       {a.correctCount ?? 0}/{a.totalCount ?? 0}
                     </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Tile>
+
+        {/* Quick practice */}
+        <Tile title={t("quick")}>
+          <div className="space-y-2">
+            <DailyQuestionButton label={tc("dailyQuestion")} />
+            <Link href="/review" className="flex min-h-11 items-center gap-2 text-small font-medium text-primary hover:underline">
+              <Target className="size-4" aria-hidden /> {tc("reviewDue", { count: notebook.due })}
+            </Link>
+            <Link href="/vocab" className="flex min-h-11 items-center text-small font-medium text-primary hover:underline">
+              {tc("vocabDue", { count: vocab.due + Math.min(vocab.unseen, 10) })}
+            </Link>
+          </div>
+        </Tile>
       </div>
     </Container>
   );

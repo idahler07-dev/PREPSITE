@@ -3,8 +3,9 @@
 import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Lightbulb, Loader2, Send, Sparkles } from "lucide-react";
+import { Lightbulb, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/mascot/mascot";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
@@ -131,10 +132,10 @@ export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { atte
               : null;
 
   return (
-    <section className="space-y-3 rounded-lg border border-primary/30 bg-primary-soft/30 p-3" aria-label={t("title")}>
+    <section className="space-y-3 rounded-[14px] border bg-surface p-4 shadow-sm" aria-label={t("title")}>
       <div className="flex flex-wrap items-center gap-2">
         <span className="flex items-center gap-1 text-sm font-semibold">
-          <Sparkles className="size-4 text-primary" aria-hidden /> {t("title")}
+          <Mascot pose={busy ? "think" : "wave"} className="w-9" /> {t("title")}
         </span>
         {modes.map((m) => (
           <Button key={m} size="sm" variant={mode === m ? "default" : "outline"} disabled={busy} onClick={() => void ask(m)}>
