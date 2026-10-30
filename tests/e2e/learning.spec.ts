@@ -7,7 +7,8 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
 
   // Dashboard: today's plan and the question of the day.
   await page.goto("/dashboard");
-  await expect(page.getByText("Today's plan", { exact: true })).toBeVisible();
+  // While a route streams in, React keeps a hidden copy of the page for a moment.
+  await expect(page.getByText("Today's plan", { exact: true }).filter({ visible: true })).toBeVisible();
   await page.getByRole("button", { name: "Question of the day" }).click();
   await expect(page).toHaveURL(/\/test\//);
   // The daily question changes by date: multiple choice or a typed answer.

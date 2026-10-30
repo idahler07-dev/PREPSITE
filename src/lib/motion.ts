@@ -26,11 +26,10 @@ export const ease = {
 /** A short opacity fade: what reduced motion gets instead of movement. */
 export const fade: Transition = { duration: 0.15, ease: ease.out };
 
-/** Page enter/exit: crossfade with a slight blur and 12px rise. */
+/** Page enter: fade in with a slight blur and 12px rise. */
 export const pageVariants: Variants = {
   initial: { opacity: 0, y: 12, filter: "blur(4px)" },
   enter: { opacity: 1, y: 0, filter: "blur(0px)", transition: spring.soft },
-  exit: { opacity: 0, y: -6, filter: "blur(4px)", transition: { duration: 0.12, ease: ease.out } },
 };
 
 /** Scroll reveal for landing sections: fade + rise + slight scale, children staggered. */

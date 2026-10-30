@@ -33,7 +33,7 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
 
   await page.goto("/dashboard");
   // The finished drill is listed with its score, and the skill map is filled in.
-  await expect(page.getByRole("link", { name: /Drill/ }).first()).toContainText("/10");
+  await expect(page.getByRole("main").getByRole("link", { name: /Drill/ }).first()).toContainText("/10");
   await expect(page.getByRole("heading", { name: "Skill map" })).toBeVisible();
   await expect(page.getByText("Estimate, not an official College Board score.")).toBeVisible();
 });
