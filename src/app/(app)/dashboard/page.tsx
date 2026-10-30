@@ -82,7 +82,7 @@ export default async function DashboardPage() {
               <div className="flex flex-wrap gap-2 pt-2">
                 {s.openAttemptId && (
                   <Button asChild variant="secondary">
-                    <Link href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</Link>
+                    <a href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</a>
                   </Button>
                 )}
                 <Button asChild>

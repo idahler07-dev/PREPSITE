@@ -756,7 +756,9 @@
       "type": "Type",
       "questions": "Questions",
       "score": "Score",
-      "status": "Status"
+      "status": "Status",
+      "accuracy": "Accuracy",
+      "time": "Time"
     },
     "kinds": {
       "DRILL": "Drill",
@@ -771,7 +773,11 @@
       "COMPLETED": "Completed",
       "ABANDONED": "Abandoned"
     },
-    "emptyCta": "Start your first drill"
+    "emptyCta": "Start your first drill",
+    "resume": "Resume",
+    "view": "View results",
+    "accuracyLabel": "{percent}% correct",
+    "description": "Every drill and practice test you’ve taken. Open one to see the questions again."
   },
   "settings": {
     "title": "Settings",
@@ -1931,7 +1937,35 @@
     "target": "Real SAT: about {seconds}s",
     "empty": "Answer a few questions and your analytics will appear here.",
     "emptyCta": "Start your first drill",
-    "answered": "{count, plural, one {# answer} other {# answers}}"
+    "answered": "{count, plural, one {# answer} other {# answers}}",
+    "daily": {
+      "title": "Answers per day",
+      "hint": "Correct and incorrect answers over the last 30 days.",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "date": "Date",
+      "correctCount": "{count} correct",
+      "incorrectCount": "{count} incorrect"
+    },
+    "activity": {
+      "title": "Study streak",
+      "hint": "Questions answered each day.",
+      "count": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+      "summary": "{days, plural, =0 {No active days} one {# active day} other {# active days}} in {weeks} weeks",
+      "srSummary": "You practised on {days} days in the last {weeks} weeks.",
+      "less": "Less",
+      "more": "More",
+      "streak": "{count, plural, =0 {No streak yet} one {# day streak} other {# day streak}}"
+    },
+    "pace": {
+      "title": "Time by difficulty",
+      "hint": "Average seconds per question. The dashed line is the real SAT pace.",
+      "target": "Target {seconds}s",
+      "seconds": "{seconds}s",
+      "bar": "{difficulty}: {seconds}s average over {count} questions",
+      "overTarget": "(slower than the target pace)"
+    },
+    "skillsByAccuracy": "Accuracy by skill"
   },
   "bank": {
     "title": "Question bank",
