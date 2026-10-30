@@ -10,7 +10,8 @@ export interface MailMessage {
   text: string;
 }
 
-export const DEV_OUTBOX_DIR = path.join(process.cwd(), ".data", "dev-mail");
+/** Where the outbox transport writes emails (on read-only hosts such as Vercel, point it at /tmp). */
+export const DEV_OUTBOX_DIR = process.env.MAIL_OUTBOX_DIR || path.join(process.cwd(), ".data", "dev-mail");
 
 /** Send an email using the transport chosen by EMAIL_TRANSPORT. */
 export async function sendMail(msg: MailMessage): Promise<void> {

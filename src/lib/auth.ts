@@ -53,6 +53,26 @@ function providers(): Provider[] {
       }),
     );
   }
+  if (e.DEMO_MODE) {
+    list.push(
+      Credentials({
+        id: "demo",
+        name: "Demo",
+        credentials: { role: {} },
+        // Demo only: a fresh student per visit, or the shared demo admin.
+        async authorize(credentials) {
+          const admin = credentials?.role === "admin";
+          const email = admin ? "demo-admin@demo.local" : `demo-student-${crypto.randomUUID().slice(0, 8)}@demo.local`;
+          const user = await db.user.upsert({
+            where: { email },
+            create: { email, name: admin ? "Demo Admin" : "Demo Student", role: admin ? "ADMIN" : "STUDENT", onboardedAt: new Date() },
+            update: {},
+          });
+          return { id: user.id, name: user.name, email: user.email, image: null };
+        },
+      }),
+    );
+  }
   if (e.TELEGRAM_BOT_TOKEN) {
     const botToken = e.TELEGRAM_BOT_TOKEN;
     list.push(

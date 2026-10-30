@@ -52,3 +52,13 @@ export async function signInWithTelegram(payload: string, nextRaw?: string): Pro
   }
   return { redirectTo: `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}` };
 }
+
+/** Demo site only (DEMO_MODE): sign in as a demo student or the demo admin. */
+export async function signInAsDemo(form: FormData) {
+  if (!env().DEMO_MODE) return;
+  const ip = await clientIp();
+  if (!(await rateLimit(`demo-login:ip:${ip}`, 30, 3600)).ok) return;
+  const locale = await getLocale();
+  const role = form.get("role") === "admin" ? "admin" : "student";
+  await signIn("demo", { role, redirectTo: role === "admin" ? `/${locale}/admin` : `/${locale}/dashboard` });
+}

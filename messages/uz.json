@@ -1685,5 +1685,12 @@
       "body": "Premium imkoniyatlaringiz {date} kuni tugaydi ({days} kun qoldi). Cheksiz mashq, sinov testlari va AI repetitorni saqlab qolish uchun uzaytiring.",
       "cta": "Uzaytirish"
     }
+  },
+  "demo": {
+    "title": "Demo sayt",
+    "body": "Roʻyxatdan oʻtmasdan sinab koʻring. Har bir oʻquvchi kirishida yangi hisob yaratiladi; admin hisobi umumiy, shuning uchun oʻzgarishlaringizni boshqalar ham koʻrishi mumkin. Maʼlumotlar istalgan vaqtda tozalanishi mumkin.",
+    "student": "Oʻquvchi sifatida sinash",
+    "admin": "Admin sifatida sinash",
+    "banner": "Demo sayt — faqat sinov toʻlovlari, maʼlumotlar tozalanishi mumkin."
   }
 }

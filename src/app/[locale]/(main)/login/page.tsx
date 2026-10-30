@@ -3,6 +3,7 @@ import { env } from "@/lib/env";
 import { Link, redirect } from "@/i18n/navigation";
 import { getCurrentUser } from "@/server/auth/session";
 import { LoginForm } from "@/components/auth/login-form";
+import { DemoLogin } from "@/components/auth/demo-login";
 import { safeNextPath } from "@/lib/safe-redirect";
 
 export async function generateMetadata() {
@@ -22,6 +23,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <div className="mx-auto max-w-md px-4 py-12 sm:py-16">
       <h1 className="text-2xl font-bold tracking-tight">{t("signInTitle")}</h1>
       <p className="mt-2 mb-8 text-muted-foreground">{t("signInSubtitle")}</p>
+      {e.DEMO_MODE && <DemoLogin />}
       <LoginForm
         next={next}
         initialError={sp.error}

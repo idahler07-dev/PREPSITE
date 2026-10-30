@@ -55,6 +55,9 @@ const schema = z.object({
 
   DESMOS_API_KEY: z.string().optional(),
 
+  /** Demo site: "Try as student / admin" buttons without email. Never turn on for the real site. */
+  DEMO_MODE: bool,
+
   /** Comma-separated: mock, payme, click, octo. */
   PAYMENT_PROVIDERS: csv,
   /** The mock provider is refused in production unless this is set (staging only). */

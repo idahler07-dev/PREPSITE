@@ -1685,5 +1685,12 @@
       "body": "Your premium access ends on {date} ({days, plural, one {in # day} other {in # days}}). Renew to keep unlimited practice, practice tests and the AI tutor.",
       "cta": "Renew"
     }
+  },
+  "demo": {
+    "title": "Demo site",
+    "body": "Try it without signing up. Each student visit gets a fresh account; the admin account is shared, so others may see your changes. Data can be reset at any time.",
+    "student": "Try as a student",
+    "admin": "Try as admin",
+    "banner": "Demo site — test payments only, data may be reset."
   }
 }
