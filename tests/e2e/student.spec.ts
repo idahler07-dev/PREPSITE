@@ -32,8 +32,9 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
   await expect(page.getByText(/^(sample|mk)-/).first()).toBeVisible(); // question codes are shown
 
   await page.goto("/dashboard");
-  const answered = page.locator("[data-slot=card]", { has: page.getByText("Questions answered", { exact: true }) });
-  await expect(answered).toContainText("10");
+  // The finished drill is listed with its score, and the skill map is filled in.
+  await expect(page.getByRole("link", { name: /Drill/ }).first()).toContainText("/10");
+  await expect(page.getByRole("heading", { name: "Skill map" })).toBeVisible();
   await expect(page.getByText("Estimate, not an official College Board score.")).toBeVisible();
 });
 
