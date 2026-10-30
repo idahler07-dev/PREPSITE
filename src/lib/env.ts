@@ -36,7 +36,7 @@ const schema = z.object({
   MAGIC_LINKS_PER_IP_HOUR: z.coerce.number().int().min(1).default(10),
 
   EMAIL_TRANSPORT: z.enum(["outbox", "smtp", "resend"]).default("outbox"),
-  EMAIL_FROM: z.string().default("PrepSite <no-reply@example.com>"),
+  EMAIL_FROM: z.string().default("Satify <no-reply@example.com>"),
   RESEND_API_KEY: z.string().optional(),
   SMTP_URL: z.string().optional(),
 

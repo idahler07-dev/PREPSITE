@@ -1,4 +1,4 @@
-# PrepSite — digital SAT preparation
+# Satify — digital SAT preparation
 
 Web app for a learning centre's SAT students: a question bank the centre owns, exam-like practice, and honest progress tracking. Built for students in Uzbekistan and Central Asia, in English, Oʻzbekcha and Русский.
 
@@ -53,7 +53,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `AUTH_URL`, `NEXT_PUBLIC_SITE_URL` | production | Public URL of the site. `NEXT_PUBLIC_SITE_URL` must be set **at build time** |
 | `ADMIN_EMAILS` | recommended | Comma-separated emails promoted to admin when they sign in |
 | `EMAIL_TRANSPORT` | yes | `outbox` (dev only), `smtp` (+ `SMTP_URL`) or `resend` (+ `RESEND_API_KEY`) |
-| `EMAIL_FROM` | production | Sender, e.g. `PrepSite <no-reply@yourdomain.uz>` |
+| `EMAIL_FROM` | production | Sender, e.g. `Satify <no-reply@yourdomain.uz>` |
 | `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | optional | Google sign-in |
 | `TELEGRAM_BOT_TOKEN`, `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` | optional | Telegram Login |
 | `STORAGE_DRIVER` | yes | `local` (files on disk) or `s3` (Cloudflare R2 / MinIO) |
@@ -84,7 +84,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `pnpm db:migrate` / `pnpm db:deploy` | Create a migration in development / apply migrations in production |
 | `pnpm db:seed` | Add the development sample questions |
 | `pnpm samples:remove` | **Before launch:** delete all sample questions (`--dry-run` to preview) |
-| `pnpm tsx scripts/make-icons.ts` | Make the app icons from `public/brand/mark.svg` |
+| `pnpm tsx scripts/make-brand.ts` | Regenerate the logo, favicons, app icons and OpenGraph image in `public/brand/` |
 
 ## Deploying
 

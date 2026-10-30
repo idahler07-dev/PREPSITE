@@ -4,17 +4,19 @@
  * Everything here is public (it ships to the browser). Never put secrets here;
  * secrets belong in environment variables (see .env.example).
  *
- * User-facing *text* (taglines, page copy) lives in /messages/{locale}.json so it
- * can be translated. This file holds names, contact details, colors and links.
+ * User-facing *text* (tagline, page copy) lives in /messages/en.json. Colors and
+ * fonts are design tokens in src/app/globals.css (see DESIGN.md). This file
+ * holds names, logo files, contact details and links. Regenerate the logo
+ * files with `pnpm tsx scripts/make-brand.ts`.
  */
 
 export const siteConfig = {
   /** Brand name shown in the header, emails and page titles. */
-  name: "PrepSite",
+  name: "Satify",
   /** Short name used by the installable app (PWA) and small screens. */
-  shortName: "PrepSite",
+  shortName: "Satify",
   /** Legal name of the learning centre, used on legal pages and receipts. */
-  legalName: "PrepSite Learning Centre LLC",
+  legalName: "Satify Learning Centre LLC",
 
   logo: {
     /**
@@ -23,8 +25,11 @@ export const siteConfig = {
      * contains the name, set showName to false and use `light` / `dark`.
      */
     mark: "/brand/mark.svg",
+    markDark: "/brand/mark-dark.svg",
     light: "/brand/logo.svg",
     dark: "/brand/logo-dark.svg",
+    /** 1200×630 image for link previews (Telegram, Instagram, WhatsApp). */
+    og: "/brand/og.png",
     showName: true,
   },
 

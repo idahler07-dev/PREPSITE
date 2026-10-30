@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "title": "{name} — SAT preparation",
-    "description": "Practice for the digital SAT with questions written by our teachers, timed drills and honest progress tracking."
+    "title": "{name}: SAT prep with a plan you can see working",
+    "description": "Practice for the digital SAT with questions written by teachers, a calm exam-like test screen, AI explanations and progress you can trust.",
+    "ogAlt": "{name}: Your SAT score, planned and proven."
   },
   "common": {
     "loading": "Loading…",
@@ -1711,5 +1712,9 @@
     "student": "Try as a student",
     "admin": "Try as admin",
     "banner": "Demo site — test payments only, data may be reset."
+  },
+  "brand": {
+    "tagline": "Your SAT score, <i>planned</i> and <b>proven</b>.",
+    "taglinePlain": "Your SAT score, planned and proven."
   }
 }

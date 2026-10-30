@@ -17,8 +17,22 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: t("title", { name: siteConfig.name }), template: `%s · ${siteConfig.name}` },
     description: t("description"),
     applicationName: siteConfig.name,
-    icons: { icon: siteConfig.logo.mark, apple: "/brand/apple-touch-icon.png" },
+    icons: {
+      icon: [
+        { url: siteConfig.logo.mark, type: "image/svg+xml" },
+        { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+      ],
+      apple: "/brand/apple-touch-icon.png",
+    },
     appleWebApp: { capable: true, title: siteConfig.shortName },
+    openGraph: {
+      type: "website",
+      siteName: siteConfig.name,
+      title: t("title", { name: siteConfig.name }),
+      description: t("description"),
+      images: [{ url: siteConfig.logo.og, width: 1200, height: 630, alt: t("ogAlt", { name: siteConfig.name }) }],
+    },
+    twitter: { card: "summary_large_image", images: [siteConfig.logo.og] },
   };
 }
 

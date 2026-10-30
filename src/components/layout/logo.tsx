@@ -1,25 +1,14 @@
 import siteConfig from "@site";
 import { Link } from "@/i18n/navigation";
+import { BrandStar } from "@/components/brand/star";
 import { cn } from "@/lib/utils";
 
-export function Logo({ className, href = "/" }: { className?: string; href?: string }) {
-  const { logo, name } = siteConfig;
+/** Wordmark: the star plus the name in the display font (follows the theme's colors). */
+export function Logo({ className, href = "/", compact = false }: { className?: string; href?: string; compact?: boolean }) {
   return (
-    <Link href={href} className={cn("flex items-center gap-2 font-semibold tracking-tight", className)}>
-      {logo.showName ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo.mark} alt="" width={28} height={28} className="size-7 rounded-md" />
-          <span className="text-lg">{name}</span>
-        </>
-      ) : (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo.light} alt={name} height={28} className="h-7 w-auto dark:hidden" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo.dark} alt={name} height={28} className="hidden h-7 w-auto dark:block" />
-        </>
-      )}
+    <Link href={href} className={cn("group inline-flex items-center gap-2 rounded-md", className)} aria-label={siteConfig.name}>
+      <BrandStar className="size-6 transition-transform duration-500 ease-out group-hover:rotate-45 motion-reduce:transition-none" />
+      {!compact && <span className="font-display text-[1.375rem] leading-none font-semibold tracking-[-0.02em] text-foreground">{siteConfig.name}</span>}
     </Link>
   );
 }

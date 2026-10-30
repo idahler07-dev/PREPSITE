@@ -46,7 +46,7 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 
 - [ ] Review the 30 starter vocabulary words (Admin → Vocabulary) and add your own.
 - [ ] Telegram bot: students must allow the bot to message them in the login widget for Telegram reminders.
-- [ ] Replace the logo in `public/brand/` and run `pnpm tsx scripts/make-icons.ts` for the app icons.
+- [ ] Replace the logo in `public/brand/` and run `pnpm tsx scripts/make-brand.ts` for the logo files, app icons and link-preview image.
 
 ## Payments
 
