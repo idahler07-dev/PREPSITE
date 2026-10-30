@@ -4,7 +4,7 @@ import { BrandMark } from "@/components/brand/mark";
 import { cn } from "@/lib/utils";
 
 /**
- * Full logo: Otto mark + "Satify" in Geist Bold, tracking -0.035em. Sized in em
+ * Full logo: Rising S mark + "Satify" in Geist Bold, tracking -0.035em. Sized in em
  * from the wordmark: mark height = cap height (0.71em) × 1.3 = 0.923em, gap 0.35em.
  * `compact` shows the mark only (32px).
  */

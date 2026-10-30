@@ -4,8 +4,8 @@ import { m, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
 import { Mascot } from "./mascot";
 
-/** Correct answer in a drill: Otto pops in cheering (spring.bouncy, under 1s). Not used in timed tests. */
-export function OttoCheerPop() {
+/** Correct answer in a drill: Pip pops in cheering (spring.bouncy, under 1s). Not used in timed tests. */
+export function MascotCheerPop() {
   const reduce = useReducedMotion();
   return (
     <m.div
@@ -23,7 +23,7 @@ export function OttoCheerPop() {
 const PARTICLES = Array.from({ length: 14 }, (_, i) => i);
 const TONES = ["bg-primary", "bg-highlight", "bg-accent"];
 
-/** Finished test / streak milestone: a short burst of cobalt, lilac and coral particles around Otto cheering. */
+/** Finished test / streak milestone: a short burst of cobalt, lilac and coral particles around Pip cheering. */
 export function Celebration({ className }: { className?: string }) {
   const reduce = useReducedMotion();
   return (

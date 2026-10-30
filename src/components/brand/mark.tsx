@@ -22,7 +22,7 @@ function Svg({ className, title, html }: { className?: string; title?: string; h
   );
 }
 
-/** Flat mark for 16–48px: Otto in one color on the cobalt squircle (follows the theme). */
+/** Flat mark for 16–48px: the Rising S in one color on the cobalt squircle (follows the theme). */
 export function BrandMark({ className, title, concept = CHOSEN_CONCEPT }: Props) {
   return <Svg className={cn("size-8", className)} title={title} html={flatMarkInner(concept, { bgClass: "fill-primary", fgClass: "fill-primary-foreground", strokeClass: "stroke-primary-foreground" })} />;
 }

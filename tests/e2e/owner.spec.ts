@@ -48,7 +48,7 @@ async function expectNoManageAccess(page: Page, request: APIRequestContext) {
     const res = await page.goto(url);
     expect(res?.status(), url).toBe(404);
     await expect(
-      page.getByRole("heading", { name: "Otto can't find that page" }),
+      page.getByRole("heading", { name: "Pip can't find that page" }),
       url,
     ).toBeVisible();
   }

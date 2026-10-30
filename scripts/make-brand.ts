@@ -104,14 +104,18 @@ async function png(svgInner: string, size: number) {
   return c.toBuffer("image/png");
 }
 
-/** Otto as a standalone SVG (CSS variables resolved to the light theme colors). */
-function ottoSvg(pose: "wave" | "cheer" | "juggle") {
+/** Pip as a standalone SVG (CSS variables resolved to the light theme colors). */
+function mascotSvg(pose: "wave" | "cheer" | "juggle") {
   const vars: Record<string, string> = {
-    "--otto-body": "#2747F5",
-    "--otto-belly": "#7F95FF",
-    "--otto-accent": "#FF6B4A",
-    "--otto-eye": "#FFFFFF",
-    "--otto-ink": "#0E1222",
+    "--mascot-body": "#A897FF",
+    "--mascot-light": "#D3C9FF",
+    "--mascot-dark": "#7A66F2",
+    "--mascot-cap": "#2747F5",
+    "--mascot-cap-light": "#5C76FF",
+    "--mascot-cap-dark": "#1C32C4",
+    "--mascot-accent": "#FF6B4A",
+    "--mascot-eye": "#FFFFFF",
+    "--mascot-ink": "#0E1222",
     "--flagged": "#F2A20C",
     "--highlight": "#B7A6FF",
     "--correct": "#12B886",
@@ -171,7 +175,7 @@ async function main() {
   writeFileSync(`${OUT}/apple-touch-icon.png`, await png(gloss("light", { fullBleed: true }), 180));
   writeFileSync(`${OUT}/icon-192.png`, await png(gloss("light"), 192));
   writeFileSync(`${OUT}/icon-512.png`, await png(gloss("light"), 512));
-  writeFileSync(`${OUT}/icon-maskable-512.png`, await png(gloss("light", { fullBleed: true, ottoScale: 0.82 }), 512));
+  writeFileSync(`${OUT}/icon-maskable-512.png`, await png(gloss("light", { fullBleed: true, symbolScale: 0.82 }), 512));
   writeFileSync(`${OUT}/mark-1024.png`, await png(gloss("light"), 1024));
 
   const wordmark = await loadImage(Buffer.from(logo));
@@ -188,8 +192,8 @@ async function main() {
   ctx.fillRect(0, 0, W, H);
   mesh(ctx, W, H);
   ctx.drawImage(wordmark, 88, 80, (wordmark.width / wordmark.height) * 64, 64);
-  const otto = await loadImage(Buffer.from(ottoSvg("wave")));
-  ctx.drawImage(otto, 780, 150, 340, 340);
+  const mascot = await loadImage(Buffer.from(mascotSvg("wave")));
+  ctx.drawImage(mascot, 780, 150, 340, 340);
 
   const draw = (text: string, x: number, y: number, f: string, color: string) => {
     ctx.font = f;

@@ -36,7 +36,7 @@ const TYPE = [
 const CHOICES = ["11", "26", "30", "41"].map((html, i) => ({ key: "ABCD"[i]!, html }));
 const SKILLS = [0.92, 0.8, 0.66, 0.5, 0.35, 0.2, null].map((m, i) => ({ key: String(i), label: `Skill ${i + 1}`, mastery: m, detail: m == null ? undefined : `${Math.round(m * 100)}%` }));
 const TREND = [1180, 1220, 1210, 1290, 1340].map((value, i) => ({ label: `T${i + 1}`, value }));
-const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", test: "Answer choices", otto: "Otto poses", empty: "Empty state", emphasis: "Emphasis" };
+const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", test: "Answer choices", mascot: "Pip poses", empty: "Empty state", emphasis: "Emphasis" };
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -144,7 +144,7 @@ export function Showcase() {
           </Button>
         </div>
       </Block>
-      <Block title={H.otto}>
+      <Block title={H.mascot}>
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {MASCOT_POSES.map((p) => (
             <li key={p} className="flex flex-col items-center gap-2 rounded-[14px] border bg-surface p-4">

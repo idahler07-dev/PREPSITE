@@ -174,8 +174,8 @@
     },
     "bank": {
       "label": "Question bank",
-      "title": "Stuck? <i>Ask</i> Otto.",
-      "body": "Every question is written and checked by teachers. When you get one wrong, Otto explains it step by step, and every explanation is checked against the answer key.",
+      "title": "Stuck? <i>Ask</i> Pip.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, Pip explains it step by step, and every explanation is checked against the answer key.",
       "cta": "Try a drill"
     },
     "plan": {
@@ -388,7 +388,7 @@
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
     },
-    "tip": "Tip from Otto: a test date helps me spread your practice across the weeks you have."
+    "tip": "Tip from Pip: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -434,7 +434,7 @@
     "practiceNow": "Practice now",
     "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
     "streakTitle": "Day streak",
-    "streakReminder": "Otto misses you. Ten questions keeps your streak alive.",
+    "streakReminder": "Pip misses you. Ten questions keeps your streak alive.",
     "daysToTest": "Days to test",
     "noTestDate": "Set your test date",
     "estimateEmpty": "Take a practice test to see your estimate.",
@@ -781,11 +781,11 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Otto can't find that page",
+    "notFoundTitle": "Pip can't find that page",
     "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Otto dropped a few things. Try again, and if it keeps happening, let us know.",
+    "errorBody": "Pip dropped a few things. Try again, and if it keeps happening, let us know.",
     "goDashboard": "Go to my dashboard",
     "tryAgain": "Try again"
   },
@@ -1540,7 +1540,7 @@
     }
   },
   "tutor": {
-    "title": "Ask Otto",
+    "title": "Ask Pip",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1548,7 +1548,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Otto is thinking…",
+    "thinking": "Pip is thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1562,7 +1562,7 @@
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
     },
-    "askOtto": "Ask Otto",
+    "askPip": "Ask Pip",
     "stepByStep": "Step by step"
   },
   "billing": {

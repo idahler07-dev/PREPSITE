@@ -22,7 +22,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RichText } from "@/components/content/rich-text";
 import { cn } from "@/lib/utils";
-import { OttoCheerPop } from "@/components/mascot/celebrate";
+import { MascotCheerPop } from "@/components/mascot/celebrate";
 import { useAutosave, type SaveStatus } from "./use-autosave";
 import { CountdownTimer } from "./timer";
 import { ChoiceList } from "./choice-list";
@@ -638,7 +638,7 @@ function FeedbackPanel({ item, feedback, attemptId, aiEnabled }: { item: RunnerI
       role="status"
       className={cn("relative space-y-3 rounded-[14px] border-2 p-4", feedback.isCorrect ? "border-correct bg-correct-soft" : "border-danger bg-danger-soft")}
     >
-      {feedback.isCorrect && <OttoCheerPop />}
+      {feedback.isCorrect && <MascotCheerPop />}
       <p className="flex items-center gap-2 font-semibold">
         {feedback.isCorrect ? <CheckCircle2 className="size-5 text-correct-ink" aria-hidden /> : <XCircle className="size-5 text-danger-ink" aria-hidden />}
         {feedback.isCorrect ? t("correct") : t("incorrect")}

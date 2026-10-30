@@ -168,7 +168,7 @@ function Choices({ items, selected, correct }: { items: string[]; selected: numb
   );
 }
 
-/** Test interface with the "Ask Otto" side panel (question bank section). */
+/** Test interface with the "Ask Pip" side panel (question bank section). */
 export function TutorMockup() {
   const t = useTranslations("home.mini");
   const tt = useTranslations("tutor");
@@ -186,7 +186,7 @@ export function TutorMockup() {
             <Mascot pose="think" className="w-14" />
             <div>
               <p className="flex items-center gap-1.5 font-semibold">
-                <Sparkles className="size-4 text-primary" aria-hidden /> {tt("askOtto")}
+                <Sparkles className="size-4 text-primary" aria-hidden /> {tt("askPip")}
               </p>
               <p className="text-label text-muted-foreground">{tt("stepByStep")}</p>
             </div>

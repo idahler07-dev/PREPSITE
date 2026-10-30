@@ -5,7 +5,7 @@ import { LogoConcepts } from "@/components/design/logo-concepts";
 export const metadata = { title: "Design system", robots: { index: false } };
 
 const TITLE = "Design system";
-const SUB = "Every component, token and Otto pose in both themes. See DESIGN.md for the rules.";
+const SUB = "Every component, token and Pip pose in both themes. See DESIGN.md for the rules.";
 const LIGHT = "Light";
 const DARK = "Dark";
 

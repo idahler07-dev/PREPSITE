@@ -1,6 +1,6 @@
 # Satify design system
 
-Satify is calm, spacious and friendly: mostly white and neutral, cobalt for actions and data, and Otto the octopus for personality. This file is the source of truth. The owner-only page **/manage/design** shows every token, component and Otto pose in both themes.
+Satify is calm, spacious and friendly: mostly white and neutral, cobalt for actions and data, and Pip the highlighter for personality. This file is the source of truth. The owner-only page **/manage/design** shows every token, component and Pip pose in both themes.
 
 Tagline: **Your SAT score, *planned* and proven.** (`brand.tagline` in `messages/en.json`).
 
@@ -16,7 +16,7 @@ All colors are CSS variables in `src/app/globals.css`, mapped to Tailwind (`bg-p
 | `foreground` / `muted-foreground` | #0E1222 / #5A6178 | #EEF0FA / #9AA0BC | text |
 | `border` / `input` | #E5E8F0 / #7E86A0 | #262C4A / #5F688E | dividers / control borders (3:1) |
 | `primary` (cobalt) | #2747F5, hover #1C36D1, soft #E8ECFF | #6F86FF, hover #8C9EFF, soft #1C2452 | actions, links, data, selected answers |
-| `accent` (coral) | #FF6B4A, soft #FFEDE7, ink #CF2600 | #FF8A6E, soft #3A1E17 | **upgrade CTAs and Otto's accents only** |
+| `accent` (coral) | #FF6B4A, soft #FFEDE7, ink #CF2600 | #FF8A6E, soft #3A1E17 | **upgrade CTAs and Pip's accents only** |
 | `highlight` (lilac) | #B7A6FF | #9C88FF | `<hl>` underline and gradients only |
 | `correct` (mint) | #12B886, soft #E0F7EF, ink #0C7B5A | #3DD6A3, soft #0F3329 | right answers (review only) |
 | `wrong` / `danger` | #E5484D, soft #FDE8E8, ink #C8191F | #FF6B70 | wrong answers (review only), errors |
@@ -24,7 +24,7 @@ All colors are CSS variables in `src/app/globals.css`, mapped to Tailwind (`bg-p
 
 AA adjustments: in light mode, coral, mint, amber and red are too light for text on white. They're used as **fills with dark text** (`text-on-fill`) and for graphics, and each has an **-ink** shade of the same hue for text and icons. White text appears only on cobalt and the red ink. In dark mode, filled controls use dark text.
 
-Otto has his own tokens (`--otto-body`, `--otto-belly`, `--otto-accent`, `--otto-eye`, `--otto-ink`) so he looks the same character in both themes.
+Pip has its own tokens (`--mascot-body`, `--mascot-light`, `--mascot-dark`, `--mascot-cap`, `--mascot-cap-light`, `--mascot-cap-dark`, `--mascot-accent`, `--mascot-eye`, `--mascot-ink`) so it looks the same in both themes, a touch brighter in dark.
 
 ## Typography
 
@@ -68,7 +68,7 @@ At most **one emphasis per headline**. The brand tagline is the only exception: 
 
 ### Landing section pattern
 
-One idea per section: a pill label with a colored icon (`SectionPill`), a big headline on the left and a short paragraph on the right (`SectionHead`), one CTA, then a large product mockup or bento. Vary the composition every 2–3 sections: centered head + path, full-width mockup, two columns with Otto and a speech bubble, tilted mockup with floating cards, bento. Mockups are **real components with sample data** (`src/components/marketing/mockups.tsx`), never screenshots. **No invented statistics, testimonials or user counts.** Real figures need `site.config.ts › publicStats` thresholds.
+One idea per section: a pill label with a colored icon (`SectionPill`), a big headline on the left and a short paragraph on the right (`SectionHead`), one CTA, then a large product mockup or bento. Vary the composition every 2–3 sections: centered head + path, full-width mockup, two columns with Pip and a speech bubble, tilted mockup with floating cards, bento. Mockups are **real components with sample data** (`src/components/marketing/mockups.tsx`), never screenshots. **No invented statistics, testimonials or user counts.** Real figures need `site.config.ts › publicStats` thresholds.
 
 ## Components
 
@@ -79,7 +79,7 @@ One idea per section: a pill label with a colored icon (`SectionPill`), a big he
 | SpotlightCard | `motion/interactive-card.tsx` | Bento card with a cursor spotlight (desktop); `tilt` only on landing feature cards. |
 | Tabs | `ui/tabs.tsx` | Active pill slides between options (`layoutId`). |
 | PageHeader | `layout/page-header.tsx` | Title, one-line description, primary action on the right. |
-| EmptyState | `layout/empty-state.tsx` | Always an Otto pose, one sentence, one action. |
+| EmptyState | `layout/empty-state.tsx` | Always an Pip pose, one sentence, one action. |
 | ConfirmDialog | `ui/confirm-dialog.tsx` | For destructive actions. |
 | Skeleton | `ui/skeleton.tsx` | Shimmer, never a spinner for content. |
 | SkillMap / TrendChart | `learning/` | Tiles shaded by mastery; line chart that draws in. |
@@ -89,22 +89,35 @@ One idea per section: a pill label with a colored icon (`SectionPill`), a big he
 
 Glass (`.glass`) is only for the sticky top bars, the command palette and floating panels (calculator, reference sheet).
 
-## Otto, the mascot
+## Pip, the mascot
 
-`<Mascot pose="..." />` (`src/components/mascot/mascot.tsx`) is an original flat-vector octopus: a dome head with a lighter belly, big eyes, coral cheeks and suction dots, and eight short curly arms. He's built from simple shapes so a designer can replace the artwork **inside that one file** without touching anything else.
+`<Mascot pose="..." />` (`src/components/mascot/mascot.tsx`) is Pip, an original lilac highlighter with a cobalt cap: glossy barrel with a specular stripe and ambient occlusion, a white label band carrying the logo, a pocket clip, a chisel nib, small arms and a simple face (dark oval eyes with highlights, coral cheeks). Pip marks what matters and glows when you get it right (the `cheer` pose has a soft lilac halo). All shading is SVG gradients, no filters or raster images. Replace the artwork **inside that one file** without touching anything else.
 
 | Pose | Where |
 |---|---|
 | `wave` | hero, dashboard greeting, OG image |
-| `think` | AI tutor while answering ("Ask Otto"), loading, estimate empty state |
+| `think` | AI tutor while answering ("Ask Pip"), loading, estimate empty state |
 | `cheer` | correct answer pop-in (drills), finished test celebration, final CTA |
-| `focus` | holding pencil and book (study moments) |
+| `focus` | tilted, highlighting a line (study moments) |
 | `sleepy` | streak reminder when the streak has lapsed |
 | `point` | onboarding tips, study plan bubble, "start here" empty states |
 | `juggle` | holding many tools at once (hero variants, error page) |
 | `confused` | 404 page |
 
-Otto is personality, not decoration: use him in the hero, empty states, onboarding, the tutor, celebrations and reminders. **Never inside test questions.** He blinks, his arms wiggle gently, poses cross-fade, and he reacts on hover in the hero. The logo is his head and two arms in white on a cobalt rounded square (`src/lib/brand-mark.ts`). `pnpm brand` regenerates the logo files, icons and OG image.
+Pip is personality, not decoration: use Pip in the hero, empty states, onboarding, the tutor, celebrations and reminders. **Never inside test questions.** Pip blinks, poses cross-fade, raised arms wave or bob, and reacts on hover in the hero.
+
+## Logo
+
+The mark is the **Rising S**: the S of Satify finishing as an upward stroke with an arrow tip (progress), in a cobalt squircle with a 28% corner radius and smoothed corners (`src/lib/brand-mark.ts`). Two renderings:
+
+- **Flat** (16–48px, `<BrandMark>`): solid squircle, the S in one color with slightly heavier strokes. Follows the theme.
+- **Gloss** (64px and up, `<BrandMarkGloss>`): gradient squircle with an inner glow, darker lower edge and rim light; the S is a soft 3D ribbon with a highlight and ambient occlusion. Brighter edges in dark mode.
+
+Wordmark: Geist 700, tracking −0.035em. Mark height = cap height (0.71em) × 1.3; gap 0.35em (`components/layout/logo.tsx`).
+
+Three concepts were drawn (Rising S, Steps, Bubble) and are compared at 16/32/64/256px on `/manage/design`. **Rising S** won: it carries the name and the promise (it rises) and stays crisp from a 16px favicon to a 256px icon; Steps reads as a signal icon and Bubble turns into a plain dot at 16px.
+
+`pnpm brand` writes everything to `public/brand/` (plus `public/favicon.ico`): `logo(-dark).svg` and `logo-flat(-dark).svg`, `mark.svg` (theme-aware favicon), `mark-small(-dark).svg`, `mark-gloss(-dark).svg`, `favicon-16/32/48.png`, `apple-touch-icon.png`, `icon-192/512.png`, `icon-maskable-512.png`, `mark-1024.png`, `logo-email.png` and the 1200×630 `og.png`.
 
 ## Motion
 
@@ -120,9 +133,9 @@ Rules:
 - Animate only **transform, opacity and filter**. No layout thrashing, no layout shift. Use `layout` / `layoutId` for size changes and shared elements.
 - Page transitions: fade + 12px rise + blur 4px→0. Sections reveal once on scroll (fade, rise, scale 0.98→1, staggered).
 - Hero: words rise in one by one (40ms), the emphasized word last, then its underline draws. Floating mini-cards bob on a 6s loop and drift slightly on scroll.
-- Answers: the selection fills from the click point. Correct: the check draws itself, and in drills Otto pops in cheering. Wrong: a gentle shake, and the correct choice highlights.
+- Answers: the selection fills from the click point. Correct: the check draws itself, and in drills Pip pops in cheering. Wrong: a gentle shake, and the correct choice highlights.
 - Celebrations last at most 1 second, and never happen during a test. The test interface only animates selection, check/shake feedback and panels.
-- `useLiteMotion()` turns off tilt, spotlight, parallax, cursor-reactive gradients and heavy blur on small, touch or weak devices. `prefers-reduced-motion` keeps only short fades (Otto's idle loops stop too).
+- `useLiteMotion()` turns off tilt, spotlight, parallax, cursor-reactive gradients and heavy blur on small, touch or weak devices. `prefers-reduced-motion` keeps only short fades (Pip's idle loops stop too).
 
 ## Micro-details
 

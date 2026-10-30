@@ -76,7 +76,7 @@ export default async function HomePage() {
         <HowPath steps={(["diagnose", "plan", "practice"] as const).map((k) => ({ title: t(`how.steps.${k}.title`), body: t(`how.steps.${k}.body`) }))} />
       </Section>
 
-      {/* 4. Question bank + Ask Otto: full-width mockup */}
+      {/* 4. Question bank + Ask Pip: full-width mockup */}
       <Section id="features">
         <SectionHead
           pill={<SectionPill icon={<Library />}>{t("bank.label")}</SectionPill>}
@@ -95,7 +95,7 @@ export default async function HomePage() {
         </Reveal>
       </Section>
 
-      {/* 5. Study plan: two columns, Otto with a speech bubble */}
+      {/* 5. Study plan: two columns, Pip with a speech bubble */}
       <Section tint>
         <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
           <div className="space-y-6">

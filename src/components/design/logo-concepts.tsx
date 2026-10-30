@@ -4,22 +4,22 @@ import { CHOSEN_CONCEPT, MARK_CONCEPTS, type MarkConcept } from "@/lib/brand-mar
 import { cn } from "@/lib/utils";
 
 const ABOUT: Record<MarkConcept, { name: string; note: string }> = {
-  curls: {
-    name: "A · Curls",
-    note: "Dome head, two eyes, four mirrored arms ending in tidy curls. Reads as an octopus at every size and stays calm and balanced.",
-  },
   rise: {
-    name: "B · Rising arm",
-    note: "One arm rises into an arrow for “scores go up”. Clever at 256px, but the arrow turns into a smudge at 16px and makes the mark lopsided.",
+    name: "A · Rising S",
+    note: "The S of Satify finishing as an upward stroke with an arrow tip: progress, not perfection. Distinctive, and still a clear letter at 16px.",
   },
-  stamp: {
-    name: "C · Stamp",
-    note: "Head only with a scalloped edge. Strongest at 16px, but without arms it reads as a ghost rather than an octopus, and loses Otto.",
+  steps: {
+    name: "B · Steps",
+    note: "Three rising bars. Clear idea, but it reads as a phone signal or chart icon, so it says little about Satify.",
+  },
+  bubble: {
+    name: "C · Bubble",
+    note: "A filled answer bubble with a small orbit. Calm and SAT-specific, but at 16px it becomes a plain dot in a ring.",
   },
 };
 
 const WHY =
-  "Chosen: A. It is the only concept that is unmistakably Otto at 16px (the head and four arm stubs survive) and still rich at 256px. The symmetry suits a calm study tool; the rising arrow (B) is kept as an idea for marketing, not the mark.";
+  "Chosen: A. It is the only concept that carries the name (the S), the promise (it rises) and stays crisp from a 16px favicon to a 256px app icon. Pip the highlighter carries the personality; the mark stays simple and premium.";
 
 /** The three logo concepts at 16, 32, 64 and 256px: flat up to 32, gloss from 64. */
 export function LogoConcepts() {
