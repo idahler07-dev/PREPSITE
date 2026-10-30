@@ -33,7 +33,7 @@ async function pdf(pages: string[][], opts: { box?: boolean } = {}) {
 }
 
 async function batchWith(files: { bytes: Uint8Array; kind: "QUESTIONS_PDF" | "ANSWER_KEY_PDF"; name: string }[], section: "RW" | "MATH" = "MATH") {
-  const admin = await makeUser("ADMIN");
+  const admin = await makeUser();
   const source = await db.source.create({ data: { name: "Booklet", owner: "Centre", rightsStatement: "ok", rightsConfirmedById: admin.id, rightsConfirmedAt: new Date() } });
   const batch = await db.importBatch.create({
     data: { kind: "PDF", sourceId: source.id, section, defaultDifficulty: "HARD", codePrefix: "PDF-", rightsConfirmedById: admin.id, rightsConfirmedAt: new Date(), createdById: admin.id },

@@ -4,11 +4,11 @@
  */
 import { freeLimits, premiumLimits } from "./plans";
 
-export type AiTier = "free" | "premium" | "staff";
+export type AiTier = "free" | "premium" | "owner";
 
 export const aiLimits = {
   /** New AI tutor answers (explanations, hints, follow-up replies) per day, in the site time zone. */
-  tutorPerDay: { free: freeLimits.aiAnswersPerDay, premium: premiumLimits.aiAnswersPerDay, staff: 500 } satisfies Record<AiTier, number>,
+  tutorPerDay: { free: freeLimits.aiAnswersPerDay, premium: premiumLimits.aiAnswersPerDay, owner: 500 } satisfies Record<AiTier, number>,
   /** Burst limit across all tutor requests. */
   tutorPerMinute: 6,
   /** Follow-up messages a student can send about one question. */

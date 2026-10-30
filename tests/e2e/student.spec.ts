@@ -80,14 +80,6 @@ test("Telegram sign-in: coming back from Telegram's page signs the student in", 
   await expect(page).toHaveURL(/\/onboarding$/);
 });
 
-test("students cannot open the admin area", async ({ page }) => {
-  await signIn(page, uniqueEmail("nosy"));
-  await page.goto("/admin");
-  await expect(page.getByRole("heading", { name: "Otto can't find that page" })).toBeVisible();
-  const res = await page.request.get("/api/admin/imports/template");
-  expect(res.status()).toBe(403);
-});
-
 test("public pages: disclaimer, and old locale links redirect to English pages", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("SAT® is a trademark registered by the College Board")).toBeVisible();

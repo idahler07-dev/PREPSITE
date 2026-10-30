@@ -37,7 +37,7 @@ export async function saveGoal(_prev: FormState, form: FormData): Promise<FormSt
     where: { id: user.id },
     data: { ...data, onboardedAt: user.onboardedAt ?? new Date() },
   });
-  revalidatePath("/[locale]", "layout");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -53,14 +53,14 @@ export async function saveName(_prev: FormState, form: FormData): Promise<FormSt
   const parsed = nameSchema.safeParse(form.get("name") ?? "");
   if (!parsed.success) return { errors: { name: "invalid" } };
   await db.user.update({ where: { id: user.id }, data: { name: parsed.data || null } });
-  revalidatePath("/[locale]", "layout");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
 export async function deleteAccount(confirmation: string) {
   const user = await requireApiUser();
   if (confirmation.trim() !== "DELETE") return { error: "CONFIRMATION" };
-  await audit(null, "user.delete", "User", user.id, { role: user.role });
+  await audit(null, "user.delete", "User", user.id, {});
   // Cascades remove accounts, attempts, modules and responses. Reports stay, anonymized.
   await db.user.delete({ where: { id: user.id } });
   await signOut({ redirectTo: "/" });

@@ -63,7 +63,6 @@
     "about": "About us",
     "faq": "FAQ",
     "contact": "Contact",
-    "admin": "Admin",
     "settings": "Settings",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -80,7 +79,8 @@
     "howItWorks": "How it works",
     "mistakes": "Mistakes",
     "analytics": "Analytics",
-    "mockTests": "Mock tests"
+    "mockTests": "Mock tests",
+    "manage": "Manage"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -861,11 +861,6 @@
       "IMPORTED": "Imported",
       "AI_DRAFTED": "AI draft",
       "MANUAL": "Manual"
-    },
-    "role": {
-      "STUDENT": "Student",
-      "EDITOR": "Editor",
-      "ADMIN": "Admin"
     }
   },
   "flags": {
@@ -941,7 +936,7 @@
     }
   },
   "admin": {
-    "title": "Admin",
+    "title": "Manage",
     "nav": {
       "overview": "Overview",
       "questions": "Questions",
@@ -1285,12 +1280,13 @@
       "columns": {
         "name": "Name",
         "email": "Email",
-        "role": "Role",
+        "access": "Access",
         "joined": "Joined",
         "attempts": "Drills"
       },
-      "roleChanged": "Role updated",
-      "cannotChangeOwnRole": "You can’t change your own role."
+      "owner": "Owner",
+      "member": "Member",
+      "ownerNote": "Owners are set with the OWNER_EMAILS setting and must sign in with that verified email."
     },
     "importReview": {
       "title": "Review import",
@@ -1842,9 +1838,8 @@
   },
   "demo": {
     "title": "Demo site",
-    "body": "Try it without signing up. Each student visit gets a fresh account; the admin account is shared, so others may see your changes. Data can be reset at any time.",
+    "body": "Try it without signing up. Each visit gets a fresh account. Data can be reset at any time.",
     "student": "Try as a student",
-    "admin": "Try as admin",
     "banner": "Demo site — test payments only, data may be reset."
   },
   "brand": {

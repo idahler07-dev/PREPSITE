@@ -30,8 +30,8 @@ const schema = z.object({
   AUTH_GOOGLE_SECRET: z.string().optional(),
   TELEGRAM_BOT_TOKEN: z.string().optional(),
   NEXT_PUBLIC_TELEGRAM_BOT_USERNAME: z.string().optional(),
-  /** Comma-separated emails that are promoted to admin on sign-in. */
-  ADMIN_EMAILS: csv,
+  /** Comma-separated emails of the owners, who can manage content. The email must be verified at sign-in. */
+  OWNER_EMAILS: csv,
   /** Sign-in emails one IP address may request per hour (raise it if a whole classroom shares one IP). */
   MAGIC_LINKS_PER_IP_HOUR: z.coerce.number().int().min(1).default(10),
 

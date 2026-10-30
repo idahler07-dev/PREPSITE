@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { env } from "@/lib/env";
-import { getCurrentUser, isStaff } from "@/server/auth/session";
+import { getCurrentUser, isOwner } from "@/server/auth/session";
 import { AppShell, SIDEBAR_COOKIE, type ShellItem } from "@/components/layout/app-shell";
 import { Logo } from "@/components/layout/logo";
 import { CountdownChip } from "@/components/layout/countdown-chip";
@@ -49,7 +49,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     { key: "history", href: "/history", label: t("history"), group: "more" },
     { key: "resources", href: "/resources", label: t("resources"), group: "more" },
     { key: "billing", href: "/billing", label: t("billing"), group: "more" },
-    ...(isStaff(user) ? [{ key: "admin", href: "/admin", label: t("admin"), group: "more" } as const] : []),
+    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage"), group: "more" } as const] : []),
   ];
 
   const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "collapsed";
@@ -72,7 +72,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           <CommandPaletteButton />
           <ThemeToggle signedIn />
           <ThemeSync theme={user.theme} />
-          <UserMenu name={user.name} email={user.email} isStaff={isStaff(user)} />
+          <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
         </div>
       </div>
     </header>

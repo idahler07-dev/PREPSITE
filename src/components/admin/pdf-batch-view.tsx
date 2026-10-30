@@ -71,11 +71,11 @@ export async function PdfBatchView({ batchId }: { batchId: string }) {
           <div className="flex flex-wrap gap-2 pt-2">
             {!!log.created && (
               <Button asChild>
-                <Link href={`/admin/import/${batchId}/review`}>{t("result.review")}</Link>
+                <Link href={`/manage/import/${batchId}/review`}>{t("result.review")}</Link>
               </Button>
             )}
             <Button asChild variant="outline">
-              <Link href={`/admin/review?batch=${batchId}`}>{t("result.queue")}</Link>
+              <Link href={`/manage/review?batch=${batchId}`}>{t("result.queue")}</Link>
             </Button>
           </div>
         </CardContent>

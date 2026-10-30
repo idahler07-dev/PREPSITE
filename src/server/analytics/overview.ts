@@ -9,11 +9,11 @@ export async function analyticsOverview(now = new Date()) {
   const tz = siteConfig.defaultTimeZone;
   const since30 = new Date(now.getTime() - 30 * DAY);
   const active = (days: number) =>
-    db.attempt.findMany({ where: { startedAt: { gte: new Date(now.getTime() - days * DAY) }, user: { role: "STUDENT" } }, distinct: ["userId"], select: { userId: true } }).then((r) => r.length);
+    db.attempt.findMany({ where: { startedAt: { gte: new Date(now.getTime() - days * DAY) } }, distinct: ["userId"], select: { userId: true } }).then((r) => r.length);
 
   const [students, newThisWeek, dau, wau, mau, premium, perDay, signupsPerWeek, mocks, skillRows] = await Promise.all([
-    db.user.count({ where: { role: "STUDENT" } }),
-    db.user.count({ where: { role: "STUDENT", createdAt: { gte: new Date(now.getTime() - 7 * DAY) } } }),
+    db.user.count(),
+    db.user.count({ where: { createdAt: { gte: new Date(now.getTime() - 7 * DAY) } } }),
     active(1),
     active(7),
     active(30),
@@ -25,7 +25,7 @@ export async function analyticsOverview(now = new Date()) {
       GROUP BY 1 ORDER BY 1`,
     db.$queryRaw<{ week: string; n: bigint }[]>`
       SELECT to_char(date_trunc('week', u."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE ${tz}), 'YYYY-MM-DD') AS week, count(*) AS n
-      FROM "User" u WHERE u.role = 'STUDENT' AND u."createdAt" >= ${new Date(now.getTime() - 12 * 7 * DAY)}
+      FROM "User" u WHERE u."createdAt" >= ${new Date(now.getTime() - 12 * 7 * DAY)}
       GROUP BY 1 ORDER BY 1`,
     db.attempt.findMany({ where: { kind: "MOCK", status: "COMPLETED", completedAt: { gte: since30 } }, select: { scores: true } }),
     db.$queryRaw<{ skill: string; answered: bigint; correct: bigint }[]>`

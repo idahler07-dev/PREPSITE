@@ -16,7 +16,7 @@ Web app for a learning centre's SAT students: a question bank the centre owns, e
 | 6 | Mistake notebook (SM-2), daily question, bookmarks and notes, vocabulary, official scores, study coach, notifications, PWA | **Done** (languages stay en/uz/ru by decision) |
 | 7 | Admin analytics, question calibration, security hardening, accessibility audit, performance, docs | **Done** |
 
-Scope note: this is an individual-student site plus an admin side. Classes, teacher accounts, parent access and tutoring booking are intentionally **not** built.
+Scope note: this is an individual-student site plus an owner-only Manage area. Classes, teacher accounts, parent access and tutoring booking are intentionally **not** built.
 
 ## What it does
 
@@ -33,14 +33,14 @@ Scope note: this is an individual-student site plus an admin side. Classes, teac
 
 ```bash
 pnpm install                 # also generates the Prisma client
-cp .env.example .env         # then set AUTH_SECRET and ADMIN_EMAILS
+cp .env.example .env         # then set AUTH_SECRET and OWNER_EMAILS
 docker compose up -d         # Postgres on :5432, MinIO on :9000 (console :9001)
 pnpm db:migrate              # create the tables
 pnpm db:seed                 # 40 development sample questions (marked as samples)
 pnpm dev                     # http://localhost:3000
 ```
 
-Sign in with an email listed in `ADMIN_EMAILS` to get the admin role. With `EMAIL_TRANSPORT=outbox` no email is sent: the sign-in link is printed in the terminal and saved under `.data/dev-mail/`.
+Sign in with an email listed in `OWNER_EMAILS` to see **Manage** (question import, review, editor, practice tests, users, orders). With `EMAIL_TRANSPORT=outbox` no email is sent: the sign-in link is printed in the terminal and saved under `.data/dev-mail/`.
 
 ## Environment variables
 
@@ -51,7 +51,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `DATABASE_URL` | yes | PostgreSQL connection string |
 | `AUTH_SECRET` | yes | Signs sessions. `openssl rand -base64 32` |
 | `AUTH_URL`, `NEXT_PUBLIC_SITE_URL` | production | Public URL of the site. `NEXT_PUBLIC_SITE_URL` must be set **at build time** |
-| `ADMIN_EMAILS` | recommended | Comma-separated emails promoted to admin when they sign in |
+| `OWNER_EMAILS` | recommended | Comma-separated owner emails. Only these (signed in with that verified email) can open `/manage`; everyone else gets 404 |
 | `EMAIL_TRANSPORT` | yes | `outbox` (dev only), `smtp` (+ `SMTP_URL`) or `resend` (+ `RESEND_API_KEY`) |
 | `EMAIL_FROM` | production | Sender, e.g. `Satify <no-reply@yourdomain.uz>` |
 | `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | optional | Google sign-in |
@@ -69,7 +69,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `MOCK_PAYMENT_SECRET`, `ALLOW_MOCK_PAYMENTS` | dev/staging | Test provider; refused in production unless allowed |
 | `MAGIC_LINKS_PER_IP_HOUR` | optional | Sign-in emails per IP per hour (default 10) |
 | `SENTRY_DSN` | optional | Error reports to Sentry (errors are always logged as JSON lines) |
-| `DEMO_MODE` | demo only | "Try as student / admin" sign-in without email. Never on the real site |
+| `DEMO_MODE` | demo only | "Try as a student" sign-in without email. Never on the real site |
 | `MAIL_OUTBOX_DIR` | optional | Where the `outbox` email transport writes (e.g. `/tmp/dev-mail` on read-only hosts) |
 
 ## Scripts

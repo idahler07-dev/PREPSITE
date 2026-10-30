@@ -24,7 +24,7 @@ export function NewMockForm() {
         e.preventDefault();
         start(async () => {
           const res = await createMockTest({ title, sections });
-          if (res.ok) router.push(`/admin/mocks/${res.data.id}`);
+          if (res.ok) router.push(`/manage/mocks/${res.data.id}`);
           else toast.error(t("errors.create"));
         });
       }}
@@ -77,7 +77,7 @@ export function MockStatusActions({ id, status, canPublish, canDelete }: { id: s
         </Button>
       )}
       {canDelete && (
-        <Button variant="ghost" disabled={pending} onClick={() => act(() => deleteMockTest(id), () => router.push("/admin/mocks"))}>
+        <Button variant="ghost" disabled={pending} onClick={() => act(() => deleteMockTest(id), () => router.push("/manage/mocks"))}>
           {t("delete")}
         </Button>
       )}

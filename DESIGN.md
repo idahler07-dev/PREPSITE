@@ -1,6 +1,6 @@
 # Satify design system
 
-Satify is calm, spacious and friendly: mostly white and neutral, cobalt for actions and data, and Otto the octopus for personality. This file is the source of truth. The admin-only page **/admin/design** shows every token, component and Otto pose in both themes.
+Satify is calm, spacious and friendly: mostly white and neutral, cobalt for actions and data, and Otto the octopus for personality. This file is the source of truth. The owner-only page **/manage/design** shows every token, component and Otto pose in both themes.
 
 Tagline: **Your SAT score, *planned* and proven.** (`brand.tagline` in `messages/en.json`).
 

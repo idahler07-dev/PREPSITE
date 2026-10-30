@@ -11,16 +11,13 @@ Only two kinds of question:
 
 Never copy, paraphrase or import questions, passages, explanations, figures or reference sheets from the College Board, Bluebook, Khan Academy or other prep companies. Link students to the official free resources instead (they are on the **Official resources** page).
 
-If permission for a set of questions is ever withdrawn, open **Admin → Sources** and use **Unpublish everything from this source** (or a single file). The questions are retired immediately and the action is logged.
+If permission for a set of questions is ever withdrawn, open **Manage → Sources** and use **Unpublish everything from this source** (or a single file). The questions are retired immediately and the action is logged.
 
-## 2. Roles
+## 2. Who can manage content
 
-| Role | Can do |
-| --- | --- |
-| Editor | Create, import, edit and review questions; publish; manage sources and reports |
-| Admin | Everything an editor can, plus users and roles (and later: plans, payments, settings) |
+There are no roles: every account is a normal account. The **owners** are the emails listed in `OWNER_EMAILS` (comma-separated). An owner must sign in with that email through the email code/link or Google, so the address is verified; the same email typed into another account doesn't count.
 
-People listed in `ADMIN_EMAILS` become admins when they sign in. Admins can make others editors in **Admin → Users**.
+Owners see an extra **Manage** item (sidebar "More", and the account menu). Every page under `/manage` and every `/api/manage` route returns "Page not found" (404) to everyone else, signed in or not. To add or remove an owner, change `OWNER_EMAILS` and redeploy.
 
 ## 3. Question codes
 
@@ -67,7 +64,7 @@ Tips:
 
 ## 5. Importing a spreadsheet
 
-1. **Admin → Import → CSV / Excel**. Download the Excel template (it has drop-down lists and a skills sheet) or the CSV template.
+1. **Manage → Import → CSV / Excel**. Download the Excel template (it has drop-down lists and a skills sheet) or the CSV template.
 2. Fill one question per row. Columns: `code, section, domain, skill, difficulty, type, passage, stem, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, image_url` (optional extra columns: `tags`, `rationale_a`…`rationale_d`). Delete the example rows.
    - Only `stem` and `correct_answer` are required in the header. Section, difficulty and code can come from the form; domain is worked out from the skill.
    - Domain and skill may be written as the English name ("Linear functions"), the key (`LINEAR_FUNCTIONS`) or the domain code (`ALG`).
@@ -81,7 +78,7 @@ Limits: 5 MB and 2,000 rows per file.
 
 ## 5a. Importing PDFs
 
-1. **Admin → Import → PDF**. Choose the source, tick the rights confirmation, pick the section, difficulty and code prefix.
+1. **Manage → Import → PDF**. Choose the source, tick the rights confirmation, pick the section, difficulty and code prefix.
 2. Add one or more question booklets and, optionally, an answer key PDF. Click **Upload and read**. You can leave the page; the import continues in the background.
 3. When it finishes you see how many questions were created, how many answers came from the key and which pages could not be read.
 4. **Review side by side** shows each original page next to the editor. Check the text, math, figures and answer, confirm domain and skill, and save. In the review queue, **Confirm domain and skill** does this for many questions at once once you have checked them.
@@ -97,7 +94,7 @@ Text the AI could not read clearly is marked `[[?…]]` and flagged **Uncertain 
 
 ## 5b. Building practice tests
 
-1. **Admin → Practice tests → New practice test**. Give it a title and choose the sections.
+1. **Manage → Practice tests → New practice test**. Give it a title and choose the sections.
 2. Questions are picked automatically from **published** questions to match the real test's mix of domains and difficulty. Each section gets module 1 and two versions of module 2 (easier and harder); students get one of them depending on how they do in module 1.
 3. A full test needs 81 Reading and Writing and 66 Math published questions. If the bank is too small, the test is saved as a draft that lists what is missing, and it can't be published. Publish more questions and build a new one.
 4. Open the test to see every module with its question codes. **Publish** makes it visible to students under **Practice tests**; **Archive** hides it again (past results stay).
@@ -107,29 +104,29 @@ To change the mix of topics, difficulty or the score table, edit `src/config/moc
 
 ## 5c. AI-drafted questions
 
-1. **Admin → AI drafts**. Pick section, domain, skill, difficulty and how many (up to 20). Tick "match our style" to show the AI up to three of our own published questions for that skill.
+1. **Manage → AI drafts**. Pick section, domain, skill, difficulty and how many (up to 20). Tick "match our style" to show the AI up to three of our own published questions for that skill.
 2. Drafting takes a minute or two. Each draft is then solved by a second AI pass that doesn't see the answer, and Math answers are recalculated.
 3. Drafts appear in the review queue (filter: origin = AI drafted) with the flag **AI draft — needs reading**. Open each one in the editor, check every sentence, the facts, the answer and the explanation, and **save**. Saving clears that flag; only then can the question be published. Pay special attention to drafts also flagged **Solver got another answer**, **Possibly ambiguous** or **Math check failed**.
 4. AI drafts never have figures. Add one in the editor if a question needs it.
 
 ## 5d. When the AI tutor questions an answer
 
-If the tutor thinks an answer key may be wrong, it doesn't tell the student; the question gets the flag **AI questions the answer** and the admin overview shows a count with a link. Open the question (its editor shows the AI's reason), check it, and either fix and save it or approve it as it is. Both clear the flag.
+If the tutor thinks an answer key may be wrong, it doesn't tell the student; the question gets the flag **AI questions the answer** and the Manage overview shows a count with a link. Open the question (its editor shows the AI's reason), check it, and either fix and save it or approve it as it is. Both clear the flag.
 
 ## 5e. Plans, payments and refunds (admins)
 
-- **Admin → Orders** lists every payment with its status. Use **Refund** to return money: Octo and Click (when reversal is enabled) refund directly; for Payme, cancel the payment in the Payme business cabinet and the order updates by itself. Premium from a refunded order stops immediately.
+- **Manage → Orders** lists every payment with its status. Use **Refund** to return money: Octo and Click (when reversal is enabled) refund directly; for Payme, cancel the payment in the Payme business cabinet and the order updates by itself. Premium from a refunded order stops immediately.
 - **Give free premium days** (same page): enter the student's email, number of days and a reason (e.g. scholarship).
-- **Admin → Promo codes**: percent or fixed-amount codes, optionally limited to some plans, a number of uses and an end date. Deactivate a code to stop it.
+- **Manage → Promo codes**: percent or fixed-amount codes, optionally limited to some plans, a number of uses and an end date. Deactivate a code to stop it.
 - Prices, plan lengths and free limits are in `src/config/plans.ts`.
 
 ## 5f. Vocabulary
 
-**Admin → Vocabulary**: each word needs a part of speech, an English definition, one example sentence written by your team (never copied from books or tests) and optional Uzbek and Russian translations. Hide a word to take it out of students' cards.
+**Manage → Vocabulary**: each word needs a part of speech, an English definition, one example sentence written by your team (never copied from books or tests) and optional Uzbek and Russian translations. Hide a word to take it out of students' cards.
 
 ## 6. Reviewing and publishing
 
-Students only ever see **Published** questions. Everything else waits in **Admin → Review queue**.
+Students only ever see **Published** questions. Everything else waits in **Manage → Review queue**.
 
 | Flag | Meaning | Blocks publishing? |
 | --- | --- | --- |
@@ -149,7 +146,7 @@ Editing a published question keeps it published and saves a new version. Use **U
 
 ## 7. Student reports
 
-After answering, students can **Report a problem** (wrong key, typo, unclear, figure, other). A report adds the **Student report** flag and — with the default setting `review.reportsToUnpublish: 1` in `site.config.ts` — sends a published question straight back to review so no one else sees a possibly wrong question. Open reports are listed in **Admin → Reports** and on the question's page. Re-publishing the question resolves its open reports.
+After answering, students can **Report a problem** (wrong key, typo, unclear, figure, other). A report adds the **Student report** flag and — with the default setting `review.reportsToUnpublish: 1` in `site.config.ts` — sends a published question straight back to review so no one else sees a possibly wrong question. Open reports are listed in **Manage → Reports** and on the question's page. Re-publishing the question resolves its open reports.
 
 ## 8. Difficulty
 
@@ -157,4 +154,4 @@ Set the difficulty label you believe is right (easy / medium / hard). Each quest
 
 ## 9. Development samples
 
-The 40 questions with codes starting `SAMPLE-` were written only for testing the site. The admin overview warns while they exist. Remove them before launch with `pnpm samples:remove` (`--dry-run` shows what would be deleted).
+The 40 questions with codes starting `SAMPLE-` were written only for testing the site. The Manage overview warns while they exist. Remove them before launch with `pnpm samples:remove` (`--dry-run` shows what would be deleted).

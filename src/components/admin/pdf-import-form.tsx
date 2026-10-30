@@ -73,7 +73,7 @@ export function PdfImportForm({ sources, defaultPrefix, aiEnabled }: { sources: 
     if (!files.length) return setError(tp("errors.NO_QUESTION_FILE"));
     setBusy(true);
     try {
-      const res = await fetch("/api/admin/imports/pdf", {
+      const res = await fetch("/api/manage/imports/pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -101,9 +101,9 @@ export function PdfImportForm({ sources, defaultPrefix, aiEnabled }: { sources: 
         }
       }
       setStatus(tp("starting"));
-      const start = await fetch(`/api/admin/imports/${body.batchId}/start`, { method: "POST" });
+      const start = await fetch(`/api/manage/imports/${body.batchId}/start`, { method: "POST" });
       if (!start.ok) return setError(explain((await start.json()) as ApiError));
-      router.push(`/admin/import/${body.batchId}`);
+      router.push(`/manage/import/${body.batchId}`);
     } catch {
       setError(c("networkError"));
     } finally {

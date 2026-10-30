@@ -10,9 +10,9 @@ export async function resetDb() {
 }
 
 let n = 0;
-export async function makeUser(role: "STUDENT" | "EDITOR" | "ADMIN" = "STUDENT") {
+export async function makeUser() {
   n++;
-  return db.user.create({ data: { email: `user${n}-${Date.now()}@test.local`, role, name: `User ${n}` } });
+  return db.user.create({ data: { email: `user${n}-${Date.now()}@test.local`, name: `User ${n}` } });
 }
 
 export function mathInput(overrides: Partial<QuestionFormValues> = {}) {

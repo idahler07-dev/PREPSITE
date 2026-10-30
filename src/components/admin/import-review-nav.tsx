@@ -20,7 +20,7 @@ export function ImportReviewNav({
   const t = useTranslations("admin.importReview");
   const router = useRouter();
   const index = items.findIndex((i) => i.id === currentId);
-  const href = (q: string | null, s = show) => `/admin/import/${batchId}/review?show=${s}${q ? `&q=${q}` : ""}`;
+  const href = (q: string | null, s = show) => `/manage/import/${batchId}/review?show=${s}${q ? `&q=${q}` : ""}`;
   const prev = index > 0 ? items[index - 1] : null;
   const next = index >= 0 && index < items.length - 1 ? items[index + 1] : null;
   return (
