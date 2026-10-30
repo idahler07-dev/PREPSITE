@@ -123,19 +123,36 @@ Three concepts were drawn (Rising S, Steps, Bubble) and are compared at 16/32/64
 
 Tokens in `src/lib/motion.ts`; use them everywhere:
 
-- `spring.soft` = { stiffness 170, damping 26 }: page transitions, reveals, fills.
-- `spring.snappy` = { 400, 32 }: pills, sidebar, toggles.
-- `spring.bouncy` = { 260, 18 }: **celebrations only**.
-- `ease.out` = [0.22, 1, 0.36, 1].
+- `spring.soft` = visual duration 350ms, bounce 0.1: page transitions, reveals, fills, sheets.
+- `spring.snappy` = 250ms, bounce 0.1: pills, sidebar, toggles, docked panels.
+- `spring.bouncy` = 400ms, bounce 0.35: **celebrations only**.
+- `ease.out` = [0.22, 1, 0.36, 1]; `fade` = 150ms (what reduced motion gets).
+- **Nothing takes longer than 400ms.** Springs are set by visual duration, not stiffness, so don't override `stiffness`/`damping`. The only exceptions are ambient loops (floating hero cards, mesh gradient, Pip's idle float), which stop with reduced motion.
 
 Rules:
 
 - Animate only **transform, opacity and filter**. No layout thrashing, no layout shift. Use `layout` / `layoutId` for size changes and shared elements.
 - Page transitions: fade + 12px rise + blur 4px→0. Sections reveal once on scroll (fade, rise, scale 0.98→1, staggered).
 - Hero: words rise in one by one (40ms), the emphasized word last, then its underline draws. Floating mini-cards bob on a 6s loop and drift slightly on scroll.
-- Answers: the selection fills from the click point. Correct: the check draws itself, and in drills Pip pops in cheering. Wrong: a gentle shake, and the correct choice highlights.
-- Celebrations last at most 1 second, and never happen during a test. The test interface only animates selection, check/shake feedback and panels.
+- Answers: the selection fills from the click point. After "Check answer": the picked card turns green with a check that draws itself, or red with a cross that draws itself (the correct card turns green); a slim result strip springs in ("Correct · 0:42" / "Incorrect · Correct answer: B"); the neutral explanation card then expands. **No shaking, no red box.** In drills Pip pops in cheering on a correct answer.
+- Celebrations last at most 1 second, and never happen during a test. The test interface only animates selection, feedback and panels.
 - `useLiteMotion()` turns off tilt, spotlight, parallax, cursor-reactive gradients and heavy blur on small, touch or weak devices. `prefers-reduced-motion` keeps only short fades (Pip's idle loops stop too).
+
+## Product surfaces
+
+**Question page** (`components/test/`). Top bar: Exit (or "Back to bank") and title · centered timer · tools. Tool icons have hover/focus labels with their shortcut key; on phones they collapse into a **Tools** menu. The question sits in a card about 680px wide on the tinted background: a header row with the number, a "Section · Skill" chip, a difficulty chip with a colored dot (green/amber/red; practice only, never in practice tests), and Mark for review. Stem 1.0625em, line height 1.65, KaTeX at 1.08em; everything scales with the zoom control. Choices are full-width cards with A–D badges and a cross-out button each (Shift + letter). Typed answers get a large box, a live preview (fractions stacked) and the rules folded under "Answer format". Phones: bottom bar Back · navigator · Next with safe-area padding; the navigator is a bottom sheet (popover on desktop) with current / answered / unanswered / flagged tiles. **Question IDs never appear here**, only in the question bank.
+
+**Desmos** (`components/test/calculator.tsx`). Official graphing and scientific calculators, one instance per session. Desktop: docked panel (left by default, can be dragged to the right), resizable from its inner edge; the question reflows. Phones: full-height bottom sheet. See README › Desmos calculator for keys, terms and the security policy.
+
+**Reference sheet.** Our own line diagrams (stroke `foreground/70`, fill `primary-soft`, cobalt for the measured line, italic serif labels) beside each formula. Side panel on desktop, bottom sheet on phones.
+
+**Question bank** (`/question-bank`). Filters in the URL; section tabs, domain and skill chips, difficulty chips with counts, status chips, search and sort. Rows show ID (monospace, the only place students see it), skill, difficulty, a plain-text preview, my status and my last time. Table on desktop, cards on phones with the filters in a bottom sheet.
+
+**Charts** (`components/learning/analytics-charts.tsx`). Plain HTML/CSS. Correct and incorrect use `--chart-correct` / `--chart-incorrect` (validated against both surfaces; incorrect also gets a hatch). Magnitude uses one cobalt ramp. Every chart has a legend when it has two series, a hover tooltip and a screen-reader table. One axis per chart.
+
+**Navigation.** Desktop sidebar in three groups: Study (Home, Plan, Analytics, Mistakes, Vocabulary), Practice (Question bank, Drills, Mock tests, History), Account (Settings, Plan and payments, Official resources, Manage for owners); it collapses to icons. Phones: Home, Practice, Question bank, Tests, More, with a sliding pill. The demo notice is 32px and can be hidden for the session (`NEXT_PUBLIC_DEMO_BANNER`).
+
+**States.** Every data page has a loading skeleton (`PageSkeleton`), an error state with retry (`RouteError`) and an empty state (`EmptyState`, a Pip pose + one sentence + one action). Checked at 360/390/768/1440px in both themes with no horizontal scrolling.
 
 ## Micro-details
 
