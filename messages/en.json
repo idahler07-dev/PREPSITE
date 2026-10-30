@@ -493,7 +493,6 @@
       "timeUp": "Time is up. Your answers have been submitted."
     },
     "markForReview": "Mark for review",
-    "questionId": "ID {code}",
     "marked": "Marked for review",
     "eliminator": "Cross out answer choices",
     "eliminatorOn": "Cross-out mode on",
@@ -566,7 +565,7 @@
       "next": "Next question",
       "previous": "Previous question",
       "mark": "Mark for review",
-      "eliminate": "Toggle cross-out mode",
+      "eliminate": "Cross out a choice (Shift + A–D)",
       "help": "Show shortcuts",
       "highlight": "Toggle the highlighter",
       "lineReader": "Toggle the line reader (↑ ↓ to move it)",
@@ -600,7 +599,12 @@
       "addNote": "Add note",
       "editNote": "Edit note",
       "note": "Your note on this question",
-      "noteHelp": "Saved automatically. Only you can see it."
+      "noteHelp": "Saved automatically. Only you can see it.",
+      "menu": "Tools",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "shortcuts": "Keyboard shortcuts",
+      "exit": "Exit"
     },
     "calculator": {
       "title": "Calculator",
@@ -642,7 +646,20 @@
       "remaining": "Break time left",
       "body": "Stand up, stretch, drink some water. {section} starts when the timer ends, or resume now.",
       "resume": "Resume testing"
-    }
+    },
+    "answerFormat": "Answer format",
+    "sprRules": {
+      "r1": "Enter a whole number, a decimal or a fraction, like 12, 3.5 or 7/2.",
+      "r2": "Up to 5 characters, or 6 with a minus sign.",
+      "r3": "No mixed numbers: enter 7/2 or 3.5, not 3 1/2.",
+      "r4": "No commas, units or symbols such as %, $ or °.",
+      "r5": "If more than one answer is correct, enter just one.",
+      "r6": "Decimals that don’t fit: round or cut them off at the last digit that fits."
+    },
+    "sprPlaceholder": "Type here",
+    "sprEmptyPreview": "Your answer will appear here",
+    "crossOutShort": "Cross out",
+    "difficultyChip": "{level} difficulty"
   },
   "results": {
     "title": "Results",

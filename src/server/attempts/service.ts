@@ -144,8 +144,9 @@ export function feedbackFor(r: LoadedResponse) {
 export interface RunnerItem {
   position: number;
   questionId: string;
-  code: string;
   section: "RW" | "MATH";
+  /** Skill and difficulty, shown on practice screens only (never in practice tests). Question codes are never sent here. */
+  meta: { domain: string; skill: string; difficulty: "EASY" | "MEDIUM" | "HARD" } | null;
   type: "MCQ" | "SPR";
   passageHtml: string;
   stemHtml: string;
@@ -236,8 +237,8 @@ export async function getRunnerState(attemptId: string, userId: string): Promise
     items: current.responses.map((r) => ({
       position: r.position,
       questionId: r.questionId,
-      code: r.question.code,
       section: r.question.section,
+      meta: attempt.kind === "MOCK" ? null : { domain: r.question.domain, skill: r.question.skill, difficulty: r.question.difficulty },
       type: r.question.type,
       passageHtml: renderMarkdown(r.question.passage),
       stemHtml: renderMarkdown(r.question.stem),
@@ -419,7 +420,6 @@ export async function getResults(attemptId: string, userId: string) {
       moduleIndex: m.index,
       position: r.position,
       questionId: r.questionId,
-      code: r.question.code,
       section: r.question.section,
       domain: r.question.domain,
       skill: r.question.skill,

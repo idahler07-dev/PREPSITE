@@ -138,7 +138,7 @@ export function Showcase() {
       </Block>
       <Block title={H.test}>
         <div className="max-w-md space-y-3">
-          <ChoiceList name="demo" choices={CHOICES} value={pick} eliminated={[]} eliminatorOn={false} correctAnswers={checked ? ["B"] : undefined} onSelect={setPick} onToggleEliminate={() => {}} />
+          <ChoiceList name="demo" choices={CHOICES} value={pick} eliminated={[]} correctAnswers={checked ? ["B"] : undefined} onSelect={setPick} onToggleEliminate={() => {}} />
           <Button size="sm" onClick={() => setChecked((c) => !c)}>
             {checked ? "Reset" : "Check"}
           </Button>

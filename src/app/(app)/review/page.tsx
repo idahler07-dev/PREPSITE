@@ -27,13 +27,13 @@ export default async function ReviewPage() {
       where: { userId: user.id, archivedAt: null, question: { status: "PUBLISHED" } },
       orderBy: { dueAt: "asc" },
       take: 100,
-      include: { question: { select: { id: true, code: true, skill: true } } },
+      include: { question: { select: { id: true, skill: true } } },
     }),
     db.questionNote.findMany({
       where: { userId: user.id, OR: [{ bookmarked: true }, { note: { not: null } }], question: { status: "PUBLISHED" } },
       orderBy: { updatedAt: "desc" },
       take: 100,
-      include: { question: { select: { code: true, skill: true } } },
+      include: { question: { select: { skill: true } } },
     }),
   ]);
 
@@ -77,8 +77,7 @@ export default async function ReviewPage() {
           <ul className="divide-y rounded-lg border">
             {items.map((i) => (
               <li key={i.id} className="flex flex-wrap items-center gap-3 p-3 text-sm">
-                <span className="font-mono">{i.question.code.toLowerCase()}</span>
-                <span className="text-muted-foreground">{tx(`skills.${i.question.skill as "INFERENCES"}`)}</span>
+                <span className="font-medium">{tx(`skills.${i.question.skill as "INFERENCES"}`)}</span>
                 <Badge variant="secondary">{t(`reasons.${i.reason as "WRONG"}`)}</Badge>
                 <span className="ms-auto text-muted-foreground">
                   {i.dueAt <= now ? t("dueNow") : t("dueOn", { date: format.dateTime(i.dueAt, { dateStyle: "medium" }) })}
@@ -96,7 +95,7 @@ export default async function ReviewPage() {
           <ul className="space-y-2">
             {bookmarks.map((b) => (
               <li key={b.id} className="rounded-lg border p-3 text-sm">
-                <span className="font-mono">{b.question.code.toLowerCase()}</span> <span className="text-muted-foreground">{tx(`skills.${b.question.skill as "INFERENCES"}`)}</span>
+                <span className="font-medium">{tx(`skills.${b.question.skill as "INFERENCES"}`)}</span>
                 {b.bookmarked && <Badge className="ms-2">{t("bookmarked")}</Badge>}
                 {b.note && <p className="mt-1 whitespace-pre-wrap">{b.note}</p>}
               </li>

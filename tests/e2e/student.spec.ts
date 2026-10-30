@@ -29,7 +29,7 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
 
   await expect(page).toHaveURL(/\/attempts\//);
   await expect(page.getByRole("heading", { name: "Drill results" })).toBeVisible();
-  await expect(page.getByText(/^(sample|mk)-/).first()).toBeVisible(); // question codes are shown
+  await expect(page.getByText(/^(sample|mk)-/i)).toHaveCount(0); // question codes only appear in the question bank
 
   await page.goto("/dashboard");
   // The finished drill is listed with its score, and the skill map is filled in.

@@ -559,6 +559,19 @@ html {
   border-radius: 2px;
   padding: 0 2px;
 }
+/* Question stem and answer text on the test screen. Sizes are em so the zoom control scales them. */
+.q-stem {
+  font-size: 1.0625em;
+  line-height: 1.65;
+}
+.q-text {
+  line-height: 1.55;
+}
+.q-stem .katex,
+.q-text .katex {
+  font-size: 1.08em;
+}
+
 /* Test passages stay plain and exam-like: the UI sans, no decorative emphasis. */
 .passage {
   font-family: var(--font-sans);

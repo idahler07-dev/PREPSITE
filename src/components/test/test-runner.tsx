@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Bookmark, Calculator, ChevronLeft, ChevronRight, Highlighter, Keyboard, Loader2, LogOut, Maximize, Minimize, Minus, NotebookPen, Plus, ScanLine, Sigma, Strikethrough, Wifi, WifiOff, CheckCircle2, XCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Highlighter, Loader2, LogOut, NotebookPen, Wifi, WifiOff, CheckCircle2, XCircle } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import type { RunnerItem, RunnerState } from "@/server/attempts/service";
 import { testStructure } from "@/config/test-structure";
@@ -33,6 +33,8 @@ import { CalculatorPanel } from "./calculator";
 import { ReferenceSheet } from "./reference-sheet";
 import { HighlightablePassage, type Highlight, type HighlightColor } from "./highlightable";
 import { LineReader } from "./line-reader";
+import { TestToolbar } from "./test-toolbar";
+import { QuestionHeader } from "./question-header";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { AiTutor } from "@/components/tutor/ai-tutor";
@@ -66,7 +68,6 @@ export function TestRunner({
   const [items, setItems] = useState<RunnerItem[]>(initial.items);
   const [index, setIndex] = useState(0);
   const [view, setView] = useState<"question" | "review">("question");
-  const [eliminatorOn, setEliminatorOn] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
@@ -278,7 +279,7 @@ export function TestRunner({
         const key = "abcd".includes(k) ? k.toUpperCase() : "ABCD"[Number(k) - 1]!;
         if (item.choices.some((ch) => ch.key === key)) {
           e.preventDefault();
-          if (eliminatorOn && e.shiftKey) toggleEliminate(key);
+          if (e.shiftKey) toggleEliminate(key);
           else selectChoice(key);
         }
       } else if (k === "arrowright" || k === "n") {
@@ -290,9 +291,6 @@ export function TestRunner({
       } else if (k === "m") {
         e.preventDefault();
         toggleFlag();
-      } else if (k === "e") {
-        e.preventDefault();
-        setEliminatorOn((x) => !x);
       } else if (k === "h" && item.passageHtml) {
         e.preventDefault();
         setHighlighterOn((x) => !x);
@@ -337,10 +335,15 @@ export function TestRunner({
 
   return (
     <div className="flex h-dvh flex-col bg-background">
-      {/* Top bar */}
-      <header className="flex h-14 shrink-0 items-center gap-2 border-b px-3 sm:px-4">
-        <h1 className="truncate font-semibold">{title}</h1>
-        <div className="mx-auto">
+      {/* Top bar: exit and title | timer | tools. The timer stays centered. */}
+      <header className="grid h-14 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b bg-surface px-2 sm:px-4">
+        <div className="flex min-w-0 items-center gap-1">
+          <Button variant="ghost" size="sm" onClick={() => setConfirmExit(true)} aria-label={t("tools.exit")} className="shrink-0">
+            <LogOut aria-hidden /> <span className="hidden sm:inline">{t("exit")}</span>
+          </Button>
+          <h1 className="hidden min-w-0 truncate text-sm font-semibold sm:block">{title}</h1>
+        </div>
+        <div>
           {initial.module.deadline && (
             <CountdownTimer
               deadline={initial.module.deadline}
@@ -350,35 +353,24 @@ export function TestRunner({
             />
           )}
         </div>
-        <div className="flex items-center gap-1">
-          {isMath && (
-            <>
-              <Button variant={calcOpen ? "secondary" : "ghost"} size="icon" onClick={() => setCalcOpen((x) => !x)} aria-pressed={calcOpen} aria-label={t("tools.calculator")} title={t("tools.calculator")}>
-                <Calculator aria-hidden />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => setRefOpen(true)} aria-label={t("tools.reference")} title={t("tools.reference")}>
-                <Sigma aria-hidden />
-              </Button>
-            </>
-          )}
-          <Button variant={lineReader ? "secondary" : "ghost"} size="icon" className="hidden sm:inline-flex" onClick={() => setLineReader((x) => !x)} aria-pressed={lineReader} aria-label={t("tools.lineReader")} title={t("tools.lineReader")}>
-            <ScanLine aria-hidden />
-          </Button>
-          <Button variant="ghost" size="icon" className="hidden sm:inline-flex" onClick={toggleFullscreen} aria-pressed={fullscreen} aria-label={fullscreen ? t("tools.exitFullscreen") : t("tools.fullscreen")} title={fullscreen ? t("tools.exitFullscreen") : t("tools.fullscreen")}>
-            {fullscreen ? <Minimize aria-hidden /> : <Maximize aria-hidden />}
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => setZoomLevel(-1)} aria-label={t("zoomOut")} disabled={zoom <= ZOOM_STEPS[0]!}>
-            <Minus aria-hidden />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => setZoomLevel(1)} aria-label={t("zoomIn")} disabled={zoom >= ZOOM_STEPS.at(-1)!}>
-            <Plus aria-hidden />
-          </Button>
-          <Button variant="ghost" size="icon" className="hidden sm:inline-flex" onClick={() => setShortcutsOpen(true)} aria-label={t("shortcuts.title")}>
-            <Keyboard aria-hidden />
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => setConfirmExit(true)}>
-            <LogOut aria-hidden /> <span className="hidden sm:inline">{t("exit")}</span>
-          </Button>
+        <div className="flex items-center justify-end gap-1">
+          <span className="md:hidden">
+            <SaveIndicator status={autosave.status} compact />
+          </span>
+          <TestToolbar
+            isMath={isMath}
+            calcOpen={calcOpen}
+            onCalculator={() => setCalcOpen((x) => !x)}
+            onReference={() => setRefOpen(true)}
+            lineReader={lineReader}
+            onLineReader={() => setLineReader((x) => !x)}
+            fullscreen={fullscreen}
+            onFullscreen={toggleFullscreen}
+            canZoomIn={zoom < ZOOM_STEPS.at(-1)!}
+            canZoomOut={zoom > ZOOM_STEPS[0]!}
+            onZoom={setZoomLevel}
+            onShortcuts={() => setShortcutsOpen(true)}
+          />
         </div>
       </header>
 
@@ -402,7 +394,7 @@ export function TestRunner({
 
       {/* Main */}
       {/* One scroll area on phones; side-by-side panes that scroll separately on large screens. */}
-      <main ref={mainRef} id="main" className="min-h-0 flex-1 overflow-y-auto lg:overflow-hidden" style={{ fontSize: `${zoom}rem` }}>
+      <main ref={mainRef} id="main" className="min-h-0 flex-1 overflow-y-auto bg-section-tint lg:overflow-hidden" style={{ fontSize: `${zoom}rem` }}>
         {view === "review" ? (
           <div className="mx-auto h-full max-w-3xl space-y-6 overflow-y-auto p-6">
             <h2 className="text-2xl font-bold">{t("review.title")}</h2>
@@ -427,7 +419,7 @@ export function TestRunner({
           // Keyed by question so both panes start at the top for each question.
           <div key={item.position} className={cn("grid lg:h-full", item.passageHtml ? "lg:grid-cols-2 lg:divide-x" : "")}>
             {item.passageHtml && (
-              <section aria-label={t("passage")} className="border-b p-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
+              <section aria-label={t("passage")} className="border-b bg-surface p-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
                 <div className="mb-3 flex flex-wrap items-center gap-1">
                   <Button variant={highlighterOn ? "secondary" : "ghost"} size="sm" onClick={() => setHighlighterOn((x) => !x)} aria-pressed={highlighterOn}>
                     <Highlighter aria-hidden /> {highlighterOn ? t("tools.highlighterOn") : t("tools.highlighter")}
@@ -479,31 +471,11 @@ export function TestRunner({
                 />
               </section>
             )}
-            <section aria-label={t("question")} className="p-4 sm:p-6 lg:overflow-y-auto">
-              <div className={cn("mx-auto space-y-5", item.passageHtml ? "max-w-2xl" : "max-w-3xl")}>
-                <div className="flex flex-wrap items-center gap-2 border-b pb-3">
-                  <span className="flex h-8 min-w-8 items-center justify-center rounded bg-foreground px-2 text-sm font-bold text-background">{index + 1}</span>
-                  <span className="font-mono text-xs text-muted-foreground">{t("questionId", { code: item.code.toLowerCase() })}</span>
-                  <Button variant={item.flagged ? "secondary" : "ghost"} size="sm" onClick={toggleFlag} aria-pressed={item.flagged}>
-                    <Bookmark className={cn(item.flagged && "fill-flagged text-warning-ink")} aria-hidden />
-                    {item.flagged ? t("marked") : t("markForReview")}
-                  </Button>
-                  {item.type === "MCQ" && !item.feedback && (
-                    <Button
-                      variant={eliminatorOn ? "secondary" : "ghost"}
-                      size="sm"
-                      className="ms-auto"
-                      onClick={() => setEliminatorOn((x) => !x)}
-                      aria-pressed={eliminatorOn}
-                      title={t("eliminator")}
-                    >
-                      <Strikethrough aria-hidden />
-                      <span className="sr-only sm:not-sr-only">{eliminatorOn ? t("eliminatorOn") : t("eliminator")}</span>
-                    </Button>
-                  )}
-                </div>
+            <section aria-label={t("question")} className="px-3 py-4 sm:p-6 lg:overflow-y-auto">
+              <div className="mx-auto w-full max-w-[680px] space-y-5 rounded-[20px] border bg-surface p-4 shadow-sm sm:p-7">
+                <QuestionHeader number={index + 1} item={item} onToggleFlag={toggleFlag} />
 
-                <RichText html={item.stemHtml} />
+                <RichText html={item.stemHtml} className="q-stem" />
 
                 {item.type === "MCQ" ? (
                   <ChoiceList
@@ -511,7 +483,6 @@ export function TestRunner({
                     choices={item.choices}
                     value={item.answer}
                     eliminated={item.eliminated}
-                    eliminatorOn={eliminatorOn}
                     disabled={!!item.feedback}
                     correctAnswers={item.feedback?.correctAnswers}
                     onSelect={selectChoice}
@@ -522,7 +493,7 @@ export function TestRunner({
                 )}
 
                 {immediate && !item.feedback && (
-                  <Button onClick={check} disabled={!item.answer || checking || (item.type === "SPR" && !!validateSprInput(item.answer ?? ""))}>
+                  <Button size="lg" className="w-full sm:w-auto" onClick={check} disabled={!item.answer || checking || (item.type === "SPR" && !!validateSprInput(item.answer ?? ""))}>
                     {checking && <Loader2 className="animate-spin" aria-hidden />}
                     {checking ? t("checking") : t("check")}
                   </Button>
@@ -537,23 +508,32 @@ export function TestRunner({
         )}
       </main>
 
-      {/* Bottom bar */}
-      <footer className="flex h-16 shrink-0 items-center gap-2 border-t px-3 sm:px-4">
-        <SaveIndicator status={autosave.status} />
-        <div className="mx-auto">
-          {view === "question" && (
-            <NavigatorPopover items={navItems} current={index} onGo={go} onReview={() => setView("review")} open={navOpen} onOpenChange={setNavOpen} />
-          )}
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={prev} disabled={view === "question" && index === 0}>
-            <ChevronLeft aria-hidden /> <span className="hidden sm:inline">{c("back")}</span>
-          </Button>
-          {view === "question" && (
-            <Button onClick={next}>
-              <span className="hidden sm:inline">{c("next")}</span> <ChevronRight aria-hidden />
+      {/* Bottom bar: Back | navigator | Next on phones (with the safe area); save status on the left from tablets up. */}
+      <footer className="shrink-0 border-t bg-surface pb-[env(safe-area-inset-bottom)]">
+        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:px-4">
+          <div className="flex min-w-0 items-center">
+            <Button variant="outline" className="h-11 md:hidden" onClick={prev} disabled={view === "question" && index === 0} aria-label={c("back")}>
+              <ChevronLeft aria-hidden />
             </Button>
-          )}
+            <span className="hidden md:inline-flex">
+              <SaveIndicator status={autosave.status} />
+            </span>
+          </div>
+          <div>
+            {view === "question" && (
+              <NavigatorPopover items={navItems} current={index} onGo={go} onReview={() => setView("review")} open={navOpen} onOpenChange={setNavOpen} />
+            )}
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" className="hidden h-11 md:inline-flex" onClick={prev} disabled={view === "question" && index === 0}>
+              <ChevronLeft aria-hidden /> {c("back")}
+            </Button>
+            {view === "question" && (
+              <Button className="h-11" onClick={next}>
+                {c("next")} <ChevronRight aria-hidden />
+              </Button>
+            )}
+          </div>
         </div>
       </footer>
 
@@ -669,13 +649,21 @@ function FeedbackPanel({ item, feedback, attemptId, aiEnabled }: { item: RunnerI
   );
 }
 
-function SaveIndicator({ status }: { status: SaveStatus }) {
+/** Save status. `compact` (phone top bar) is a labelled icon; the full one (bottom bar, tablets up) also announces changes. */
+function SaveIndicator({ status, compact = false }: { status: SaveStatus; compact?: boolean }) {
   const t = useTranslations("test.save");
   const Icon = status === "offline" || status === "error" ? WifiOff : status === "saving" ? Loader2 : Wifi;
+  if (compact) {
+    return (
+      <span role="img" aria-label={t(status)} title={t(status)} className="flex size-9 items-center justify-center text-muted-foreground">
+        <Icon className={cn("size-4", status === "saving" && "animate-spin", (status === "offline" || status === "error") && "text-destructive")} aria-hidden />
+      </span>
+    );
+  }
   return (
     <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground" aria-live="polite">
       <Icon className={cn("size-4 shrink-0", status === "saving" && "animate-spin", (status === "offline" || status === "error") && "text-destructive")} aria-hidden />
-      <span className="hidden truncate md:inline">{t(status)}</span>
+      <span className="truncate">{t(status)}</span>
     </span>
   );
 }

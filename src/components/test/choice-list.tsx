@@ -2,18 +2,22 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, m, useReducedMotion } from "motion/react";
-import { X } from "lucide-react";
-import { DrawCheck, RadialFill, shake } from "./answer-effects";
+import { AnimatePresence } from "motion/react";
+import { RotateCcw, X } from "lucide-react";
+import { DrawCheck, RadialFill } from "./answer-effects";
 import { RichText } from "@/components/content/rich-text";
 import { cn } from "@/lib/utils";
 
+/**
+ * Answer choices as full-width cards with an A–D badge. Each choice has its
+ * own cross-out button beside it (Shift + letter does the same). After a check,
+ * the picked card shows a check or a cross and the correct one turns green.
+ */
 export function ChoiceList({
   name,
   choices,
   value,
   eliminated,
-  eliminatorOn,
   disabled,
   correctAnswers,
   onSelect,
@@ -23,7 +27,6 @@ export function ChoiceList({
   choices: { key: string; html: string }[];
   value: string | null;
   eliminated: string[];
-  eliminatorOn: boolean;
   disabled?: boolean;
   /** Shown after checking/submitting. */
   correctAnswers?: string[];
@@ -31,36 +34,36 @@ export function ChoiceList({
   onToggleEliminate: (key: string) => void;
 }) {
   const t = useTranslations("test");
-  const reduce = useReducedMotion();
   // Where the pointer went down on each choice, so the selection fill grows from there.
   const [origin, setOrigin] = useState<Record<string, { x: number; y: number }>>({});
   return (
-    <div role="radiogroup" aria-label={t("question")} className="space-y-3">
+    <div role="radiogroup" aria-label={t("question")} className="space-y-2.5">
       {choices.map((c) => {
         const selected = value === c.key;
         const struck = eliminated.includes(c.key);
-        const isCorrect = correctAnswers?.includes(c.key);
-        const wrongPick = correctAnswers && selected && !isCorrect;
+        const isCorrect = !!correctAnswers?.includes(c.key);
+        const wrongPick = !!correctAnswers && selected && !isCorrect;
+        const checked = !!correctAnswers;
         return (
           <div key={c.key} className="flex items-stretch gap-2">
-            <m.label
+            <label
               onPointerDown={(e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 setOrigin((o) => ({ ...o, [c.key]: { x: e.clientX - r.left, y: e.clientY - r.top } }));
               }}
-              animate={wrongPick && !reduce ? shake.animate : { x: 0 }}
-              transition={shake.transition}
               className={cn(
-                "relative isolate flex flex-1 cursor-pointer items-start gap-3 overflow-hidden rounded-[12px] border-2 p-3 transition-colors",
+                "relative isolate flex min-h-14 flex-1 cursor-pointer items-center gap-3 overflow-hidden rounded-2xl border bg-surface px-3.5 py-3 transition-[border-color,background-color,box-shadow] duration-150",
                 "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-                selected ? "border-primary" : "border-border hover:border-primary/60",
-                struck && !selected && "opacity-60",
-                isCorrect && "border-correct bg-correct-soft",
-                wrongPick && "border-danger bg-danger-soft",
+                !checked && !selected && "border-border hover:border-primary/50 hover:bg-primary-soft/40 hover:shadow-sm",
+                !checked && selected && "border-primary shadow-[0_0_0_1px_var(--primary)]",
+                checked && isCorrect && "border-correct shadow-[0_0_0_1px_var(--correct)]",
+                wrongPick && "border-danger shadow-[0_0_0_1px_var(--danger)]",
+                checked && !isCorrect && !wrongPick && "border-border opacity-70",
+                struck && !selected && !checked && "opacity-55",
                 disabled && "cursor-default",
               )}
             >
-              <AnimatePresence>{selected && !isCorrect && !wrongPick && <RadialFill origin={origin[c.key] ?? null} />}</AnimatePresence>
+              <AnimatePresence>{selected && !checked && <RadialFill origin={origin[c.key] ?? null} />}</AnimatePresence>
               <input
                 type="radio"
                 name={name}
@@ -74,30 +77,37 @@ export function ChoiceList({
               <span
                 aria-hidden
                 className={cn(
-                  "relative flex size-8 shrink-0 items-center justify-center rounded-full border-2 font-semibold",
-                  selected ? "border-primary bg-primary text-primary-foreground" : "border-foreground/40",
+                  "relative flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
+                  !checked && (selected ? "border-primary bg-primary text-primary-foreground" : "border-foreground/25 bg-background text-foreground"),
+                  checked && isCorrect && "border-correct bg-correct text-on-fill",
+                  wrongPick && "border-danger bg-danger text-on-fill",
+                  checked && !isCorrect && !wrongPick && "border-foreground/20 text-muted-foreground",
                   struck && "line-through",
                 )}
               >
                 {c.key}
               </span>
-              <RichText html={c.html} className={cn("relative flex-1 pt-1", struck && "line-through decoration-2")} />
-              {isCorrect && (
-                <span className="relative mt-1" role="img" aria-label={t("correct")}>
+              <RichText html={c.html} className={cn("q-text relative flex-1", struck && "text-muted-foreground line-through decoration-2")} />
+              {checked && isCorrect && (
+                <span className="relative shrink-0" role="img" aria-label={t("correct")}>
                   <DrawCheck />
                 </span>
               )}
-              {wrongPick && <X className="relative mt-1 size-5 shrink-0 text-danger-ink" aria-label={t("incorrect")} />}
-            </m.label>
-            {eliminatorOn && !disabled && (
+              {wrongPick && <X className="relative size-5 shrink-0 text-danger-ink" aria-label={t("incorrect")} />}
+            </label>
+            {!disabled && (
               <button
                 type="button"
                 onClick={() => onToggleEliminate(c.key)}
                 aria-pressed={struck}
                 aria-label={struck ? t("undoCrossOut", { choice: c.key }) : t("crossOut", { choice: c.key })}
-                className="w-12 shrink-0 rounded-lg border text-sm font-semibold hover:bg-surface-2"
+                title={struck ? t("undoCrossOut", { choice: c.key }) : t("crossOut", { choice: c.key })}
+                className={cn(
+                  "flex w-11 shrink-0 items-center justify-center rounded-xl border text-sm font-semibold transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
+                  struck ? "border-primary/40 bg-primary-soft text-primary" : "border-transparent text-muted-foreground hover:border-border hover:bg-surface-2 hover:text-foreground",
+                )}
               >
-                <span className={cn(!struck && "line-through")}>{struck ? "↺" : c.key}</span>
+                {struck ? <RotateCcw className="size-4" aria-hidden /> : <span className="line-through decoration-2">{c.key}</span>}
               </button>
             )}
           </div>
