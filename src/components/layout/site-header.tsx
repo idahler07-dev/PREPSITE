@@ -15,11 +15,11 @@ export async function SiteHeader() {
   const t = await getTranslations("nav");
   const c = await getTranslations("common");
   const user = await getCurrentUser();
+  const h = await getTranslations("home.nav");
   const items = [
-    { href: "/#how", label: t("howItWorks") },
-    { href: "/pricing", label: t("pricing") },
-    { href: "/resources", label: t("resources") },
-    { href: "/faq", label: t("faq") },
+    { href: "/#features", label: h("features") },
+    { href: "/pricing", label: h("pricing") },
+    { href: "/faq", label: h("faq") },
   ];
 
   return (
@@ -30,7 +30,7 @@ export async function SiteHeader() {
       >
         {c("skipToContent")}
       </a>
-      <div className="mx-auto flex h-full max-w-[1200px] items-center gap-2 px-4 sm:px-6">
+      <div className="mx-auto flex h-full max-w-[1296px] items-center gap-2 px-6 lg:px-12">
         <MobileNav items={items} />
         <Logo href="/" />
         <nav className="ms-6 hidden items-center gap-1 md:flex" aria-label={t("mainNavigation")}>
@@ -54,10 +54,10 @@ export async function SiteHeader() {
           ) : (
             <>
               <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
-                <Link href="/login">{t("signIn")}</Link>
+                <Link href="/login">{h("login")}</Link>
               </Button>
-              <Button asChild size="sm">
-                <Link href="/login">{t("getStarted")}</Link>
+              <Button asChild size="sm" className="rounded-full px-4">
+                <Link href="/login">{h("start")}</Link>
               </Button>
             </>
           )}

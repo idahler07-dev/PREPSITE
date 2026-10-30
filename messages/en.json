@@ -87,7 +87,17 @@
     "refunds": "Refund policy",
     "contact": "Contact",
     "about": "About us",
-    "resources": "Official resources"
+    "resources": "Official resources",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "social": "Follow us",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "youtube": "YouTube"
   },
   "theme": {
     "label": "Theme",
@@ -96,15 +106,13 @@
     "system": "System"
   },
   "home": {
-    "eyebrow": "Digital SAT prep, made calm",
-    "title": "Your SAT score, <grad>planned and proven.</grad>",
-    "subtitle": "Teacher-written questions, an exam-like test screen and progress you can trust. Practise a little every day and watch your estimate climb.",
+    "title": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
+    "subtitle": "Teacher-written questions, an exam-like test screen and a study plan that adapts to you. Practise a little every day and watch your estimate climb.",
     "ctaPrimary": "Start free practice",
-    "ctaSecondary": "See how it works",
+    "ctaSecondary": "Take a diagnostic",
     "noCard": "Free to start. No card needed.",
-    "tryIt": "Try a real question",
     "question": {
-      "label": "Sample question",
+      "label": "Try a question",
       "check": "Check answer",
       "correct": "Correct!",
       "incorrect": "Not quite. The answer is {key}.",
@@ -114,70 +122,91 @@
       "choice": "Choice {key}",
       "pick": "Pick an answer, then check it."
     },
-    "stats": {
-      "title": "Real numbers, <i>straight</i> from our database",
-      "questions": "{count, plural, one {# question} other {# questions}} written and checked by teachers",
-      "students": "{count, plural, one {# student} other {# students}} practising",
-      "answers": "{count, plural, one {# answer} other {# answers}} checked so far"
-    },
     "how": {
-      "title": "How it <i>works</i>",
-      "subtitle": "Three steps, repeated a little every day.",
+      "label": "How it works",
+      "title": "Three steps, <i>every</i> week",
+      "body": "Start with a short diagnostic, follow the plan it builds for you, and practise the skills that move your score most.",
       "steps": {
-        "goal": {
-          "title": "Set your goal",
-          "body": "Tell us your target score and test date. You get a weekly plan that fits the days you have."
+        "diagnose": {
+          "title": "Diagnose",
+          "body": "A short mixed test shows where you stand in each skill."
+        },
+        "plan": {
+          "title": "Plan",
+          "body": "A weekly plan that fits your test date and the time you have."
         },
         "practice": {
-          "title": "Practise in focus",
-          "body": "Short drills and full adaptive tests on an exam-like screen, with explanations when you need them."
-        },
-        "progress": {
-          "title": "Watch it add up",
-          "body": "Accuracy by skill, an estimated score with a range and a notebook of mistakes to revisit."
+          "title": "Practise",
+          "body": "Drills and full tests on an exam-like screen, with help when you're stuck."
         }
       }
     },
-    "features": {
-      "title": "Everything you need, <i>nothing</i> you don't",
-      "subtitle": "Built for focus: the tools of test day, plus the feedback you can't get from a paper book.",
-      "test": {
-        "title": "An exam-like test screen",
-        "body": "Timer, navigator, flag for review, answer eliminator, highlighter and calculator, the tools you'll use on test day."
-      },
-      "ai": {
-        "title": "Explanations that answer back",
-        "body": "Ask why your answer was wrong, get a hint, or see another way to solve it. Every explanation is checked against the answer key."
-      },
-      "analytics": {
-        "title": "Progress you can trust",
-        "body": "Accuracy by domain and skill, time per question and an estimated score with a range, only from your own practice."
-      },
-      "mocks": {
-        "title": "Full adaptive practice tests",
-        "body": "Two modules per section, the second one adapting to how you did, with breaks and a score estimate at the end."
-      },
-      "aiSample": {
-        "student": "Why isn't it B?",
-        "tutor": "B doubles the flour, but the ratio is 3 : 2. For 8 cups of milk you need 8 × 3⁄2 = 12 cups."
-      }
-    },
     "pricing": {
+      "label": "Pricing",
       "title": "Simple <i>pricing</i>",
-      "subtitle": "Start free. Upgrade when you're ready for unlimited practice.",
-      "cta": "Compare plans",
+      "subtitle": "Start free. Upgrade when you want unlimited practice.",
+      "cta": "Compare all plans",
       "recommended": "Recommended"
     },
-    "faqTitle": "Questions, <i>answered</i>",
     "final": {
-      "title": "Your next point starts <hl>today</hl>.",
-      "body": "Ten questions a day is enough to see the difference in two weeks.",
-      "cta": "Start free practice"
+      "title": "Your next score starts <i>today</i>.",
+      "body": "Ten questions a day is enough to feel the difference in two weeks.",
+      "cta": "Start free"
     },
-    "officialTitle": "Use the official free materials too",
-    "officialBody": "The College Board and Khan Academy publish free official practice. We link to them instead of copying them.",
-    "officialCta": "Official resources",
-    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far"
+    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
+    "mini": {
+      "score": "Estimated score",
+      "scoreRange": "Range {low}–{high}",
+      "streak": "Day streak",
+      "streakDays": "{count, plural, one {# day} other {# days}}",
+      "timer": "Time left",
+      "sample": "Sample data"
+    },
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "login": "Log in",
+      "start": "Start free"
+    },
+    "bank": {
+      "label": "Question bank",
+      "title": "Stuck? <i>Ask</i> Otto.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, Otto explains it step by step, and every explanation is checked against the answer key.",
+      "cta": "Try a drill"
+    },
+    "plan": {
+      "label": "Study plan",
+      "title": "A plan that <hl>fits</hl> your week",
+      "body": "Set your target score and test date. Satify spreads the work across the days you have and adjusts after every test.",
+      "cta": "Build my plan",
+      "bubble": "Tuesday: 20 minutes of algebra. You've got this!",
+      "week": "This week",
+      "countdown": "Test day",
+      "days": "{count, plural, one {# day} other {# days}} to go"
+    },
+    "mocks": {
+      "label": "Mock tests",
+      "title": "The real thing, <i>minus</i> the nerves",
+      "body": "Full adaptive practice tests with two modules per section, a timer, question navigator, calculator and highlighter, so test day feels familiar.",
+      "cta": "See practice tests"
+    },
+    "analytics": {
+      "label": "Analytics",
+      "title": "Know <i>exactly</i> what to practise",
+      "body": "Every answer updates your skill map. See your weakest skills, your score trend and how you pace each module.",
+      "cta": "Start practising",
+      "skills": "Skill map",
+      "trend": "Score trend",
+      "pacing": "Pacing",
+      "pacingBody": "Average time per question, by module",
+      "module": "Module {n}",
+      "secs": "{count}s"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Questions, <i>answered</i>"
+    }
   },
   "about": {
     "title": "About us",
@@ -1509,7 +1538,9 @@
       "chatLimit": "That's the limit of follow-up questions for this question.",
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
-    }
+    },
+    "askOtto": "Ask Otto",
+    "stepByStep": "Step by step"
   },
   "billing": {
     "plans": {

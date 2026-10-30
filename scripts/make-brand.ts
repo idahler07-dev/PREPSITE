@@ -102,10 +102,6 @@ function mesh(ctx: SKRSContext2D, w: number, h: number) {
   blob(w * 1.02, h * 0.72, w * 0.36, C.light.coral, 0.24);
 }
 
-function dotGrid(ctx: SKRSContext2D, w: number, h: number) {
-  ctx.fillStyle = `${C.light.text}14`;
-  for (let y = 12; y < h; y += 24) for (let x = 12; x < w; x += 24) ctx.fillRect(x, y, 1.6, 1.6);
-}
 
 async function main() {
   const [geistBold, geist, geistSemi, serifItalic] = await Promise.all([

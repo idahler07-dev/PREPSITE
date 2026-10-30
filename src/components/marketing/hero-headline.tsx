@@ -1,56 +1,64 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { spring } from "@/lib/motion";
+import { emphasis } from "@/components/motion/emphasis-tags";
+
+type Tag = keyof typeof emphasis;
+type Seg = { text: string; tag?: Tag };
+
+/** Split "Your SAT score, <i>planned</i> and <hl>proven</hl>." into plain and tagged segments. */
+function parse(raw: string): Seg[] {
+  const out: Seg[] = [];
+  const re = /<(i|hl|b|grad)>(.*?)<\/\1>/gs;
+  let last = 0;
+  for (const m of raw.matchAll(re)) {
+    if (m.index! > last) out.push({ text: raw.slice(last, m.index) });
+    out.push({ text: m[2]!, tag: m[1] as Tag });
+    last = m.index! + m[0].length;
+  }
+  if (last < raw.length) out.push({ text: raw.slice(last) });
+  return out;
+}
 
 /**
  * Hero headline: words fade and rise in one by one (40ms stagger) on first
- * load; the emphasized phrase (<grad>…</grad> in en.json, gradient text)
- * arrives last. Screen readers get the plain sentence once.
+ * load; emphasized words (en.json tags) arrive last, then the underline
+ * draws in. Screen readers get the plain sentence once.
  */
 export function HeroHeadline({ raw, className }: { raw: string; className?: string }) {
   const reduce = useReducedMotion();
-  const m = /^(.*?)<grad>(.*?)<\/grad>(.*)$/s.exec(raw);
-  const [before, grad, after] = m ? [m[1]!, m[2]!, m[3]!] : [raw, "", ""];
-  const plain = (before + grad + after).replace(/\s+/g, " ").trim();
-  const words = (s: string) => s.split(/\s+/).filter(Boolean);
-  const lead = [...words(before), ...words(after)];
-  const word = (w: string, i: number, extra = "") => (
+  const segs = parse(raw);
+  const plainCount = segs.filter((s) => !s.tag).reduce((n, s) => n + s.text.split(/\s+/).filter(Boolean).length, 0);
+  let plainIndex = 0;
+  let emphIndex = 0;
+  const plain = segs.map((s) => s.text).join("").replace(/\s+/g, " ").trim();
+
+  const rise = (key: string, i: number, child: ReactNode) => (
     <motion.span
-      key={`${w}-${i}`}
-      className={`inline-block ${extra}`}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18, filter: "blur(4px)" }}
+      key={key}
+      className="inline-block"
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20, filter: "blur(4px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.1 + i * 0.04 }}
+      transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.08 + i * 0.04 }}
     >
-      {w}
+      {child}
     </motion.span>
   );
+
   return (
     <h1 className={className}>
       <span className="sr-only">{plain}</span>
       <span aria-hidden>
-        {words(before).map((w, i) => (
-          <span key={`b${i}`}>
-            {word(w, i)}{" "}
-          </span>
-        ))}
-        {grad && (
-          <span className="inline-block">
-            {words(grad).map((w, i) => (
-              <span key={`g${i}`}>
-                {word(w, lead.length + 2 + i, "text-gradient pb-[0.08em]")}
-                {i < words(grad).length - 1 ? " " : ""}
-              </span>
-            ))}
-          </span>
-        )}
-        {words(after).map((w, i) => (
-          <span key={`a${i}`}>
-            {" "}
-            {word(w, words(before).length + i)}
-          </span>
-        ))}
+        {segs.map((s, si) => {
+          if (s.tag) {
+            const i = plainCount + 2 + emphIndex++;
+            return rise(`e${si}`, i, emphasis[s.tag](s.text));
+          }
+          // Keep spaces between words so lines still wrap naturally.
+          return s.text.split(/(\s+)/).map((w, wi) => (/^\s+$/.test(w) || !w ? w : rise(`p${si}-${wi}`, plainIndex++, w)));
+        })}
       </span>
     </h1>
   );
