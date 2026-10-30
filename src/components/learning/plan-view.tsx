@@ -56,7 +56,7 @@ export async function WeekView({ plan, today }: { plan: WeeklyPlan; today: strin
   return (
     <ol className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
       {plan.days.map((d) => (
-        <li key={d.date} className={cn("space-y-2 rounded-lg border p-3", d.date === today && "border-primary bg-accent/40")}>
+        <li key={d.date} className={cn("space-y-2 rounded-lg border p-3", d.date === today && "border-primary bg-primary-soft/40")}>
           <h3 className="text-sm font-semibold">{format.dateTime(new Date(`${d.date}T12:00:00Z`), { weekday: "long", day: "numeric", month: "short" })}</h3>
           <TaskList tasks={d.tasks} />
         </li>

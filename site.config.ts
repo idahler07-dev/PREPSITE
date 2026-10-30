@@ -4,17 +4,19 @@
  * Everything here is public (it ships to the browser). Never put secrets here;
  * secrets belong in environment variables (see .env.example).
  *
- * User-facing *text* (taglines, page copy) lives in /messages/{locale}.json so it
- * can be translated. This file holds names, contact details, colors and links.
+ * User-facing *text* (tagline, page copy) lives in /messages/en.json. Colors and
+ * fonts are design tokens in src/app/globals.css (see DESIGN.md). This file
+ * holds names, logo files, contact details and links. Regenerate the logo
+ * files with `pnpm tsx scripts/make-brand.ts`.
  */
 
 export const siteConfig = {
   /** Brand name shown in the header, emails and page titles. */
-  name: "PrepSite",
+  name: "Satify",
   /** Short name used by the installable app (PWA) and small screens. */
-  shortName: "PrepSite",
+  shortName: "Satify",
   /** Legal name of the learning centre, used on legal pages and receipts. */
-  legalName: "PrepSite Learning Centre LLC",
+  legalName: "Satify Learning Centre LLC",
 
   logo: {
     /**
@@ -23,29 +25,12 @@ export const siteConfig = {
      * contains the name, set showName to false and use `light` / `dark`.
      */
     mark: "/brand/mark.svg",
+    markDark: "/brand/mark-dark.svg",
     light: "/brand/logo.svg",
     dark: "/brand/logo-dark.svg",
+    /** 1200×630 image for link previews (Telegram, Instagram, WhatsApp). */
+    og: "/brand/og.png",
     showName: true,
-  },
-
-  /**
-   * Brand colors as OKLCH or any CSS color. `primary` is used for buttons,
-   * links and focus rings. Keep contrast WCAG AA against `primaryForeground`
-   * in both themes (the defaults below pass at 4.5:1+).
-   */
-  colors: {
-    light: {
-      primary: "oklch(0.45 0.16 258)",
-      primaryForeground: "oklch(0.985 0 0)",
-      accent: "oklch(0.95 0.03 258)",
-      accentForeground: "oklch(0.3 0.12 258)",
-    },
-    dark: {
-      primary: "oklch(0.78 0.12 258)",
-      primaryForeground: "oklch(0.2 0.05 258)",
-      accent: "oklch(0.3 0.06 258)",
-      accentForeground: "oklch(0.95 0.02 258)",
-    },
   },
 
   contact: {
@@ -70,8 +55,11 @@ export const siteConfig = {
    */
   legalPagesAreDrafts: true,
 
-  /** Default UI language for visitors whose browser language is not supported. */
-  defaultLocale: "en",
+  /**
+   * Real numbers on the landing page. Each figure is shown only once it is at
+   * least this big; below that the whole section is hidden (never invented).
+   */
+  publicStats: { minQuestions: 300, minStudents: 100, minAnswers: 5000 },
 
   /** Time zone used for streaks, daily questions and reminders. */
   defaultTimeZone: "Asia/Tashkent",

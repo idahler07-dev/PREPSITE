@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "title": "{name} — SAT preparation",
-    "description": "Practice for the digital SAT with questions written by our teachers, timed drills and honest progress tracking."
+    "title": "{name}: SAT prep with a plan you can see working",
+    "description": "Practice for the digital SAT with questions written by teachers, a calm exam-like test screen, AI explanations and progress you can trust.",
+    "ogAlt": "{name}: Your SAT score, planned and proven."
   },
   "common": {
     "loading": "Loading…",
@@ -75,7 +76,11 @@
     "billing": "Plan and payments",
     "plan": "Plan",
     "review": "Review",
-    "vocab": "Vocabulary"
+    "vocab": "Vocabulary",
+    "howItWorks": "How it works",
+    "mistakes": "Mistakes",
+    "analytics": "Analytics",
+    "mockTests": "Mock tests"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -85,7 +90,17 @@
     "refunds": "Refund policy",
     "contact": "Contact",
     "about": "About us",
-    "resources": "Official resources"
+    "resources": "Official resources",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "social": "Follow us",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "youtube": "YouTube"
   },
   "theme": {
     "label": "Theme",
@@ -93,38 +108,108 @@
     "dark": "Dark",
     "system": "System"
   },
-  "language": {
-    "label": "Language"
-  },
   "home": {
-    "eyebrow": "Digital SAT preparation",
-    "title": "Practice for the SAT with questions written by real teachers",
-    "subtitle": "Timed drills, an exam-like test screen and clear progress tracking. Built by {name} for students in Uzbekistan and Central Asia.",
-    "ctaPrimary": "Start practising",
-    "ctaSecondary": "See official free resources",
-    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
-    "featuresTitle": "What you get",
-    "features": {
-      "bank": {
-        "title": "Our own question bank",
-        "body": "Every question is written by our teachers or used with permission, and checked by a person before it reaches you."
-      },
-      "test": {
-        "title": "Exam-like practice",
-        "body": "A timer, question navigator, flag for review and answer eliminator — the tools you will use on test day."
-      },
-      "drills": {
-        "title": "Focused drills",
-        "body": "Practise one skill at a time, choose the difficulty, and check each answer as you go or at the end."
-      },
-      "progress": {
-        "title": "Honest progress",
-        "body": "Accuracy by domain and skill, time per question and your streak — only real numbers from your own practice."
+    "title": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
+    "subtitle": "Teacher-written questions, an exam-like test screen and a study plan that adapts to you. Practise a little every day and watch your estimate climb.",
+    "ctaPrimary": "Start free practice",
+    "ctaSecondary": "Take a diagnostic",
+    "noCard": "Free to start. No card needed.",
+    "question": {
+      "label": "Try a question",
+      "check": "Check answer",
+      "correct": "Correct!",
+      "incorrect": "Not quite. The answer is {key}.",
+      "explanation": "Why",
+      "more": "Practise 10 more",
+      "again": "Try again",
+      "choice": "Choice {key}",
+      "pick": "Pick an answer, then check it."
+    },
+    "how": {
+      "label": "How it works",
+      "title": "Three steps, <i>every</i> week",
+      "body": "Start with a short diagnostic, follow the plan it builds for you, and practise the skills that move your score most.",
+      "steps": {
+        "diagnose": {
+          "title": "Diagnose",
+          "body": "A short mixed test shows where you stand in each skill."
+        },
+        "plan": {
+          "title": "Plan",
+          "body": "A weekly plan that fits your test date and the time you have."
+        },
+        "practice": {
+          "title": "Practise",
+          "body": "Drills and full tests on an exam-like screen, with help when you're stuck."
+        }
       }
     },
-    "officialTitle": "Use the official free materials too",
-    "officialBody": "The College Board and Khan Academy publish free official practice. We link to them instead of copying them.",
-    "officialCta": "Official resources"
+    "pricing": {
+      "label": "Pricing",
+      "title": "Simple <i>pricing</i>",
+      "subtitle": "Start free. Upgrade when you want unlimited practice.",
+      "cta": "Compare all plans",
+      "recommended": "Recommended"
+    },
+    "final": {
+      "title": "Your next score starts <i>today</i>.",
+      "body": "Ten questions a day is enough to feel the difference in two weeks.",
+      "cta": "Start free"
+    },
+    "publishedCount": "{count, plural, one {# question} other {# questions}} in our bank so far",
+    "mini": {
+      "score": "Estimated score",
+      "scoreRange": "Range {low}–{high}",
+      "streak": "Day streak",
+      "streakDays": "{count, plural, one {# day} other {# days}}",
+      "timer": "Time left",
+      "sample": "Sample data"
+    },
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "login": "Log in",
+      "start": "Start free"
+    },
+    "bank": {
+      "label": "Question bank",
+      "title": "Stuck? <i>Ask</i> Otto.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, Otto explains it step by step, and every explanation is checked against the answer key.",
+      "cta": "Try a drill"
+    },
+    "plan": {
+      "label": "Study plan",
+      "title": "A plan that <hl>fits</hl> your week",
+      "body": "Set your target score and test date. Satify spreads the work across the days you have and adjusts after every test.",
+      "cta": "Build my plan",
+      "bubble": "Tuesday: 20 minutes of algebra. You've got this!",
+      "week": "This week",
+      "countdown": "Test day",
+      "days": "{count, plural, one {# day} other {# days}} to go"
+    },
+    "mocks": {
+      "label": "Mock tests",
+      "title": "The real thing, <i>minus</i> the nerves",
+      "body": "Full adaptive practice tests with two modules per section, a timer, question navigator, calculator and highlighter, so test day feels familiar.",
+      "cta": "See practice tests"
+    },
+    "analytics": {
+      "label": "Analytics",
+      "title": "Know <i>exactly</i> what to practise",
+      "body": "Every answer updates your skill map. See your weakest skills, your score trend and how you pace each module.",
+      "cta": "Start practising",
+      "skills": "Skill map",
+      "trend": "Score trend",
+      "pacing": "Pacing",
+      "pacingBody": "Average time per question, by module",
+      "module": "Module {n}",
+      "secs": "{count}s"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Questions, <i>answered</i>"
+    }
   },
   "about": {
     "title": "About us",
@@ -146,8 +231,8 @@
         "a": "No. It is an estimate based on your practice. Only the College Board can give you an official score."
       },
       "language": {
-        "q": "Why are the questions in English?",
-        "a": "The real SAT is in English, so our questions are too. Menus, explanations and study plans can be shown in your language."
+        "q": "Is everything in English?",
+        "a": "Yes. The real SAT is in English, and so is Satify: questions, explanations, study plans and messages."
       },
       "device": {
         "q": "Can I practise on my phone?",
@@ -302,7 +387,8 @@
     "errors": {
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
-    }
+    },
+    "tip": "Tip from Otto: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -338,7 +424,26 @@
     "noData": "No practice yet. Your results will appear here.",
     "recent": "Recent practice",
     "viewAll": "View all",
-    "officialScores": "Official practice scores"
+    "officialScores": "Official practice scores",
+    "greeting": "Hi, {name}!",
+    "greetingNoName": "Hi there!",
+    "greetingSub": "Here's your plan for today. A little every day adds up.",
+    "skillMap": "Skill map",
+    "skillMapHint": "Tap a skill to start a 10-question drill on it.",
+    "weakest": "Weakest skills",
+    "practiceNow": "Practice now",
+    "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
+    "streakTitle": "Day streak",
+    "streakReminder": "Otto misses you. Ten questions keeps your streak alive.",
+    "daysToTest": "Days to test",
+    "noTestDate": "Set your test date",
+    "estimateEmpty": "Take a practice test to see your estimate.",
+    "takeTest": "Take a practice test",
+    "recentEmpty": "Your finished drills and tests will appear here.",
+    "firstDrill": "Start your first drill",
+    "quick": "Quick practice",
+    "mastery": "{pct}% correct",
+    "range": "Range {low}–{high}"
   },
   "practice": {
     "title": "Practice",
@@ -373,7 +478,8 @@
     "quickMath": "10 math questions",
     "quickRw": "10 reading & writing questions",
     "inProgress": "In progress",
-    "resume": "Resume"
+    "resume": "Resume",
+    "drillStarted": "Drill started. Good luck!"
   },
   "test": {
     "drillTitle": "Practice drill",
@@ -595,7 +701,8 @@
         "harder": "Module 2 was the harder one.",
         "easier": "Module 2 was the easier one, which limits the highest possible score."
       }
-    }
+    },
+    "reviewMistakes": "Review mistakes"
   },
   "history": {
     "title": "Practice history",
@@ -619,7 +726,8 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed",
       "ABANDONED": "Abandoned"
-    }
+    },
+    "emptyCta": "Start your first drill"
   },
   "settings": {
     "title": "Settings",
@@ -629,7 +737,6 @@
     "telegram": "Telegram",
     "notConnected": "Not connected",
     "preferences": "Preferences",
-    "language": "Language",
     "theme": "Theme",
     "goal": "Goal",
     "saved": "Settings saved",
@@ -674,11 +781,13 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Page not found",
-    "notFoundBody": "The page you are looking for doesn’t exist or has moved.",
+    "notFoundTitle": "Otto can't find that page",
+    "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Please try again. If the problem continues, contact us."
+    "errorBody": "Otto dropped a few things. Try again, and if it keeps happening, let us know.",
+    "goDashboard": "Go to my dashboard",
+    "tryAgain": "Try again"
   },
   "taxonomy": {
     "sections": {
@@ -1435,7 +1544,7 @@
     }
   },
   "tutor": {
-    "title": "AI tutor",
+    "title": "Ask Otto",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1443,7 +1552,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Thinking…",
+    "thinking": "Otto is thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1456,7 +1565,9 @@
       "chatLimit": "That's the limit of follow-up questions for this question.",
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
-    }
+    },
+    "askOtto": "Ask Otto",
+    "stepByStep": "Step by step"
   },
   "billing": {
     "plans": {
@@ -1529,7 +1640,7 @@
       "expired": "Premium ended"
     },
     "pricing": {
-      "title": "Plans and prices",
+      "title": "Simple <i>pricing</i>",
       "subtitle": "Start free. Upgrade when you want unlimited practice, full practice tests and more help from the AI tutor. No automatic charges: you pay for a period and renew when you choose.",
       "currency": "Currency",
       "uzsHint": "Uzcard and Humo through Payme or Click",
@@ -1542,7 +1653,26 @@
       "testdayNote": "Set your test date in your settings first.",
       "noProviders": "Online payment is not available yet. Please contact us to pay.",
       "faq": "Payments are made on the payment provider's secure page. We never see or store your card number. Unused time is not refunded automatically; see the refund policy.",
-      "refundPolicy": "Refund policy"
+      "refundPolicy": "Refund policy",
+      "titlePlain": "Plans and prices",
+      "recommended": "Recommended",
+      "freeTitle": "Not ready to pay? Start free.",
+      "freeBody": "{questions} practice questions a day, {tests, plural, one {# practice test} other {# practice tests}} and {ai} AI tutor answers a day. No card needed.",
+      "compare": {
+        "title": "Compare plans",
+        "feature": "Feature",
+        "free": "Free",
+        "questions": "Practice questions",
+        "tests": "Full practice tests",
+        "ai": "AI tutor answers a day",
+        "tools": "Exam-like test screen and tools",
+        "progress": "Progress tracking and score estimates",
+        "review": "Mistake notebook and study plan",
+        "unlimited": "Unlimited",
+        "included": "Included",
+        "perDayCount": "{count} a day",
+        "total": "{count} in total"
+      }
     },
     "checkout": {
       "title": "Checkout",
@@ -1638,7 +1768,8 @@
     "bookmark": "Bookmark",
     "myNote": "My note",
     "noteSaved": "Saved",
-    "noteUnsaved": "Not saved yet — click outside the box to save"
+    "noteUnsaved": "Not saved yet — click outside the box to save",
+    "emptyCta": "Start a drill"
   },
   "vocab": {
     "title": "Vocabulary",
@@ -1715,5 +1846,52 @@
     "student": "Try as a student",
     "admin": "Try as admin",
     "banner": "Demo site — test payments only, data may be reset."
+  },
+  "brand": {
+    "tagline": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
+    "taglinePlain": "Your SAT score, planned and proven."
+  },
+  "command": {
+    "title": "Command palette",
+    "description": "Search pages, start a drill or change settings.",
+    "open": "Open command palette",
+    "placeholder": "Search pages, drills and settings…",
+    "placeholderShort": "Search…",
+    "empty": "Nothing found. Try “math” or “settings”.",
+    "pages": "Go to",
+    "drills": "Start a drill",
+    "drillSection": "10 {section} questions",
+    "drillDomain": "Drill: {domain}",
+    "settings": "Settings",
+    "themeTo": "Theme: {theme}"
+  },
+  "shell": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "more": "More",
+    "appNavigation": "App navigation",
+    "tabs": "Main sections",
+    "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
+    "countdownShort": "{days, plural, =0 {Today} other {#d}}",
+    "countdownLabel": "Your SAT is on {date}",
+    "closeMenu": "Close menu"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Where you stand in every skill, and how your practice is trending.",
+    "practice": "Start a drill",
+    "skills": "Skill map",
+    "skillsHint": "Shaded by how often you answer correctly. Tap a skill to drill it.",
+    "trend": "Score trend",
+    "trendHint": "Estimated total from your full practice tests.",
+    "trendEmpty": "Finish two practice tests to see a trend.",
+    "byDomain": "Accuracy by domain",
+    "pacing": "Pacing",
+    "pacingHint": "Average time per answered question.",
+    "perQuestion": "{seconds}s per question",
+    "target": "Real SAT: about {seconds}s",
+    "empty": "Answer a few questions and your analytics will appear here.",
+    "emptyCta": "Start your first drill",
+    "answered": "{count, plural, one {# answer} other {# answers}}"
   }
 }

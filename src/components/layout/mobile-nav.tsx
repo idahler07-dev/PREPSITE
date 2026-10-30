@@ -6,7 +6,6 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "./nav-link";
-import { LocaleSwitcher } from "./locale-switcher";
 
 export function MobileNav({ items }: { items: { href: string; label: string }[] }) {
   const t = useTranslations("nav");
@@ -30,7 +29,6 @@ export function MobileNav({ items }: { items: { href: string; label: string }[] 
           ))}
         </nav>
         <div className="px-4 pt-4">
-          <LocaleSwitcher />
         </div>
       </SheetContent>
     </Sheet>

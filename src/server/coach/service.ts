@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 import { buildWeeklyPlan, mondayOf, type WeeklyPlan } from "@/lib/coach/plan";
 import { dayInZone } from "@/lib/stats/streak";
-import { LOCALE_ENGLISH_NAMES, isEnabledLocale } from "@/i18n/locales";
+import { LOCALE_ENGLISH_NAMES } from "@/i18n/locales";
 import { aiAvailable, models } from "@/server/ai/client";
 import { generateJson } from "@/server/ai/structured";
 import { usageSummary } from "@/server/billing/entitlement";
@@ -54,7 +54,7 @@ async function coachMessage(userId: string, plan: WeeklyPlan, ctx: { locale: str
       system:
         "You are a friendly SAT study coach. Write 2–3 short sentences for the student about this week's plan: what to focus on and why, and one practical tip. Don't invent numbers. Don't mention College Board or other companies. Plain text, no Markdown.",
       user: JSON.stringify({
-        language: LOCALE_ENGLISH_NAMES[isEnabledLocale(ctx.locale) ? ctx.locale : "en"],
+        language: LOCALE_ENGLISH_NAMES.en,
         daysToTest: plan.daysToTest,
         targetScore: ctx.targetScore,
         latestEstimatedScore: ctx.latestEstimate,

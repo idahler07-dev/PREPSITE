@@ -125,7 +125,7 @@ All calls go through `src/server/ai/` (server-side only) and are logged in `AiUs
 - **Official scores**: students log official practice test scores and missed skills (`OfficialScore`); the dashboard and coach use them.
 - **Study coach** (`src/lib/coach/plan.ts` rules, `src/server/coach/service.ts`): a weekly plan from the test date, accuracy by skill (last 60 days), due reviews and whether a practice test is allowed. Rebuilt after every scored test and on request; the AI only adds a short note (`coach` feature, fast model).
 - **Notifications** (`src/config/notifications.ts`, `src/server/notify/*`): kinds study / streak / newTests / renewals by email and Telegram, per-student preferences, each sent once (`NotificationLog`). Jobs: `evening-reminders` (18:47 Tashkent), `announce-test` (when a practice test is published), renewals from `billing-daily`.
-- **PWA**: `src/app/manifest.ts`, icons from `scripts/make-icons.ts`, `public/sw.js` (static files cache-first; test pages cached on open so a drill keeps working offline; offline page). Registered only in production.
+- **PWA**: `src/app/manifest.ts`, icons from `scripts/make-brand.ts`, `public/sw.js` (static files cache-first; test pages cached on open so a drill keeps working offline; offline page). Registered only in production.
 
 ## Analytics, calibration and operations
 

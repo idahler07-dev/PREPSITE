@@ -53,12 +53,12 @@ export function ImportReviewNav({
           <div className="ms-auto flex gap-2">
             <Button asChild variant="outline" size="sm" aria-disabled={!prev} className={!prev ? "pointer-events-none opacity-50" : ""}>
               <Link href={prev ? href(prev.id) : "#"}>
-                <ChevronLeft className="rtl:rotate-180" aria-hidden /> {t("previous")}
+                <ChevronLeft aria-hidden /> {t("previous")}
               </Link>
             </Button>
             <Button asChild variant="outline" size="sm" aria-disabled={!next} className={!next ? "pointer-events-none opacity-50" : ""}>
               <Link href={next ? href(next.id) : "#"}>
-                {t("next")} <ChevronRight className="rtl:rotate-180" aria-hidden />
+                {t("next")} <ChevronRight aria-hidden />
               </Link>
             </Button>
           </div>

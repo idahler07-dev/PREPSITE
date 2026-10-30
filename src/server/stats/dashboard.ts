@@ -66,6 +66,7 @@ export async function getDashboardStats(userId: string, timeZone: string) {
       dayInZone(new Date(), timeZone),
     ),
     byDomain: toRows(byDomain),
+    bySkill: skills,
     weakSkills: skills
       .filter((s) => s.total >= 3)
       .sort((a, b) => a.correct / a.total - b.correct / b.total)

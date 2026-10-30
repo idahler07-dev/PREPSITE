@@ -10,25 +10,25 @@ test("free limit → upgrade with the test provider → premium unlocked, receip
 
   // Two quick drills use up the 20 free questions for today; the third is refused.
   for (let i = 0; i < 2; i++) {
-    await page.goto("/en/practice");
+    await page.goto("/practice");
     await page.getByRole("button", { name: "10 math questions" }).click();
-    await expect(page).toHaveURL(/\/en\/test\//);
+    await expect(page).toHaveURL(/\/test\//);
   }
-  await page.goto("/en/practice");
+  await page.goto("/practice");
   await page.getByRole("button", { name: "10 math questions" }).click();
   await expect(page.getByText(/You've used today's free practice questions/)).toBeVisible();
 
   // Upgrade.
-  await page.goto("/en/pricing");
+  await page.goto("/pricing");
   await page.getByRole("link", { name: "Choose 1 month" }).click();
-  await expect(page).toHaveURL(/\/en\/checkout/);
+  await expect(page).toHaveURL(/\/checkout/);
   await expect(page.getByText("Test payment (no real money)")).toBeVisible();
   await page.getByRole("button", { name: /^Pay / }).click();
-  await expect(page).toHaveURL(/\/en\/payments\/mock\//);
+  await expect(page).toHaveURL(/\/payments\/mock\//);
   await page.getByRole("button", { name: "Pay (test)" }).click();
   await expect(page.getByText("Payment received. Premium is active")).toBeVisible();
 
-  await page.goto("/en/billing");
+  await page.goto("/billing");
   await expect(page.getByText("Premium", { exact: true })).toBeVisible();
   await expect(page.getByRole("cell", { name: "Paid" })).toBeVisible();
   await page.getByRole("link", { name: "Receipt" }).click();
@@ -41,7 +41,7 @@ test("free limit → upgrade with the test provider → premium unlocked, receip
     .toBe(true);
 
   // Premium: practice is no longer limited.
-  await page.goto("/en/practice");
+  await page.goto("/practice");
   await page.getByRole("button", { name: "10 math questions" }).click();
-  await expect(page).toHaveURL(/\/en\/test\//);
+  await expect(page).toHaveURL(/\/test\//);
 });

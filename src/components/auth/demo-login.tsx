@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export async function DemoLogin() {
   const t = await getTranslations("demo");
   return (
-    <section aria-labelledby="demo-title" className="mb-6 space-y-3 rounded-xl border border-primary/30 bg-accent/40 p-4">
+    <section aria-labelledby="demo-title" className="mb-6 space-y-3 rounded-xl border border-primary/30 bg-primary-soft/40 p-4">
       <h2 id="demo-title" className="text-sm font-semibold">
         {t("title")}
       </h2>

@@ -38,7 +38,7 @@ test("admin builds a practice test; a student takes it with the test tools and g
   seedMockBank();
   await signIn(page, "admin@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
-  await page.goto("/en/admin/mocks");
+  await page.goto("/admin/mocks");
   await page.getByLabel("Title").fill("E2E Practice Test");
   await page.getByRole("button", { name: "Build test" }).click();
   await expect(page.getByRole("heading", { name: "E2E Practice Test" })).toBeVisible();
@@ -49,10 +49,10 @@ test("admin builds a practice test; a student takes it with the test tools and g
   const student = await browser.newPage();
   await signIn(student, uniqueEmail("mock"));
   await student.getByRole("button", { name: "Skip for now" }).click();
-  await student.goto("/en/mocks");
+  await student.goto("/mocks");
   const card = student.getByRole("listitem").filter({ hasText: "E2E Practice Test" });
   await card.getByRole("button", { name: "Start full test" }).click();
-  await expect(student).toHaveURL(/\/en\/test\//);
+  await expect(student).toHaveURL(/\/test\//);
   await expect(student.getByRole("heading", { name: "Reading and Writing: Module 1" })).toBeVisible();
 
   // Highlight part of the passage and add a note; both survive a reload.
@@ -100,7 +100,7 @@ test("admin builds a practice test; a student takes it with the test tools and g
   await expect(student.getByRole("heading", { name: "Math: Module 2" })).toBeVisible();
   await submitModule(student);
 
-  await expect(student).toHaveURL(/\/en\/attempts\//);
+  await expect(student).toHaveURL(/\/attempts\//);
   await expect(student.getByText("Estimated score, not an official College Board score.", { exact: false })).toBeVisible();
   await expect(student.getByText("Total (400–1600)")).toBeVisible();
   await expect(student.getByText("Module 2 was the easier one", { exact: false }).first()).toBeVisible();

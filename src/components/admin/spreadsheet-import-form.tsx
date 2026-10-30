@@ -169,7 +169,7 @@ export function SpreadsheetImportForm({ sources, defaultPrefix }: { sources: { i
           }}
           className={cn(
             "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 text-center text-sm transition-colors",
-            dragging ? "border-primary bg-accent" : "border-input hover:bg-muted/50",
+            dragging ? "border-primary bg-primary-soft" : "border-input hover:bg-muted/50",
           )}
           onClick={() => fileRef.current?.click()}
         >

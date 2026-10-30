@@ -4,7 +4,6 @@ import { createHash } from "node:crypto";
 import { env } from "@/lib/env";
 import { z } from "zod";
 import { AuthError } from "next-auth";
-import { getLocale } from "next-intl/server";
 import { db } from "@/lib/db";
 import { signIn } from "@/lib/auth";
 import { clientIp } from "@/server/http";
@@ -24,10 +23,9 @@ export async function requestMagicLink(_prev: LoginState, form: FormData): Promi
   const byIp = await rateLimit(`magic-link:ip:${ip}`, env().MAGIC_LINKS_PER_IP_HOUR, 3600);
   if (!byIp.ok) return { error: "RateLimited", email };
 
-  const locale = await getLocale();
   const next = safeNextPath(parsed.data.next);
   try {
-    await signIn("email", { email, redirect: false, redirectTo: `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}` });
+    await signIn("email", { email, redirect: false, redirectTo: `/api/post-login?next=${encodeURIComponent(next ?? "")}` });
   } catch (e) {
     if (e instanceof AuthError) return { error: e.type === "EmailSignInError" ? "EmailSignin" : "Default", email };
     throw e;
@@ -63,22 +61,19 @@ export async function verifyEmailCode(_prev: CodeState, form: FormData): Promise
   const found = await db.verificationToken.findFirst({ where: { identifier: email, token, expires: { gt: new Date() } }, select: { token: true } });
   if (!found) return { error: "WrongCode" };
 
-  const locale = await getLocale();
   const next = safeNextPath(parsed.data.next);
-  const callbackUrl = `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}`;
+  const callbackUrl = `/api/post-login?next=${encodeURIComponent(next ?? "")}`;
   return { redirectTo: `/api/auth/callback/email?${new URLSearchParams({ callbackUrl, token: code, email })}` };
 }
 
 export async function signInWithGoogle(form: FormData) {
-  const locale = await getLocale();
   const next = safeNextPath(String(form.get("next") ?? ""));
-  await signIn("google", { redirectTo: `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}` });
+  await signIn("google", { redirectTo: `/api/post-login?next=${encodeURIComponent(next ?? "")}` });
 }
 
 export async function signInWithTelegram(payload: string, nextRaw?: string): Promise<{ error?: string; redirectTo?: string }> {
   const ip = await clientIp();
   if (!(await rateLimit(`telegram-login:ip:${ip}`, 20, 3600)).ok) return { error: "RateLimited" };
-  const locale = await getLocale();
   const next = safeNextPath(nextRaw);
   try {
     await signIn("telegram", { payload, redirect: false });
@@ -86,7 +81,7 @@ export async function signInWithTelegram(payload: string, nextRaw?: string): Pro
     if (e instanceof AuthError) return { error: "CredentialsSignin" };
     throw e;
   }
-  return { redirectTo: `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}` };
+  return { redirectTo: `/api/post-login?next=${encodeURIComponent(next ?? "")}` };
 }
 
 /** Demo site only (DEMO_MODE): sign in as a demo student or the demo admin. */
@@ -94,7 +89,6 @@ export async function signInAsDemo(form: FormData) {
   if (!env().DEMO_MODE) return;
   const ip = await clientIp();
   if (!(await rateLimit(`demo-login:ip:${ip}`, 30, 3600)).ok) return;
-  const locale = await getLocale();
   const role = form.get("role") === "admin" ? "admin" : "student";
-  await signIn("demo", { role, redirectTo: role === "admin" ? `/${locale}/admin` : `/${locale}/dashboard` });
+  await signIn("demo", { role, redirectTo: role === "admin" ? "/admin" : "/dashboard" });
 }

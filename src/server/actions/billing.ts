@@ -54,7 +54,7 @@ export async function startCheckout(raw: unknown): Promise<{ ok: true; redirectU
     if (!(await rateLimit(`checkout:${user.id}`, 10, 600)).ok) throw new HttpError(429, "RATE_LIMITED");
     const order = await createOrder(user.id, raw, providerSupports);
     const site = env().NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
-    const returnUrl = `${site}/${order.locale}/payments/return?order=${order.id}`;
+    const returnUrl = `${site}/payments/return?order=${order.id}`;
     if (order.status === "PAID") return { ok: true, redirectUrl: returnUrl };
     const provider = getProvider(order.provider)!;
     const { redirectUrl, providerRef } = await provider.createCheckout(

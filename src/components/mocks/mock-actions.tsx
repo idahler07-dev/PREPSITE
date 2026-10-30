@@ -85,7 +85,7 @@ export function GenerateMockForm() {
       <fieldset className="flex flex-wrap gap-2">
         <legend className="mb-1 text-sm font-medium">{t("generateWhat")}</legend>
         {(["both", "RW", "MATH"] as const).map((v) => (
-          <label key={v} className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-accent">
+          <label key={v} className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary-soft">
             <input type="radio" name="sections" value={v} checked={choice === v} onChange={() => setChoice(v)} className="size-4" />
             {v === "both" ? t("bothSections") : tx(`sections.${v}`)}
           </label>

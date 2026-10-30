@@ -1,16 +1,17 @@
 import type { MetadataRoute } from "next";
 import siteConfig from "@site";
+import { THEME_COLORS } from "@/config/theme-colors";
 
-/** Installable app (PWA). Icons are generated from the logo: pnpm tsx scripts/make-icons.ts */
+/** Installable app (PWA). Icons are generated with the logo: pnpm tsx scripts/make-brand.ts */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
     short_name: siteConfig.shortName,
-    start_url: `/${siteConfig.defaultLocale}/dashboard`,
+    start_url: "/dashboard",
     scope: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#2a4fb0",
+    background_color: THEME_COLORS.light,
+    theme_color: THEME_COLORS.light,
     icons: [
       { src: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
       { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png" },

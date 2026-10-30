@@ -24,7 +24,7 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
   writeFileSync(booklet, await makePdf(["1. PDF-E2E-STEM: If 4x = 20, what is the value of x?", "A) 4", "B) 5", "C) 6", "D) 16"]));
   writeFileSync(key, await makePdf(["Answer Key", "1. B"]));
 
-  await page.goto("/en/admin/import");
+  await page.goto("/admin/import");
   const panel = page.getByRole("tabpanel");
   const newSource = panel.getByText("Create a new source");
   if (await newSource.isVisible()) await newSource.click();
@@ -51,7 +51,7 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
   const student = await browser.newPage();
   await signIn(student, uniqueEmail("pdfdrill"));
   await student.getByRole("button", { name: "Skip for now" }).click();
-  await student.goto("/en/practice");
+  await student.goto("/practice");
   await student.getByText("Question code range").click();
   await student.getByLabel("From code").fill("E2E-P-ALG-0001");
   await student.getByLabel("To code").fill("E2E-P-ALG-0001");

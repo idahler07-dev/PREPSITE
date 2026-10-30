@@ -12,14 +12,14 @@ async function check(page: Page, url: string) {
 }
 
 test("public pages", async ({ page }) => {
-  for (const url of ["/en", "/en/pricing", "/en/login", "/en/resources", "/en/faq", "/uz", "/ru/pricing"]) await check(page, url);
+  for (const url of ["/", "/pricing", "/login", "/resources", "/faq"]) await check(page, url);
 });
 
 test("student pages", async ({ page }) => {
   await signIn(page, uniqueEmail("a11y"));
   await page.getByRole("button", { name: "Skip for now" }).click();
-  for (const url of ["/en/dashboard", "/en/practice", "/en/mocks", "/en/plan", "/en/review", "/en/vocab", "/en/billing", "/en/settings"]) await check(page, url);
-  await page.goto("/en/practice");
+  for (const url of ["/dashboard", "/practice", "/mocks", "/plan", "/review", "/vocab", "/billing", "/settings"]) await check(page, url);
+  await page.goto("/practice");
   await page.getByRole("button", { name: "10 math questions" }).click();
   await page.waitForURL(/\/test\//);
   await check(page, page.url().replace(/^https?:\/\/[^/]+/, ""));
@@ -28,5 +28,5 @@ test("student pages", async ({ page }) => {
 test("admin pages", async ({ page }) => {
   await signIn(page, "admin@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
-  for (const url of ["/en/admin", "/en/admin/questions", "/en/admin/review", "/en/admin/import", "/en/admin/mocks", "/en/admin/orders", "/en/admin/analytics", "/en/admin/vocab"]) await check(page, url);
+  for (const url of ["/admin", "/admin/questions", "/admin/review", "/admin/import", "/admin/mocks", "/admin/orders", "/admin/analytics", "/admin/vocab"]) await check(page, url);
 });

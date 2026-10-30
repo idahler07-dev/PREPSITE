@@ -22,6 +22,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RichText } from "@/components/content/rich-text";
 import { cn } from "@/lib/utils";
+import { OttoCheerPop } from "@/components/mascot/celebrate";
 import { useAutosave, type SaveStatus } from "./use-autosave";
 import { CountdownTimer } from "./timer";
 import { ChoiceList } from "./choice-list";
@@ -382,7 +383,7 @@ export function TestRunner({
       </header>
 
       {showTip && (
-        <div className="flex items-start gap-2 border-b bg-accent px-4 py-2 text-sm text-accent-foreground">
+        <div className="flex items-start gap-2 border-b bg-primary-soft px-4 py-2 text-sm text-foreground">
           <p className="flex-1">{t("mobileTip")}</p>
           <button
             type="button"
@@ -484,7 +485,7 @@ export function TestRunner({
                   <span className="flex h-8 min-w-8 items-center justify-center rounded bg-foreground px-2 text-sm font-bold text-background">{index + 1}</span>
                   <span className="font-mono text-xs text-muted-foreground">{t("questionId", { code: item.code.toLowerCase() })}</span>
                   <Button variant={item.flagged ? "secondary" : "ghost"} size="sm" onClick={toggleFlag} aria-pressed={item.flagged}>
-                    <Bookmark className={cn(item.flagged && "fill-flag text-flag")} aria-hidden />
+                    <Bookmark className={cn(item.flagged && "fill-flagged text-warning-ink")} aria-hidden />
                     {item.flagged ? t("marked") : t("markForReview")}
                   </Button>
                   {item.type === "MCQ" && !item.feedback && (
@@ -546,11 +547,11 @@ export function TestRunner({
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={prev} disabled={view === "question" && index === 0}>
-            <ChevronLeft className="rtl:rotate-180" aria-hidden /> <span className="hidden sm:inline">{c("back")}</span>
+            <ChevronLeft aria-hidden /> <span className="hidden sm:inline">{c("back")}</span>
           </Button>
           {view === "question" && (
             <Button onClick={next}>
-              <span className="hidden sm:inline">{c("next")}</span> <ChevronRight className="rtl:rotate-180" aria-hidden />
+              <span className="hidden sm:inline">{c("next")}</span> <ChevronRight aria-hidden />
             </Button>
           )}
         </div>
@@ -635,10 +636,11 @@ function FeedbackPanel({ item, feedback, attemptId, aiEnabled }: { item: RunnerI
   return (
     <div
       role="status"
-      className={cn("space-y-3 rounded-lg border-2 p-4", feedback.isCorrect ? "border-success bg-success-muted" : "border-destructive bg-danger-muted")}
+      className={cn("relative space-y-3 rounded-[14px] border-2 p-4", feedback.isCorrect ? "border-correct bg-correct-soft" : "border-danger bg-danger-soft")}
     >
+      {feedback.isCorrect && <OttoCheerPop />}
       <p className="flex items-center gap-2 font-semibold">
-        {feedback.isCorrect ? <CheckCircle2 className="size-5 text-success" aria-hidden /> : <XCircle className="size-5 text-destructive" aria-hidden />}
+        {feedback.isCorrect ? <CheckCircle2 className="size-5 text-correct-ink" aria-hidden /> : <XCircle className="size-5 text-danger-ink" aria-hidden />}
         {feedback.isCorrect ? t("correct") : t("incorrect")}
       </p>
       {!feedback.isCorrect && (

@@ -31,7 +31,7 @@ async function latestSignInMail(email: string, since: number) {
  */
 export async function signIn(page: Page, email: string, via: "code" | "link" = "code") {
   const since = Date.now() - 1000;
-  await page.goto("/en/login");
+  await page.goto("/login");
   await page.getByLabel("Email address").fill(email);
   await page.getByRole("button", { name: "Continue with email" }).click();
   await expect(page.getByLabel("Sign-in code")).toBeVisible();

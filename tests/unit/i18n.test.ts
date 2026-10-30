@@ -20,17 +20,6 @@ describe("translation helpers", () => {
   });
 });
 
-describe("enabled locales are complete", () => {
-  const en = read("en");
-  for (const code of ENABLED_LOCALES.filter((c) => c !== "en")) {
-    it(`${code} has every key with matching placeholders`, () => {
-      const r = compareMessages(code, en, read(code));
-      expect(r.missing).toEqual([]);
-      expect(r.placeholderMismatch).toEqual([]);
-    });
-  }
-});
-
 describe("every message is valid ICU", () => {
   it.each(ENABLED_LOCALES)("%s parses", async (code) => {
     const { IntlMessageFormat } = await import("intl-messageformat");
@@ -39,7 +28,7 @@ describe("every message is valid ICU", () => {
     for (const key of flattenKeys(messages)) {
       const value = key.split(".").reduce((o: Record<string, unknown>, k) => o[k] as Record<string, unknown>, messages) as unknown as string;
       try {
-        new IntlMessageFormat(value, code === "uz" ? "uz-Latn" : code);
+        new IntlMessageFormat(value, code);
       } catch (e) {
         bad.push(`${key}: ${(e as Error).message}`);
       }
