@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
 import { MobileNav } from "./mobile-nav";
-import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle, ThemeSync } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
@@ -50,7 +49,6 @@ export async function SiteHeader() {
         </nav>
         <div className="ms-auto flex items-center gap-1">
           <div className="hidden sm:block">
-            <LocaleSwitcher compact />
           </div>
           <ThemeToggle signedIn={!!user} />
           {user ? (

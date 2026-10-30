@@ -1,14 +1,10 @@
 import { getRequestConfig } from "next-intl/server";
-import { hasLocale } from "next-intl";
-import { routing } from "./routing";
+import { DEFAULT_LOCALE } from "./locales";
 import { loadMessages } from "./messages";
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  const requested = await requestLocale;
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
-  return {
-    locale,
-    messages: await loadMessages(locale),
-    timeZone: "Asia/Tashkent",
-  };
-});
+// No locale in URLs: every request uses the default (English) messages.
+export default getRequestConfig(async () => ({
+  locale: DEFAULT_LOCALE,
+  messages: await loadMessages(DEFAULT_LOCALE),
+  timeZone: "Asia/Tashkent",
+}));

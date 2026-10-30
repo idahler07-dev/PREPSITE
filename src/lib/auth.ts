@@ -19,10 +19,6 @@ declare module "next-auth" {
   }
 }
 
-function localeFromRequest(request: Request): string {
-  const cookie = request.headers.get("cookie") ?? "";
-  return /(?:^|;\s*)NEXT_LOCALE=([^;]+)/.exec(cookie)?.[1] ?? "en";
-}
 
 /** Email sign-in codes (and the link in the same email) expire after this many seconds. */
 export const EMAIL_CODE_TTL_SEC = 15 * 60;
@@ -44,10 +40,10 @@ const emailProvider: EmailConfig = {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) throw new Error("Invalid email");
     return email;
   },
-  async sendVerificationRequest({ identifier, url, token, request }) {
+  async sendVerificationRequest({ identifier, url, token }) {
     const limit = await rateLimit(`magic-link:email:${identifier}`, 5, 3600);
     if (!limit.ok) throw new Error("Too many sign-in emails. Try again later.");
-    await sendMail(await magicLinkEmail(identifier, url, token, localeFromRequest(request)));
+    await sendMail(await magicLinkEmail(identifier, url, token, "en"));
   },
 };
 

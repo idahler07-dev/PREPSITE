@@ -70,9 +70,6 @@ export const siteConfig = {
    */
   legalPagesAreDrafts: true,
 
-  /** Default UI language for visitors whose browser language is not supported. */
-  defaultLocale: "en",
-
   /** Time zone used for streaks, daily questions and reminders. */
   defaultTimeZone: "Asia/Tashkent",
 

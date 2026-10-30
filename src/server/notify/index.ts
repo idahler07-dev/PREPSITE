@@ -37,7 +37,7 @@ export async function notify(
   } catch {
     return false; // already sent
   }
-  const { loc, t } = await translatorFor(user.locale);
+  const { loc, t } = await translatorFor("en");
   const msg = build(t);
   const url = `${env().NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/${loc}${msg.path}`;
   const settings = `${env().NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/${loc}/settings`;

@@ -93,9 +93,6 @@
     "dark": "Dark",
     "system": "System"
   },
-  "language": {
-    "label": "Language"
-  },
   "home": {
     "eyebrow": "Digital SAT preparation",
     "title": "Practice for the SAT with questions written by real teachers",
@@ -629,7 +626,6 @@
     "telegram": "Telegram",
     "notConnected": "Not connected",
     "preferences": "Preferences",
-    "language": "Language",
     "theme": "Theme",
     "goal": "Goal",
     "saved": "Settings saved",

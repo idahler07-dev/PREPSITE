@@ -33,7 +33,7 @@ export async function sendReceipt(orderId: string) {
     where: { id: orderId },
     include: { user: { select: { email: true, telegramId: true, locale: true } }, subscription: true },
   });
-  const { loc, t: tr } = await t(order.locale ?? order.user.locale ?? "en");
+  const { loc, t: tr } = await t("en");
   const date = (d: Date) => new Intl.DateTimeFormat(loc, { dateStyle: "long", timeZone: siteConfig.defaultTimeZone }).format(d);
   const currency = order.currency as Currency;
   const lines: [string, string][] = [
@@ -56,7 +56,7 @@ export async function sendRenewalReminder(
   endsAt: Date,
   key: string,
 ) {
-  const loc = user.locale ?? "en";
+  const loc = "en";
   const endsOn = new Intl.DateTimeFormat(loc, { dateStyle: "long", timeZone: siteConfig.defaultTimeZone }).format(endsAt);
   await notify(user, "renewals", key, (t) => ({
     subject: t("renewal.subject", { name: siteConfig.name, days }),

@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
     short_name: siteConfig.shortName,
-    start_url: `/${siteConfig.defaultLocale}/dashboard`,
+    start_url: "/dashboard",
     scope: "/",
     display: "standalone",
     background_color: "#ffffff",

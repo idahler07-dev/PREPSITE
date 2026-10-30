@@ -4,7 +4,6 @@ import { db } from "@/lib/db";
 import { requireRole, STAFF_ROLES } from "@/server/auth/session";
 import { Logo } from "@/components/layout/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { UserMenu } from "@/components/layout/user-menu";
 import { AdminNav } from "@/components/admin/admin-nav";
 
@@ -26,7 +25,6 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         <Logo href="/admin" />
         <span className="rounded bg-accent px-2 py-0.5 text-xs font-semibold text-accent-foreground">{t("title")}</span>
         <div className="ms-auto flex items-center gap-1">
-          <LocaleSwitcher compact />
           <ThemeToggle signedIn />
           <UserMenu name={user.name} email={user.email} isStaff />
         </div>

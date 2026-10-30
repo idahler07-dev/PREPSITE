@@ -31,7 +31,7 @@ export default async function BillingPage() {
     db.user.count({ where: { referredById: user.id } }),
   ]);
   const renewPlan = ent.planId && getPaidPlan(ent.planId) ? ent.planId : "quarter";
-  const link = `${env().NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/${locale}?ref=${code}`;
+  const link = `${env().NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/?ref=${code}`;
   const date = (d: Date) => format.dateTime(d, { dateStyle: "long" });
 
   return (

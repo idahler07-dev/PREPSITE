@@ -24,13 +24,13 @@ export function Pagination({ page, pages, total, pageSize }: { page: number; pag
       <div className="flex items-center gap-2">
         <Button asChild variant="outline" size="sm" aria-disabled={page <= 1} className={page <= 1 ? "pointer-events-none opacity-50" : ""}>
           <Link href={href(Math.max(1, page - 1))} aria-label={c("previous")}>
-            <ChevronLeft className="rtl:rotate-180" aria-hidden />
+            <ChevronLeft aria-hidden />
           </Link>
         </Button>
         <span>{c("page", { page, pages })}</span>
         <Button asChild variant="outline" size="sm" aria-disabled={page >= pages} className={page >= pages ? "pointer-events-none opacity-50" : ""}>
           <Link href={href(Math.min(pages, page + 1))} aria-label={c("next")}>
-            <ChevronRight className="rtl:rotate-180" aria-hidden />
+            <ChevronRight aria-hidden />
           </Link>
         </Button>
       </div>

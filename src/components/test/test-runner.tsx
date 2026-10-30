@@ -546,11 +546,11 @@ export function TestRunner({
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={prev} disabled={view === "question" && index === 0}>
-            <ChevronLeft className="rtl:rotate-180" aria-hidden /> <span className="hidden sm:inline">{c("back")}</span>
+            <ChevronLeft aria-hidden /> <span className="hidden sm:inline">{c("back")}</span>
           </Button>
           {view === "question" && (
             <Button onClick={next}>
-              <span className="hidden sm:inline">{c("next")}</span> <ChevronRight className="rtl:rotate-180" aria-hidden />
+              <span className="hidden sm:inline">{c("next")}</span> <ChevronRight aria-hidden />
             </Button>
           )}
         </div>

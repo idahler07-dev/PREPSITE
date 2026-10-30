@@ -10,7 +10,6 @@ import { DeleteAccount } from "@/components/account/delete-account";
 import { NotificationSettings } from "@/components/account/notification-settings";
 import { resolvePrefs } from "@/config/notifications";
 import { db } from "@/lib/db";
-import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export async function generateMetadata() {
@@ -44,10 +43,6 @@ export default async function SettingsPage() {
           <CardTitle>{t("preferences")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">{t("language")}</span>
-            <LocaleSwitcher />
-          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium">{t("theme")}</span>
             <ThemeToggle signedIn />

@@ -20,10 +20,10 @@ export function PageViewer({ fileName, pages, initialPage }: { fileName: string;
         <h2 className="truncate text-sm font-semibold">{t("pageOf", { file: fileName, page: page.pageNumber })}</h2>
         <div className="flex gap-1">
           <Button variant="ghost" size="icon" disabled={index === 0} onClick={() => setIndex((i) => i - 1)} aria-label={t("previousPage")}>
-            <ChevronLeft className="rtl:rotate-180" aria-hidden />
+            <ChevronLeft aria-hidden />
           </Button>
           <Button variant="ghost" size="icon" disabled={index === pages.length - 1} onClick={() => setIndex((i) => i + 1)} aria-label={t("nextPage")}>
-            <ChevronRight className="rtl:rotate-180" aria-hidden />
+            <ChevronRight aria-hidden />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setZoomed((z) => !z)} aria-label={zoomed ? t("zoomOut") : t("zoomIn")} aria-pressed={zoomed}>
             {zoomed ? <Minimize2 aria-hidden /> : <Maximize2 aria-hidden />}

@@ -103,10 +103,9 @@ describe("AI tutor", () => {
     expect(textOf(again)).toBe("Subtract 3 from both sides, then divide by 2.");
     expect(model.calls).toHaveLength(1);
 
-    await events(await tutorStream(s.user as never, s.req("explain", "uz")));
-    expect(model.calls).toHaveLength(2);
-    expect(JSON.stringify(model.calls[1]!.messages)).toContain("Uzbek (Latin script)");
-    expect(await db.aiUsage.count({ where: { feature: "tutor" } })).toBe(2);
+    // Explanations are always in English.
+    expect(JSON.stringify(model.calls[0]!.messages)).toContain("English");
+    expect(await db.aiUsage.count({ where: { feature: "tutor" } })).toBe(1);
   });
 
   it("only explains a wrong choice that was actually chosen", async () => {
