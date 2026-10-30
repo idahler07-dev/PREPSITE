@@ -10,7 +10,11 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
   await expect(page.getByText("Today's plan", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Question of the day" }).click();
   await expect(page).toHaveURL(/\/en\/test\//);
-  await page.getByRole("radio").first().check({ force: true }).catch(async () => page.getByLabel("Your answer").fill("0"));
+  // The daily question changes by date: multiple choice or a typed answer.
+  const typed = page.getByLabel("Your answer");
+  await expect(page.getByRole("radio").first().or(typed)).toBeVisible();
+  if (await typed.isVisible()) await typed.fill("0");
+  else await page.getByRole("radio").first().check({ force: true });
   await page.getByRole("button", { name: "Check answer" }).click();
   await expect(page.getByRole("status").filter({ hasText: /Correct|Incorrect/ })).toBeVisible();
 

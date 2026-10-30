@@ -1,49 +1,105 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, Mail } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
+import { ArrowLeft, ExternalLink, Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { requestMagicLink, signInWithGoogle, type LoginState } from "@/server/actions/login";
+import { requestMagicLink, signInWithGoogle, verifyEmailCode, type CodeState, type LoginState } from "@/server/actions/login";
 import { TelegramLoginButton } from "./telegram-login";
+import { rememberMethod, useLastMethod } from "./last-method";
 
 type AuthErrorKey = keyof IntlMessages["auth"]["errors"];
 type IntlMessages = import("next-intl").Messages;
+
+const KNOWN_ERRORS = ["EmailSignin", "OAuthAccountNotLinked", "Verification", "AccessDenied", "CredentialsSignin", "Configuration", "RateLimited", "InvalidEmail", "WrongCode"];
+const RESEND_AFTER_SEC = 60;
+
+/** Webmail for common providers, so people can jump straight to the code. */
+const MAIL_APPS: { app: string; url: string; domains: string[] }[] = [
+  { app: "Gmail", url: "https://mail.google.com/mail/u/0/#inbox", domains: ["gmail.com", "googlemail.com"] },
+  { app: "Outlook", url: "https://outlook.live.com/mail/0/", domains: ["outlook.com", "hotmail.com", "live.com", "msn.com"] },
+  { app: "Yandex Mail", url: "https://mail.yandex.ru/", domains: ["yandex.ru", "yandex.com", "ya.ru", "yandex.uz"] },
+  { app: "Mail.ru", url: "https://e.mail.ru/inbox/", domains: ["mail.ru", "inbox.ru", "list.ru", "bk.ru"] },
+  { app: "iCloud Mail", url: "https://www.icloud.com/mail", domains: ["icloud.com", "me.com", "mac.com"] },
+];
+
+function LastUsed({ show }: { show: boolean }) {
+  const t = useTranslations("auth");
+  if (!show) return null;
+  return <span className="absolute -top-2 end-3 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">{t("lastUsed")}</span>;
+}
 
 export function LoginForm({
   next,
   initialError,
   google,
-  telegramBot,
+  telegramBotId,
+  emailNote,
 }: {
   next?: string;
   initialError?: string;
   google: boolean;
-  telegramBot?: string;
+  telegramBotId?: string;
+  /** Shown under the email field (e.g. on the demo site, where emails aren't delivered). */
+  emailNote?: string;
 }) {
   const t = useTranslations("auth");
-  const router = useRouter();
+  const last = useLastMethod();
   const [state, action, pending] = useActionState<LoginState, FormData>(requestMagicLink, {});
+  // The code step opens for the email the last request succeeded for; "Change email" closes it.
+  const [codeFor, setCodeFor] = useState<string | null>(null);
+  const [telegramError, setTelegramError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (state.email && !state.error) router.push("/login/check-email");
-  }, [state, router]);
+    if (state.email && !state.error) setCodeFor(state.email);
+  }, [state]);
 
-  const errorKey = (state.error ?? initialError) as AuthErrorKey | undefined;
-  const knownErrors = ["EmailSignin", "OAuthAccountNotLinked", "Verification", "AccessDenied", "CredentialsSignin", "Configuration", "RateLimited", "InvalidEmail"];
-  const error = errorKey ? t(`errors.${knownErrors.includes(errorKey) ? errorKey : "Default"}` as `errors.${AuthErrorKey}`) : null;
+  const errorKey = (telegramError ?? state.error ?? initialError) as AuthErrorKey | undefined;
+  const error = errorKey ? t(`errors.${KNOWN_ERRORS.includes(errorKey) ? errorKey : "Default"}` as `errors.${AuthErrorKey}`) : null;
+
+  if (codeFor) {
+    return <CodeStep email={codeFor} next={next} onBack={() => setCodeFor(null)} resend={action} resending={pending} resendError={state.error} />;
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {error && (
         <p role="alert" className="rounded-md border border-destructive/40 bg-danger-muted p-3 text-sm">
           {error}
         </p>
       )}
-      <form action={action} className="space-y-3">
+
+      {(google || telegramBotId) && (
+        <>
+          <div className="space-y-3">
+            {google && (
+              <form action={signInWithGoogle} onSubmit={() => rememberMethod("google")} className="relative">
+                <input type="hidden" name="next" value={next ?? ""} />
+                <Button type="submit" variant="outline" size="lg" className="w-full">
+                  <GoogleIcon />
+                  {t("google")}
+                </Button>
+                <LastUsed show={last === "google"} />
+              </form>
+            )}
+            {telegramBotId && (
+              <div className="relative">
+                <TelegramLoginButton botId={telegramBotId} next={next} onError={setTelegramError} />
+                <LastUsed show={last === "telegram"} />
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground uppercase">
+            <span className="h-px flex-1 bg-border" />
+            {t("or")}
+            <span className="h-px flex-1 bg-border" />
+          </div>
+        </>
+      )}
+
+      <form action={action} onSubmit={() => rememberMethod("email")} className="space-y-3">
         <input type="hidden" name="next" value={next ?? ""} />
         <div className="space-y-2">
           <Label htmlFor="email">{t("emailLabel")}</Label>
@@ -54,37 +110,158 @@ export function LoginForm({
             autoComplete="email"
             inputMode="email"
             required
+            className="h-11"
             placeholder={t("emailPlaceholder")}
             defaultValue={state.email}
+            aria-describedby={emailNote ? "email-note" : undefined}
           />
         </div>
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? <Loader2 className="animate-spin" aria-hidden /> : <Mail aria-hidden />}
-          {pending ? t("sending") : t("sendLink")}
+        <div className="relative">
+          <Button type="submit" size="lg" className="w-full" disabled={pending}>
+            {pending ? <Loader2 className="animate-spin" aria-hidden /> : <Mail aria-hidden />}
+            {pending ? t("sending") : t("sendCode")}
+          </Button>
+          <LastUsed show={last === "email"} />
+        </div>
+        {emailNote && (
+          <p id="email-note" className="text-xs text-muted-foreground">
+            {emailNote}
+          </p>
+        )}
+      </form>
+    </div>
+  );
+}
+
+function CodeStep({
+  email,
+  next,
+  onBack,
+  resend,
+  resending,
+  resendError,
+}: {
+  email: string;
+  next?: string;
+  onBack: () => void;
+  resend: (form: FormData) => void;
+  resending: boolean;
+  resendError?: string;
+}) {
+  const t = useTranslations("auth");
+  const [state, verify, verifying] = useActionState<CodeState, FormData>(verifyEmailCode, {});
+  const [code, setCode] = useState("");
+  const [wait, setWait] = useState(RESEND_AFTER_SEC);
+  const [resent, setResent] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const busy = verifying || !!state.redirectTo;
+  const mailApp = MAIL_APPS.find((m) => m.domains.includes(email.split("@")[1] ?? ""));
+
+  useEffect(() => {
+    if (wait <= 0) return;
+    const id = setTimeout(() => setWait((w) => w - 1), 1000);
+    return () => clearTimeout(id);
+  }, [wait]);
+
+  // A right code: open the sign-in URL (a full page load, so it's requested once).
+  // A wrong code clears the field so the next attempt starts fresh.
+  useEffect(() => {
+    if (state.redirectTo) window.location.assign(state.redirectTo);
+    else if (state.error) {
+      setCode("");
+      inputRef.current?.focus();
+    }
+  }, [state]);
+
+  function onChange(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 6);
+    setCode(digits);
+    // Submit as soon as the sixth digit arrives (typed, pasted or autofilled).
+    if (digits.length === 6 && !busy) queueMicrotask(() => formRef.current?.requestSubmit());
+  }
+
+  function onResend() {
+    const form = new FormData();
+    form.set("email", email);
+    form.set("next", next ?? "");
+    startTransition(() => resend(form));
+    setWait(RESEND_AFTER_SEC);
+    setResent(true);
+  }
+
+  const error = state.error
+    ? t(`errors.${state.error === "RateLimited" ? "RateLimited" : "WrongCode"}`)
+    : resent && resendError
+      ? t(`errors.${resendError === "RateLimited" ? "RateLimited" : "EmailSignin"}`)
+      : null;
+
+  return (
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <h2 className="text-lg font-semibold">{t("codeTitle")}</h2>
+        <p className="text-sm text-muted-foreground">
+          {t.rich("codeSent", { email, b: (chunks) => <strong className="font-medium text-foreground break-all">{chunks}</strong> })}
+        </p>
+      </div>
+
+      <form ref={formRef} action={verify} className="space-y-3">
+        <input type="hidden" name="email" value={email} />
+        <input type="hidden" name="next" value={next ?? ""} />
+        <Label htmlFor="code">{t("codeLabel")}</Label>
+        <Input
+          ref={inputRef}
+          id="code"
+          name="code"
+          value={code}
+          onChange={(e) => onChange(e.target.value)}
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="\d{6}"
+          maxLength={6}
+          required
+          autoFocus
+          aria-invalid={!!error}
+          aria-describedby={error ? "code-error" : "code-hint"}
+          className="h-14 text-center font-mono text-2xl tracking-[0.5em]"
+        />
+        {error && (
+          <p id="code-error" role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
+        <Button type="submit" size="lg" className="w-full" disabled={busy || code.length !== 6}>
+          {busy && <Loader2 className="animate-spin" aria-hidden />}
+          {busy ? t("verifying") : t("verify")}
         </Button>
       </form>
 
-      {(google || telegramBot) && (
-        <>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground uppercase">
-            <span className="h-px flex-1 bg-border" />
-            {t("orContinueWith")}
-            <span className="h-px flex-1 bg-border" />
-          </div>
-          <div className="space-y-3">
-            {google && (
-              <form action={signInWithGoogle}>
-                <input type="hidden" name="next" value={next ?? ""} />
-                <Button type="submit" variant="outline" className="w-full">
-                  <GoogleIcon />
-                  {t("google")}
-                </Button>
-              </form>
-            )}
-            {telegramBot && <TelegramLoginButton bot={telegramBot} next={next} />}
-          </div>
-        </>
+      <p id="code-hint" className="text-xs text-muted-foreground">
+        {t("codeHint")}
+      </p>
+
+      {mailApp && (
+        <Button asChild variant="outline" className="w-full">
+          <a href={mailApp.url} target="_blank" rel="noopener noreferrer">
+            {t("openMail", { app: mailApp.app })}
+            <ExternalLink aria-hidden />
+          </a>
+        </Button>
       )}
+
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+        <Button type="button" variant="link" className="h-auto px-0" onClick={onBack}>
+          <ArrowLeft aria-hidden />
+          {t("changeEmail")}
+        </Button>
+        <Button type="button" variant="link" className="h-auto px-0" disabled={wait > 0 || resending} onClick={onResend}>
+          {wait > 0 ? t("resendIn", { seconds: wait }) : t("resend")}
+        </Button>
+      </div>
+      <p aria-live="polite" className="sr-only">
+        {resent && !resending ? t("resent") : ""}
+      </p>
+      <p className="text-xs text-muted-foreground">{t("checkEmailSpam")}</p>
     </div>
   );
 }
