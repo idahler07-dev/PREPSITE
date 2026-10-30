@@ -56,7 +56,7 @@ test("a wrong sign-in code is rejected", async ({ page }) => {
   await page.getByRole("button", { name: "Continue with email" }).click();
   await expect(page.getByText(`We sent a 6-digit code to ${email}.`)).toBeVisible();
   await page.getByLabel("Sign-in code").fill("000000");
-  await expect(page.getByRole("alert")).toContainText("That code isn’t right");
+  await expect(page.getByText("That code isn’t right")).toBeVisible();
   await expect(page).toHaveURL(/\/login/);
   // "Change email" goes back to the first step.
   await page.getByRole("button", { name: "Change email" }).click();

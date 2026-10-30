@@ -155,6 +155,7 @@ function CodeStep({
   const [resent, setResent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const busy = verifying || !!state.redirectTo;
   const mailApp = MAIL_APPS.find((m) => m.domains.includes(email.split("@")[1] ?? ""));
 
   useEffect(() => {
@@ -163,9 +164,11 @@ function CodeStep({
     return () => clearTimeout(id);
   }, [wait]);
 
+  // A right code: open the sign-in URL (a full page load, so it's requested once).
   // A wrong code clears the field so the next attempt starts fresh.
   useEffect(() => {
-    if (state.error) {
+    if (state.redirectTo) window.location.assign(state.redirectTo);
+    else if (state.error) {
       setCode("");
       inputRef.current?.focus();
     }
@@ -175,7 +178,7 @@ function CodeStep({
     const digits = value.replace(/\D/g, "").slice(0, 6);
     setCode(digits);
     // Submit as soon as the sixth digit arrives (typed, pasted or autofilled).
-    if (digits.length === 6 && !verifying) queueMicrotask(() => formRef.current?.requestSubmit());
+    if (digits.length === 6 && !busy) queueMicrotask(() => formRef.current?.requestSubmit());
   }
 
   function onResend() {
@@ -227,9 +230,9 @@ function CodeStep({
             {error}
           </p>
         )}
-        <Button type="submit" size="lg" className="w-full" disabled={verifying || code.length !== 6}>
-          {verifying && <Loader2 className="animate-spin" aria-hidden />}
-          {verifying ? t("verifying") : t("verify")}
+        <Button type="submit" size="lg" className="w-full" disabled={busy || code.length !== 6}>
+          {busy && <Loader2 className="animate-spin" aria-hidden />}
+          {busy ? t("verifying") : t("verify")}
         </Button>
       </form>
 

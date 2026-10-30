@@ -5,7 +5,6 @@ import { env } from "@/lib/env";
 import { z } from "zod";
 import { AuthError } from "next-auth";
 import { getLocale } from "next-intl/server";
-import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { signIn } from "@/lib/auth";
 import { clientIp } from "@/server/http";
@@ -36,7 +35,7 @@ export async function requestMagicLink(_prev: LoginState, form: FormData): Promi
   return { email };
 }
 
-export type CodeState = { error?: string };
+export type CodeState = { error?: string; redirectTo?: string };
 
 const codeSchema = z.object({ email: z.email().max(254), code: z.string().regex(/^\d{6}$/), next: z.string().optional() });
 
@@ -44,10 +43,12 @@ const codeSchema = z.object({ email: z.email().max(254), code: z.string().regex(
 const CODE_ATTEMPTS_PER_HOUR = 8;
 
 /**
- * Check a 6-digit email code, then hand it to Auth.js's email callback (the
- * same URL as the link in the email), which uses up the token and signs in.
+ * Check a 6-digit email code and return Auth.js's email callback URL (the same
+ * URL as the link in the email). The browser opens it once, which uses up the
+ * token and signs in; a server-side redirect() would make the router request it twice.
  */
 export async function verifyEmailCode(_prev: CodeState, form: FormData): Promise<CodeState> {
+  // public: signing in; guesses are rate-limited per email below.
   const parsed = codeSchema.safeParse({
     email: String(form.get("email") ?? "").trim().toLowerCase(),
     code: String(form.get("code") ?? "").replace(/\D/g, ""),
@@ -65,7 +66,7 @@ export async function verifyEmailCode(_prev: CodeState, form: FormData): Promise
   const locale = await getLocale();
   const next = safeNextPath(parsed.data.next);
   const callbackUrl = `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}`;
-  redirect(`/api/auth/callback/email?${new URLSearchParams({ callbackUrl, token: code, email })}`);
+  return { redirectTo: `/api/auth/callback/email?${new URLSearchParams({ callbackUrl, token: code, email })}` };
 }
 
 export async function signInWithGoogle(form: FormData) {
