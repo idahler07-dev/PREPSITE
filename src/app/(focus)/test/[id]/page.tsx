@@ -9,6 +9,9 @@ import { TestRunner } from "@/components/test/test-runner";
 import { BreakScreen } from "@/components/test/break-screen";
 import { aiAvailable } from "@/server/ai/client";
 
+/** Desmos's public demo key from https://www.desmos.com/api — for development only. */
+const DESMOS_DEMO_KEY = "dcb31709b452b1cf9dc26972add0fda6";
+
 export async function generateMetadata() {
   const t = await getTranslations("test");
   return { title: t("drillTitle"), robots: { index: false } };
@@ -26,8 +29,18 @@ export default async function TestPage({ params }: { params: Promise<{ id: strin
   }
   if ("completed" in state) return redirect({ href: `/attempts/${id}`, locale: await getLocale() });
   if ("onBreak" in state) return <BreakScreen key={state.breakEndsAt} state={state} />;
-  // Desmos API keys are meant to be used in the browser; the key is limited to our domain by Desmos.
-  return <TestRunner key={state.module.id} initial={state} annotations={await loadAnnotations(id, user.id)} desmosKey={process.env.DESMOS_API_KEY || null}
+  // Desmos API keys are meant to be used in the browser; Desmos limits each key to our domain.
+  // Without a key, development falls back to Desmos's documented demo key (with a console warning).
+  const ownKey = process.env.NEXT_PUBLIC_DESMOS_API_KEY || process.env.DESMOS_API_KEY || null;
+  const demo = !ownKey && process.env.NODE_ENV === "development";
+  return (
+    <TestRunner
+      key={state.module.id}
+      initial={state}
+      annotations={await loadAnnotations(id, user.id)}
+      desmosKey={ownKey ?? (demo ? DESMOS_DEMO_KEY : null)}
+      desmosDemoKey={demo}
       aiEnabled={aiAvailable()}
-    />;
+    />
+  );
 }

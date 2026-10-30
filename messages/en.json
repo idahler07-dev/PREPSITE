@@ -608,7 +608,7 @@
     },
     "calculator": {
       "title": "Calculator",
-      "graphing": "Graphing calculator",
+      "graphing": "Graphing",
       "close": "Close calculator",
       "angle": "Angle unit",
       "deg": "Deg",
@@ -616,7 +616,13 @@
       "clear": "Clear",
       "history": "Previous calculations",
       "expression": "Expression",
-      "error": "Can't calculate that"
+      "error": "Can't calculate that",
+      "scientific": "Scientific",
+      "hide": "Hide calculator",
+      "resize": "Resize calculator",
+      "dockLeft": "Dock on the left",
+      "dockRight": "Dock on the right",
+      "graphingUnavailable": "The graphing calculator isn’t available right now. Use the Scientific tab."
     },
     "reference": {
       "title": "Reference sheet",

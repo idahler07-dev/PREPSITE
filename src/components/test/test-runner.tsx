@@ -53,11 +53,14 @@ export function TestRunner({
   initial,
   annotations: initialAnnotations = {},
   desmosKey = null,
+  desmosDemoKey = false,
   aiEnabled = false,
 }: {
   initial: RunnerState;
   annotations?: Annotations;
   desmosKey?: string | null;
+  /** The key is Desmos's public demo key (development only). */
+  desmosDemoKey?: boolean;
   aiEnabled?: boolean;
 }) {
   const t = useTranslations("test");
@@ -84,6 +87,10 @@ export function TestRunner({
   const [hlColor, setHlColor] = useState<HighlightColor>("yellow");
   const [lineReader, setLineReader] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
+  const [calcSide, setCalcSide] = useState<"left" | "right">("left");
+  // Set when the page was reloaded so the calculator could run (see CalculatorPanel).
+  const [reloadedForCalc, setReloadedForCalc] = useState(false);
+  const reopenCalcKey = `reopen-calc:${attemptId}`;
   const [refOpen, setRefOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const annotationTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
@@ -152,6 +159,12 @@ export function TestRunner({
         if (firstOpen > 0) setIndex(firstOpen);
       }
       setZoom(Number(localStorage.getItem("test-zoom")) || 1);
+      if (localStorage.getItem("calc-side") === "right") setCalcSide("right");
+      if (sessionStorage.getItem(reopenCalcKey)) {
+        sessionStorage.removeItem(reopenCalcKey);
+        setReloadedForCalc(true);
+        setCalcOpen(true);
+      }
       setShowTip(window.matchMedia("(max-width: 767px)").matches && !localStorage.getItem("mobile-tip-dismissed"));
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -402,7 +415,35 @@ export function TestRunner({
 
       {/* Main */}
       {/* One scroll area on phones; side-by-side panes that scroll separately on large screens. */}
-      <main ref={mainRef} id="main" className="min-h-0 flex-1 overflow-y-auto bg-section-tint lg:overflow-hidden" style={{ fontSize: `${zoom}rem` }}>
+      <div className="flex min-h-0 flex-1">
+      {isMath && (
+        <CalculatorPanel
+          open={calcOpen}
+          onClose={() => setCalcOpen(false)}
+          desmosKey={desmosKey}
+          demoKey={desmosDemoKey}
+          attemptId={attemptId}
+          initialState={initial.calculatorState}
+          side={calcSide}
+          onNeedsReload={
+            reloadedForCalc
+              ? null
+              : () => {
+                  try {
+                    sessionStorage.setItem(reopenCalcKey, "1");
+                  } catch {}
+                  void autosave.flush().then(() => window.location.reload());
+                }
+          }
+          onSideChange={(side) => {
+            setCalcSide(side);
+            try {
+              localStorage.setItem("calc-side", side);
+            } catch {}
+          }}
+        />
+      )}
+      <main ref={mainRef} id="main" className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-section-tint lg:overflow-hidden" style={{ fontSize: `${zoom}rem` }}>
         {view === "review" ? (
           <div className="mx-auto h-full max-w-3xl space-y-6 overflow-y-auto p-6">
             <h2 className="text-2xl font-bold">{t("review.title")}</h2>
@@ -517,6 +558,7 @@ export function TestRunner({
           </div>
         )}
       </main>
+      </div>
 
       {/* Bottom bar: Back | navigator | Next on phones (with the safe area); save status on the left from tablets up. */}
       <footer className="shrink-0 border-t bg-surface pb-[env(safe-area-inset-bottom)]">
@@ -583,7 +625,6 @@ export function TestRunner({
       </AlertDialog>
 
       {lineReader && <LineReader />}
-      {calcOpen && <CalculatorPanel desmosKey={desmosKey} attemptId={attemptId} onClose={() => setCalcOpen(false)} />}
       {isMath && <ReferenceSheet open={refOpen} onOpenChange={setRefOpen} />}
 
       <Dialog open={shortcutsOpen} onOpenChange={setShortcutsOpen}>

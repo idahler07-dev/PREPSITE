@@ -20,7 +20,7 @@ Scope note: this is an individual-student site plus an owner-only Manage area. C
 
 ## What it does
 
-**Students:** custom drills by skill, difficulty and question code, with immediate checking or end-of-set results · full adaptive practice tests (two modules per section, easier/harder module 2, break, timer with 5-minute warning) · exam-like test screen with highlighter and notes, answer eliminator, line reader, zoom, full screen, keyboard shortcuts, our own reference sheet and Desmos or a built-in calculator · estimated scores with a likely range, per-test reports with question codes and time · AI tutor (hints, step-by-step, why my answer is wrong, another method, simpler, follow-up questions) that never contradicts the key · mistake notebook on a spaced-repetition schedule, question of the day, bookmarks and notes · vocabulary flashcards · weekly study plan · logging official practice test scores · email and Telegram reminders · installable app that keeps open drills working offline · free plan and paid plans (Payme, Click, international cards), receipts, referral links.
+**Students:** custom drills by skill, difficulty and question code, with immediate checking or end-of-set results · full adaptive practice tests (two modules per section, easier/harder module 2, break, timer with 5-minute warning) · exam-like test screen with highlighter and notes, answer eliminator, line reader, zoom, full screen, keyboard shortcuts, our own reference sheet and Desmos or a built-in calculator · estimated scores with a likely range, per-test reports with skill, difficulty and time · AI tutor (hints, step-by-step, why my answer is wrong, another method, simpler, follow-up questions) that never contradicts the key · mistake notebook on a spaced-repetition schedule, question of the day, bookmarks and notes · vocabulary flashcards · weekly study plan · logging official practice test scores · email and Telegram reminders · installable app that keeps open drills working offline · free plan and paid plans (Payme, Click, international cards), receipts, referral links.
 
 **Staff:** question editor with live preview and version history · CSV/Excel and PDF import (typed or scanned, figures cropped, side-by-side review) with rights confirmation and provenance · review queue with automatic flags · AI-drafted questions checked by an independent solver and a calculator · practice test builder · vocabulary · sources and permission withdrawal · student reports · orders, refunds, promo codes, free premium grants · analytics and nightly question calibration · AI usage and cost.
 
@@ -61,7 +61,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `ANTHROPIC_API_KEY`, `AI_MODEL_FAST`, `AI_MODEL_SMART` | recommended | AI features (server-side only): scanned-PDF import, the AI tutor, AI-drafted questions. Without it the site works, minus these |
 | `JOBS_MODE` | optional | `worker` (default; in-process worker and schedules), `external` (a cron calls `/api/jobs/run` every minute) or `inline` (jobs run inside the request: tests and small demos) |
 | `CRON_SECRET` | if `external` | Bearer token for `POST /api/jobs/run` |
-| `DESMOS_API_KEY` | optional | Desmos graphing calculator (falls back to our scientific calculator) |
+| `NEXT_PUBLIC_DESMOS_API_KEY` | recommended | Desmos graphing and scientific calculators (see **Desmos calculator** below). `DESMOS_API_KEY` still works |
 | `PAYMENT_PROVIDERS` | for payments | Enabled providers: `mock`, `payme`, `click`, `octo` |
 | `PAYME_MERCHANT_ID`, `PAYME_KEY`, `PAYME_SANDBOX` | Payme | Merchant id and cabinet key (test key in sandbox) |
 | `CLICK_SERVICE_ID`, `CLICK_MERCHANT_ID`, `CLICK_MERCHANT_USER_ID`, `CLICK_SECRET_KEY` | Click | From the Click merchant cabinet |
@@ -71,6 +71,16 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `SENTRY_DSN` | optional | Error reports to Sentry (errors are always logged as JSON lines) |
 | `DEMO_MODE` | demo only | "Try as a student" sign-in without email. Never on the real site |
 | `MAIL_OUTBOX_DIR` | optional | Where the `outbox` email transport writes (e.g. `/tmp/dev-mail` on read-only hosts) |
+
+## Desmos calculator
+
+The Math test screen embeds the official Desmos calculators through the Desmos API (`https://www.desmos.com/api/v1.11/calculator.js?apiKey=…`, the latest stable version), set up like the digital SAT: expression list and keypad on; settings menu, links, images, notes and folders off; zoom buttons on; a Deg/Rad toggle; Graphing and Scientific tabs.
+
+- **API key.** Request a free key at <https://www.desmos.com/my-api> (or partnerships@desmos.com for commercial use) and set `NEXT_PUBLIC_DESMOS_API_KEY`. Desmos ties each key to your domain. Without a key, development uses Desmos's documented demo key and logs a console warning; production falls back to our own scientific calculator. The demo key shows a "Desmos Trial Key" notice and must not be used in production.
+- **Terms.** Follow the Desmos API terms: keep the Desmos attribution that the calculator shows, don't hide or restyle it, and don't present it as our own. We show no College Board or Bluebook branding with it.
+- **One instance per test.** The calculator loads the first time it's opened and stays alive (hidden) when closed, so graphs survive question changes. Its state is saved to sessionStorage and, a couple of seconds after each change, with the attempt (`Attempt.calculatorState`, `PUT /api/attempts/[id]/calculator`, 200 KB max), so it comes back after a reload or on another device.
+- **Layout.** Desktop: docked panel (left by default; drag its header to the other side or use the dock button), resizable from its inner edge (pointer or arrow keys); the question reflows beside it. Phones: full-height bottom sheet with a drag handle and "Hide calculator". Shortcut **C** toggles it.
+- **Content Security Policy.** Desmos compiles expressions with `new Function`, so `/test/*` pages allow `'unsafe-eval'` (`src/lib/csp.ts`); no other page does. Buttons that start a test do a full page load into `/test/…` (`src/lib/open-test.ts`); if the test screen was reached by an in-app link instead, opening the calculator saves the answers and reloads the page once.
 
 ## Scripts
 

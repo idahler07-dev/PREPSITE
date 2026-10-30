@@ -185,6 +185,8 @@ export interface RunnerState {
     ordinal: number;
   };
   items: RunnerItem[];
+  /** Saved Desmos state, if any (see saveCalculatorState). */
+  calculatorState: unknown;
 }
 
 /**
@@ -218,6 +220,7 @@ export async function getRunnerState(attemptId: string, userId: string): Promise
 
   const deadline = moduleDeadline(current);
   return {
+    calculatorState: attempt.calculatorState ?? null,
     id: attempt.id,
     kind: attempt.kind,
     status: attempt.status,
@@ -447,4 +450,21 @@ export async function getResults(attemptId: string, userId: string) {
     modules: attempt.modules.map((m) => ({ index: m.index, section: m.section, moduleNumber: m.moduleNumber, variant: m.variant })),
     items,
   };
+}
+
+// ─── Calculator state ────────────────────────────────────────────────────────
+
+/** Largest Desmos state we keep per attempt (graphs with many expressions stay well under this). */
+const CALC_STATE_MAX_BYTES = 200_000;
+
+/** Save the Desmos calculator state with an attempt in progress. */
+export async function saveCalculatorState(attemptId: string, userId: string, state: unknown) {
+  const size = JSON.stringify(state ?? null).length;
+  if (size > CALC_STATE_MAX_BYTES) throw new HttpError(413, "TOO_LARGE");
+  if (state === null || typeof state !== "object" || Array.isArray(state)) throw new HttpError(400, "VALIDATION");
+  const attempt = await db.attempt.findUnique({ where: { id: attemptId }, select: { userId: true, status: true } });
+  if (!attempt || attempt.userId !== userId) throw new HttpError(404, "NOT_FOUND");
+  if (attempt.status !== "IN_PROGRESS") throw new HttpError(409, "NOT_IN_PROGRESS");
+  await db.attempt.update({ where: { id: attemptId }, data: { calculatorState: state as object } });
+  return { ok: true };
 }

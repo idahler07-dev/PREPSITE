@@ -485,6 +485,8 @@ model Attempt {
   scores        Json?
   /// Break between sections ends at this time (null when not on a break).
   breakEndsAt   DateTime?
+  /// Desmos calculator state ({ graphing, scientific, tab }) so graphs survive a reload or another device.
+  calculatorState Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

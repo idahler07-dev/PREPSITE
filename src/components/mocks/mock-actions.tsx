@@ -8,6 +8,7 @@ import { useRouter } from "@/i18n/navigation";
 import { generateMockTest, startMockTest } from "@/server/actions/mocks";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { openTest } from "@/lib/open-test";
 
 type Scope = "full" | "RW" | "MATH" | "module-RW" | "module-MATH";
 
@@ -19,7 +20,7 @@ function useStart() {
   const go = (fn: () => Promise<{ ok: true; id: string } | { ok: false; error: string }>) =>
     start(async () => {
       const res = await fn();
-      if (res.ok) router.push(`/test/${res.id}`);
+      if (res.ok) openTest(res.id);
       else if (res.error === "TEST_LIMIT") toast.error(tb("limits.tests"), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
       else toast.error(t(`errors.${res.error === "NOT_ENOUGH_QUESTIONS" || res.error === "RATE_LIMITED" ? res.error : "other"}`));
     });

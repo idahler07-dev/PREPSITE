@@ -3,10 +3,12 @@
  * (Next.js adds it to its own scripts automatically); 'strict-dynamic' lets
  * those trusted scripts load others (e.g. the Telegram login widget).
  */
-export function buildCsp(nonce: string, opts: { dev: boolean; https: boolean; storageOrigin?: string }): string {
+export function buildCsp(nonce: string, opts: { dev: boolean; https: boolean; storageOrigin?: string; desmos?: boolean }): string {
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
-    "script-src": ["'self'", `'nonce-${nonce}'`, "'strict-dynamic'", ...(opts.dev ? ["'unsafe-eval'"] : [])],
+    // The Desmos calculator compiles graph expressions with `new Function`, so the
+    // test screen (the only page that loads it) also needs 'unsafe-eval'.
+    "script-src": ["'self'", `'nonce-${nonce}'`, "'strict-dynamic'", ...(opts.dev || opts.desmos ? ["'unsafe-eval'"] : [])],
     "style-src": ["'self'", "'unsafe-inline'"],
     "img-src": [
       "'self'",

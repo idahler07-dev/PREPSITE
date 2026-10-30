@@ -53,7 +53,9 @@ const schema = z.object({
   AI_MODEL_FAST: z.string().default("claude-haiku-5-5"),
   AI_MODEL_SMART: z.string().default("claude-sonnet-5-5"),
 
+  /** Desmos API key (https://www.desmos.com/api). NEXT_PUBLIC_DESMOS_API_KEY is preferred; this older name still works. */
   DESMOS_API_KEY: z.string().optional(),
+  NEXT_PUBLIC_DESMOS_API_KEY: z.string().optional(),
 
   /** Demo site: "Try as student / admin" buttons without email. Never turn on for the real site. */
   DEMO_MODE: bool,
