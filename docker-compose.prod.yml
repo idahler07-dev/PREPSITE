@@ -1,0 +1,53 @@
+# Production on one server: the site, PostgreSQL and Caddy (automatic HTTPS).
+# 1. Copy .env.example to .env and fill it in (DATABASE_URL below overrides it).
+# 2. Set DOMAIN in .env (e.g. DOMAIN=prep.example.uz) and point the domain's DNS to this server.
+# 3. docker compose -f docker-compose.prod.yml up -d --build
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prep
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: prepsite
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prep -d prepsite"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
+        NEXT_PUBLIC_TELEGRAM_BOT_USERNAME: ${NEXT_PUBLIC_TELEGRAM_BOT_USERNAME:-}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://prep:${POSTGRES_PASSWORD}@db:5432/prepsite
+      NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
+      AUTH_URL: https://${DOMAIN}
+      AUTH_TRUST_HOST: "true"
+      JOBS_MODE: worker
+      STORAGE_LOCAL_DIR: /app/.data/storage
+    volumes:
+      - appdata:/app/.data
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from ${DOMAIN} --to app:3000
+    volumes:
+      - caddydata:/data
+    depends_on: [app]
+
+volumes:
+  pgdata:
+  appdata:
+  caddydata:

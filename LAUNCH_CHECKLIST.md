@@ -34,7 +34,7 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Storage: `STORAGE_DRIVER=s3` with a **private** bucket (no public access), or `local` with the folder included in backups.
 - [ ] Google sign-in (optional): OAuth client with redirect URI `https://<your-domain>/api/auth/callback/google`.
 - [ ] Telegram Login (optional): bot created with @BotFather, `/setdomain` set to your domain, `TELEGRAM_BOT_TOKEN` and `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` set.
-- [ ] `ALLOW_DEV_OUTBOX` is **not** set.
+- [ ] `ALLOW_DEV_OUTBOX` is **not** set, and `DEMO_MODE` is **not** set.
 - [ ] Optional: `SENTRY_DSN` for error reports.
 - [ ] `DESMOS_API_KEY` set (request one from Desmos for your domain); without it students get the basic calculator.
 - [ ] `ANTHROPIC_API_KEY` set for scanned PDFs, the AI tutor and AI drafts; set a monthly spend limit in the Anthropic console and check Admin → AI usage in the first weeks.
@@ -58,6 +58,12 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] `PAYMENT_PROVIDERS` lists only the real providers (no `mock`), and `ALLOW_MOCK_PAYMENTS` is not set.
 - [ ] One full purchase and one refund per provider before announcing.
 - [ ] Daily billing job runs (worker mode schedules it; with `JOBS_MODE=external` the minute cron triggers it). Check Admin → Orders after the first day.
+
+## Quality checks (already passing in development — re-run on the server)
+
+- [ ] `pnpm test` and `pnpm test:e2e` pass (includes the accessibility and route-guard checks).
+- [ ] Lighthouse (mobile) on `/`, `/pricing`, `/login`: performance ≥ 90, accessibility 100.
+- [ ] Check Admin → Analytics after the first week; review questions flagged by calibration.
 
 ## Deploy
 

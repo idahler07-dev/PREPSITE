@@ -127,6 +127,16 @@ All calls go through `src/server/ai/` (server-side only) and are logged in `AiUs
 - **Notifications** (`src/config/notifications.ts`, `src/server/notify/*`): kinds study / streak / newTests / renewals by email and Telegram, per-student preferences, each sent once (`NotificationLog`). Jobs: `evening-reminders` (18:47 Tashkent), `announce-test` (when a practice test is published), renewals from `billing-daily`.
 - **PWA**: `src/app/manifest.ts`, icons from `scripts/make-icons.ts`, `public/sw.js` (static files cache-first; test pages cached on open so a drill keeps working offline; offline page). Registered only in production.
 
+## Analytics, calibration and operations
+
+- **Admin → Analytics** (`src/server/analytics/overview.ts`): students, active users, premium share, answers per day, signups per week, practice tests, hardest skills.
+- **Calibration** (`src/lib/analytics/calibration.ts`, run nightly with the daily job): questions with 30+ answers get a measured `difficultyRating` (1 − accuracy); a label outside its expected accuracy band adds `DIFFICULTY_MISMATCH`, and a wrong choice picked more often than the key adds `ANSWER_PATTERN`.
+- **Errors**: `onRequestError` in `src/instrumentation.ts` logs one JSON line per error and, with `SENTRY_DSN`, sends it to Sentry (`src/server/observability.ts`, no SDK).
+- **Guards test** (`tests/unit/route-guards.test.ts`): fails if any API route or server action lacks an auth check, or a state-changing route lacks the same-origin (CSRF) check.
+- **Accessibility test** (`tests/e2e/a11y.spec.ts`): axe (WCAG 2.1 AA) on public, student and admin pages; serious or critical issues fail the build.
+- **Demo mode** (`DEMO_MODE`): adds a "demo" credentials provider (fresh student per visit, shared admin) and a banner. Off for the real site.
+- **Hosting**: `Dockerfile` + `docker-compose.prod.yml` (app, Postgres, Caddy) — see DEPLOY.md; `vercel.json` for the Vercel demo.
+
 ## Practice engine
 
 `src/server/attempts/service.ts`:
