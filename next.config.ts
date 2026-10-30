@@ -17,12 +17,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["exceljs", "pdfjs-dist", "@napi-rs/canvas", "pg-boss"],
   // pdf.js loads fonts, character maps and image decoders from these folders at runtime.
+  // Real paths inside pnpm's store: Vercel rejects files traced through the node_modules/pdfjs-dist symlink.
   outputFileTracingIncludes: {
-    "/**": [
-      "./node_modules/pdfjs-dist/standard_fonts/**",
-      "./node_modules/pdfjs-dist/cmaps/**",
-      "./node_modules/pdfjs-dist/wasm/**",
-    ],
+    "/**": ["./node_modules/.pnpm/pdfjs-dist@6.*/node_modules/pdfjs-dist/{standard_fonts,cmaps,wasm}/**"],
   },
   experimental: {
     serverActions: { bodySizeLimit: "8mb" },
