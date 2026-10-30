@@ -9,6 +9,8 @@ export interface TelegramAuthData {
   photo_url?: string;
   auth_date: number | string;
   hash: string;
+  /** Telegram may send more fields; they are part of the signature. */
+  [field: string]: unknown;
 }
 
 export interface TelegramUser {
@@ -18,8 +20,6 @@ export interface TelegramUser {
   username?: string;
   photoUrl?: string;
 }
-
-const ALLOWED_KEYS = ["id", "first_name", "last_name", "username", "photo_url", "auth_date"] as const;
 
 /**
  * Verify a Telegram Login Widget payload.
@@ -32,9 +32,12 @@ export function verifyTelegramLogin(
 ): TelegramUser | null {
   if (!data || typeof data.hash !== "string" || data.id == null || data.auth_date == null) return null;
 
-  const checkString = ALLOWED_KEYS.filter((k) => data[k] !== undefined && data[k] !== null && data[k] !== "")
-    .sort()
-    .map((k) => `${k}=${data[k]}`)
+  // Telegram signs every field it sends (not only the documented ones), so all but `hash` go in.
+  const fields = Object.entries(data as Record<string, unknown>).filter(([k, v]) => k !== "hash" && v !== undefined && v !== null && v !== "");
+  if (fields.some(([, v]) => typeof v !== "string" && typeof v !== "number" && typeof v !== "boolean")) return null;
+  const checkString = fields
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([k, v]) => `${k}=${String(v)}`)
     .join("\n");
 
   const secret = createHash("sha256").update(botToken).digest();

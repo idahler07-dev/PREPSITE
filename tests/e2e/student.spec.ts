@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { createHash, createHmac } from "node:crypto";
+import { e2eEnv } from "../../playwright.config";
 import { signIn, uniqueEmail } from "./helpers";
 
 test("sign up → onboarding → drill → results → dashboard", async ({ page }) => {
@@ -61,6 +63,20 @@ test("a wrong sign-in code is rejected", async ({ page }) => {
   // "Change email" goes back to the first step.
   await page.getByRole("button", { name: "Change email" }).click();
   await expect(page.getByLabel("Email address")).toBeVisible();
+});
+
+test("Telegram sign-in: coming back from Telegram's page signs the student in", async ({ page }) => {
+  // What oauth.telegram.org sends back, signed with the bot token (it may add fields, e.g. allows_write_to_pm).
+  const data: Record<string, string | number> = { id: Date.now(), first_name: "Aziz", username: "aziz_e2e", auth_date: Math.floor(Date.now() / 1000), allows_write_to_pm: "true" };
+  const check = Object.keys(data)
+    .sort()
+    .map((k) => `${k}=${data[k]}`)
+    .join("\n");
+  const secret = createHash("sha256").update(e2eEnv.TELEGRAM_BOT_TOKEN).digest();
+  const result = Buffer.from(JSON.stringify({ ...data, hash: createHmac("sha256", secret).update(check).digest("hex") })).toString("base64url");
+
+  await page.goto(`/en/login#tgAuthResult=${result}`);
+  await expect(page).toHaveURL(/\/en\/onboarding$/);
 });
 
 test("students cannot open the admin area", async ({ page }) => {

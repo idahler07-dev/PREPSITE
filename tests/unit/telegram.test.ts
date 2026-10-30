@@ -32,6 +32,12 @@ describe("Telegram login verification", () => {
     expect(verifyTelegramLogin(payload, "999:OTHER", { now })).toBeNull();
   });
 
+  it("checks fields Telegram adds beyond the documented ones", () => {
+    const data = sign({ id: 42, first_name: "Aziz", auth_date: authDate, allows_write_to_pm: "true" });
+    expect(verifyTelegramLogin(data, TOKEN, { now })?.id).toBe("42");
+    expect(verifyTelegramLogin({ ...data, allows_write_to_pm: "false" }, TOKEN, { now })).toBeNull();
+  });
+
   it("rejects an old login", () => {
     const payload = sign({ id: 42, auth_date: authDate - 2 * 86400 });
     expect(verifyTelegramLogin(payload, TOKEN, { now })).toBeNull();

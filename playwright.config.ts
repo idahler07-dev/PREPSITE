@@ -18,6 +18,7 @@ export const e2eEnv = {
   PAYMENT_PROVIDERS: "mock",
   MAGIC_LINKS_PER_IP_HOUR: "100",
   ALLOW_MOCK_PAYMENTS: "true",
+  TELEGRAM_BOT_TOKEN: "123456:E2E-TELEGRAM-TOKEN",
   PORT: String(PORT),
 };
 
