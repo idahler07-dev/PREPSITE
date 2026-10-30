@@ -84,7 +84,9 @@
     "analytics": "Analytics",
     "mockTests": "Mock tests",
     "manage": "Manage",
-    "questionBank": "Question bank"
+    "questionBank": "Question bank",
+    "drills": "Drills",
+    "tests": "Tests"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -1890,7 +1892,8 @@
     "title": "Demo site",
     "body": "Try it without signing up. Each visit gets a fresh account. Data can be reset at any time.",
     "student": "Try as a student",
-    "banner": "Demo site — test payments only, data may be reset."
+    "banner": "Demo site — test payments only, data may be reset.",
+    "dismiss": "Hide this notice"
   },
   "brand": {
     "tagline": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
@@ -1919,7 +1922,12 @@
     "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
     "countdownShort": "{days, plural, =0 {Today} other {#d}}",
     "countdownLabel": "Your SAT is on {date}",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "groups": {
+      "study": "Study",
+      "practice": "Practice",
+      "account": "Account"
+    }
   },
   "analytics": {
     "title": "Analytics",

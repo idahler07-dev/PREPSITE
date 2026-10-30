@@ -70,6 +70,7 @@ All secrets are environment variables; see [`.env.example`](.env.example) for ev
 | `MAGIC_LINKS_PER_IP_HOUR` | optional | Sign-in emails per IP per hour (default 10) |
 | `SENTRY_DSN` | optional | Error reports to Sentry (errors are always logged as JSON lines) |
 | `DEMO_MODE` | demo only | "Try as a student" sign-in without email. Never on the real site |
+| `NEXT_PUBLIC_DEMO_BANNER` | optional | `true` / `false`: show the slim demo notice at the top (visitors can hide it for the session). When unset it follows `DEMO_MODE` |
 | `MAIL_OUTBOX_DIR` | optional | Where the `outbox` email transport writes (e.g. `/tmp/dev-mail` on read-only hosts) |
 
 ## Desmos calculator

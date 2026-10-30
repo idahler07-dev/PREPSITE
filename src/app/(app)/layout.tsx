@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
-import { env } from "@/lib/env";
 import { getCurrentUser, isOwner } from "@/server/auth/session";
 import { AppShell, SIDEBAR_COOKIE, type ShellItem } from "@/components/layout/app-shell";
 import { Logo } from "@/components/layout/logo";
@@ -14,12 +13,12 @@ import { PageTransition } from "@/components/motion/page-transition";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CookieNotice } from "@/components/layout/cookie-notice";
-import { DemoBanner } from "@/components/layout/demo-banner";
+import { DemoBanner, showDemoBanner } from "@/components/layout/demo-banner";
 
 /** Signed-in app pages: sidebar (desktop) / bottom tabs (phones), top bar with countdown and search. */
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser();
-  const demo = env().DEMO_MODE ? <DemoBanner /> : null;
+  const demo = showDemoBanner() ? <DemoBanner /> : null;
 
   // Pages here redirect signed-out visitors to sign in; until then, show the public chrome.
   if (!user) {
@@ -37,20 +36,21 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   }
 
   const t = await getTranslations("nav");
+  // Sidebar groups (desktop); `tab` puts an item in the phone tab bar, in that order, with an optional shorter label.
   const items: ShellItem[] = [
-    { key: "dashboard", href: "/dashboard", label: t("dashboard"), group: "main" },
-    { key: "practice", href: "/practice", label: t("practice"), group: "main" },
-    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "main" },
-    { key: "mocks", href: "/mocks", label: t("mockTests"), group: "main" },
-    { key: "mistakes", href: "/review", label: t("mistakes"), group: "main" },
-    { key: "analytics", href: "/analytics", label: t("analytics"), group: "main" },
-    { key: "plan", href: "/plan", label: t("plan"), group: "main" },
-    { key: "settings", href: "/settings", label: t("settings"), group: "main" },
-    { key: "vocab", href: "/vocab", label: t("vocab"), group: "more" },
-    { key: "history", href: "/history", label: t("history"), group: "more" },
-    { key: "resources", href: "/resources", label: t("resources"), group: "more" },
-    { key: "billing", href: "/billing", label: t("billing"), group: "more" },
-    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage"), group: "more" } as const] : []),
+    { key: "dashboard", href: "/dashboard", label: t("home"), group: "study", tab: 1 },
+    { key: "plan", href: "/plan", label: t("plan"), group: "study" },
+    { key: "analytics", href: "/analytics", label: t("analytics"), group: "study" },
+    { key: "mistakes", href: "/review", label: t("mistakes"), group: "study" },
+    { key: "vocab", href: "/vocab", label: t("vocab"), group: "study" },
+    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "practice", tab: 3 },
+    { key: "practice", href: "/practice", label: t("drills"), tabLabel: t("practice"), group: "practice", tab: 2 },
+    { key: "mocks", href: "/mocks", label: t("mockTests"), tabLabel: t("tests"), group: "practice", tab: 4 },
+    { key: "history", href: "/history", label: t("history"), group: "practice" },
+    { key: "settings", href: "/settings", label: t("settings"), group: "account" },
+    { key: "billing", href: "/billing", label: t("billing"), group: "account" },
+    { key: "resources", href: "/resources", label: t("resources"), group: "account" },
+    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage"), group: "account" } as const] : []),
   ];
 
   const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "collapsed";

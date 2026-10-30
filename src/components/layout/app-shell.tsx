@@ -48,12 +48,18 @@ const ICONS: Record<string, LucideIcon> = {
   bank: ListChecks,
 };
 
+export const SHELL_GROUPS = ["study", "practice", "account"] as const;
+
 export interface ShellItem {
   key: keyof typeof ICONS;
   href: string;
   label: string;
-  /** "main" items are in the sidebar's first group and (first four) in the mobile tab bar. */
-  group: "main" | "more";
+  /** Sidebar group (desktop). */
+  group: (typeof SHELL_GROUPS)[number];
+  /** Position in the phone tab bar (1–4); items without one live under "More". */
+  tab?: number;
+  /** Shorter label for the phone tab bar. */
+  tabLabel?: string;
 }
 
 function isActive(pathname: string, href: string) {
@@ -91,10 +97,8 @@ export function AppShell({
     document.cookie = `${SIDEBAR_COOKIE}=${next ? "collapsed" : "open"}; path=/; max-age=31536000; samesite=lax`;
   }
 
-  const main = items.filter((i) => i.group === "main");
-  const more = items.filter((i) => i.group === "more");
-  const tabs = main.slice(0, 4);
-  const inMore = [...main.slice(4), ...more];
+  const tabs = items.filter((i) => i.tab).sort((a, b) => a.tab! - b.tab!);
+  const inMore = items.filter((i) => !i.tab);
   const moreActive = inMore.some((i) => isActive(pathname, i.href));
 
   const link = (i: ShellItem) => {
@@ -141,10 +145,28 @@ export function AppShell({
           <div className={cn("mb-6 flex h-10 items-center", collapsed ? "justify-center" : "px-2")}>
             <Logo href="/dashboard" compact={collapsed} />
           </div>
-          <nav className="flex flex-1 flex-col gap-1">
-            {main.map(link)}
-            <div className="my-3 h-px bg-border" aria-hidden />
-            {more.map(link)}
+          <nav className="flex flex-1 flex-col gap-1 overflow-y-auto">
+            {SHELL_GROUPS.map((g, gi) => {
+              const groupItems = items.filter((i) => i.group === g);
+              if (!groupItems.length) return null;
+              return (
+                <div key={g} role="group" aria-labelledby={`nav-group-${g}`} className="flex flex-col gap-1">
+                  {collapsed ? (
+                    <>
+                      {gi > 0 && <div className="mx-2 my-2 h-px bg-border" aria-hidden />}
+                      <span id={`nav-group-${g}`} className="sr-only">
+                        {t(`groups.${g}`)}
+                      </span>
+                    </>
+                  ) : (
+                    <p id={`nav-group-${g}`} className={cn("px-3 pb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase", gi > 0 && "pt-4")}>
+                      {t(`groups.${g}`)}
+                    </p>
+                  )}
+                  {groupItems.map(link)}
+                </div>
+              );
+            })}
           </nav>
           <button
             type="button"
@@ -185,7 +207,7 @@ export function AppShell({
                 >
                   {active && <m.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
                   <Icon className="relative size-5" aria-hidden />
-                  <span className="relative">{i.label}</span>
+                  <span className="relative">{i.tabLabel ?? i.label}</span>
                 </Link>
               </li>
             );
