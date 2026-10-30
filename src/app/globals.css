@@ -13,7 +13,9 @@
  * shade of the same hue for text and icons. Dark mode keeps the specified
  * colors as they are; filled controls use dark text there.
  */
-:root {
+/* .light lets a panel show the light theme inside dark mode (e.g. /admin/design). */
+:root,
+.light {
   --radius: 14px;
   --radius-large: 20px;
   --radius-input: 12px;

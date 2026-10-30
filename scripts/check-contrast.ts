@@ -11,7 +11,8 @@ import { THEME_COLORS } from "../src/config/theme-colors";
 const css = readFileSync("src/app/globals.css", "utf8");
 
 function block(selector: string): Record<string, string> {
-  const start = css.indexOf(`${selector} {`);
+  const at = css.search(new RegExp(`(^|\\n)${selector.replace(".", "\\.")}[ ,\\n]`));
+  const start = at < 0 ? -1 : css.indexOf("{", at);
   if (start < 0) throw new Error(`No ${selector} block`);
   const body = css.slice(start, css.indexOf("\n}", start));
   const vars: Record<string, string> = {};
