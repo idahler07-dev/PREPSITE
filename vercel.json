@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
   "buildCommand": "pnpm db:deploy && pnpm db:seed && pnpm build",
   "crons": [
     {
