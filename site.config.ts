@@ -33,26 +33,6 @@ export const siteConfig = {
     showName: true,
   },
 
-  /**
-   * Brand colors as OKLCH or any CSS color. `primary` is used for buttons,
-   * links and focus rings. Keep contrast WCAG AA against `primaryForeground`
-   * in both themes (the defaults below pass at 4.5:1+).
-   */
-  colors: {
-    light: {
-      primary: "oklch(0.45 0.16 258)",
-      primaryForeground: "oklch(0.985 0 0)",
-      accent: "oklch(0.95 0.03 258)",
-      accentForeground: "oklch(0.3 0.12 258)",
-    },
-    dark: {
-      primary: "oklch(0.78 0.12 258)",
-      primaryForeground: "oklch(0.2 0.05 258)",
-      accent: "oklch(0.3 0.06 258)",
-      accentForeground: "oklch(0.95 0.02 258)",
-    },
-  },
-
   contact: {
     email: "hello@example.com",
     phone: "+998 00 000 00 00",

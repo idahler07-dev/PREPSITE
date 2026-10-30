@@ -131,7 +131,7 @@ export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { atte
               : null;
 
   return (
-    <section className="space-y-3 rounded-lg border border-primary/30 bg-accent/30 p-3" aria-label={t("title")}>
+    <section className="space-y-3 rounded-lg border border-primary/30 bg-primary-soft/30 p-3" aria-label={t("title")}>
       <div className="flex flex-wrap items-center gap-2">
         <span className="flex items-center gap-1 text-sm font-semibold">
           <Sparkles className="size-4 text-primary" aria-hidden /> {t("title")}

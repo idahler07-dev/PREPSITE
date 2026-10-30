@@ -54,7 +54,7 @@ export function GoalForm({
           </p>
         </div>
       </div>
-      {mode === "onboarding" && <p className="rounded-md bg-accent p-3 text-sm text-accent-foreground">{t("diagnosticHint")}</p>}
+      {mode === "onboarding" && <p className="rounded-md bg-primary-soft p-3 text-sm text-foreground">{t("diagnosticHint")}</p>}
       <div className="flex flex-wrap gap-3">
         <Button type="submit" disabled={pending}>
           {mode === "onboarding" ? t("save") : c("save")}

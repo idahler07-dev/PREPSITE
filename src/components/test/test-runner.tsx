@@ -382,7 +382,7 @@ export function TestRunner({
       </header>
 
       {showTip && (
-        <div className="flex items-start gap-2 border-b bg-accent px-4 py-2 text-sm text-accent-foreground">
+        <div className="flex items-start gap-2 border-b bg-primary-soft px-4 py-2 text-sm text-foreground">
           <p className="flex-1">{t("mobileTip")}</p>
           <button
             type="button"

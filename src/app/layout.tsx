@@ -6,7 +6,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import siteConfig from "@site";
 import { ServiceWorkerRegister } from "@/components/layout/sw-register";
 import { Providers } from "@/components/providers";
-import { BrandStyle } from "@/components/brand-style";
+import { THEME_COLORS } from "@/config/theme-colors";
+import { literata, onest } from "./fonts";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,8 +41,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fcfcfd" },
-    { media: "(prefers-color-scheme: dark)", color: "#16181d" },
+    { media: "(prefers-color-scheme: light)", color: THEME_COLORS.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLORS.dark },
   ],
 };
 
@@ -50,10 +51,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        <BrandStyle nonce={nonce} />
-      </head>
+    <html lang={locale} suppressHydrationWarning className={`${literata.variable} ${onest.variable}`}>
       <body className="min-h-dvh font-sans">
         <NextIntlClientProvider>
           <Providers nonce={nonce}>{children}</Providers>

@@ -36,7 +36,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             </li>
           ))}
         </ul>
-        <p className="mt-8 inline-flex rounded-full bg-accent px-3 py-1 text-sm font-medium">{t("perks.free")}</p>
+        <p className="mt-8 inline-flex rounded-full bg-primary-soft px-3 py-1 text-sm font-medium">{t("perks.free")}</p>
       </aside>
 
       <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">

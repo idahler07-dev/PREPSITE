@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b bg-background px-4">
         <Logo href="/admin" />
-        <span className="rounded bg-accent px-2 py-0.5 text-xs font-semibold text-accent-foreground">{t("title")}</span>
+        <span className="rounded bg-primary-soft px-2 py-0.5 text-xs font-semibold text-foreground">{t("title")}</span>
         <div className="ms-auto flex items-center gap-1">
           <ThemeToggle signedIn />
           <UserMenu name={user.name} email={user.email} isStaff />

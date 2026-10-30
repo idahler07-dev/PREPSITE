@@ -222,7 +222,7 @@ export function PdfImportForm({ sources, defaultPrefix, aiEnabled }: { sources: 
           onClick={() => fileRef.current?.click()}
           className={cn(
             "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 text-center text-sm transition-colors",
-            dragging ? "border-primary bg-accent" : "border-input hover:bg-muted/50",
+            dragging ? "border-primary bg-primary-soft" : "border-input hover:bg-muted/50",
           )}
         >
           <FileText className="size-8 text-muted-foreground" aria-hidden />

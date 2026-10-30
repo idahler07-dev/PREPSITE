@@ -49,7 +49,7 @@ export default async function MocksPage() {
       <PageHeader title={t("title")} description={t("subtitle", { rw: minutes("RW"), math: minutes("MATH"), breakMin: testStructure.breakSec / 60 })} />
 
       {open.length > 0 && (
-        <section className="rounded-xl border bg-accent/50 p-4">
+        <section className="rounded-xl border bg-primary-soft/50 p-4">
           <h2 className="mb-2 font-semibold">{t("inProgress")}</h2>
           <ul className="space-y-2">
             {open.map((a) => (

@@ -29,7 +29,7 @@ export default async function PracticePage({ searchParams }: { searchParams: Pro
     <Container className="max-w-4xl">
       <PageHeader title={t("title")} description={t("subtitle")} />
       {open.length > 0 && (
-        <section className="mb-6 rounded-xl border bg-accent/50 p-4">
+        <section className="mb-6 rounded-xl border bg-primary-soft/50 p-4">
           <h2 className="mb-2 font-semibold">{t("inProgress")}</h2>
           <ul className="space-y-2">
             {open.map((a) => (

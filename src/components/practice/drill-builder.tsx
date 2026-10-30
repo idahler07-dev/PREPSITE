@@ -241,7 +241,7 @@ function Chip({ active, onClick, children, small }: { active: boolean; onClick: 
       className={cn(
         "rounded-full border px-3 py-1.5 text-sm transition-colors",
         small && "px-2.5 py-1 text-xs",
-        active ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:bg-accent hover:text-accent-foreground",
+        active ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:bg-surface-2 hover:text-foreground",
       )}
     >
       {children}

@@ -41,7 +41,7 @@ export function ChoiceList({
               className={cn(
                 "flex flex-1 cursor-pointer items-start gap-3 rounded-lg border-2 p-3 transition-colors",
                 "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-                selected ? "border-primary bg-accent" : "border-border hover:border-primary/60",
+                selected ? "border-primary bg-primary-soft" : "border-border hover:border-primary/60",
                 struck && !selected && "opacity-60",
                 isCorrect && "border-success bg-success-muted",
                 wrongPick && "border-destructive bg-danger-muted",
@@ -78,7 +78,7 @@ export function ChoiceList({
                 onClick={() => onToggleEliminate(c.key)}
                 aria-pressed={struck}
                 aria-label={struck ? t("undoCrossOut", { choice: c.key }) : t("crossOut", { choice: c.key })}
-                className="w-12 shrink-0 rounded-lg border text-sm font-semibold hover:bg-accent"
+                className="w-12 shrink-0 rounded-lg border text-sm font-semibold hover:bg-surface-2"
               >
                 <span className={cn(!struck && "line-through")}>{struck ? "↺" : c.key}</span>
               </button>
