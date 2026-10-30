@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design tokens: the "Focus mode" palette (see DESIGN.md).
+ * Design tokens: the Satify palette (see DESIGN.md).
  * Every component uses these variables; no hardcoded colors.
  * `pnpm check:contrast` verifies every text/control pair is WCAG AA in both themes.
  * Coral, mint, amber and red are too light for text on light surfaces, so
@@ -14,40 +14,42 @@
  * colors as they are; filled controls use dark text there.
  */
 :root {
-  --radius: 16px;
+  --radius: 14px;
+  --radius-large: 20px;
   --radius-input: 12px;
 
-  --background: #f5f6fa;
+  --background: #ffffff;
+  --section-tint: #f4f6fb;
   --foreground: #0e1222;
   --surface: #ffffff;
-  --surface-2: #eef0f6;
+  --surface-2: #f1f3f8;
   --muted: var(--surface-2);
   --muted-foreground: #5a6178;
-  --border: #e3e6ef;
+  --border: #e5e8f0;
   --input: #7e86a0;
 
   --primary: #2747f5;
   --primary-hover: #1c36d1;
   --primary-foreground: #ffffff;
-  --primary-soft: #e6eaff;
+  --primary-soft: #e8ecff;
   --ring: var(--primary);
 
   --accent: #ff6b4a;
   --accent-foreground: #0e1222;
-  --accent-soft: #ffe9e3;
+  --accent-soft: #ffede7;
   --accent-ink: #cf2600;
 
   --highlight: #b7a6ff;
 
   --correct: #12b886;
-  --correct-soft: #ddf7ee;
+  --correct-soft: #e0f7ef;
   --correct-ink: #0c7b5a;
   --warning-fill: #f2a20c;
   --warning-soft: #fdf0d6;
   --warning-ink: #946307;
   --danger: #e5484d;
-  --danger-soft: #fff0f0;
-  --danger-ink: #d51e24;
+  --danger-soft: #fde8e8;
+  --danger-ink: #c8191f;
   /* Text on bright fills (amber flag, mint, coral) in both themes. */
   --on-fill: #0e1222;
 
@@ -67,6 +69,10 @@
   --popover: var(--surface);
   --popover-foreground: var(--foreground);
   --flag: var(--warning-fill);
+  --flagged: var(--warning-fill);
+  --wrong: var(--danger);
+  --wrong-soft: var(--danger-soft);
+  --wrong-ink: var(--danger-ink);
   --highlight-yellow: #fbe6a6;
   --hl-yellow: #fbe6a6;
   --hl-blue: #cfdcff;
@@ -84,12 +90,13 @@
 }
 
 .dark {
-  --background: #090c16;
+  --background: #0a0d18;
+  --section-tint: #0f1324;
   --foreground: #eef0fa;
-  --surface: #11152a;
-  --surface-2: #181d36;
+  --surface: #131830;
+  --surface-2: #1a2040;
   --muted-foreground: #9aa0bc;
-  --border: #252b48;
+  --border: #262c4a;
   --input: #5f688e;
 
   --primary: #6f86ff;
@@ -138,27 +145,37 @@
   --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Type scale (rem): hero / h1 / h2 / h3 / lead / body / small. */
+  /* Type scale (rem): hero / section / h2 / h3 / lead / body / small / label. */
   --text-hero: 4rem;
   --text-hero--line-height: 1.05;
   --text-hero--letter-spacing: -0.03em;
-  --text-h1: 2.75rem;
-  --text-h1--line-height: 1.15;
+  --text-section: 3rem;
+  --text-section--line-height: 1.08;
+  --text-section--letter-spacing: -0.03em;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.1;
   --text-h1--letter-spacing: -0.03em;
   --text-h2: 2rem;
-  --text-h2--line-height: 1.15;
-  --text-h2--letter-spacing: -0.02em;
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.03em;
   --text-h3: 1.375rem;
-  --text-h3--line-height: 1.15;
-  --text-h3--letter-spacing: -0.01em;
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.02em;
   --text-lead: 1.125rem;
-  --text-lead--line-height: 1.55;
+  --text-lead--line-height: 1.6;
   --text-body: 1rem;
-  --text-body--line-height: 1.55;
+  --text-body--line-height: 1.6;
   --text-small: 0.875rem;
-  --text-small--line-height: 1.55;
+  --text-small--line-height: 1.6;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
 
   --color-background: var(--background);
+  --color-section-tint: var(--section-tint);
+  --color-flagged: var(--flagged);
+  --color-wrong: var(--wrong);
+  --color-wrong-soft: var(--wrong-soft);
+  --color-wrong-ink: var(--wrong-ink);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -208,7 +225,7 @@
   --radius-sm: 8px;
   --radius-md: var(--radius-input);
   --radius-lg: var(--radius);
-  --radius-xl: 20px;
+  --radius-xl: var(--radius-large);
   --radius-2xl: 24px;
 
   --shadow-xs: var(--elev-sm);
@@ -274,6 +291,27 @@
 }
 
 /* ---------- Shared surfaces and effects (see DESIGN.md) ---------- */
+
+/* Landing sections: one idea each, 96px (mobile) / 160px (desktop) apart, alternating white and tint. */
+.section {
+  padding-block: 96px;
+}
+@media (min-width: 1024px) {
+  .section {
+    padding-block: 160px;
+  }
+}
+.section-inner {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(1200px + 2 * 48px);
+  padding-inline: 24px;
+}
+@media (min-width: 1024px) {
+  .section-inner {
+    padding-inline: 48px;
+  }
+}
 
 /* Dot grid: marketing pages and empty states only. */
 .dot-grid {

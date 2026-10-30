@@ -51,7 +51,7 @@ export function contrast(a: string, b: string): number {
 
 const TEXT = 4.5;
 const UI = 3;
-const SURFACES = ["background", "surface", "surface-2"];
+const SURFACES = ["background", "section-tint", "surface", "surface-2"];
 
 /** [foreground, background(s), minimum, where it's used] */
 const PAIRS: [string, string[], number, string][] = [
