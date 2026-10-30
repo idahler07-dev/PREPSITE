@@ -1,5 +1,6 @@
 import { requireOwner } from "@/server/auth/session";
 import { Showcase } from "@/components/design/showcase";
+import { LogoConcepts } from "@/components/design/logo-concepts";
 
 export const metadata = { title: "Design system", robots: { index: false } };
 
@@ -8,7 +9,7 @@ const SUB = "Every component, token and Otto pose in both themes. See DESIGN.md 
 const LIGHT = "Light";
 const DARK = "Dark";
 
-/** Admin only: the design system rendered in light and dark side by side. */
+/** Owners only: the logo concepts and the design system rendered in light and dark side by side. */
 export default async function DesignPage() {
   await requireOwner();
   return (
@@ -17,6 +18,7 @@ export default async function DesignPage() {
         <h1 className="text-h2 font-semibold">{TITLE}</h1>
         <p className="text-muted-foreground">{SUB}</p>
       </header>
+      <LogoConcepts />
       <div className="grid gap-6 2xl:grid-cols-2">
         {[
           { label: LIGHT, cls: "light" },

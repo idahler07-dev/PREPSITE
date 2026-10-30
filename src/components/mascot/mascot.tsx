@@ -1,9 +1,11 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Otto, Satify's octopus. Flat vector, built from simple shapes so a designer
- * can swap in polished artwork later: everything outside this file only uses
+ * Otto, Satify's octopus, drawn like the logo mark: a geometric dome, simple
+ * eyes with highlights, arms with neat curls, and soft 3D shading (body
+ * gradient, specular highlight, rim light, ambient occlusion, contact shadow).
+ * Pure SVG, no filters. Everything outside this file only uses
  * <Mascot pose="..." />. Colors come from the --otto-* tokens.
  *
  * Poses: wave, think, cheer, focus, sleepy, point, juggle, confused.
@@ -24,13 +26,14 @@ const QUESTION = "?";
 /** Arm roots along the bottom of the head, left to right. */
 const ROOTS = [62, 74, 86, 96, 104, 114, 126, 138];
 
-/** A resting arm: down, then a little curl outward. */
+/** A resting arm: down and out, ending in a neat round curl (mirrored left/right). */
 function restArm(i: number) {
   const x = ROOTS[i]!;
   const k = i < 4 ? -1 : 1;
   const spread = [1.5, 1.1, 0.7, 0.3, 0.3, 0.7, 1.1, 1.5][i]!;
   const len = [22, 27, 30, 32, 32, 30, 27, 22][i]!;
-  return `M${x} 132 q ${k * spread * 6} ${len * 0.8} ${k * (spread * 12 + 6)} ${len} q ${k * 7} 2 ${k * 6} -6`;
+  const sweep = k > 0 ? 0 : 1;
+  return `M${x} 132 q ${k * spread * 6} ${len * 0.8} ${k * (spread * 12 + 6)} ${len} a 4.6 4.6 0 1 ${sweep} ${k * 6.4} -7.2 a 2.2 2.2 0 0 ${sweep} ${k * -3} 1.4`;
 }
 
 /** Arm raised up and out on one side (for waving, cheering, holding). */
@@ -38,11 +41,13 @@ function upArm(side: -1 | 1, root: number, reach = 1) {
   return `M${root} 124 q ${side * 20 * reach} -2 ${side * 26 * reach} -26 q ${side * 3} -12 ${side * -6} -13`;
 }
 
-function Arm({ d, dots = true, className, style }: { d: string; dots?: boolean; className?: string; style?: React.CSSProperties }) {
+/** An arm as a shaded tube: occlusion underneath, the body color, a thin highlight on top. */
+function Arm({ d, className, style }: { d: string; className?: string; style?: React.CSSProperties }) {
   return (
-    <g className={className} style={style}>
-      <path d={d} fill="none" stroke={BODY} strokeWidth={11} strokeLinecap="round" strokeLinejoin="round" />
-      {dots && <path d={d} fill="none" stroke={ACCENT} strokeWidth={3} strokeLinecap="round" strokeDasharray="0.1 13" strokeDashoffset={-9} opacity={0.8} />}
+    <g className={className} style={style} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} stroke={INK} strokeOpacity={0.16} strokeWidth={13} transform="translate(0 2.5)" />
+      <path d={d} stroke={BODY} strokeWidth={11} />
+      <path d={d} stroke={EYE} strokeOpacity={0.4} strokeWidth={2.6} transform="translate(-1.2 -1.6)" />
     </g>
   );
 }
@@ -111,31 +116,66 @@ function Eyes({ mood }: { mood: "open" | "closed" | "happy" | "side" }) {
   const dx = mood === "side" ? 3 : 0;
   return (
     <g className="otto-blink">
-      <ellipse cx={82} cy={97} rx={12} ry={14} fill={EYE} />
-      <ellipse cx={118} cy={97} rx={12} ry={14} fill={EYE} />
-      <circle cx={84 + dx} cy={99} r={6.5} fill={INK} />
-      <circle cx={120 + dx} cy={99} r={6.5} fill={INK} />
-      <circle cx={86.5 + dx} cy={95.5} r={2.3} fill={EYE} />
-      <circle cx={122.5 + dx} cy={95.5} r={2.3} fill={EYE} />
+      <ellipse cx={82 + dx} cy={97} rx={9.5} ry={12} fill={INK} />
+      <ellipse cx={118 + dx} cy={97} rx={9.5} ry={12} fill={INK} />
+      <circle cx={85.2 + dx} cy={92.2} r={3.4} fill={EYE} />
+      <circle cx={121.2 + dx} cy={92.2} r={3.4} fill={EYE} />
+      <circle cx={79.6 + dx} cy={102.4} r={1.4} fill={EYE} opacity={0.6} />
+      <circle cx={115.6 + dx} cy={102.4} r={1.4} fill={EYE} opacity={0.6} />
     </g>
   );
 }
 
-function Head({ eyes, mouth }: { eyes: "open" | "closed" | "happy" | "side"; mouth: "smile" | "open" | "o" | "flat" }) {
+const HEAD = "M52 116C52 66 73 42 100 42C127 42 148 66 148 116V124C148 130.6 142.6 136 136 136H64C57.4 136 52 130.6 52 124Z";
+
+function Head({ id, eyes, mouth }: { id: string; eyes: "open" | "closed" | "happy" | "side"; mouth: "smile" | "open" | "o" | "flat" }) {
   return (
     <g>
-      {/* Dome head: a clear rounded top, not a blob. */}
-      <path d="M50 112 C 48 38, 152 38, 150 112 L 150 122 C 150 134, 140 138, 100 138 C 60 138, 50 134, 50 122 Z" fill={BODY} />
-      <ellipse cx={100} cy={122} rx={34} ry={13} fill={BELLY} />
-      <ellipse cx={76} cy={62} rx={11} ry={5} fill={EYE} opacity={0.2} transform="rotate(-30 76 62)" />
+      {/* Geometric dome: body gradient, occlusion at the base, rim light, specular highlight. */}
+      <path d={HEAD} fill={`url(#${id}-body)`} />
+      <path d={HEAD} fill={`url(#${id}-ao)`} />
+      <path d={HEAD} fill="none" stroke={`url(#${id}-rim)`} strokeWidth={4} clipPath={`url(#${id}-clip)`} />
+      <ellipse cx={74} cy={64} rx={15} ry={7} transform="rotate(-34 74 64)" fill={`url(#${id}-spec)`} />
       <Eyes mood={eyes} />
-      <ellipse cx={66} cy={114} rx={7} ry={4.5} fill={ACCENT} opacity={0.75} />
-      <ellipse cx={134} cy={114} rx={7} ry={4.5} fill={ACCENT} opacity={0.75} />
-      {mouth === "smile" && <path d="M92 116 q 8 7 16 0" fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
-      {mouth === "open" && <path d="M91 114 q 9 14 18 0 Z" fill={INK} />}
-      {mouth === "o" && <ellipse cx={100} cy={118} rx={4} ry={5} fill={INK} />}
-      {mouth === "flat" && <path d="M94 118 h 12" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
+      <ellipse cx={66} cy={116} rx={7} ry={4.5} fill={ACCENT} opacity={0.55} />
+      <ellipse cx={134} cy={116} rx={7} ry={4.5} fill={ACCENT} opacity={0.55} />
+      {mouth === "smile" && <path d="M92 117 q 8 7 16 0" fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
+      {mouth === "open" && <path d="M91 115 q 9 14 18 0 Z" fill={INK} />}
+      {mouth === "o" && <ellipse cx={100} cy={119} rx={4} ry={5} fill={INK} />}
+      {mouth === "flat" && <path d="M94 119 h 12" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
     </g>
+  );
+}
+
+/** Gradients for the head and the contact shadow. */
+function Defs({ id }: { id: string }) {
+  return (
+    <defs>
+      <radialGradient id={`${id}-body`} cx=".36" cy=".26" r=".85">
+        <stop offset="0" style={{ stopColor: BELLY }} />
+        <stop offset=".55" style={{ stopColor: BODY }} />
+        <stop offset="1" style={{ stopColor: BODY }} />
+      </radialGradient>
+      <linearGradient id={`${id}-ao`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset=".55" stopColor="#0A1255" stopOpacity="0" />
+        <stop offset="1" stopColor="#0A1255" stopOpacity=".32" />
+      </linearGradient>
+      <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset=".5" stopColor="#fff" stopOpacity="0" />
+        <stop offset="1" stopColor="#fff" stopOpacity=".7" />
+      </linearGradient>
+      <radialGradient id={`${id}-spec`}>
+        <stop offset="0" stopColor="#fff" stopOpacity=".85" />
+        <stop offset="1" stopColor="#fff" stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id={`${id}-shadow`}>
+        <stop offset="0" style={{ stopColor: INK }} stopOpacity=".2" />
+        <stop offset="1" style={{ stopColor: INK }} stopOpacity="0" />
+      </radialGradient>
+      <clipPath id={`${id}-clip`}>
+        <path d={HEAD} />
+      </clipPath>
+    </defs>
   );
 }
 
@@ -143,18 +183,18 @@ function Head({ eyes, mouth }: { eyes: "open" | "closed" | "happy" | "side"; mou
 function Rest({ skip = [] as number[] }) {
   return (
     <g className="otto-wiggle">
-      {ROOTS.map((_, i) => (skip.includes(i) ? null : <Arm key={i} d={restArm(i)} dots={i % 3 === 0} />))}
+      {ROOTS.map((_, i) => (skip.includes(i) ? null : <Arm key={i} d={restArm(i)} />))}
     </g>
   );
 }
 
-function Pose({ pose }: { pose: MascotPose }): ReactNode {
+function Pose({ pose, id }: { pose: MascotPose; id: string }): ReactNode {
   switch (pose) {
     case "wave":
       return (
         <>
           <Rest skip={[7]} />
-          <Head eyes="open" mouth="smile" />
+          <Head id={id} eyes="open" mouth="smile" />
           <g className="otto-wave" style={{ transformOrigin: "142px 124px" }}>
             <Arm d={upArm(1, 142)} />
           </g>
@@ -164,8 +204,8 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       return (
         <>
           <Rest skip={[5, 6]} />
-          <Head eyes="side" mouth="flat" />
-          <Arm d="M126 130 q 10 6 4 -2 q -4 -6 -14 -6" dots={false} />
+          <Head id={id} eyes="side" mouth="flat" />
+          <Arm d="M126 130 q 10 6 4 -2 q -4 -6 -14 -6" />
           <g fill={BODY} opacity={0.9}>
             <circle cx={158} cy={64} r={4} />
             <circle cx={168} cy={50} r={6} />
@@ -177,7 +217,7 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       return (
         <>
           <Rest skip={[0, 1, 6, 7]} />
-          <Head eyes="happy" mouth="open" />
+          <Head id={id} eyes="happy" mouth="open" />
           <g className="otto-cheer">
             <Arm d={upArm(-1, 58, 1.1)} />
             <Arm d={upArm(-1, 70, 0.7)} />
@@ -197,17 +237,17 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
         <>
           <Rest skip={[1, 6]} />
           <Book x={70} y={150} r={-8} />
-          <Arm d="M74 132 q -4 14 -2 18" dots={false} />
-          <Head eyes="open" mouth="flat" />
+          <Arm d="M74 132 q -4 14 -2 18" />
+          <Head id={id} eyes="open" mouth="flat" />
           <Pencil x={150} y={120} r={30} />
-          <Arm d="M126 130 q 14 4 20 -4" dots={false} />
+          <Arm d="M126 130 q 14 4 20 -4" />
         </>
       );
     case "sleepy":
       return (
         <>
           <Rest />
-          <Head eyes="closed" mouth="o" />
+          <Head id={id} eyes="closed" mouth="o" />
           <g fill={INK} opacity={0.55} fontFamily="var(--font-sans)" fontWeight={700}>
             <text x={150} y={70} fontSize={18}>
               {ZZ[0]}
@@ -222,7 +262,7 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       return (
         <>
           <Rest skip={[7]} />
-          <Head eyes="side" mouth="smile" />
+          <Head id={id} eyes="side" mouth="smile" />
           <Arm d="M142 124 q 22 0 36 -10" />
         </>
       );
@@ -230,7 +270,7 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       return (
         <>
           <Rest skip={[0, 1, 6, 7]} />
-          <Head eyes="open" mouth="smile" />
+          <Head id={id} eyes="open" mouth="smile" />
           <g className="otto-juggle">
             <Arm d={upArm(-1, 58, 1.1)} />
             <Arm d={upArm(-1, 70, 0.7)} />
@@ -249,8 +289,8 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       return (
         <>
           <Rest skip={[6]} />
-          <Head eyes="open" mouth="o" />
-          <Arm d="M128 128 q 12 -12 4 -30" dots={false} />
+          <Head id={id} eyes="open" mouth="o" />
+          <Arm d="M128 128 q 12 -12 4 -30" />
           <text x={150} y={66} fontSize={34} fontWeight={700} fill="var(--highlight)" fontFamily="var(--font-sans)">
             {QUESTION}
           </text>
@@ -266,6 +306,7 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
  * CSS animations, all off with reduced motion.
  */
 export function Mascot({ pose, className, label, hoverReact = false }: { pose: MascotPose; className?: string; label?: string; hoverReact?: boolean }) {
+  const id = `otto${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg
       viewBox="0 0 200 200"
@@ -274,9 +315,11 @@ export function Mascot({ pose, className, label, hoverReact = false }: { pose: M
       aria-label={label}
       aria-hidden={label ? undefined : true}
     >
+      <Defs id={id} />
+      <ellipse cx={100} cy={178} rx={54} ry={6} fill={`url(#${id}-shadow)`} />
       {/* Keyed by pose: a new pose remounts and fades in. */}
       <g key={pose} className="otto-pose">
-        <Pose pose={pose} />
+        <Pose pose={pose} id={id} />
       </g>
     </svg>
   );

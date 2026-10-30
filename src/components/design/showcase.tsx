@@ -19,7 +19,7 @@ import { ChoiceList } from "@/components/test/choice-list";
 import { EmptyStateDemo } from "./empty-state-demo";
 
 /*
- * Design system showcase (admin only, /admin/design). Sample labels here are
+ * Design system showcase (owners only, /manage/design). Sample labels here are
  * for designers, so they're plain constants rather than translations.
  */
 const TOKENS = ["background", "section-tint", "surface", "surface-2", "foreground", "muted-foreground", "border", "input", "primary", "primary-hover", "primary-soft", "accent", "accent-soft", "accent-ink", "highlight", "correct", "correct-soft", "correct-ink", "flagged", "warning-ink", "danger", "danger-soft", "danger-ink"];

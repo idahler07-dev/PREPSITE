@@ -1,10 +1,14 @@
 /**
- * Generate the Satify brand assets in public/brand/:
- *   mark.svg / mark-dark.svg   Otto's head and two arms, white, in a rounded cobalt square (favicon; mark.svg follows the system theme)
- *   logo.svg / logo-dark.svg   mark + "Satify" in Geist Bold, -0.03em (text as paths)
- *   logo-email.png             wordmark for email headers (mail apps don't show SVG)
- *   icon-*.png, apple-touch-icon.png, favicon-32.png
- *   og.png                     1200×630 OpenGraph image with the mesh gradient
+ * Generate the Satify brand assets in public/brand/ from src/lib/brand-mark.ts:
+ *   mark.svg                    flat mark, follows the system theme (also the SVG favicon)
+ *   mark-small.svg / -dark      flat mark for 16–48px, light and dark
+ *   mark-gloss.svg / -dark      glossy 3D mark for 64px and up, light and dark
+ *   logo.svg / logo-dark.svg    gloss mark + "Satify" (Geist Bold, -0.035em, mark = cap height × 1.3, gap 0.35em; text as paths)
+ *   logo-flat.svg / -dark       the same with the flat mark (small sizes)
+ *   logo-email.png              flat logo for email headers (mail apps don't show SVG)
+ *   favicon.ico (16/32/48), favicon-16/32/48.png, apple-touch-icon.png (180), icon-192/512.png,
+ *   icon-maskable-512.png, mark-1024.png
+ *   og.png                      1200×630 OpenGraph image
  *
  *   pnpm brand
  *
@@ -15,7 +19,7 @@ import { createCanvas, GlobalFonts, loadImage, type SKRSContext2D } from "@napi-
 import opentype from "opentype.js";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { BRAND_MARK } from "../src/lib/brand-mark";
+import { CHOSEN_CONCEPT, FLAT_COLORS, GEIST_CAP_HEIGHT, WORDMARK, flatMarkInner, glossMarkInner, svgDoc } from "../src/lib/brand-mark";
 import { Mascot } from "../src/components/mascot/mascot";
 
 const OUT = "public/brand";
@@ -32,16 +36,22 @@ async function googleTtf(query: string): Promise<ArrayBuffer> {
   return (await fetch(url)).arrayBuffer();
 }
 
-const markInner = (bg: string, fg: string, cls = false) =>
-  `<rect${cls ? ' class="b"' : ""} width="32" height="32" rx="${BRAND_MARK.radius}" fill="${bg}"/>` +
-  `<path${cls ? ' class="f"' : ""} d="${BRAND_MARK.head}" fill="${fg}"/>` +
-  BRAND_MARK.eyes.map((e) => `<circle${cls ? ' class="b"' : ""} cx="${e.cx}" cy="${e.cy}" r="${e.r}" fill="${bg}"/>`).join("") +
-  BRAND_MARK.arms.map((d) => `<path${cls ? ' class="s"' : ""} d="${d}" fill="none" stroke="${fg}" stroke-width="${BRAND_MARK.stroke}" stroke-linecap="round"/>`).join("");
+const K = CHOSEN_CONCEPT;
+const flat = (theme: "light" | "dark") => flatMarkInner(K, FLAT_COLORS[theme]);
+const gloss = (theme: "light" | "dark", opts?: Parameters<typeof glossMarkInner>[3]) => glossMarkInner(K, theme, `m${theme}`, opts);
 
-/** Full logo: mark + "Satify" in Geist Bold with -0.03em tracking. */
-function wordmarkSvg(font: opentype.Font, colors: { text: string; primary: string; markFg: string }) {
+/** Flat mark that follows the system theme (for the SVG favicon). */
+function autoMarkSvg() {
+  const inner = flatMarkInner(K, { bgClass: "b", fgClass: "f", strokeClass: "s" });
+  const { light, dark } = FLAT_COLORS;
+  const style = `.b{fill:${light.bg}}.f{fill:${light.fg}}.s{stroke:${light.fg}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.f{fill:${dark.fg}}.s{stroke:${dark.fg}}}`;
+  return svgDoc(`<style>${style}</style>${inner}`, 32);
+}
+
+/** Full logo: mark + "Satify" in Geist Bold, sized from the cap height. */
+function wordmarkSvg(font: opentype.Font, text: string, markInner: string) {
   const size = 64;
-  const tracking = -0.03 * size;
+  const tracking = WORDMARK.tracking * size;
   const upm = font.unitsPerEm;
   let x = 0;
   const parts: string[] = [];
@@ -50,25 +60,49 @@ function wordmarkSvg(font: opentype.Font, colors: { text: string; primary: strin
     x += ((g.advanceWidth ?? 0) / upm) * size + tracking;
   }
   const textW = x - tracking;
-  const ascent = ((font.ascender * 0.8) / upm) * size;
+  const cap = GEIST_CAP_HEIGHT * size;
+  const mark = cap * WORDMARK.markScale;
+  const gap = WORDMARK.gap * size;
   const descent = ((-font.descender * 0.9) / upm) * size;
-  const h = Math.ceil(ascent + descent + 8);
-  const mark = h - 6;
-  const gap = 16;
-  const w = Math.ceil(mark + gap + textW + 4);
-  const base = 4 + ascent;
+  const pad = 2;
+  // Mark centered on the cap height; the baseline sits below it.
+  const top = pad;
+  const baseline = top + (mark + cap) / 2;
+  const h = Math.ceil(Math.max(top + mark, baseline + descent * 0.3) + pad);
+  const w = Math.ceil(mark + gap + textW + pad);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Satify">
-  <g transform="translate(0 3) scale(${(mark / 32).toFixed(4)})">${markInner(colors.primary, colors.markFg)}</g>
-  <path fill="${colors.text}" transform="translate(${mark + gap} ${base.toFixed(2)})" d="${parts.join("")}"/>
+  <g transform="translate(0 ${top}) scale(${(mark / 64).toFixed(4)})">${markInner}</g>
+  <path fill="${text}" transform="translate(${(mark + gap).toFixed(2)} ${baseline.toFixed(2)})" d="${parts.join("")}"/>
 </svg>
 `;
 }
 
-const markSvg = (bg: string, fg: string, dark?: { bg: string; fg: string }) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  ${dark ? `<style>.b{fill:${bg}}.f{fill:${fg}}.s{stroke:${fg}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.f{fill:${dark.fg}}.s{stroke:${dark.fg}}}</style>` : ""}
-  ${markInner(bg, fg, !!dark)}
-</svg>
-`;
+/** ICO file holding PNG images (supported by every current browser). */
+function ico(pngs: { size: number; data: Buffer }[]) {
+  const header = Buffer.alloc(6 + 16 * pngs.length);
+  header.writeUInt16LE(0, 0);
+  header.writeUInt16LE(1, 2);
+  header.writeUInt16LE(pngs.length, 4);
+  let offset = header.length;
+  pngs.forEach((p, i) => {
+    const e = 6 + i * 16;
+    header.writeUInt8(p.size >= 256 ? 0 : p.size, e);
+    header.writeUInt8(p.size >= 256 ? 0 : p.size, e + 1);
+    header.writeUInt16LE(1, e + 4);
+    header.writeUInt16LE(32, e + 6);
+    header.writeUInt32LE(p.data.length, e + 8);
+    header.writeUInt32LE(offset, e + 12);
+    offset += p.data.length;
+  });
+  return Buffer.concat([header, ...pngs.map((p) => p.data)]);
+}
+
+async function png(svgInner: string, size: number) {
+  const img = await loadImage(Buffer.from(svgDoc(svgInner, size)));
+  const c = createCanvas(size, size);
+  c.getContext("2d").drawImage(img, 0, 0, size, size);
+  return c.toBuffer("image/png");
+}
 
 /** Otto as a standalone SVG (CSS variables resolved to the light theme colors). */
 function ottoSvg(pose: "wave" | "cheer" | "juggle") {
@@ -112,37 +146,35 @@ async function main() {
   ]);
   const font = opentype.parse(geistBold);
 
-  writeFileSync(`${OUT}/mark.svg`, markSvg(C.light.primary, "#FFFFFF", { bg: C.dark.primary, fg: C.dark.bg }));
-  writeFileSync(`${OUT}/mark-dark.svg`, markSvg(C.dark.primary, C.dark.bg));
-  writeFileSync(`${OUT}/logo.svg`, wordmarkSvg(font, { ...C.light, markFg: "#FFFFFF" }));
-  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, { ...C.dark, markFg: C.dark.bg }));
+  writeFileSync(`${OUT}/mark.svg`, autoMarkSvg());
+  writeFileSync(`${OUT}/mark-small.svg`, svgDoc(flat("light"), 32));
+  writeFileSync(`${OUT}/mark-small-dark.svg`, svgDoc(flat("dark"), 32));
+  writeFileSync(`${OUT}/mark-gloss.svg`, svgDoc(gloss("light"), 256));
+  writeFileSync(`${OUT}/mark-gloss-dark.svg`, svgDoc(gloss("dark"), 256));
+  const logo = wordmarkSvg(font, C.light.text, gloss("light"));
+  writeFileSync(`${OUT}/logo.svg`, logo);
+  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, C.dark.text, gloss("dark")));
+  const logoFlat = wordmarkSvg(font, C.light.text, flat("light"));
+  writeFileSync(`${OUT}/logo-flat.svg`, logoFlat);
+  writeFileSync(`${OUT}/logo-flat-dark.svg`, wordmarkSvg(font, C.dark.text, flat("dark")));
 
-  const wordmark = await loadImage(Buffer.from(wordmarkSvg(font, { ...C.light, markFg: "#FFFFFF" })));
+  const emailLogo = await loadImage(Buffer.from(logoFlat));
   const eh = 64;
-  const el = createCanvas(Math.round((wordmark.width / wordmark.height) * eh), eh);
-  el.getContext("2d").drawImage(wordmark, 0, 0, el.width, eh);
+  const el = createCanvas(Math.round((emailLogo.width / emailLogo.height) * eh), eh);
+  el.getContext("2d").drawImage(emailLogo, 0, 0, el.width, eh);
   writeFileSync(`${OUT}/logo-email.png`, el.toBuffer("image/png"));
 
-  // App icons: the mark fills the icon; the maskable one keeps the line inside the safe zone.
-  const mark = await loadImage(Buffer.from(markSvg(C.light.primary, "#FFFFFF")));
-  for (const [size, name, inset] of [
-    [32, "favicon-32.png", 0],
-    [180, "apple-touch-icon.png", 0],
-    [192, "icon-192.png", 0],
-    [512, "icon-512.png", 0],
-    [512, "icon-maskable-512.png", 0.18],
-  ] as const) {
-    const c = createCanvas(size, size);
-    const ctx = c.getContext("2d");
-    if (inset) {
-      ctx.fillStyle = C.light.primary;
-      ctx.fillRect(0, 0, size, size);
-    }
-    const i = size * inset;
-    ctx.drawImage(mark, i, i, size - 2 * i, size - 2 * i);
-    writeFileSync(`${OUT}/${name}`, c.toBuffer("image/png"));
-  }
+  // Favicons use the flat mark; larger icons the gloss one (full-bleed where the OS masks the corners).
+  const fav = await Promise.all([16, 32, 48].map(async (size) => ({ size, data: await png(flat("light"), size) })));
+  for (const f of fav) writeFileSync(`${OUT}/favicon-${f.size}.png`, f.data);
+  writeFileSync("public/favicon.ico", ico(fav));
+  writeFileSync(`${OUT}/apple-touch-icon.png`, await png(gloss("light", { fullBleed: true }), 180));
+  writeFileSync(`${OUT}/icon-192.png`, await png(gloss("light"), 192));
+  writeFileSync(`${OUT}/icon-512.png`, await png(gloss("light"), 512));
+  writeFileSync(`${OUT}/icon-maskable-512.png`, await png(gloss("light", { fullBleed: true, ottoScale: 0.82 }), 512));
+  writeFileSync(`${OUT}/mark-1024.png`, await png(gloss("light"), 1024));
 
+  const wordmark = await loadImage(Buffer.from(logo));
   // OpenGraph image.
   GlobalFonts.register(Buffer.from(geist), "Geist");
   GlobalFonts.register(Buffer.from(geistSemi), "Geist SemiBold");
@@ -155,7 +187,7 @@ async function main() {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, W, H);
   mesh(ctx, W, H);
-  ctx.drawImage(wordmark, 88, 84, (wordmark.width / wordmark.height) * 56, 56);
+  ctx.drawImage(wordmark, 88, 80, (wordmark.width / wordmark.height) * 64, 64);
   const otto = await loadImage(Buffer.from(ottoSvg("wave")));
   ctx.drawImage(otto, 780, 150, 340, 340);
 

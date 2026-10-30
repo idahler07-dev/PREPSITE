@@ -25,7 +25,7 @@ export const siteConfig = {
      * contains the name, set showName to false and use `light` / `dark`.
      */
     mark: "/brand/mark.svg",
-    markDark: "/brand/mark-dark.svg",
+    markDark: "/brand/mark-small-dark.svg",
     light: "/brand/logo.svg",
     dark: "/brand/logo-dark.svg",
     /** 1200×630 image for link previews (Telegram, Instagram, WhatsApp). */
