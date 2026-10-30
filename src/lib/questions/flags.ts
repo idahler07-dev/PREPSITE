@@ -17,6 +17,8 @@ export const FLAGS = {
   TAXONOMY_UNCONFIRMED: { blocking: true },
   STUDENT_REPORT: { blocking: false },
   DIFFICULTY_MISMATCH: { blocking: false },
+  /** Students choose one wrong answer more often than the keyed one. */
+  ANSWER_PATTERN: { blocking: false },
   /** The AI tutor thinks the answer key may be wrong; a person should check. */
   AI_KEY_DISPUTE: { blocking: false },
   /** Drafted by AI; a person must read and save it in the editor before it can be published. */

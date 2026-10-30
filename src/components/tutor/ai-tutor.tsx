@@ -1,5 +1,6 @@
 "use client";
 
+import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Lightbulb, Loader2, Send, Sparkles } from "lucide-react";

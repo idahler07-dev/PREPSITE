@@ -802,6 +802,10 @@
     "MATH_CHECK_FAILED": {
       "label": "Math check failed",
       "help": "The automatic calculation of this draft's answer did not match the key."
+    },
+    "ANSWER_PATTERN": {
+      "label": "Students prefer another answer",
+      "help": "With 30+ answers, one wrong choice is picked more often than the keyed answer. Check the key and the wording; approving clears this flag."
     }
   },
   "admin": {
@@ -821,7 +825,8 @@
       "aiUsage": "AI usage",
       "orders": "Orders",
       "promos": "Promo codes",
-      "vocab": "Vocabulary"
+      "vocab": "Vocabulary",
+      "analytics": "Analytics"
     },
     "overview": {
       "title": "Overview",
@@ -1345,6 +1350,34 @@
       "save": "Save",
       "hide": "Hide",
       "show": "Show"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "How students use the site and how the questions perform. Last 30 days unless noted.",
+      "students": "Students",
+      "newThisWeek": "{count} new this week",
+      "active": "Active: today / 7 days / 30 days",
+      "activeNote": "Students who started any practice",
+      "premium": "Premium now",
+      "conversion": "{pct} of students",
+      "mocks": "Practice tests completed",
+      "avgEstimate": "Average estimate {score}",
+      "answeredPerDay": "Questions answered per day",
+      "signups": "New students per week",
+      "weakSkills": "Hardest skills for students (accuracy · answers)",
+      "noData": "Not enough answers yet.",
+      "calibration": "Question calibration",
+      "calibrationHelp": "Questions with at least 30 answers whose difficulty label doesn't match how students do, or where one wrong choice beats the key. Flags are updated every night.",
+      "calibrationNone": "{checked, plural, =0 {No question has enough answers yet.} one {# question checked — all fine.} other {# questions checked — all fine.}}",
+      "code": "Code",
+      "label": "Label",
+      "accuracy": "Correct (answers)",
+      "finding": "Finding",
+      "status": {
+        "tooEasy": "Easier than labelled (suggest {suggested})",
+        "tooHard": "Harder than labelled (suggest {suggested})"
+      },
+      "suspect": "Choice {choice} is picked more than the key — check the question"
     }
   },
   "mocks": {

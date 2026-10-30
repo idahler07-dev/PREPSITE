@@ -1,5 +1,6 @@
 "use client";
 
+import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useDeferredValue, useMemo, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";

@@ -1,5 +1,6 @@
 "use client";
 
+import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useLayoutEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 

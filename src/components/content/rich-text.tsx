@@ -1,3 +1,4 @@
+import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { cn } from "@/lib/utils";
 
 /**

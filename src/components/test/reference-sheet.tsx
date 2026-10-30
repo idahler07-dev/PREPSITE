@@ -1,5 +1,6 @@
 "use client";
 
+import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useMemo } from "react";
 import katex from "katex";
 import { useTranslations } from "next-intl";

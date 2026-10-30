@@ -802,6 +802,10 @@
     "MATH_CHECK_FAILED": {
       "label": "Matematik tekshiruv oʻtmadi",
       "help": "Bu qoralama javobini avtomatik hisoblash kalit bilan mos kelmadi."
+    },
+    "ANSWER_PATTERN": {
+      "label": "Oʻquvchilar boshqa javobni tanlaydi",
+      "help": "30 dan ortiq javobda bitta notoʻgʻri variant kalitdagi javobdan koʻproq tanlangan. Kalit va matnni tekshiring; tasdiqlash bu belgini olib tashlaydi."
     }
   },
   "admin": {
@@ -821,7 +825,8 @@
       "aiUsage": "AI sarfi",
       "orders": "Buyurtmalar",
       "promos": "Promokodlar",
-      "vocab": "Lugʻat"
+      "vocab": "Lugʻat",
+      "analytics": "Tahlil"
     },
     "overview": {
       "title": "Umumiy koʻrinish",
@@ -1345,6 +1350,34 @@
       "save": "Saqlash",
       "hide": "Yashirish",
       "show": "Koʻrsatish"
+    },
+    "analytics": {
+      "title": "Tahlil",
+      "subtitle": "Oʻquvchilar saytdan qanday foydalanishi va savollar qanday ishlashi. Boshqacha koʻrsatilmagan boʻlsa — soʻnggi 30 kun.",
+      "students": "Oʻquvchilar",
+      "newThisWeek": "bu hafta {count} ta yangi",
+      "active": "Faol: bugun / 7 kun / 30 kun",
+      "activeNote": "Har qanday mashqni boshlagan oʻquvchilar",
+      "premium": "Hozir premium",
+      "conversion": "oʻquvchilarning {pct}",
+      "mocks": "Yakunlangan sinov testlari",
+      "avgEstimate": "Oʻrtacha taxmin {score}",
+      "answeredPerDay": "Kuniga javob berilgan savollar",
+      "signups": "Haftasiga yangi oʻquvchilar",
+      "weakSkills": "Oʻquvchilar uchun eng qiyin koʻnikmalar (aniqlik · javoblar)",
+      "noData": "Hali javoblar yetarli emas.",
+      "calibration": "Savollarni kalibrlash",
+      "calibrationHelp": "Kamida 30 ta javobga ega, qiyinlik belgisi oʻquvchilar natijasiga mos kelmaydigan yoki bitta notoʻgʻri variant kalitdan koʻproq tanlangan savollar. Belgilar har kecha yangilanadi.",
+      "calibrationNone": "{checked, plural, =0 {Hali hech bir savolda yetarli javob yoʻq.} other {# ta savol tekshirildi — hammasi joyida.}}",
+      "code": "Kod",
+      "label": "Belgi",
+      "accuracy": "Toʻgʻri (javoblar)",
+      "finding": "Xulosa",
+      "status": {
+        "tooEasy": "Belgilangandan osonroq ({suggested} tavsiya etiladi)",
+        "tooHard": "Belgilangandan qiyinroq ({suggested} tavsiya etiladi)"
+      },
+      "suspect": "{choice} varianti kalitdan koʻproq tanlanmoqda — savolni tekshiring"
     }
   },
   "mocks": {
