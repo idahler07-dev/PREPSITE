@@ -630,25 +630,29 @@
     },
     "reference": {
       "title": "Reference sheet",
-      "intro": "Formulas you may use on the Math section.",
+      "intro": "Formulas you may use on the Math section. Drawings are not to scale.",
       "items": {
-        "circleArea": "Area of a circle",
-        "circumference": "Circumference of a circle",
-        "rectangleArea": "Area of a rectangle",
-        "triangleArea": "Area of a triangle",
+        "circle": "Circle",
+        "rectangle": "Rectangle",
+        "triangle": "Triangle",
         "pythagorean": "Pythagorean theorem",
-        "special30": "Special right triangle",
-        "special45": "Special right triangle",
-        "boxVolume": "Volume of a rectangular box",
-        "cylinderVolume": "Volume of a cylinder",
-        "sphereVolume": "Volume of a sphere",
-        "coneVolume": "Volume of a cone",
-        "pyramidVolume": "Volume of a rectangular pyramid"
+        "special30": "30°–60°–90° triangle",
+        "special45": "45°–45°–90° triangle",
+        "box": "Rectangular box",
+        "cylinder": "Cylinder",
+        "sphere": "Sphere",
+        "cone": "Cone",
+        "pyramid": "Rectangular pyramid"
       },
       "facts": {
         "circleDegrees": "A circle has 360 degrees.",
         "circleRadians": "A circle has 2π radians.",
         "triangleAngles": "The angles of a triangle add up to 180 degrees."
+      },
+      "groups": {
+        "area": "Area and circles",
+        "rightTriangles": "Right triangles",
+        "volume": "Volume"
       }
     },
     "break": {
