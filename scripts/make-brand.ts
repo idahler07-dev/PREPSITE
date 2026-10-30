@@ -1,19 +1,22 @@
 /**
  * Generate the Satify brand assets in public/brand/:
- *   mark.svg / mark-dark.svg   rounded cobalt square with a rising "S" line (favicon; mark.svg follows the system theme)
- *   logo.svg / logo-dark.svg   "Satify" wordmark in Geist Bold, the dot of the i in cobalt (text as paths)
+ *   mark.svg / mark-dark.svg   Otto's head and two arms, white, in a rounded cobalt square (favicon; mark.svg follows the system theme)
+ *   logo.svg / logo-dark.svg   mark + "Satify" in Geist Bold, -0.03em (text as paths)
  *   logo-email.png             wordmark for email headers (mail apps don't show SVG)
  *   icon-*.png, apple-touch-icon.png, favicon-32.png
  *   og.png                     1200×630 OpenGraph image with the mesh gradient
  *
- *   pnpm tsx scripts/make-brand.ts
+ *   pnpm brand
  *
  * Fonts are downloaded from Google Fonts at run time (static TTF instances).
  */
 import { writeFileSync } from "node:fs";
 import { createCanvas, GlobalFonts, loadImage, type SKRSContext2D } from "@napi-rs/canvas";
 import opentype from "opentype.js";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { BRAND_MARK } from "../src/lib/brand-mark";
+import { Mascot } from "../src/components/mascot/mascot";
 
 const OUT = "public/brand";
 const C = {
@@ -29,44 +32,61 @@ async function googleTtf(query: string): Promise<ArrayBuffer> {
   return (await fetch(url)).arrayBuffer();
 }
 
-/** "Satify" with a dotless ı; the dot is a separate circle so it can be colored (and animated on the site). */
-function wordmarkSvg(font: opentype.Font, colors: { text: string; primary: string }) {
+const markInner = (bg: string, fg: string, cls = false) =>
+  `<rect${cls ? ' class="b"' : ""} width="32" height="32" rx="${BRAND_MARK.radius}" fill="${bg}"/>` +
+  `<path${cls ? ' class="f"' : ""} d="${BRAND_MARK.head}" fill="${fg}"/>` +
+  BRAND_MARK.eyes.map((e) => `<circle${cls ? ' class="b"' : ""} cx="${e.cx}" cy="${e.cy}" r="${e.r}" fill="${bg}"/>`).join("") +
+  BRAND_MARK.arms.map((d) => `<path${cls ? ' class="s"' : ""} d="${d}" fill="none" stroke="${fg}" stroke-width="${BRAND_MARK.stroke}" stroke-linecap="round"/>`).join("");
+
+/** Full logo: mark + "Satify" in Geist Bold with -0.03em tracking. */
+function wordmarkSvg(font: opentype.Font, colors: { text: string; primary: string; markFg: string }) {
   const size = 64;
-  const tracking = -0.04 * size;
+  const tracking = -0.03 * size;
   const upm = font.unitsPerEm;
   let x = 0;
   const parts: string[] = [];
-  let dot = { cx: 0, cy: 0, r: 0 };
-  for (const g of font.stringToGlyphs("Satıfy")) {
+  for (const g of font.stringToGlyphs("Satify")) {
     parts.push(g.getPath(x, 0, size).toPathData(2));
-    if (g.unicode === 0x131) {
-      const bb = g.getBoundingBox();
-      const stemW = ((bb.x2 - bb.x1) / upm) * size;
-      const top = (bb.y2 / upm) * size;
-      dot = { cx: x + (((bb.x1 + bb.x2) / 2) / upm) * size, cy: -(top + stemW * 1.05), r: stemW * 0.62 };
-    }
     x += ((g.advanceWidth ?? 0) / upm) * size + tracking;
   }
-  const width = x - tracking;
+  const textW = x - tracking;
   const ascent = ((font.ascender * 0.8) / upm) * size;
   const descent = ((-font.descender * 0.9) / upm) * size;
-  const pad = 2;
-  const w = Math.ceil(width + pad * 2);
-  const h = Math.ceil(ascent + descent + pad * 2);
-  const base = pad + ascent;
+  const h = Math.ceil(ascent + descent + 8);
+  const mark = h - 6;
+  const gap = 16;
+  const w = Math.ceil(mark + gap + textW + 4);
+  const base = 4 + ascent;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Satify">
-  <path fill="${colors.text}" transform="translate(${pad} ${base.toFixed(2)})" d="${parts.join("")}"/>
-  <circle fill="${colors.primary}" cx="${(pad + dot.cx).toFixed(2)}" cy="${(base + dot.cy).toFixed(2)}" r="${dot.r.toFixed(2)}"/>
+  <g transform="translate(0 3) scale(${(mark / 32).toFixed(4)})">${markInner(colors.primary, colors.markFg)}</g>
+  <path fill="${colors.text}" transform="translate(${mark + gap} ${base.toFixed(2)})" d="${parts.join("")}"/>
 </svg>
 `;
 }
 
-const markSvg = (bg: string, line: string, dark?: { bg: string; line: string }) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  ${dark ? `<style>.b{fill:${bg}}.l{stroke:${line}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.l{stroke:${dark.line}}}</style>` : ""}
-  <rect class="b" width="32" height="32" rx="${BRAND_MARK.radius}" fill="${bg}"/>
-  <path class="l" d="${BRAND_MARK.path}" fill="none" stroke="${line}" stroke-width="${BRAND_MARK.stroke}" stroke-linecap="round" stroke-linejoin="round"/>
+const markSvg = (bg: string, fg: string, dark?: { bg: string; fg: string }) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  ${dark ? `<style>.b{fill:${bg}}.f{fill:${fg}}.s{stroke:${fg}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.f{fill:${dark.fg}}.s{stroke:${dark.fg}}}</style>` : ""}
+  ${markInner(bg, fg, !!dark)}
 </svg>
 `;
+
+/** Otto as a standalone SVG (CSS variables resolved to the light theme colors). */
+function ottoSvg(pose: "wave" | "cheer" | "juggle") {
+  const vars: Record<string, string> = {
+    "--otto-body": "#2747F5",
+    "--otto-belly": "#7F95FF",
+    "--otto-accent": "#FF6B4A",
+    "--otto-eye": "#FFFFFF",
+    "--otto-ink": "#0E1222",
+    "--flagged": "#F2A20C",
+    "--highlight": "#B7A6FF",
+    "--correct": "#12B886",
+    "--font-sans": "Geist, sans-serif",
+  };
+  let svg = renderToStaticMarkup(createElement(Mascot, { pose }));
+  for (const [k, v] of Object.entries(vars)) svg = svg.replaceAll(`var(${k})`, v);
+  return svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"');
+}
 
 /** Soft mesh gradient: cobalt, lilac and coral blobs at low opacity, as behind the hero. */
 function mesh(ctx: SKRSContext2D, w: number, h: number) {
@@ -96,12 +116,12 @@ async function main() {
   ]);
   const font = opentype.parse(geistBold);
 
-  writeFileSync(`${OUT}/mark.svg`, markSvg(C.light.primary, "#FFFFFF", { bg: C.dark.primary, line: C.dark.bg }));
+  writeFileSync(`${OUT}/mark.svg`, markSvg(C.light.primary, "#FFFFFF", { bg: C.dark.primary, fg: C.dark.bg }));
   writeFileSync(`${OUT}/mark-dark.svg`, markSvg(C.dark.primary, C.dark.bg));
-  writeFileSync(`${OUT}/logo.svg`, wordmarkSvg(font, C.light));
-  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, C.dark));
+  writeFileSync(`${OUT}/logo.svg`, wordmarkSvg(font, { ...C.light, markFg: "#FFFFFF" }));
+  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, { ...C.dark, markFg: C.dark.bg }));
 
-  const wordmark = await loadImage(Buffer.from(wordmarkSvg(font, C.light)));
+  const wordmark = await loadImage(Buffer.from(wordmarkSvg(font, { ...C.light, markFg: "#FFFFFF" })));
   const eh = 64;
   const el = createCanvas(Math.round((wordmark.width / wordmark.height) * eh), eh);
   el.getContext("2d").drawImage(wordmark, 0, 0, el.width, eh);
@@ -136,11 +156,12 @@ async function main() {
   const H = 630;
   const og = createCanvas(W, H);
   const ctx = og.getContext("2d");
-  ctx.fillStyle = C.light.bg;
+  ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, W, H);
   mesh(ctx, W, H);
-  dotGrid(ctx, W, H);
-  ctx.drawImage(wordmark, 88, 84, (wordmark.width / wordmark.height) * 60, 60);
+  ctx.drawImage(wordmark, 88, 84, (wordmark.width / wordmark.height) * 56, 56);
+  const otto = await loadImage(Buffer.from(ottoSvg("wave")));
+  ctx.drawImage(otto, 780, 150, 340, 340);
 
   const draw = (text: string, x: number, y: number, f: string, color: string) => {
     ctx.font = f;
@@ -149,7 +170,7 @@ async function main() {
     return x + ctx.measureText(text).width;
   };
   ctx.textBaseline = "alphabetic";
-  const size = 84;
+  const size = 76;
   draw("Your SAT score,", 88, 318, `${size}px 'Geist SemiBold'`, C.light.text);
   let x = draw("planned", 88, 412, `italic ${size + 10}px 'Instrument Serif'`, C.light.primary);
   x = draw(" and ", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
@@ -162,7 +183,7 @@ async function main() {
   ctx.fill();
   x = draw("proven", x, 412, `${size}px 'Geist Bold'`, C.light.text);
   draw(".", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
-  draw("Adaptive SAT practice, clear explanations, progress you can trust.", 88, 494, "30px Geist", C.light.muted);
+  draw("SAT practice with a plan you can see working.", 88, 494, "30px Geist", C.light.muted);
   ctx.fillStyle = C.light.border;
   ctx.fillRect(88, 540, W - 176, 2);
   draw("SAT® is a trademark of the College Board, which does not endorse this site.", 88, 580, "21px Geist", C.light.muted);

@@ -6,7 +6,7 @@ import { Highlight } from "./emphasis";
  * (one emphasis per marketing headline; never in tests). Works in server and
  * client components: t.rich(key, emphasis).
  *   <i>word</i>        Instrument Serif italic, same size, primary color
- *   <hl>word</hl>      bold with the lilac highlighter that draws in on view
+ *   <hl>word</hl>      bold with a hand-drawn lilac underline that draws in on view
  *   <b>word</b>        bold (key numbers in stats and results)
  *   <grad>word</grad>  cobalt → coral gradient text (hero headline only)
  */

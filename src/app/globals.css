@@ -87,6 +87,13 @@
   --overlay: rgb(14 18 34 / 0.32);
   --dot-color: rgb(14 18 34 / 0.09);
   --mesh-opacity: 0.55;
+
+  /* Otto, the mascot: same character in both themes, a touch brighter in dark. */
+  --otto-body: #2747f5;
+  --otto-belly: #7f95ff;
+  --otto-accent: #ff6b4a;
+  --otto-eye: #ffffff;
+  --otto-ink: #0e1222;
 }
 
 .dark {
@@ -138,6 +145,9 @@
   --overlay: rgb(3 5 12 / 0.6);
   --dot-color: rgb(238 240 250 / 0.07);
   --mesh-opacity: 0.4;
+  --otto-body: #4a66ff;
+  --otto-belly: #93a6ff;
+  --otto-accent: #ff8a6e;
 }
 
 @theme inline {
@@ -357,6 +367,47 @@
   transition: opacity 300ms ease-out;
   background: radial-gradient(360px circle at var(--spot-x, 50%) var(--spot-y, 50%), color-mix(in oklab, var(--primary) 10%, transparent), transparent 70%);
   pointer-events: none;
+}
+
+/* Otto's idle loops (off with reduced motion via the global rule). */
+.otto .otto-blink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: otto-blink 5.5s infinite;
+}
+.otto .otto-wiggle path {
+  transform-box: view-box;
+}
+.otto .otto-wiggle {
+  transform-origin: 100px 132px;
+  animation: otto-wiggle 4s ease-in-out infinite;
+}
+.otto .otto-wave {
+  animation: otto-wave 1.6s ease-in-out infinite;
+}
+.otto .otto-cheer,
+.otto .otto-juggle {
+  transform-origin: 100px 120px;
+  animation: otto-bob 1.8s ease-in-out infinite;
+}
+@keyframes otto-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes otto-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1.5deg); }
+}
+@keyframes otto-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-16deg); }
+}
+@keyframes otto-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .otto * { animation: none !important; }
 }
 
 @keyframes logo-dot {

@@ -23,7 +23,8 @@
     "samples:remove": "tsx scripts/remove-samples.ts",
     "i18n:check": "tsx scripts/check-translations.ts",
     "postinstall": "prisma generate",
-    "check:contrast": "tsx scripts/check-contrast.ts"
+    "check:contrast": "tsx scripts/check-contrast.ts",
+    "brand": "tsx --tsconfig tsconfig.scripts.json scripts/make-brand.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
