@@ -80,7 +80,21 @@ const PAGES = [
   { name: "06-test", url: openDrill, auth: true },
   { name: "07-results", url: resultsUrl, auth: true },
   { name: "08-not-found", url: url("/this-page-does-not-exist"), auth: false },
+  { name: "09-history", url: url("/history"), auth: true },
+  { name: "10-analytics", url: url("/analytics"), auth: true },
+  { name: "11-mistakes", url: url("/review"), auth: true },
+  { name: "12-question-bank", url: url("/question-bank"), auth: true },
+  // The drill question after checking a (likely wrong) answer: feedback state.
+  { name: "13-feedback", url: openDrill, auth: true, action: checkLastChoice },
 ];
+
+async function checkLastChoice(page) {
+  const radios = page.getByRole("radio");
+  if (await radios.count()) await radios.last().check({ force: true });
+  else await page.getByLabel(/Your answer/).fill("1");
+  await page.getByRole("button", { name: /Check answer/ }).click();
+  await page.getByRole("status").filter({ hasText: /Correct|Incorrect/ }).first().waitFor({ timeout: 10000 }).catch(() => {});
+}
 
 for (const v of VARIANTS) {
   for (const auth of [false, true]) {
@@ -96,6 +110,7 @@ for (const v of VARIANTS) {
     for (const p of PAGES.filter((x) => x.auth === auth)) {
       await page.goto(p.url, { waitUntil: "networkidle" });
       await dismissCookies(page);
+      if (p.action) await p.action(page).catch(() => {});
       await page.waitForTimeout(1500);
       await page.screenshot({ path: path.join(OUT, `${p.name}-${v.name}.png`) });
     }
