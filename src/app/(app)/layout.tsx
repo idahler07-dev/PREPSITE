@@ -40,6 +40,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const items: ShellItem[] = [
     { key: "dashboard", href: "/dashboard", label: t("dashboard"), group: "main" },
     { key: "practice", href: "/practice", label: t("practice"), group: "main" },
+    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "main" },
     { key: "mocks", href: "/mocks", label: t("mockTests"), group: "main" },
     { key: "mistakes", href: "/review", label: t("mistakes"), group: "main" },
     { key: "analytics", href: "/analytics", label: t("analytics"), group: "main" },

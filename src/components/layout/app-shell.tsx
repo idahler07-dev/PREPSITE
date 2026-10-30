@@ -12,6 +12,7 @@ import {
   History,
   LayoutDashboard,
   Library,
+  ListChecks,
   MoreHorizontal,
   NotebookPen,
   PanelLeftClose,
@@ -44,6 +45,7 @@ const ICONS: Record<string, LucideIcon> = {
   admin: Shield,
   mistakes: NotebookPen,
   analytics: BarChart3,
+  bank: ListChecks,
 };
 
 export interface ShellItem {

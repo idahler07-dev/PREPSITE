@@ -69,9 +69,15 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                 <Link href="/review">{t("reviewMistakes")}</Link>
               </Button>
             )}
-            <Button asChild>
-              <Link href="/practice">{t("practiceAgain")}</Link>
-            </Button>
+            {r.returnTo ? (
+              <Button asChild>
+                <Link href={r.returnTo}>{t("backToBank")}</Link>
+              </Button>
+            ) : (
+              <Button asChild>
+                <Link href="/practice">{t("practiceAgain")}</Link>
+              </Button>
+            )}
           </>
         }
       />

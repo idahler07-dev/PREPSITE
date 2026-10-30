@@ -359,8 +359,9 @@ export function TestRunner({
       {/* Top bar: exit and title | timer | tools. The timer stays centered. */}
       <header className="grid h-14 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b bg-surface px-2 sm:px-4">
         <div className="flex min-w-0 items-center gap-1">
-          <Button variant="ghost" size="sm" onClick={() => setConfirmExit(true)} aria-label={t("tools.exit")} className="shrink-0">
-            <LogOut aria-hidden /> <span className="hidden sm:inline">{t("exit")}</span>
+          <Button variant="ghost" size="sm" onClick={() => setConfirmExit(true)} aria-label={initial.returnTo ? t("backToBank") : t("tools.exit")} className="shrink-0">
+            {initial.returnTo ? <ChevronLeft aria-hidden /> : <LogOut aria-hidden />}
+            <span className="hidden sm:inline">{initial.returnTo ? t("backToBank") : t("exit")}</span>
           </Button>
           <h1 className="hidden min-w-0 truncate text-sm font-semibold sm:block">{title}</h1>
         </div>
@@ -615,7 +616,7 @@ export function TestRunner({
             <AlertDialogAction
               onClick={async () => {
                 await autosave.flush();
-                router.push("/practice");
+                router.push(initial.returnTo ?? "/practice");
               }}
             >
               {t("exitConfirm.leave")}

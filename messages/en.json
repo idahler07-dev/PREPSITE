@@ -52,7 +52,10 @@
     "sample": "Sample",
     "sampleHint": "Development sample — removed before launch",
     "skipToContent": "Skip to main content",
-    "sizeMb": "{value} MB"
+    "sizeMb": "{value} MB",
+    "errorTitle": "Something went wrong",
+    "errorBody": "This page couldn’t load. Check your connection and try again.",
+    "tryAgain": "Try again"
   },
   "nav": {
     "home": "Home",
@@ -80,7 +83,8 @@
     "mistakes": "Mistakes",
     "analytics": "Analytics",
     "mockTests": "Mock tests",
-    "manage": "Manage"
+    "manage": "Manage",
+    "questionBank": "Question bank"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -676,7 +680,8 @@
       "whyNot": "Why {choice} isn’t right",
       "explainDifferently": "Explain differently",
       "askFollowUp": "Ask a follow-up"
-    }
+    },
+    "backToBank": "Back to bank"
   },
   "results": {
     "title": "Results",
@@ -736,7 +741,8 @@
         "easier": "Module 2 was the easier one, which limits the highest possible score."
       }
     },
-    "reviewMistakes": "Review mistakes"
+    "reviewMistakes": "Review mistakes",
+    "backToBank": "Back to question bank"
   },
   "history": {
     "title": "Practice history",
@@ -1922,5 +1928,62 @@
     "empty": "Answer a few questions and your analytics will appear here.",
     "emptyCta": "Start your first drill",
     "answered": "{count, plural, one {# answer} other {# answers}}"
+  },
+  "bank": {
+    "title": "Question bank",
+    "description": "Every published question, with your own results. Filter, then practise exactly what you need.",
+    "sections": {
+      "RW": "Reading and Writing",
+      "MATH": "Math"
+    },
+    "search": "Search questions or IDs",
+    "allDomains": "All domains",
+    "allSkills": "All skills",
+    "domain": "Domain",
+    "skill": "Skill",
+    "difficulty": "Difficulty",
+    "allDifficulties": "All",
+    "status": "Status",
+    "allStatuses": "All",
+    "statuses": {
+      "unattempted": "Unattempted",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "flagged": "Flagged"
+    },
+    "sort": "Sort",
+    "sorts": {
+      "difficulty": "Easy to hard",
+      "newest": "Newest",
+      "missed": "Most missed"
+    },
+    "filters": "Filters",
+    "clear": "Clear filters",
+    "showResults": "{count, plural, =0 {No questions} one {Show # question} other {Show # questions}}",
+    "count": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+    "columns": {
+      "id": "ID",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "question": "Question",
+      "status": "Status",
+      "time": "Last time"
+    },
+    "practiceThese": "Practice these",
+    "practiceMistakes": "Practice my mistakes",
+    "practiceHint": "Practice these starts a drill with the questions on this page (up to 20).",
+    "progress": "{attempted} of {total} done · {correct} correct",
+    "progressLabel": "{domain}: {attempted} of {total} answered, {correct} correct",
+    "empty": {
+      "title": "Nothing matches",
+      "body": "Try another skill or difficulty, or clear the filters."
+    },
+    "noMistakes": "No mistakes here yet. Nice work.",
+    "open": "Practise {id}",
+    "pageOf": "Page {page} of {pages}",
+    "previous": "Previous",
+    "next": "Next",
+    "flagged": "Flagged",
+    "spr": "Typed answer"
   }
 }
