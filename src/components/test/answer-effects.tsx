@@ -57,8 +57,24 @@ export function DrawCheck({ className = "size-5" }: { className?: string }) {
   );
 }
 
-/** Wrong answer: a gentle spring shake (none with reduced motion). */
-export const shake = {
-  animate: { x: [0, -7, 7, -4, 4, 0] },
-  transition: { duration: 0.42, ease: "easeOut" as const },
-};
+/** Wrong pick: the cross draws itself in (two strokes, one after the other). No shaking. */
+export function DrawX({ className = "size-5" }: { className?: string }) {
+  const reduce = useReducedMotion();
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      {["M6.5 6.5l11 11", "M17.5 6.5l-11 11"].map((d, i) => (
+        <m.path
+          key={d}
+          d={d}
+          fill="none"
+          strokeWidth={3}
+          strokeLinecap="round"
+          className="stroke-danger-ink"
+          initial={reduce ? false : { pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={reduce ? { duration: 0 } : { ...spring.soft, delay: 0.05 + i * 0.12 }}
+        />
+      ))}
+    </svg>
+  );
+}

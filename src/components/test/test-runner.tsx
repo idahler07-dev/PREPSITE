@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Highlighter, Loader2, LogOut, NotebookPen, Wifi, WifiOff, CheckCircle2, XCircle } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Highlighter, Loader2, LogOut, MessageCircle, NotebookPen, Sparkles, Wifi, WifiOff } from "lucide-react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
+import { spring } from "@/lib/motion";
+import { DrawCheck, DrawX } from "./answer-effects";
 import { useRouter } from "@/i18n/navigation";
 import type { RunnerItem, RunnerState } from "@/server/attempts/service";
 import { testStructure } from "@/config/test-structure";
@@ -164,12 +167,16 @@ export function TestRunner({
   // Time on the current question, counted only while the page is visible.
   const timeAcc = useRef(0);
   const lastTick = useRef<number>(0);
+  // Time per question including what's not yet saved, for the feedback strip.
+  const spent = useRef<Record<number, number>>(Object.fromEntries(initial.items.map((i) => [i.position, i.timeSpentMs])));
+  const [checkedTime, setCheckedTime] = useState<Record<number, number>>({});
   useEffect(() => {
     lastTick.current = performance.now();
     timeAcc.current = 0;
     const pos = items[index]?.position;
     const commit = () => {
       if (pos === undefined || timeAcc.current < 500) return;
+      spent.current[pos] = (spent.current[pos] ?? 0) + Math.round(timeAcc.current);
       autosave.queue({ position: pos, timeDeltaMs: Math.round(timeAcc.current) });
       timeAcc.current = 0;
     };
@@ -250,6 +257,7 @@ export function TestRunner({
       });
       if (!res.ok) throw new Error(String(res.status));
       const feedback = (await res.json()) as Feedback;
+      setCheckedTime((prev) => ({ ...prev, [item.position]: (spent.current[item.position] ?? 0) + timeAcc.current }));
       setItems((prev) => prev.map((it) => (it.position === item.position ? { ...it, feedback } : it)));
     } catch {
       toast.error(c("networkError"));
@@ -417,7 +425,7 @@ export function TestRunner({
           </div>
         ) : (
           // Keyed by question so both panes start at the top for each question.
-          <div key={item.position} className={cn("grid lg:h-full", item.passageHtml ? "lg:grid-cols-2 lg:divide-x" : "")}>
+          <div key={item.position} className={cn("grid grid-cols-[minmax(0,1fr)] lg:h-full", item.passageHtml && "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:divide-x")}>
             {item.passageHtml && (
               <section aria-label={t("passage")} className="border-b bg-surface p-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
                 <div className="mb-3 flex flex-wrap items-center gap-1">
@@ -501,7 +509,9 @@ export function TestRunner({
 
                 {immediate && !item.feedback && aiEnabled && <AiTutor key={`hint-${item.position}`} attemptId={attemptId} questionId={item.questionId} answered={false} wrongChoice={false} />}
 
-                {item.feedback && <FeedbackPanel item={item} feedback={item.feedback} attemptId={attemptId} aiEnabled={aiEnabled} />}
+                {item.feedback && (
+                  <FeedbackPanel item={item} feedback={item.feedback} timeMs={checkedTime[item.position] ?? item.timeSpentMs} attemptId={attemptId} aiEnabled={aiEnabled} />
+                )}
               </div>
             </section>
           </div>
@@ -611,40 +621,116 @@ export function TestRunner({
   );
 }
 
-function FeedbackPanel({ item, feedback, attemptId, aiEnabled }: { item: RunnerItem; feedback: Feedback; attemptId: string; aiEnabled: boolean }) {
-  const t = useTranslations("test");
+function formatTime(ms: number) {
+  const sec = Math.max(0, Math.round(ms / 1000));
+  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+}
+
+/**
+ * After "Check answer": a slim result strip springs in (the choice cards
+ * already show the check or cross), then a neutral explanation card expands
+ * with numbered steps, and the follow-up actions sit underneath.
+ */
+function FeedbackPanel({ item, feedback, timeMs, attemptId, aiEnabled }: { item: RunnerItem; feedback: Feedback; timeMs: number; attemptId: string; aiEnabled: boolean }) {
+  const t = useTranslations("test.feedback");
+  const tt = useTranslations("test");
+  const reduce = useReducedMotion();
+  const [open, setOpen] = useState(true);
+  const [tutor, setTutor] = useState<"another" | "followUp" | null>(null);
+  const answers = feedback.correctAnswers.join(", ");
+  const wrongChoice = item.type === "MCQ" && !!item.answer && !feedback.isCorrect;
   return (
-    <div
-      role="status"
-      className={cn("relative space-y-3 rounded-[14px] border-2 p-4", feedback.isCorrect ? "border-correct bg-correct-soft" : "border-danger bg-danger-soft")}
-    >
-      {feedback.isCorrect && <MascotCheerPop />}
-      <p className="flex items-center gap-2 font-semibold">
-        {feedback.isCorrect ? <CheckCircle2 className="size-5 text-correct-ink" aria-hidden /> : <XCircle className="size-5 text-danger-ink" aria-hidden />}
-        {feedback.isCorrect ? t("correct") : t("incorrect")}
-      </p>
-      {!feedback.isCorrect && (
-        <p className="text-sm">
-          {item.type === "SPR"
-            ? t("acceptedAnswers", { answers: feedback.correctAnswers.join(", ") })
-            : t("correctAnswerIs", { answer: feedback.correctAnswers.join(", ") })}
-        </p>
-      )}
-      {feedback.rationaleHtml && <RichText html={feedback.rationaleHtml} className="text-sm" />}
-      <div className="border-t border-foreground/10 pt-3">
-        <h3 className="mb-1 text-sm font-semibold">{t("explanation")}</h3>
-        {feedback.explanationHtml ? <RichText html={feedback.explanationHtml} className="text-sm" /> : <p className="text-sm text-muted-foreground">{t("noExplanation")}</p>}
+    <div className="space-y-3">
+      <m.div
+        role="status"
+        initial={reduce ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={reduce ? { duration: 0.15 } : spring.bouncy}
+        className="relative flex min-h-11 flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border bg-surface-2 px-3.5 py-2 text-small"
+      >
+        {feedback.isCorrect && <MascotCheerPop />}
+        <span className={cn("flex items-center gap-1.5 font-semibold", feedback.isCorrect ? "text-correct-ink" : "text-danger-ink")}>
+          {feedback.isCorrect ? <DrawCheck className="size-4" /> : <DrawX className="size-4" />}
+          {feedback.isCorrect ? t("correct") : t("incorrect")}
+        </span>
+        {!feedback.isCorrect && (
+          <span className="text-foreground">
+            <span aria-hidden className="me-3 text-muted-foreground">
+              ·
+            </span>
+            {item.type === "SPR" ? t("acceptedAnswers", { answers }) : t("correctAnswer", { answer: answers })}
+          </span>
+        )}
+        <span className="ms-auto font-mono text-xs text-muted-foreground tabular-nums" title={t("time", { time: formatTime(timeMs) })}>
+          <span className="sr-only">{t("time", { time: formatTime(timeMs) })}</span>
+          <span aria-hidden>{formatTime(timeMs)}</span>
+        </span>
+      </m.div>
+
+      <section className="overflow-hidden rounded-2xl border bg-surface">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          className="flex w-full items-center justify-between gap-2 px-4 py-3 text-start font-semibold focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none"
+        >
+          {t("explanation")}
+          <ChevronDown className={cn("size-4 text-muted-foreground transition-transform duration-200", open && "rotate-180")} aria-hidden />
+        </button>
+        <AnimatePresence initial={false}>
+          {open && (
+            <m.div
+              key="body"
+              initial={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
+              animate={reduce ? { opacity: 1 } : { height: "auto", opacity: 1 }}
+              exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
+              transition={reduce ? { duration: 0.15 } : { ...spring.soft, delay: 0.12 }}
+            >
+              <div className="space-y-4 border-t px-4 py-4">
+                {feedback.rationaleHtml && (
+                  <div className="rounded-xl bg-surface-2 p-3">
+                    <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("whyNot", { choice: item.answer ?? "" })}</p>
+                    <RichText html={feedback.rationaleHtml} className="text-small" />
+                  </div>
+                )}
+                {feedback.explanationHtml ? (
+                  <RichText html={feedback.explanationHtml} className="explain-steps text-small" />
+                ) : (
+                  <p className="text-small text-muted-foreground">{tt("noExplanation")}</p>
+                )}
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </section>
+
+      <div className="flex flex-wrap items-center gap-2">
+        {aiEnabled && (
+          <>
+            <Button variant={tutor === "another" ? "secondary" : "outline"} size="sm" onClick={() => setTutor("another")}>
+              <Sparkles aria-hidden /> {t("explainDifferently")}
+            </Button>
+            <Button variant={tutor === "followUp" ? "secondary" : "outline"} size="sm" onClick={() => setTutor("followUp")}>
+              <MessageCircle aria-hidden /> {t("askFollowUp")}
+            </Button>
+          </>
+        )}
+        <span className="ms-auto">
+          <ReportDialog attemptId={attemptId} questionId={item.questionId} />
+        </span>
       </div>
-      {aiEnabled && (
+
+      {aiEnabled && tutor && (
         <AiTutor
-          key={`explain-${item.position}`}
+          key={`${tutor}-${item.position}`}
           attemptId={attemptId}
           questionId={item.questionId}
           answered
-          wrongChoice={item.type === "MCQ" && !!item.answer && !feedback.isCorrect}
+          wrongChoice={wrongChoice}
+          autoStart={tutor === "another" ? (wrongChoice ? "whyWrong" : "another") : "explain"}
+          focusFollowUp={tutor === "followUp"}
         />
       )}
-      <ReportDialog attemptId={attemptId} questionId={item.questionId} />
     </div>
   );
 }

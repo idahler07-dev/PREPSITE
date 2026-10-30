@@ -659,7 +659,18 @@
     "sprPlaceholder": "Type here",
     "sprEmptyPreview": "Your answer will appear here",
     "crossOutShort": "Cross out",
-    "difficultyChip": "{level} difficulty"
+    "difficultyChip": "{level} difficulty",
+    "feedback": {
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "correctAnswer": "Correct answer: {answer}",
+      "acceptedAnswers": "Accepted: {answers}",
+      "time": "Time on question: {time}",
+      "explanation": "Explanation",
+      "whyNot": "Why {choice} isn’t right",
+      "explainDifferently": "Explain differently",
+      "askFollowUp": "Ask a follow-up"
+    }
   },
   "results": {
     "title": "Results",

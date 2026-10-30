@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence } from "motion/react";
-import { RotateCcw, X } from "lucide-react";
-import { DrawCheck, RadialFill } from "./answer-effects";
+import { RotateCcw } from "lucide-react";
+import { DrawCheck, DrawX, RadialFill } from "./answer-effects";
 import { RichText } from "@/components/content/rich-text";
 import { cn } from "@/lib/utils";
 
@@ -93,7 +93,11 @@ export function ChoiceList({
                   <DrawCheck />
                 </span>
               )}
-              {wrongPick && <X className="relative size-5 shrink-0 text-danger-ink" aria-label={t("incorrect")} />}
+              {wrongPick && (
+                <span className="relative shrink-0" role="img" aria-label={t("incorrect")}>
+                  <DrawX />
+                </span>
+              )}
             </label>
             {!disabled && (
               <button

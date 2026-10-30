@@ -572,6 +572,40 @@ html {
   font-size: 1.08em;
 }
 
+/* Long inline math scrolls inside the explanation instead of widening the page. */
+.explain-steps > p,
+.explain-steps > ol,
+.explain-steps > ul {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Explanations: when there are two or more paragraphs, they read as numbered steps. */
+.explain-steps:has(> p + p) {
+  counter-reset: step;
+}
+.explain-steps:has(> p + p) > p {
+  counter-increment: step;
+  position: relative;
+  padding-inline-start: 2.25rem;
+  min-height: 1.5rem;
+}
+.explain-steps:has(> p + p) > p::before {
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.05em;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 /* Test passages stay plain and exam-like: the UI sans, no decorative emphasis. */
 .passage {
   font-family: var(--font-sans);

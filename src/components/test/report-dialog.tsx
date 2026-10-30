@@ -22,7 +22,7 @@ export function ReportDialog({ attemptId, questionId }: { attemptId: string; que
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
           <Flag aria-hidden /> {t("button")}
         </Button>
       </DialogTrigger>
