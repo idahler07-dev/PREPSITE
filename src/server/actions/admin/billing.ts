@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireApiRole } from "@/server/auth/session";
+import { requireApiOwner } from "@/server/auth/session";
 import { HttpError } from "@/server/http";
 import { audit } from "@/server/audit";
 import { getProvider } from "@/server/payments";
@@ -22,12 +22,10 @@ async function run<T>(fn: () => Promise<T>): Promise<Result<T>> {
   }
 }
 
-const ADMIN = ["ADMIN"] as const;
-
 /** Refund through the provider; Payme (and Click without API access) are refunded in the provider's cabinet. */
 export async function refundOrder(orderId: string) {
   return run(async () => {
-    const admin = await requireApiRole(ADMIN);
+    const admin = await requireApiOwner();
     const order = await db.order.findUnique({ where: { id: z.string().max(40).parse(orderId) } });
     if (!order || order.status !== "PAID") throw new HttpError(409, "NOT_REFUNDABLE");
     if (order.provider === "free") {
@@ -40,7 +38,7 @@ export async function refundOrder(orderId: string) {
     if (result === "refunded") await markRefunded(order.id, admin.id);
     else await db.order.update({ where: { id: order.id }, data: { refundRequestedAt: new Date() } });
     await audit(admin.id, `order.refund.${result}`, "Order", order.id, { provider: order.provider });
-    revalidatePath("/[locale]/admin/orders", "page");
+    revalidatePath("/manage/orders", "page");
     return result;
   });
 }
@@ -48,9 +46,9 @@ export async function refundOrder(orderId: string) {
 /** After refunding in a provider's cabinet when its callback didn't arrive. */
 export async function markOrderRefundedManually(orderId: string) {
   return run(async () => {
-    const admin = await requireApiRole(ADMIN);
+    const admin = await requireApiOwner();
     if (!(await markRefunded(z.string().max(40).parse(orderId), admin.id))) throw new HttpError(409, "NOT_REFUNDABLE");
-    revalidatePath("/[locale]/admin/orders", "page");
+    revalidatePath("/manage/orders", "page");
     return null;
   });
 }
@@ -71,7 +69,7 @@ const promoSchema = z
 
 export async function createPromo(raw: unknown) {
   return run(async () => {
-    const admin = await requireApiRole(ADMIN);
+    const admin = await requireApiOwner();
     const p = promoSchema.parse(raw);
     if (await db.promoCode.findUnique({ where: { code: p.code } })) throw new HttpError(409, "CODE_TAKEN");
     const promo = await db.promoCode.create({
@@ -87,17 +85,17 @@ export async function createPromo(raw: unknown) {
       },
     });
     await audit(admin.id, "promo.create", "PromoCode", promo.id, { code: promo.code });
-    revalidatePath("/[locale]/admin/promos", "page");
+    revalidatePath("/manage/promos", "page");
     return null;
   });
 }
 
 export async function setPromoActive(id: string, active: boolean) {
   return run(async () => {
-    const admin = await requireApiRole(ADMIN);
+    const admin = await requireApiOwner();
     await db.promoCode.update({ where: { id: z.string().max(40).parse(id) }, data: { active } });
     await audit(admin.id, active ? "promo.activate" : "promo.deactivate", "PromoCode", id, {});
-    revalidatePath("/[locale]/admin/promos", "page");
+    revalidatePath("/manage/promos", "page");
     return null;
   });
 }
@@ -107,12 +105,12 @@ const grantSchema = z.object({ email: z.string().trim().toLowerCase().email(), d
 /** Free premium days for a student (scholarship, apology, staff testing). */
 export async function grantPremium(raw: unknown) {
   return run(async () => {
-    const admin = await requireApiRole(ADMIN);
+    const admin = await requireApiOwner();
     const g = grantSchema.parse(raw);
     const user = await db.user.findUnique({ where: { email: g.email }, select: { id: true } });
     if (!user) throw new HttpError(404, "USER_NOT_FOUND");
     await grantDays(user.id, g.days, admin.id, g.note);
-    revalidatePath("/[locale]/admin/orders", "page");
+    revalidatePath("/manage/orders", "page");
     return null;
   });
 }

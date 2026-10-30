@@ -34,7 +34,7 @@ export function VocabForm({ id, initial = EMPTY }: { id: string | null; initial?
           if (res.ok) {
             toast.success(t("saved"));
             if (!id) setV(EMPTY);
-            router.push("/admin/vocab");
+            router.push("/manage/vocab");
             router.refresh();
           } else toast.error(res.error === "DUPLICATE" ? t("duplicate") : t("invalid"));
         });

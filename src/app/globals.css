@@ -90,12 +90,20 @@
   --dot-color: rgb(14 18 34 / 0.09);
   --mesh-opacity: 0.55;
 
-  /* Otto, the mascot: same character in both themes, a touch brighter in dark. */
-  --otto-body: #2747f5;
-  --otto-belly: #7f95ff;
-  --otto-accent: #ff6b4a;
-  --otto-eye: #ffffff;
-  --otto-ink: #0e1222;
+  /* Charts: correct / incorrect series (validated with the dataviz palette checks against each surface). */
+  --chart-correct: #12b886;
+  --chart-incorrect: #e5484d;
+
+  /* Pip, the mascot: a lilac highlighter with a cobalt cap. A touch brighter in dark. */
+  --mascot-body: #a897ff;
+  --mascot-light: #d3c9ff;
+  --mascot-dark: #7a66f2;
+  --mascot-cap: #2747f5;
+  --mascot-cap-light: #5c76ff;
+  --mascot-cap-dark: #1c32c4;
+  --mascot-accent: #ff6b4a;
+  --mascot-eye: #ffffff;
+  --mascot-ink: #0e1222;
 }
 
 .dark {
@@ -147,9 +155,15 @@
   --overlay: rgb(3 5 12 / 0.6);
   --dot-color: rgb(238 240 250 / 0.07);
   --mesh-opacity: 0.4;
-  --otto-body: #4a66ff;
-  --otto-belly: #93a6ff;
-  --otto-accent: #ff8a6e;
+  --chart-correct: #26ad83;
+  --chart-incorrect: #f2585e;
+  --mascot-body: #b3a4ff;
+  --mascot-light: #ddd5ff;
+  --mascot-dark: #846ff7;
+  --mascot-cap: #4a66ff;
+  --mascot-cap-light: #7f95ff;
+  --mascot-cap-dark: #2a3fd6;
+  --mascot-accent: #ff8a6e;
 }
 
 @theme inline {
@@ -245,7 +259,7 @@
   --shadow-md: var(--elev-md);
   --shadow-lg: var(--elev-lg);
 
-  --animate-logo-dot: logo-dot 520ms cubic-bezier(0.34, 1.6, 0.64, 1);
+  --animate-logo-dot: logo-dot 400ms cubic-bezier(0.34, 1.6, 0.64, 1);
 }
 
 @layer base {
@@ -371,65 +385,54 @@
   pointer-events: none;
 }
 
-/* Otto's idle loops (off with reduced motion via the global rule). */
-.otto .otto-blink {
+/* Pip's idle loops (off with reduced motion via the global rule). */
+.mascot .mascot-blink {
   transform-box: fill-box;
   transform-origin: center;
-  animation: otto-blink 5.5s infinite;
+  animation: mascot-blink 5.5s infinite;
 }
-.otto .otto-wiggle path {
-  transform-box: view-box;
+.mascot .mascot-wave {
+  animation: mascot-wave 1.6s ease-in-out infinite;
 }
-.otto .otto-wiggle {
-  transform-origin: 100px 132px;
-  animation: otto-wiggle 4s ease-in-out infinite;
+.mascot .mascot-cheer,
+.mascot .mascot-juggle {
+  transform-origin: 100px 110px;
+  animation: mascot-bob 1.8s ease-in-out infinite;
 }
-.otto .otto-wave {
-  animation: otto-wave 1.6s ease-in-out infinite;
+.mascot .mascot-pose {
+  animation: mascot-fade 180ms ease-out;
 }
-.otto .otto-cheer,
-.otto .otto-juggle {
-  transform-origin: 100px 120px;
-  animation: otto-bob 1.8s ease-in-out infinite;
+.mascot.mascot-react {
+  transition: transform 400ms cubic-bezier(0.34, 1.6, 0.64, 1);
 }
-.otto .otto-pose {
-  animation: otto-fade 180ms ease-out;
-}
-.otto.otto-react {
-  transition: transform 450ms cubic-bezier(0.34, 1.6, 0.64, 1);
-}
-.otto.otto-react:hover {
+.mascot.mascot-react:hover {
   transform: scale(1.04) rotate(-3deg);
 }
-@keyframes otto-fade {
+@keyframes mascot-fade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes otto-blink {
+@keyframes mascot-blink {
   0%, 92%, 100% { transform: scaleY(1); }
   95% { transform: scaleY(0.1); }
 }
-@keyframes otto-wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(1.5deg); }
-}
-@keyframes otto-wave {
+@keyframes mascot-wave {
   0%, 100% { transform: rotate(0deg); }
   50% { transform: rotate(-16deg); }
 }
-@keyframes otto-bob {
+@keyframes mascot-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .otto * { animation: none !important; }
-  .otto.otto-react:hover { transform: none; }
+  .mascot * { animation: none !important; }
+  .mascot.mascot-react:hover { transform: none; }
 }
 
 /* Hero headline: words rise in one by one with CSS (paints immediately, no JS needed). */
 .hero-word {
   display: inline-block;
-  animation: hero-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: hero-rise 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(80ms + var(--i, 0) * 40ms);
 }
 @keyframes hero-rise {
@@ -446,7 +449,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-word {
-    animation: otto-fade 200ms ease-out both;
+    animation: mascot-fade 200ms ease-out both;
   }
 }
 
@@ -562,6 +565,53 @@ html {
   border-radius: 2px;
   padding: 0 2px;
 }
+/* Question stem and answer text on the test screen. Sizes are em so the zoom control scales them. */
+.q-stem {
+  font-size: 1.0625em;
+  line-height: 1.65;
+}
+.q-text {
+  line-height: 1.55;
+}
+.q-stem .katex,
+.q-text .katex {
+  font-size: 1.08em;
+}
+
+/* Long inline math scrolls inside the explanation instead of widening the page. */
+.explain-steps > p,
+.explain-steps > ol,
+.explain-steps > ul {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Explanations: when there are two or more paragraphs, they read as numbered steps. */
+.explain-steps:has(> p + p) {
+  counter-reset: step;
+}
+.explain-steps:has(> p + p) > p {
+  counter-increment: step;
+  position: relative;
+  padding-inline-start: 2.25rem;
+  min-height: 1.5rem;
+}
+.explain-steps:has(> p + p) > p::before {
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.05em;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 /* Test passages stay plain and exam-like: the UI sans, no decorative emphasis. */
 .passage {
   font-family: var(--font-sans);

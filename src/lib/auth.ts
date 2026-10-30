@@ -65,16 +65,11 @@ function providers(): Provider[] {
       Credentials({
         id: "demo",
         name: "Demo",
-        credentials: { role: {} },
-        // Demo only: a fresh student per visit, or the shared demo admin.
-        async authorize(credentials) {
-          const admin = credentials?.role === "admin";
-          const email = admin ? "demo-admin@demo.local" : `demo-student-${crypto.randomUUID().slice(0, 8)}@demo.local`;
-          const user = await db.user.upsert({
-            where: { email },
-            create: { email, name: admin ? "Demo Admin" : "Demo Student", role: admin ? "ADMIN" : "STUDENT", onboardedAt: new Date() },
-            update: {},
-          });
+        credentials: {},
+        // Demo only: a fresh user per visit. Its email is never verified, so it can't be an owner.
+        async authorize() {
+          const email = `demo-student-${crypto.randomUUID().slice(0, 8)}@demo.local`;
+          const user = await db.user.create({ data: { email, name: "Demo Student", onboardedAt: new Date() } });
           return { id: user.id, name: user.name, email: user.email, image: null };
         },
       }),
@@ -128,7 +123,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   adapter: PrismaAdapter(db as unknown as Parameters<typeof PrismaAdapter>[0]),
   // JWT sessions are required for the Telegram (credentials) provider. Every
   // request still loads the user from the database (src/server/auth/session.ts),
-  // so deleted users and role changes take effect immediately.
+  // so deleted users and owner changes take effect immediately.
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   secret: env().AUTH_SECRET,
   trustHost: true,
@@ -156,10 +151,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
     async createUser({ user }) {
       if (user.id) await applyReferralFromCookie(user.id);
     },
-    async signIn({ user }) {
-      const email = user.email?.toLowerCase();
-      if (user.id && email && env().ADMIN_EMAILS.map((x) => x.toLowerCase()).includes(email)) {
-        await db.user.update({ where: { id: user.id }, data: { role: "ADMIN" } });
+    async signIn({ user, account, profile }) {
+      // Auth.js only marks emails verified for the email provider; Google tells us itself.
+      if (user.id && account?.provider === "google" && profile?.email_verified === true && profile.email?.toLowerCase() === user.email?.toLowerCase()) {
+        await db.user.updateMany({ where: { id: user.id, emailVerified: null }, data: { emailVerified: new Date() } });
       }
     },
   },

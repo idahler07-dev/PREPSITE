@@ -26,6 +26,7 @@ export function drillWhere(c: DrillConfig): Prisma.QuestionWhereInput {
   if (c.difficulties.length) and.push({ difficulty: { in: c.difficulties } });
   if (c.codeFrom) and.push({ code: { gte: c.codeFrom } });
   if (c.codeTo) and.push({ code: { lte: c.codeTo } });
+  if (c.questionIds.length) and.push({ id: { in: c.questionIds } });
   return { AND: and };
 }
 
@@ -50,10 +51,13 @@ export async function createDrill(userId: string, raw: unknown, kind: "DRILL" | 
   });
   await assertQuestionAllowance(userId, Math.min(config.count, candidates.length));
   const seed = randomInt(2 ** 31);
-  const picked = selectDrillQuestions(candidates, new Set(seenRows.map((r) => r.questionId)), config.count, {
-    unseenFirst: config.unseenFirst,
-    rand: seededRandom(seed),
-  });
+  const picked = config.questionIds.length
+    ? // Question bank: exactly the chosen questions, in the bank's order.
+      config.questionIds.flatMap((id) => candidates.filter((c) => c.id === id)).slice(0, config.count)
+    : selectDrillQuestions(candidates, new Set(seenRows.map((r) => r.questionId)), config.count, {
+        unseenFirst: config.unseenFirst,
+        rand: seededRandom(seed),
+      });
   const sections = new Set(picked.map((p) => p.section));
   const section = sections.size === 1 ? [...sections][0]! : null;
   const timeLimitSec = config.timed ? Math.round(picked.length * secondsPerQuestion(section ?? "MIXED")) : null;
@@ -144,8 +148,9 @@ export function feedbackFor(r: LoadedResponse) {
 export interface RunnerItem {
   position: number;
   questionId: string;
-  code: string;
   section: "RW" | "MATH";
+  /** Skill and difficulty, shown on practice screens only (never in practice tests). Question codes are never sent here. */
+  meta: { domain: string; skill: string; difficulty: "EASY" | "MEDIUM" | "HARD" } | null;
   type: "MCQ" | "SPR";
   passageHtml: string;
   stemHtml: string;
@@ -184,6 +189,10 @@ export interface RunnerState {
     ordinal: number;
   };
   items: RunnerItem[];
+  /** Saved Desmos state, if any (see saveCalculatorState). */
+  calculatorState: unknown;
+  /** Where "Back" leads (drills started from the question bank). */
+  returnTo: string | null;
 }
 
 /**
@@ -217,6 +226,8 @@ export async function getRunnerState(attemptId: string, userId: string): Promise
 
   const deadline = moduleDeadline(current);
   return {
+    calculatorState: attempt.calculatorState ?? null,
+    returnTo: returnToOf(attempt.config),
     id: attempt.id,
     kind: attempt.kind,
     status: attempt.status,
@@ -236,8 +247,8 @@ export async function getRunnerState(attemptId: string, userId: string): Promise
     items: current.responses.map((r) => ({
       position: r.position,
       questionId: r.questionId,
-      code: r.question.code,
       section: r.question.section,
+      meta: attempt.kind === "MOCK" ? null : { domain: r.question.domain, skill: r.question.skill, difficulty: r.question.difficulty },
       type: r.question.type,
       passageHtml: renderMarkdown(r.question.passage),
       stemHtml: renderMarkdown(r.question.stem),
@@ -419,7 +430,6 @@ export async function getResults(attemptId: string, userId: string) {
       moduleIndex: m.index,
       position: r.position,
       questionId: r.questionId,
-      code: r.question.code,
       section: r.question.section,
       domain: r.question.domain,
       skill: r.question.skill,
@@ -438,6 +448,7 @@ export async function getResults(attemptId: string, userId: string) {
   return {
     id: attempt.id,
     kind: attempt.kind,
+    returnTo: returnToOf(attempt.config),
     startedAt: attempt.startedAt,
     completedAt: attempt.completedAt,
     correct: attempt.correctCount ?? items.filter((i) => i.isCorrect).length,
@@ -447,4 +458,27 @@ export async function getResults(attemptId: string, userId: string) {
     modules: attempt.modules.map((m) => ({ index: m.index, section: m.section, moduleNumber: m.moduleNumber, variant: m.variant })),
     items,
   };
+}
+
+/** The validated "Back to bank" link stored in a drill's config, if any. */
+export function returnToOf(config: unknown): string | null {
+  const v = (config as { returnTo?: unknown } | null)?.returnTo;
+  return typeof v === "string" && /^\/question-bank(\?[^\s]*)?$/.test(v) ? v : null;
+}
+
+// ─── Calculator state ────────────────────────────────────────────────────────
+
+/** Largest Desmos state we keep per attempt (graphs with many expressions stay well under this). */
+const CALC_STATE_MAX_BYTES = 200_000;
+
+/** Save the Desmos calculator state with an attempt in progress. */
+export async function saveCalculatorState(attemptId: string, userId: string, state: unknown) {
+  const size = JSON.stringify(state ?? null).length;
+  if (size > CALC_STATE_MAX_BYTES) throw new HttpError(413, "TOO_LARGE");
+  if (state === null || typeof state !== "object" || Array.isArray(state)) throw new HttpError(400, "VALIDATION");
+  const attempt = await db.attempt.findUnique({ where: { id: attemptId }, select: { userId: true, status: true } });
+  if (!attempt || attempt.userId !== userId) throw new HttpError(404, "NOT_FOUND");
+  if (attempt.status !== "IN_PROGRESS") throw new HttpError(409, "NOT_IN_PROGRESS");
+  await db.attempt.update({ where: { id: attemptId }, data: { calculatorState: state as object } });
+  return { ok: true };
 }

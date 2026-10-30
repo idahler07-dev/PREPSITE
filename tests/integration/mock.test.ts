@@ -51,7 +51,7 @@ describe("full adaptive mock tests", () => {
 
   it("builds, publishes, routes module 2, takes a break and scores", async () => {
     await seedBank(10);
-    const admin = await makeUser("ADMIN");
+    const admin = await makeUser();
     const mock = await buildMockTest({ title: "Practice Test 1", sections: ["RW", "MATH"] }, { kind: "CURATED", createdById: admin.id });
     await expect(startMock(admin.id, { mockTestId: mock.id, scope: "full" })).rejects.toMatchObject({ status: 404 }); // still a draft
     await setMockStatus(mock.id, "PUBLISHED");
@@ -102,7 +102,7 @@ describe("full adaptive mock tests", () => {
 
   it("refuses to generate or publish a test the bank can't fill", async () => {
     await seedBank(1);
-    const admin = await makeUser("ADMIN");
+    const admin = await makeUser();
     const student = await makeUser();
     await expect(buildMockTest({ title: "x", sections: ["MATH"] }, { kind: "GENERATED", forUserId: student.id })).rejects.toMatchObject({ code: "NOT_ENOUGH_QUESTIONS" });
     const draft = await buildMockTest({ title: "x", sections: ["MATH"] }, { kind: "CURATED", createdById: admin.id });
@@ -111,7 +111,7 @@ describe("full adaptive mock tests", () => {
 
   it("saves highlights and notes only for questions in your own attempt", async () => {
     await seedBank(10);
-    const admin = await makeUser("ADMIN");
+    const admin = await makeUser();
     const mock = await buildMockTest({ title: "T", sections: ["RW"] }, { kind: "CURATED", createdById: admin.id });
     await setMockStatus(mock.id, "PUBLISHED");
     const student = await makeUser();

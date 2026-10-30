@@ -69,9 +69,15 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                 <Link href="/review">{t("reviewMistakes")}</Link>
               </Button>
             )}
-            <Button asChild>
-              <Link href="/practice">{t("practiceAgain")}</Link>
-            </Button>
+            {r.returnTo ? (
+              <Button asChild>
+                <Link href={r.returnTo}>{t("backToBank")}</Link>
+              </Button>
+            ) : (
+              <Button asChild>
+                <Link href="/practice">{t("practiceAgain")}</Link>
+              </Button>
+            )}
           </>
         }
       />
@@ -164,7 +170,6 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                     className={`size-5 ${!i.answer ? "text-muted-foreground" : i.isCorrect ? "text-success" : "text-destructive"}`}
                     aria-label={!i.answer ? tt("unanswered") : i.isCorrect ? tt("correct") : tt("incorrect")}
                   />
-                  <span className="font-mono">{i.code.toLowerCase()}</span>
                   <span className="text-muted-foreground">{tx(`skills.${i.skill as "INFERENCES"}`)}</span>
                   <span className="text-muted-foreground">{te(`difficulty.${i.difficulty}`)}</span>
                   {i.flagged && <Bookmark className="size-4 fill-flag text-flag" aria-label={t("flagged")} />}

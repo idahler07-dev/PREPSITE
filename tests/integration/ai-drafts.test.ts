@@ -46,7 +46,7 @@ describe("AI-drafted questions", () => {
   });
 
   it("drafts, checks independently and saves drafts that can't be published until a person saves them", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     ai.drafts = [
       mcq("GOOD: If $2x + 3 = 11$, what is $x$?", "B", "(11 - 3) / 2"),
       mcq("SOLVER: If $2x + 5 = 13$, what is $x$?", "B", "(13 - 5) / 2"),
@@ -78,7 +78,7 @@ describe("AI-drafted questions", () => {
   });
 
   it("uses our own published questions as style examples, never AI drafts or samples", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const base = { section: "MATH" as const, domain: "ALGEBRA", skill: "LINEAR_EQUATIONS_ONE_VARIABLE", difficulty: "EASY" as const, type: "SPR" as const, correctAnswers: ["2"], tags: [], flags: [], status: "PUBLISHED" as const };
     await db.question.create({ data: { ...base, code: "OWN-1", stem: "OUR-OWN-STYLE question", origin: "MANUAL", publishedAt: new Date() } });
     await db.question.create({ data: { ...base, code: "AI-OLD-1", stem: "OLD-AI-DRAFT question", origin: "AI_DRAFTED", publishedAt: new Date() } });
@@ -91,14 +91,14 @@ describe("AI-drafted questions", () => {
   });
 
   it("refuses without an API key and validates the request", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     await expect(requestDrafts({ ...request, skill: "TRANSITIONS" }, editor)).rejects.toThrow();
     ai.available = false;
     await expect(requestDrafts(request, editor)).rejects.toMatchObject({ code: "AI_UNAVAILABLE" });
   });
 
   it("records a failed batch", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     ai.drafts = "not an array" as never;
     const batch = await requestDrafts({ ...request, count: 1 }, editor);
     const done = await db.aiDraftBatch.findUniqueOrThrow({ where: { id: batch.id } });

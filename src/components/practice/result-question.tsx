@@ -56,7 +56,7 @@ export function ResultQuestion({
               choices={choices}
               value={answer}
               eliminated={[]}
-              eliminatorOn={false}
+             
               disabled
               correctAnswers={correctAnswers}
               onSelect={() => {}}

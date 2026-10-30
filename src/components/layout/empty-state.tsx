@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Mascot, type MascotPose } from "@/components/mascot/mascot";
 import { cn } from "@/lib/utils";
 
-/** Never a blank screen: an Otto pose, one sentence and one action. */
+/** Never a blank screen: an Pip pose, one sentence and one action. */
 export function EmptyState({ pose = "think", title, body, action, className }: { pose?: MascotPose; title?: ReactNode; body: ReactNode; action?: ReactNode; className?: string }) {
   return (
     <div className={cn("rounded-[20px] border border-dashed bg-surface px-6 py-12 text-center", className)}>

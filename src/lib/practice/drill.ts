@@ -24,6 +24,14 @@ export const drillConfigSchema = z
     timed: z.boolean().default(false),
     feedback: z.enum(["IMMEDIATE", "END"]).default("IMMEDIATE"),
     unseenFirst: z.boolean().default(true),
+    /** Exact questions, in this order (question bank). Other filters still apply, so only published questions are used. */
+    questionIds: z.array(z.string().max(40)).max(MAX_DRILL_QUESTIONS).default([]),
+    /** Where "Back" and the results page lead (only the question bank, so this can't be an open redirect). */
+    returnTo: z
+      .string()
+      .max(500)
+      .regex(/^\/question-bank(\?[^\s]*)?$/)
+      .nullish(),
   })
   .transform((c) => {
     // Drop domains/skills that don't belong to the chosen section, and skills outside chosen domains.

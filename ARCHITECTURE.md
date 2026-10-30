@@ -15,7 +15,7 @@ prisma/
 src/
   app/[locale]/(main)/      pages with the site header and footer
   app/[locale]/(focus)/     the full-screen test interface
-  app/[locale]/admin/       admin area (staff only)
+  app/manage/              Manage area (owners only, see OWNER_EMAILS)
   app/api/                  route handlers (auth, attempts, assets, admin uploads)
   components/               UI (components/ui = shadcn/ui primitives)
   config/test-structure.ts  sections, modules, question counts and times
@@ -31,7 +31,7 @@ tests/unit, tests/integration, tests/e2e
 
 ## Data model (main tables)
 
-- **User / Account / VerificationToken** — Auth.js tables plus role (`STUDENT`, `EDITOR`, `ADMIN`), language, theme, time zone and goal (test date, target and current score).
+- **User / Account / VerificationToken** — Auth.js tables (one kind of user, no roles) plus language, theme, time zone and goal (test date, target and current score).
 - **Source** — who owns a set of questions, the exact rights statement that was confirmed, who confirmed it and when. `withdrawnAt` is set when permission is withdrawn.
 - **SourceFile** — an original uploaded file (spreadsheet; PDFs in Phase 2) in private storage, with its SHA-256.
 - **ImportBatch** — one upload: defaults (section, difficulty, code prefix), the per-row analysis, and its own rights confirmation (every upload repeats it).
@@ -41,14 +41,14 @@ tests/unit, tests/integration, tests/e2e
 - **QuestionReport** — student error reports (one open report per student per question).
 - **Attempt → AttemptModule → Response** — any practice session. A drill is one module; a full test (Phase 3) has four. Each response stores the answer, flag, crossed-out choices, time spent and grading.
 - **RateLimit** — fixed-window counters (works across serverless instances).
-- **AuditLog** — admin actions (role changes, source withdrawal, imports, sample removal).
+- **AuditLog** — owner actions (source withdrawal, imports, sample removal).
 
 ## Request flow and authorization
 
 - `middleware.ts` picks the locale (URL prefix, then the `NEXT_LOCALE` cookie, then the browser language) and creates a nonce for the Content Security Policy.
-- Pages call `requireUser()` or `requireRole()` (`src/server/auth/session.ts`). Staff pages return **404** to everyone else, so the admin area can't be discovered.
-- Route handlers and server actions call `requireApiUser()` / `requireApiRole()`. State-changing route handlers also check the `Origin` header (`assertSameOrigin`); server actions get the same check from Next.js.
-- Sessions are JWTs (required for the Telegram provider), but every request loads the user from the database, so deleted accounts and role changes take effect immediately.
+- Pages call `requireUser()`, and every `/manage` page and layout calls `requireOwner()` (`src/server/auth/session.ts`). An owner is a user whose **verified** email is listed in `OWNER_EMAILS` (`src/server/auth/owner.ts`). Manage pages return **404** to everyone else, so the area can't be discovered.
+- Route handlers and server actions call `requireApiUser()`, or `requireApiOwner()` for `/api/manage/*` and `src/server/actions/admin/*` (404 for non-owners). State-changing route handlers also check the `Origin` header (`assertSameOrigin`); server actions get the same check from Next.js.
+- Sessions are JWTs (required for the Telegram provider), but every request loads the user from the database, so deleted accounts and owner changes take effect immediately.
 
 ## Authentication
 
@@ -70,19 +70,19 @@ Codes follow `questionCodes.format` in `site.config.ts` (default `{prefix}{domai
 ## Imports
 
 Spreadsheets (CSV or XLSX) go through two steps:
-1. **Upload** (`/api/admin/imports/spreadsheet`): rights confirmation required; the original file is stored privately with its hash; every row is validated and analysed (taxonomy, codes, flags, near-duplicates against the bank and within the file). Nothing is created yet.
+1. **Upload** (`/api/manage/imports/spreadsheet`): rights confirmation required; the original file is stored privately with its hash; every row is validated and analysed (taxonomy, codes, flags, near-duplicates against the bank and within the file). Nothing is created yet.
 2. **Confirm**: the batch is claimed (so a double click can't import twice), the stored file is re-read, and valid rows become `DRAFT` questions with full provenance and a first version. Rows with errors are skipped and listed.
 
 Images referenced by `image_url` are downloaded server-side only from public https addresses (private networks are refused), size-limited and type-checked by their bytes.
 
 ### PDF import
 
-1. **Upload** (`/api/admin/imports/pdf`): creates the batch (rights confirmation required) and one `SourceFile` per PDF, and returns upload targets. The browser uploads straight to storage (presigned PUT for S3/R2, `/api/admin/uploads/[fileId]` for local disk), then calls `/start`.
+1. **Upload** (`/api/manage/imports/pdf`): creates the batch (rights confirmation required) and one `SourceFile` per PDF, and returns upload targets. The browser uploads straight to storage (presigned PUT for S3/R2, `/api/manage/uploads/[fileId]` for local disk), then calls `/start`.
 2. **Jobs** (pg-boss, schema `pgboss`; see `JOBS_MODE`):
    - `pdf-import-prepare` checks each file (magic bytes, size, encryption, page count ≤ 400) and creates one `ImportPage` per page.
    - `pdf-import-page` renders the page to PNG (pdf.js + @napi-rs/canvas, `isEvalSupported: false`) and reads it: with `ANTHROPIC_API_KEY`, Claude reads the page image (structured JSON output validated with Zod; usage logged to `AiUsage`); otherwise the text layer is parsed (`src/lib/import/pdf-text.ts`). Scanned pages without a key fail with `NO_TEXT_LAYER`. Retryable AI errors are retried twice.
    - `pdf-import-finalize` (exclusive, claimed via status `FINALIZING`) merges questions split across pages, matches the answer key by number (in document order, so restarted numbering per module works), crops figures into `QuestionAsset`s, assigns codes, checks near-duplicates and creates `DRAFT` questions with `TAXONOMY_UNCONFIRMED` (blocking until a person confirms domain and skill).
-3. **Review**: `/admin/import/[batchId]/review` shows the original page image next to the editor.
+3. **Review**: `/manage/import/[batchId]/review` shows the original page image next to the editor.
 
 The AI is only asked to transcribe what is on the page; it never writes content.
 
@@ -155,7 +155,7 @@ next-intl with locale-prefixed URLs (`/en`, `/uz`, `/ru`). `src/i18n/locales.ts`
 ## Security measures in place
 
 - Per-request nonce CSP with `strict-dynamic`; `frame-ancestors 'none'`; HSTS, `nosniff`, referrer and permissions policies.
-- Server-side authorization on every page, action and route; staff areas return 404.
+- Server-side authorization on every page, action and route; the Manage area returns 404 to non-owners (`tests/integration/owner-access.test.ts`, `tests/e2e/owner.spec.ts`).
 - Zod validation on every input; Origin check on route handlers.
 - Postgres-backed rate limits on sign-in, uploads, imports, drill creation and reports.
 - Private storage only; files are served through authenticated routes (local) or short-lived signed URLs (S3/R2). Uploaded images are identified by their bytes, not the browser's claim; SVG is not accepted.

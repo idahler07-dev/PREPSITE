@@ -26,7 +26,7 @@ test("student pages", async ({ page }) => {
 });
 
 test("admin pages", async ({ page }) => {
-  await signIn(page, "admin@e2e.test");
+  await signIn(page, "owner@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
-  for (const url of ["/admin", "/admin/questions", "/admin/review", "/admin/import", "/admin/mocks", "/admin/orders", "/admin/analytics", "/admin/vocab"]) await check(page, url);
+  for (const url of ["/manage", "/manage/questions", "/manage/review", "/manage/import", "/manage/mocks", "/manage/orders", "/manage/analytics", "/manage/vocab"]) await check(page, url);
 });

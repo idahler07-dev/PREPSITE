@@ -59,7 +59,7 @@ export default async function MocksPage() {
                   {format.dateTime(a.startedAt, { dateStyle: "medium", timeStyle: "short" })}
                 </span>
                 <Button asChild size="sm">
-                  <Link href={`/test/${a.id}`}>{t("resume")}</Link>
+                  <a href={`/test/${a.id}`}>{t("resume")}</a>
                 </Button>
               </li>
             ))}

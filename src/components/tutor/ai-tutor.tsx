@@ -9,7 +9,7 @@ import { Mascot } from "@/components/mascot/mascot";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-type Mode = "hint" | "explain" | "whyWrong" | "another" | "simpler";
+export type Mode = "hint" | "explain" | "whyWrong" | "another" | "simpler";
 type Event = { type: "start"; cached: boolean } | { type: "delta"; text: string } | { type: "flagged" } | { type: "done"; remaining: number | null } | { type: "error"; code: string };
 
 const MAX_CHARS = 600;
@@ -56,7 +56,23 @@ async function readEvents(res: Response, onEvent: (e: Event) => void) {
  * AI tutor for one question. Before the question is answered (drills only) it
  * offers a hint; afterwards, explanations in several styles and follow-ups.
  */
-export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { attemptId: string; questionId: string; answered: boolean; wrongChoice: boolean }) {
+export function AiTutor({
+  attemptId,
+  questionId,
+  answered,
+  wrongChoice,
+  autoStart,
+  focusFollowUp = false,
+}: {
+  attemptId: string;
+  questionId: string;
+  answered: boolean;
+  wrongChoice: boolean;
+  /** Ask for this explanation as soon as the tutor opens. */
+  autoStart?: Mode;
+  /** Put the cursor in the follow-up box once the first answer is in. */
+  focusFollowUp?: boolean;
+}) {
   const t = useTranslations("tutor");
   const locale = useLocale();
   const [mode, setMode] = useState<Mode | null>(null);
@@ -68,6 +84,8 @@ export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { atte
   const [chat, setChat] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [draft, setDraft] = useState("");
   const live = useRef<HTMLDivElement>(null);
+  const followUp = useRef<HTMLTextAreaElement>(null);
+  const started = useRef(false);
 
   async function call(url: string, body: object, onText: (chunk: string) => void) {
     setBusy(true);
@@ -116,6 +134,17 @@ export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { atte
     );
     if (!ok) setChat((c) => (c.at(-1)?.content ? c : c.slice(0, -2)));
   }
+
+  useEffect(() => {
+    if (autoStart && !started.current) {
+      started.current = true;
+      void ask(autoStart);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart]);
+  useEffect(() => {
+    if (focusFollowUp && text && !busy && !flagged) followUp.current?.focus();
+  }, [focusFollowUp, text, busy, flagged]);
 
   const modes: Mode[] = answered ? ["explain", ...(wrongChoice ? (["whyWrong"] as const) : []), "another", "simpler"] : ["hint"];
   const errorText =
@@ -176,6 +205,7 @@ export function AiTutor({ attemptId, questionId, answered, wrongChoice }: { atte
                 {t("followUp")}
               </label>
               <Textarea
+                ref={followUp}
                 id={`ask-${questionId}`}
                 value={draft}
                 onChange={(e) => setDraft(e.target.value.slice(0, MAX_CHARS))}

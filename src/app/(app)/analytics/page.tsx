@@ -13,6 +13,8 @@ import { SpotlightCard } from "@/components/motion/interactive-card";
 import { SpringBar } from "@/components/motion/progress";
 import { TrendChart } from "@/components/learning/trend-chart";
 import { DrillSkillMap } from "@/components/learning/practice-skill";
+import { ActivityHeatmap, DailyChart, PaceChart } from "@/components/learning/analytics-charts";
+import { activityDays, dailyResults, timeByDifficulty } from "@/server/stats/analytics";
 
 export async function generateMetadata() {
   const t = await getTranslations("analytics");
@@ -27,17 +29,12 @@ export default async function AnalyticsPage() {
   const t = await getTranslations("analytics");
   const tx = await getTranslations("taxonomy");
   const format = await getFormatter();
-  const [s, mocks, pacing] = await Promise.all([
+  const [s, mocks, daily, activity, pace] = await Promise.all([
     getDashboardStats(user.id, user.timeZone),
     db.attempt.findMany({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "asc" }, take: 12, select: { completedAt: true, scores: true } }),
-    db.$queryRaw<{ section: "RW" | "MATH"; avg_ms: number | null; n: bigint }[]>`
-      SELECT q."section" AS section, avg(r."timeSpentMs")::float AS avg_ms, count(*) AS n
-      FROM "Response" r
-      JOIN "Question" q ON q."id" = r."questionId"
-      JOIN "AttemptModule" m ON m."id" = r."moduleId"
-      JOIN "Attempt" a ON a."id" = m."attemptId"
-      WHERE a."userId" = ${user.id} AND r."answer" IS NOT NULL AND r."timeSpentMs" > 0
-      GROUP BY q."section"`,
+    dailyResults(user.id, user.timeZone),
+    activityDays(user.id, user.timeZone),
+    timeByDifficulty(user.id),
   ]);
 
   const header = (
@@ -90,6 +87,21 @@ export default async function AnalyticsPage() {
       {header}
       <div className="grid gap-6 lg:grid-cols-3">
         <SpotlightCard className={`${card} lg:col-span-2`}>
+          <h2 className="font-semibold">{t("daily.title")}</h2>
+          <p className="mb-5 text-small text-muted-foreground">{t("daily.hint")}</p>
+          <DailyChart data={daily} />
+        </SpotlightCard>
+        <SpotlightCard className={card}>
+          <div className="mb-4 flex items-start justify-between gap-3">
+            <div>
+              <h2 className="font-semibold">{t("activity.title")}</h2>
+              <p className="text-small text-muted-foreground">{t("activity.hint")}</p>
+            </div>
+            <p className="shrink-0 rounded-full bg-primary-soft px-3 py-1 text-small font-semibold text-primary tabular-nums">{t("activity.streak", { count: s.streak })}</p>
+          </div>
+          <ActivityHeatmap days={activity} />
+        </SpotlightCard>
+        <SpotlightCard className={`${card} lg:col-span-2`}>
           <h2 className="font-semibold">{t("skills")}</h2>
           <p className="mb-5 text-small text-muted-foreground">{t("skillsHint")}</p>
           <DrillSkillMap tiles={tiles} />
@@ -101,24 +113,13 @@ export default async function AnalyticsPage() {
             {trend.length >= 2 ? <TrendChart points={trend} label={t("trend")} /> : <p className="text-small text-muted-foreground">{t("trendEmpty")}</p>}
           </SpotlightCard>
           <SpotlightCard className={card}>
-            <h2 className="font-semibold">{t("pacing")}</h2>
-            <p className="mb-4 text-small text-muted-foreground">{t("pacingHint")}</p>
-            <ul className="space-y-4">
-              {(["RW", "MATH"] as const).map((sec) => {
-                const row = pacing.find((p) => p.section === sec);
-                const secs = row?.avg_ms ? Math.round(row.avg_ms / 1000) : null;
-                return (
-                  <li key={sec} className="space-y-1.5">
-                    <div className="flex justify-between gap-2 text-small">
-                      <span className="font-medium">{tx(`sections.${sec}`)}</span>
-                      <span className="font-mono tabular-nums">{secs == null ? "—" : t("perQuestion", { seconds: secs })}</span>
-                    </div>
-                    <SpringBar value={secs == null ? 0 : Math.min(100, (secs / (TARGET_SECONDS[sec] * 1.5)) * 100)} label={tx(`sections.${sec}`)} tone={secs != null && secs > TARGET_SECONDS[sec] ? "accent" : "primary"} />
-                    <p className="text-label text-muted-foreground">{t("target", { seconds: TARGET_SECONDS[sec] })}</p>
-                  </li>
-                );
-              })}
-            </ul>
+            <h2 className="font-semibold">{t("pace.title")}</h2>
+            <p className="mb-5 text-small text-muted-foreground">{t("pace.hint")}</p>
+            <div className="space-y-6">
+              {(["RW", "MATH"] as const).map((sec) => (
+                <PaceChart key={sec} section={tx(`sections.${sec}`)} rows={pace.filter((p) => p.section === sec)} target={TARGET_SECONDS[sec]} />
+              ))}
+            </div>
           </SpotlightCard>
         </div>
         <SpotlightCard className={`${card} lg:col-span-3`}>

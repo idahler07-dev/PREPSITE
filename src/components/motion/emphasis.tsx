@@ -24,7 +24,7 @@ export function Highlight({ children }: { children: ReactNode }) {
           initial={reduce ? { opacity: 0 } : { pathLength: 0 }}
           whileInView={reduce ? { opacity: 1 } : { pathLength: 1 }}
           viewport={{ once: true, margin: "-10% 0px" }}
-          transition={reduce ? { duration: 0.15 } : { ...spring.soft, stiffness: 90, delay: 0.5 }}
+          transition={reduce ? { duration: 0.15 } : { ...spring.soft, delay: 0.3 }}
         />
       </svg>
     </span>

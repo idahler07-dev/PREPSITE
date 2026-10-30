@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getCurrentUser, isStaff } from "@/server/auth/session";
+import { getCurrentUser, isOwner } from "@/server/auth/session";
 import { storage } from "@/server/storage";
 
 /**
@@ -18,7 +18,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   });
   if (!asset) return new NextResponse(null, { status: 404 });
 
-  if (!isStaff(user)) {
+  if (!isOwner(user)) {
     const q = asset.question;
     if (!q) return new NextResponse(null, { status: 404 });
     if (q.status !== "PUBLISHED") {

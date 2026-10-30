@@ -51,7 +51,7 @@ export async function getPublicStats() {
   const t = siteConfig.publicStats;
   const [questions, students, answers] = await Promise.all([
     db.question.count({ where: { status: "PUBLISHED", isSample: false } }),
-    db.user.count({ where: { role: "STUDENT", onboardedAt: { not: null } } }),
+    db.user.count({ where: { onboardedAt: { not: null } } }),
     db.response.count({ where: { answeredAt: { not: null } } }),
   ]);
   return {

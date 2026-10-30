@@ -12,12 +12,6 @@ datasource db {
 
 // ─── Users & auth ───────────────────────────────────────────────────────────
 
-enum Role {
-  STUDENT
-  EDITOR // enters, imports and reviews questions
-  ADMIN // everything, including users, settings and payments
-}
-
 enum ThemePreference {
   LIGHT
   DARK
@@ -30,7 +24,6 @@ model User {
   email            String?         @unique
   emailVerified    DateTime?
   image            String?
-  role             Role            @default(STUDENT)
   /// null = the user has not picked a language yet (browser language is used)
   locale           String?
   theme            ThemePreference @default(SYSTEM)
@@ -492,6 +485,8 @@ model Attempt {
   scores        Json?
   /// Break between sections ends at this time (null when not on a break).
   breakEndsAt   DateTime?
+  /// Desmos calculator state ({ graphing, scientific, tab }) so graphs survive a reload or another device.
+  calculatorState Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

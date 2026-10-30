@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/server/auth/session";
 import { LoginForm } from "@/components/auth/login-form";
 import { DemoLogin } from "@/components/auth/demo-login";
 import { safeNextPath } from "@/lib/safe-redirect";
+import { BrandMarkGloss } from "@/components/brand/mark";
 
 export async function generateMetadata() {
   const t = await getTranslations("nav");
@@ -40,6 +41,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       </aside>
 
       <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
+        <BrandMarkGloss className="mb-5 size-16" />
         <h1 className="text-2xl font-bold tracking-tight">{t("signInTitle")}</h1>
         <p className="mt-2 mb-6 text-sm text-muted-foreground">{t("signInSubtitle")}</p>
         {e.DEMO_MODE && <DemoLogin />}

@@ -23,7 +23,7 @@ export function ImportProgress({ batchId, initial }: { batchId: string; initial:
     let stop = false;
     const tick = async () => {
       try {
-        const res = await fetch(`/api/admin/imports/${batchId}/status`, { cache: "no-store" });
+        const res = await fetch(`/api/manage/imports/${batchId}/status`, { cache: "no-store" });
         if (res.ok) {
           const next = (await res.json()) as Status;
           if (stop) return;

@@ -5,7 +5,7 @@ import { checkResponse, createDrill, getResults, getRunnerState, saveResponses, 
 import { makeUser, mathInput, resetDb } from "./helpers";
 
 async function bank(count: number) {
-  const admin = await makeUser("ADMIN");
+  const admin = await makeUser();
   const ids: string[] = [];
   for (let i = 0; i < count; i++) {
     const { question } = await createQuestion(mathInput({ explanation: `SECRET-EXPLANATION-${i}` }), admin, { origin: "MANUAL", status: "PUBLISHED" });

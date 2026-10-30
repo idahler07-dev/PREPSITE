@@ -14,7 +14,7 @@ async function makePdf(lines: string[]) {
 
 // Typed PDF, no AI key: read from the text layer by the background worker.
 test("admin uploads a PDF booklet and key, reviews, publishes, and the question appears in a drill", async ({ page, browser }) => {
-  await signIn(page, "admin@e2e.test");
+  await signIn(page, "owner@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
 
   const dir = test.info().outputDir;
@@ -24,10 +24,17 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
   writeFileSync(booklet, await makePdf(["1. PDF-E2E-STEM: If 4x = 20, what is the value of x?", "A) 4", "B) 5", "C) 6", "D) 16"]));
   writeFileSync(key, await makePdf(["Answer Key", "1. B"]));
 
-  await page.goto("/admin/import");
+  await page.goto("/manage/import");
   const panel = page.getByRole("tabpanel");
-  const newSource = panel.getByText("Create a new source");
-  if (await newSource.isVisible()) await newSource.click();
+  await expect(panel.getByRole("button", { name: "Upload and read" })).toBeVisible();
+  // Once other tests have added a source, choose "new"; retried until the page has hydrated.
+  const newSource = panel.getByRole("radio", { name: "Create a new source" });
+  if (await newSource.isVisible()) {
+    await expect(async () => {
+      await newSource.check({ timeout: 2_000 });
+      await expect(newSource).toBeChecked({ timeout: 1_000 });
+    }).toPass();
+  }
   await panel.getByLabel("Source name").fill("E2E booklet");
   await panel.getByLabel("Owner").fill("Our centre");
   await panel.getByText("These questions were written by us").click();
@@ -57,6 +64,6 @@ test("admin uploads a PDF booklet and key, reviews, publishes, and the question 
   await student.getByLabel("To code").fill("E2E-P-ALG-0001");
   await expect(student.getByText("1 question matches")).toBeVisible();
   await student.getByRole("button", { name: "Start drill" }).click();
-  await expect(student.getByText(/PDF-E2E-STEM/)).toBeVisible();
+  await expect(student.getByText(/PDF-E2E-STEM/).filter({ visible: true })).toBeVisible();
   await student.close();
 });

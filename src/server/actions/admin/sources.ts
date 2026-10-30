@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireApiRole, STAFF_ROLES } from "@/server/auth/session";
+import { requireApiOwner } from "@/server/auth/session";
 import { audit } from "@/server/audit";
 import { withdrawSource } from "@/server/questions/service";
 
@@ -18,7 +18,7 @@ const sourceSchema = z.object({
 export type SourceFormState = { ok?: boolean; error?: string };
 
 export async function createSourceAction(_prev: SourceFormState, form: FormData): Promise<SourceFormState> {
-  const user = await requireApiRole(STAFF_ROLES);
+  const user = await requireApiOwner();
   const parsed = sourceSchema.safeParse({
     name: form.get("name"),
     owner: form.get("owner"),
@@ -38,13 +38,13 @@ export async function createSourceAction(_prev: SourceFormState, form: FormData)
     },
   });
   await audit(user.id, "source.create", "Source", source.id, { name: source.name, owner: source.owner });
-  revalidatePath("/[locale]/admin/sources", "page");
+  revalidatePath("/manage/sources", "page");
   return { ok: true };
 }
 
 export async function withdrawSourceAction(sourceId: string, fileId?: string) {
-  const user = await requireApiRole(STAFF_ROLES);
+  const user = await requireApiOwner();
   const count = await withdrawSource(z.string().parse(sourceId), user, { fileId: fileId ? z.string().parse(fileId) : undefined });
-  revalidatePath("/[locale]/admin", "layout");
+  revalidatePath("/manage", "layout");
   return { count };
 }

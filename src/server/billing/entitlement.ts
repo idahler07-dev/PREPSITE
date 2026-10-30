@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { currentEnd, hasPremium, limitsFor, subscriptionState, type SubscriptionState } from "@/lib/billing/subscription";
 import { startOfDayInZone } from "@/lib/stats/streak";
 import { HttpError } from "@/server/http";
+import { isOwner } from "@/server/auth/owner";
 
 export interface Entitlement {
   state: SubscriptionState;
@@ -11,19 +12,19 @@ export interface Entitlement {
   endsAt: Date | null;
   /** Plan of the subscription that ends last (for one-click renewal). */
   planId: string | null;
-  staff: boolean;
+  owner: boolean;
 }
 
 /** What a user may use right now. Checked on the server for every limited action. */
 export async function getEntitlement(userId: string, now = new Date()): Promise<Entitlement> {
   const [user, subs] = await Promise.all([
-    db.user.findUnique({ where: { id: userId }, select: { role: true } }),
+    db.user.findUnique({ where: { id: userId }, select: { email: true, emailVerified: true } }),
     db.subscription.findMany({ where: { userId, canceledAt: null }, orderBy: { endsAt: "desc" }, select: { endsAt: true, canceledAt: true, planId: true } }),
   ]);
   const endsAt = currentEnd(subs);
   const state = subscriptionState(endsAt, now);
-  const staff = user?.role === "ADMIN" || user?.role === "EDITOR";
-  return { state, premium: hasPremium(state) || staff, endsAt, planId: subs[0]?.planId ?? null, staff };
+  const owner = isOwner(user);
+  return { state, premium: hasPremium(state) || owner, endsAt, planId: subs[0]?.planId ?? null, owner };
 }
 
 async function questionsStartedToday(userId: string): Promise<number> {

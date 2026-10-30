@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOutAction } from "@/server/actions/auth";
 
-export function UserMenu({ name, email, isStaff }: { name: string | null; email: string | null; isStaff: boolean }) {
+export function UserMenu({ name, email, isOwner }: { name: string | null; email: string | null; isOwner: boolean }) {
   const t = useTranslations("nav");
   const initial = (name || email || "?").trim().charAt(0).toUpperCase();
   return (
@@ -47,10 +47,10 @@ export function UserMenu({ name, email, isStaff }: { name: string | null; email:
             <Settings aria-hidden /> {t("settings")}
           </Link>
         </DropdownMenuItem>
-        {isStaff && (
+        {isOwner && (
           <DropdownMenuItem asChild>
-            <Link href="/admin">
-              <Shield aria-hidden /> {t("admin")}
+            <Link href="/manage">
+              <Shield aria-hidden /> {t("manage")}
             </Link>
           </DropdownMenuItem>
         )}

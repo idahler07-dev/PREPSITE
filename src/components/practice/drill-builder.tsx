@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { openTest } from "@/lib/open-test";
 
 type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
@@ -62,7 +63,7 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
   function launch(cfg: Record<string, unknown>) {
     start(async () => {
       const res = await startDrill(cfg);
-      if (res.ok) router.push(`/test/${res.id}`);
+      if (res.ok) openTest(res.id);
       else if (res.error === "DAILY_LIMIT")
         toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
       else toast.error(res.error === "NO_QUESTIONS" ? t("noQuestions") : c("unknownError"));

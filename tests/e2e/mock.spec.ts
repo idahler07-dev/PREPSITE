@@ -36,9 +36,9 @@ async function submitModule(page: Page) {
 test("admin builds a practice test; a student takes it with the test tools and gets an estimated score", async ({ page, browser }) => {
   test.setTimeout(180_000);
   seedMockBank();
-  await signIn(page, "admin@e2e.test");
+  await signIn(page, "owner@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
-  await page.goto("/admin/mocks");
+  await page.goto("/manage/mocks");
   await page.getByLabel("Title").fill("E2E Practice Test");
   await page.getByRole("button", { name: "Build test" }).click();
   await expect(page.getByRole("heading", { name: "E2E Practice Test" })).toBeVisible();

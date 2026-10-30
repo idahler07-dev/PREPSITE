@@ -21,7 +21,7 @@ export function HowPath({ steps }: { steps: { title: string; body: string }[] })
           initial={reduce ? false : { pathLength: 0 }}
           whileInView={{ pathLength: 1 }}
           viewport={{ once: true, margin: "-20% 0px" }}
-          transition={{ ...spring.soft, stiffness: 40 }}
+          transition={spring.soft}
         />
       </svg>
       <ol className="relative grid gap-10 lg:grid-cols-3 lg:gap-8">

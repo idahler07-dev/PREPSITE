@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { getCurrentUser, isStaff } from "@/server/auth/session";
+import { getCurrentUser, isOwner } from "@/server/auth/session";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./logo";
@@ -49,7 +49,7 @@ export async function SiteHeader() {
               <Button asChild size="sm" className="hidden sm:inline-flex">
                 <Link href="/dashboard">{t("dashboard")}</Link>
               </Button>
-              <UserMenu name={user.name} email={user.email} isStaff={isStaff(user)} />
+              <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
             </>
           ) : (
             <>

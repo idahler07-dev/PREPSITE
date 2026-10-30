@@ -126,7 +126,7 @@ export function QuestionEditor({
       const form = new FormData();
       form.set("file", file);
       form.set("alt", t("imageAlt"));
-      const res = await fetch("/api/admin/assets", { method: "POST", body: form });
+      const res = await fetch("/api/manage/assets", { method: "POST", body: form });
       if (!res.ok) throw new Error(String(res.status));
       const { markdown } = (await res.json()) as { markdown: string };
       const el = textareas.current[field];
@@ -180,7 +180,7 @@ export function QuestionEditor({
       setDupes(d.nearDuplicates);
       if (d.publishError) toast.error(t("blockingFlags"));
       else toast.success(initial.id ? t("updated") : t("created"));
-      if (!initial.id) router.replace(`/admin/questions/${d.id}`);
+      if (!initial.id) router.replace(`/manage/questions/${d.id}`);
       else router.refresh();
     });
   }

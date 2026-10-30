@@ -48,7 +48,7 @@ describe("spreadsheet import", () => {
   });
 
   it("reassigns codes already used in the bank", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     await createQuestion(mathInput({ code: "LC-M-ALG-0001" }), editor, { origin: "MANUAL" });
     const { rows } = await readSpreadsheet(new TextEncoder().encode([HEADER, CSV.split("\n")[1]].join("\n")), "csv");
     const [r] = await analyzeRows(rows, { section: null, difficulty: "MEDIUM", codePrefix: "LC-M-" });
@@ -57,7 +57,7 @@ describe("spreadsheet import", () => {
   });
 
   it("creates drafts with provenance and refuses to import twice", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const batch = await pendingBatch(CSV, editor.id);
     expect(await commitBatch(batch.id, editor)).toEqual({ created: 5 });
     const questions = await db.question.findMany({ where: { importBatchId: batch.id }, orderBy: { code: "asc" } });
@@ -70,7 +70,7 @@ describe("spreadsheet import", () => {
   });
 
   it("refuses to import into a withdrawn source", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const batch = await pendingBatch(CSV, editor.id);
     await db.source.update({ where: { id: batch.sourceId }, data: { withdrawnAt: new Date() } });
     await expect(commitBatch(batch.id, editor)).rejects.toMatchObject({ code: "SOURCE_WITHDRAWN" });

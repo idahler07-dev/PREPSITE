@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { questionInputSchema, type QuestionFormValues } from "@/lib/questions/schema";
 import { normalizePrefix, PREFIX_PATTERN } from "@/lib/questions/codes";
-import { requireApiRole, STAFF_ROLES } from "@/server/auth/session";
+import { requireApiOwner } from "@/server/auth/session";
 import { HttpError } from "@/server/http";
 import {
   bulkSetStatus,
@@ -47,7 +47,7 @@ export async function saveQuestion(
   opts: { id?: string; expectedVersion?: number; intent: "draft" | "review" | "publish" | "keep"; changeNote?: string },
 ) {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const input = questionInputSchema.parse(values);
     const intent = intentSchema.parse(opts.intent);
     const saveStatus = intent === "draft" ? "DRAFT" : intent === "review" ? "IN_REVIEW" : undefined;
@@ -65,7 +65,7 @@ export async function saveQuestion(
         publishError = e instanceof HttpError ? e.code : "INTERNAL";
       }
     }
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return {
       id: question.id,
       version: question.version,
@@ -79,26 +79,26 @@ export async function saveQuestion(
 
 export async function changeQuestionStatus(id: string, status: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "RETIRED") {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const q = await setQuestionStatus(id, z.enum(["DRAFT", "IN_REVIEW", "PUBLISHED", "RETIRED"]).parse(status), actor);
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return { status: q.status, version: q.version };
   });
 }
 
 export async function bulkQuestionStatus(ids: string[], status: "IN_REVIEW" | "PUBLISHED" | "RETIRED" | "DRAFT") {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const parsedIds = z.array(z.string()).max(500).parse(ids);
     const res = await bulkSetStatus(parsedIds, z.enum(["DRAFT", "IN_REVIEW", "PUBLISHED", "RETIRED"]).parse(status), actor);
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return res;
   });
 }
 
 export async function bulkQuestionMeta(ids: string[], patch: { difficulty?: string; domain?: string; skill?: string }) {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const parsed = z
       .object({
         ids: z.array(z.string()).max(500),
@@ -108,23 +108,23 @@ export async function bulkQuestionMeta(ids: string[], patch: { difficulty?: stri
       })
       .parse({ ids, ...patch });
     await bulkUpdateMeta(parsed.ids, parsed, actor);
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return { updated: parsed.ids.length };
   });
 }
 
 export async function bulkConfirmTaxonomy(ids: string[]) {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const updated = await confirmTaxonomy(z.array(z.string()).max(500).parse(ids), actor);
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return { updated, skipped: [] as string[] };
   });
 }
 
 export async function suggestCode(prefix: string, domain: string) {
   return run(async () => {
-    await requireApiRole(STAFF_ROLES);
+    await requireApiOwner();
     const p = normalizePrefix(prefix);
     if (!PREFIX_PATTERN.test(p)) throw new HttpError(400, "INVALID_PREFIX");
     const [code] = await suggestNextCodes(p, domain, 1);
@@ -135,7 +135,7 @@ export async function suggestCode(prefix: string, domain: string) {
 /** Restore an earlier version's content as a new version (history is never rewritten). */
 export async function restoreQuestionVersion(id: string, version: number) {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const { db } = await import("@/lib/db");
     const [q, v] = await Promise.all([
       db.question.findUnique({ where: { id }, select: { version: true, status: true } }),
@@ -147,14 +147,14 @@ export async function restoreQuestionVersion(id: string, version: number) {
     // A restored version goes back through review unless it is still a draft.
     const status = q.status === "DRAFT" ? "DRAFT" : "IN_REVIEW";
     const res = await updateQuestion(id, input, actor, { expectedVersion: q.version, changeNote: `restored v${version}`, status });
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return { version: res.question.version };
   });
 }
 
 export async function resolveReport(reportId: string, status: "RESOLVED" | "DISMISSED") {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const { db } = await import("@/lib/db");
     const report = await db.questionReport.update({
       where: { id: reportId },
@@ -166,7 +166,7 @@ export async function resolveReport(reportId: string, status: "RESOLVED" | "DISM
       where: { id: report.questionId },
       data: { reportCount: open, flags: open ? q.flags : q.flags.filter((f) => f !== "STUDENT_REPORT") },
     });
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return { open };
   });
 }
@@ -174,7 +174,7 @@ export async function resolveReport(reportId: string, status: "RESOLVED" | "DISM
 /** Publish every waiting question in the current filter that has no blocking flags. */
 export async function publishCleanInFilter(rawFilters: Record<string, string | undefined>) {
   return run(async () => {
-    const actor = await requireApiRole(STAFF_ROLES);
+    const actor = await requireApiOwner();
     const { db } = await import("@/lib/db");
     const { parseQuestionFilters, questionWhere } = await import("@/server/questions/query");
     const { ALL_FLAGS, isBlocking } = await import("@/lib/questions/flags");
@@ -188,7 +188,7 @@ export async function publishCleanInFilter(rawFilters: Record<string, string | u
       })
     ).map((q) => q.id);
     const res = await bulkSetStatus(ids, "PUBLISHED", actor);
-    revalidatePath("/[locale]/admin", "layout");
+    revalidatePath("/manage", "layout");
     return res;
   });
 }

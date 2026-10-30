@@ -19,6 +19,7 @@ export default function middleware(request: NextRequest) {
     dev: process.env.NODE_ENV !== "production",
     https: (process.env.NEXT_PUBLIC_SITE_URL ?? "").startsWith("https://"),
     storageOrigin: process.env.STORAGE_DRIVER === "s3" ? originOf(process.env.S3_ENDPOINT) : undefined,
+    desmos: pathname.startsWith("/test/"),
   });
 
   // Pass the nonce to the app (Next.js reads it from the request CSP header).

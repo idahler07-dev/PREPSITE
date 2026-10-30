@@ -12,11 +12,11 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 
 ## Content
 
-- [ ] `pnpm samples:remove` — delete the 40 development sample questions. The admin overview shows a warning while any remain.
-- [ ] Every published question comes from a source with a rights confirmation (Admin → Sources).
-- [ ] Enough published questions in every domain for drills (Admin → Overview shows counts per domain).
+- [ ] `pnpm samples:remove` — delete the 40 development sample questions. The Manage overview shows a warning while any remain.
+- [ ] Every published question comes from a source with a rights confirmation (Manage → Sources).
+- [ ] Enough published questions in every domain for drills (Manage → Overview shows counts per domain).
 - [ ] Spot-check questions on a phone and in dark mode.
-- [ ] At least one published practice test (Admin → Practice tests), taken once end to end.
+- [ ] At least one published practice test (Manage → Practice tests), taken once end to end.
 - [ ] Review the score table in `src/config/mock-blueprint.ts` with your teachers; adjust it as students report real scores.
 
 ## Branding and configuration
@@ -29,7 +29,7 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] `DATABASE_URL` points to the production database; backups are enabled and a restore has been tested.
 - [ ] `AUTH_SECRET` is a new random value (`openssl rand -base64 32`), not the development one.
 - [ ] `AUTH_URL` and `NEXT_PUBLIC_SITE_URL` are the public `https://` address. `NEXT_PUBLIC_SITE_URL` is set **before** `pnpm build`.
-- [ ] `ADMIN_EMAILS` lists the real admins.
+- [ ] `OWNER_EMAILS` lists the owners (they must sign in with that email, by code/link or Google).
 - [ ] `EMAIL_TRANSPORT` is `smtp` or `resend` (the `outbox` transport refuses to run in production), `EMAIL_FROM` uses your domain, and SPF/DKIM are set for it. Send yourself a sign-in link to test.
 - [ ] Storage: `STORAGE_DRIVER=s3` with a **private** bucket (no public access), or `local` with the folder included in backups.
 - [ ] Google sign-in (optional): OAuth client with redirect URI `https://<your-domain>/api/auth/callback/google`.
@@ -37,14 +37,14 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] `ALLOW_DEV_OUTBOX` is **not** set, and `DEMO_MODE` is **not** set.
 - [ ] Optional: `SENTRY_DSN` for error reports.
 - [ ] `DESMOS_API_KEY` set (request one from Desmos for your domain); without it students get the basic calculator.
-- [ ] `ANTHROPIC_API_KEY` set for scanned PDFs, the AI tutor and AI drafts; set a monthly spend limit in the Anthropic console and check Admin → AI usage in the first weeks.
+- [ ] `ANTHROPIC_API_KEY` set for scanned PDFs, the AI tutor and AI drafts; set a monthly spend limit in the Anthropic console and check Manage → AI usage in the first weeks.
 - [ ] Review the daily AI limits per student in `src/config/ai-limits.ts`.
 - [ ] Background jobs: on a VPS keep `JOBS_MODE=worker`. On serverless hosting set `JOBS_MODE=external`, a random `CRON_SECRET`, and a cron that calls `POST /api/jobs/run` with `Authorization: Bearer <CRON_SECRET>` every minute.
 - [ ] With R2/S3 storage, add a CORS rule on the bucket allowing `PUT` from your site origin (browsers upload PDFs straight to storage).
 
 ## Learning tools
 
-- [ ] Review the 30 starter vocabulary words (Admin → Vocabulary) and add your own.
+- [ ] Review the 30 starter vocabulary words (Manage → Vocabulary) and add your own.
 - [ ] Telegram bot: students must allow the bot to message them in the login widget for Telegram reminders.
 - [ ] Replace the logo in `public/brand/` and run `pnpm tsx scripts/make-brand.ts` for the logo files, app icons and link-preview image.
 
@@ -57,13 +57,13 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] Octo: shop id and secret; notify URL `https://<domain>/api/payments/octo/webhook`; tested with `OCTO_TEST=true`, then false.
 - [ ] `PAYMENT_PROVIDERS` lists only the real providers (no `mock`), and `ALLOW_MOCK_PAYMENTS` is not set.
 - [ ] One full purchase and one refund per provider before announcing.
-- [ ] Daily billing job runs (worker mode schedules it; with `JOBS_MODE=external` the minute cron triggers it). Check Admin → Orders after the first day.
+- [ ] Daily billing job runs (worker mode schedules it; with `JOBS_MODE=external` the minute cron triggers it). Check Manage → Orders after the first day.
 
 ## Quality checks (already passing in development — re-run on the server)
 
 - [ ] `pnpm test` and `pnpm test:e2e` pass (includes the accessibility and route-guard checks).
 - [ ] Lighthouse (mobile) on `/`, `/pricing`, `/login`: performance ≥ 90, accessibility 100.
-- [ ] Check Admin → Analytics after the first week; review questions flagged by calibration.
+- [ ] Check Manage → Analytics after the first week; review questions flagged by calibration.
 
 ## Deploy
 
@@ -76,6 +76,6 @@ Work through this before real students use the site. Items marked ⚖️ need a 
 - [ ] `pnpm lint && pnpm typecheck && pnpm test && pnpm test:e2e` pass.
 - [ ] `pnpm i18n:check` shows no missing keys for enabled languages.
 - [ ] Sign up as a new student → onboarding → drill → results → dashboard, on a phone and a laptop.
-- [ ] A student account gets "Page not found" at `/en/admin`.
+- [ ] A normal account gets "Page not found" at `/manage`.
 - [ ] Data export (Settings → Download CSV) and account deletion work.
 - [ ] Lighthouse (mobile) on the home page: aim for 90+ in every category.

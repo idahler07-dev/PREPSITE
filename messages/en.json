@@ -52,7 +52,10 @@
     "sample": "Sample",
     "sampleHint": "Development sample — removed before launch",
     "skipToContent": "Skip to main content",
-    "sizeMb": "{value} MB"
+    "sizeMb": "{value} MB",
+    "errorTitle": "Something went wrong",
+    "errorBody": "This page couldn’t load. Check your connection and try again.",
+    "tryAgain": "Try again"
   },
   "nav": {
     "home": "Home",
@@ -63,7 +66,6 @@
     "about": "About us",
     "faq": "FAQ",
     "contact": "Contact",
-    "admin": "Admin",
     "settings": "Settings",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -80,7 +82,11 @@
     "howItWorks": "How it works",
     "mistakes": "Mistakes",
     "analytics": "Analytics",
-    "mockTests": "Mock tests"
+    "mockTests": "Mock tests",
+    "manage": "Manage",
+    "questionBank": "Question bank",
+    "drills": "Drills",
+    "tests": "Tests"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -174,8 +180,8 @@
     },
     "bank": {
       "label": "Question bank",
-      "title": "Stuck? <i>Ask</i> Otto.",
-      "body": "Every question is written and checked by teachers. When you get one wrong, Otto explains it step by step, and every explanation is checked against the answer key.",
+      "title": "Stuck? <i>Ask</i> Pip.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, Pip explains it step by step, and every explanation is checked against the answer key.",
       "cta": "Try a drill"
     },
     "plan": {
@@ -303,7 +309,7 @@
     }
   },
   "cookie": {
-    "message": "We use only essential cookies to keep you signed in and remember your language and theme.",
+    "message": "We use only essential cookies to keep you signed in and remember your theme.",
     "accept": "OK"
   },
   "auth": {
@@ -388,7 +394,7 @@
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
     },
-    "tip": "Tip from Otto: a test date helps me spread your practice across the weeks you have."
+    "tip": "Tip from Pip: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -434,7 +440,7 @@
     "practiceNow": "Practice now",
     "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
     "streakTitle": "Day streak",
-    "streakReminder": "Otto misses you. Ten questions keeps your streak alive.",
+    "streakReminder": "Pip misses you. Ten questions keeps your streak alive.",
     "daysToTest": "Days to test",
     "noTestDate": "Set your test date",
     "estimateEmpty": "Take a practice test to see your estimate.",
@@ -493,7 +499,6 @@
       "timeUp": "Time is up. Your answers have been submitted."
     },
     "markForReview": "Mark for review",
-    "questionId": "ID {code}",
     "marked": "Marked for review",
     "eliminator": "Cross out answer choices",
     "eliminatorOn": "Cross-out mode on",
@@ -566,7 +571,7 @@
       "next": "Next question",
       "previous": "Previous question",
       "mark": "Mark for review",
-      "eliminate": "Toggle cross-out mode",
+      "eliminate": "Cross out a choice (Shift + A–D)",
       "help": "Show shortcuts",
       "highlight": "Toggle the highlighter",
       "lineReader": "Toggle the line reader (↑ ↓ to move it)",
@@ -600,11 +605,16 @@
       "addNote": "Add note",
       "editNote": "Edit note",
       "note": "Your note on this question",
-      "noteHelp": "Saved automatically. Only you can see it."
+      "noteHelp": "Saved automatically. Only you can see it.",
+      "menu": "Tools",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "shortcuts": "Keyboard shortcuts",
+      "exit": "Exit"
     },
     "calculator": {
       "title": "Calculator",
-      "graphing": "Graphing calculator",
+      "graphing": "Graphing",
       "close": "Close calculator",
       "angle": "Angle unit",
       "deg": "Deg",
@@ -612,29 +622,39 @@
       "clear": "Clear",
       "history": "Previous calculations",
       "expression": "Expression",
-      "error": "Can't calculate that"
+      "error": "Can't calculate that",
+      "scientific": "Scientific",
+      "hide": "Hide calculator",
+      "resize": "Resize calculator",
+      "dockLeft": "Dock on the left",
+      "dockRight": "Dock on the right",
+      "graphingUnavailable": "The graphing calculator isn’t available right now. Use the Scientific tab."
     },
     "reference": {
       "title": "Reference sheet",
-      "intro": "Formulas you may use on the Math section.",
+      "intro": "Formulas you may use on the Math section. Drawings are not to scale.",
       "items": {
-        "circleArea": "Area of a circle",
-        "circumference": "Circumference of a circle",
-        "rectangleArea": "Area of a rectangle",
-        "triangleArea": "Area of a triangle",
+        "circle": "Circle",
+        "rectangle": "Rectangle",
+        "triangle": "Triangle",
         "pythagorean": "Pythagorean theorem",
-        "special30": "Special right triangle",
-        "special45": "Special right triangle",
-        "boxVolume": "Volume of a rectangular box",
-        "cylinderVolume": "Volume of a cylinder",
-        "sphereVolume": "Volume of a sphere",
-        "coneVolume": "Volume of a cone",
-        "pyramidVolume": "Volume of a rectangular pyramid"
+        "special30": "30°–60°–90° triangle",
+        "special45": "45°–45°–90° triangle",
+        "box": "Rectangular box",
+        "cylinder": "Cylinder",
+        "sphere": "Sphere",
+        "cone": "Cone",
+        "pyramid": "Rectangular pyramid"
       },
       "facts": {
         "circleDegrees": "A circle has 360 degrees.",
         "circleRadians": "A circle has 2π radians.",
         "triangleAngles": "The angles of a triangle add up to 180 degrees."
+      },
+      "groups": {
+        "area": "Area and circles",
+        "rightTriangles": "Right triangles",
+        "volume": "Volume"
       }
     },
     "break": {
@@ -642,7 +662,32 @@
       "remaining": "Break time left",
       "body": "Stand up, stretch, drink some water. {section} starts when the timer ends, or resume now.",
       "resume": "Resume testing"
-    }
+    },
+    "answerFormat": "Answer format",
+    "sprRules": {
+      "r1": "Enter a whole number, a decimal or a fraction, like 12, 3.5 or 7/2.",
+      "r2": "Up to 5 characters, or 6 with a minus sign.",
+      "r3": "No mixed numbers: enter 7/2 or 3.5, not 3 1/2.",
+      "r4": "No commas, units or symbols such as %, $ or °.",
+      "r5": "If more than one answer is correct, enter just one.",
+      "r6": "Decimals that don’t fit: round or cut them off at the last digit that fits."
+    },
+    "sprPlaceholder": "Type here",
+    "sprEmptyPreview": "Your answer will appear here",
+    "crossOutShort": "Cross out",
+    "difficultyChip": "{level} difficulty",
+    "feedback": {
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "correctAnswer": "Correct answer: {answer}",
+      "acceptedAnswers": "Accepted: {answers}",
+      "time": "Time on question: {time}",
+      "explanation": "Explanation",
+      "whyNot": "Why {choice} isn’t right",
+      "explainDifferently": "Explain differently",
+      "askFollowUp": "Ask a follow-up"
+    },
+    "backToBank": "Back to bank"
   },
   "results": {
     "title": "Results",
@@ -702,7 +747,8 @@
         "easier": "Module 2 was the easier one, which limits the highest possible score."
       }
     },
-    "reviewMistakes": "Review mistakes"
+    "reviewMistakes": "Review mistakes",
+    "backToBank": "Back to question bank"
   },
   "history": {
     "title": "Practice history",
@@ -712,7 +758,9 @@
       "type": "Type",
       "questions": "Questions",
       "score": "Score",
-      "status": "Status"
+      "status": "Status",
+      "accuracy": "Accuracy",
+      "time": "Time"
     },
     "kinds": {
       "DRILL": "Drill",
@@ -727,7 +775,11 @@
       "COMPLETED": "Completed",
       "ABANDONED": "Abandoned"
     },
-    "emptyCta": "Start your first drill"
+    "emptyCta": "Start your first drill",
+    "resume": "Resume",
+    "view": "View results",
+    "accuracyLabel": "{percent}% correct",
+    "description": "Every drill and practice test you’ve taken. Open one to see the questions again."
   },
   "settings": {
     "title": "Settings",
@@ -781,11 +833,11 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Otto can't find that page",
+    "notFoundTitle": "Pip can't find that page",
     "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Otto dropped a few things. Try again, and if it keeps happening, let us know.",
+    "errorBody": "Pip dropped a few things. Try again, and if it keeps happening, let us know.",
     "goDashboard": "Go to my dashboard",
     "tryAgain": "Try again"
   },
@@ -861,11 +913,6 @@
       "IMPORTED": "Imported",
       "AI_DRAFTED": "AI draft",
       "MANUAL": "Manual"
-    },
-    "role": {
-      "STUDENT": "Student",
-      "EDITOR": "Editor",
-      "ADMIN": "Admin"
     }
   },
   "flags": {
@@ -941,7 +988,7 @@
     }
   },
   "admin": {
-    "title": "Admin",
+    "title": "Manage",
     "nav": {
       "overview": "Overview",
       "questions": "Questions",
@@ -1285,12 +1332,13 @@
       "columns": {
         "name": "Name",
         "email": "Email",
-        "role": "Role",
+        "access": "Access",
         "joined": "Joined",
         "attempts": "Drills"
       },
-      "roleChanged": "Role updated",
-      "cannotChangeOwnRole": "You can’t change your own role."
+      "owner": "Owner",
+      "member": "Member",
+      "ownerNote": "Owners are set with the OWNER_EMAILS setting and must sign in with that verified email."
     },
     "importReview": {
       "title": "Review import",
@@ -1544,7 +1592,7 @@
     }
   },
   "tutor": {
-    "title": "Ask Otto",
+    "title": "Ask Pip",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1552,7 +1600,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Otto is thinking…",
+    "thinking": "Pip is thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1566,7 +1614,7 @@
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
     },
-    "askOtto": "Ask Otto",
+    "askPip": "Ask Pip",
     "stepByStep": "Step by step"
   },
   "billing": {
@@ -1842,10 +1890,10 @@
   },
   "demo": {
     "title": "Demo site",
-    "body": "Try it without signing up. Each student visit gets a fresh account; the admin account is shared, so others may see your changes. Data can be reset at any time.",
+    "body": "Try it without signing up. Each visit gets a fresh account. Data can be reset at any time.",
     "student": "Try as a student",
-    "admin": "Try as admin",
-    "banner": "Demo site — test payments only, data may be reset."
+    "banner": "Demo site — test payments only, data may be reset.",
+    "dismiss": "Hide this notice"
   },
   "brand": {
     "tagline": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
@@ -1874,7 +1922,12 @@
     "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
     "countdownShort": "{days, plural, =0 {Today} other {#d}}",
     "countdownLabel": "Your SAT is on {date}",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "groups": {
+      "study": "Study",
+      "practice": "Practice",
+      "account": "Account"
+    }
   },
   "analytics": {
     "title": "Analytics",
@@ -1892,6 +1945,91 @@
     "target": "Real SAT: about {seconds}s",
     "empty": "Answer a few questions and your analytics will appear here.",
     "emptyCta": "Start your first drill",
-    "answered": "{count, plural, one {# answer} other {# answers}}"
+    "answered": "{count, plural, one {# answer} other {# answers}}",
+    "daily": {
+      "title": "Answers per day",
+      "hint": "Correct and incorrect answers over the last 30 days.",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "date": "Date",
+      "correctCount": "{count} correct",
+      "incorrectCount": "{count} incorrect"
+    },
+    "activity": {
+      "title": "Study streak",
+      "hint": "Questions answered each day.",
+      "count": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+      "summary": "{days, plural, =0 {No active days} one {# active day} other {# active days}} in {weeks} weeks",
+      "srSummary": "You practised on {days} days in the last {weeks} weeks.",
+      "less": "Less",
+      "more": "More",
+      "streak": "{count, plural, =0 {No streak yet} one {# day streak} other {# day streak}}"
+    },
+    "pace": {
+      "title": "Time by difficulty",
+      "hint": "Average seconds per question. The dashed line is the real SAT pace.",
+      "target": "Target {seconds}s",
+      "seconds": "{seconds}s",
+      "bar": "{difficulty}: {seconds}s average over {count} questions",
+      "overTarget": "(slower than the target pace)"
+    },
+    "skillsByAccuracy": "Accuracy by skill"
+  },
+  "bank": {
+    "title": "Question bank",
+    "description": "Every published question, with your own results. Filter, then practise exactly what you need.",
+    "sections": {
+      "RW": "Reading and Writing",
+      "MATH": "Math"
+    },
+    "search": "Search questions or IDs",
+    "allDomains": "All domains",
+    "allSkills": "All skills",
+    "domain": "Domain",
+    "skill": "Skill",
+    "difficulty": "Difficulty",
+    "allDifficulties": "All",
+    "status": "Status",
+    "allStatuses": "All",
+    "statuses": {
+      "unattempted": "Unattempted",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "flagged": "Flagged"
+    },
+    "sort": "Sort",
+    "sorts": {
+      "difficulty": "Easy to hard",
+      "newest": "Newest",
+      "missed": "Most missed"
+    },
+    "filters": "Filters",
+    "clear": "Clear filters",
+    "showResults": "{count, plural, =0 {No questions} one {Show # question} other {Show # questions}}",
+    "count": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+    "columns": {
+      "id": "ID",
+      "skill": "Skill",
+      "difficulty": "Difficulty",
+      "question": "Question",
+      "status": "Status",
+      "time": "Last time"
+    },
+    "practiceThese": "Practice these",
+    "practiceMistakes": "Practice my mistakes",
+    "practiceHint": "Practice these starts a drill with the questions on this page (up to 20).",
+    "progress": "{attempted} of {total} done · {correct} correct",
+    "progressLabel": "{domain}: {attempted} of {total} answered, {correct} correct",
+    "empty": {
+      "title": "Nothing matches",
+      "body": "Try another skill or difficulty, or clear the filters."
+    },
+    "noMistakes": "No mistakes here yet. Nice work.",
+    "open": "Practise {id}",
+    "pageOf": "Page {page} of {pages}",
+    "previous": "Previous",
+    "next": "Next",
+    "flagged": "Flagged",
+    "spr": "Typed answer"
   }
 }

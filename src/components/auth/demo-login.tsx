@@ -11,20 +11,11 @@ export async function DemoLogin() {
         {t("title")}
       </h2>
       <p className="text-sm text-muted-foreground">{t("body")}</p>
-      <div className="grid gap-2 sm:grid-cols-2">
-        <form action={signInAsDemo}>
-          <input type="hidden" name="role" value="student" />
-          <Button type="submit" className="h-auto min-h-9 w-full whitespace-normal">
-            {t("student")}
-          </Button>
-        </form>
-        <form action={signInAsDemo}>
-          <input type="hidden" name="role" value="admin" />
-          <Button type="submit" variant="outline" className="h-auto min-h-9 w-full whitespace-normal bg-background">
-            {t("admin")}
-          </Button>
-        </form>
-      </div>
+      <form action={signInAsDemo}>
+        <Button type="submit" className="h-auto min-h-9 w-full whitespace-normal">
+          {t("student")}
+        </Button>
+      </form>
     </section>
   );
 }

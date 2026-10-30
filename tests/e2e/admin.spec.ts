@@ -11,13 +11,13 @@ const CSV = [
 ].join("\n");
 
 test("admin imports a spreadsheet, reviews, publishes, and the question appears in a drill", async ({ page, browser }) => {
-  await signIn(page, "admin@e2e.test");
+  await signIn(page, "owner@e2e.test");
   if (page.url().includes("onboarding")) await page.getByRole("button", { name: "Skip for now" }).click();
 
   mkdirSync(test.info().outputDir, { recursive: true });
   const file = path.join(test.info().outputDir, "import.csv");
   writeFileSync(file, CSV);
-  await page.goto("/admin/import");
+  await page.goto("/manage/import");
   await page.getByRole("tab", { name: "CSV / Excel" }).click();
   await page.getByRole("tabpanel").getByText("Create a new source").click();
   await page.getByLabel("Source name").fill("E2E worksheets");
@@ -29,7 +29,7 @@ test("admin imports a spreadsheet, reviews, publishes, and the question appears 
 
   await expect(page.getByText("3 rows: 2 ready, 1 with flags, 0 with errors")).toBeVisible();
   await page.getByRole("button", { name: "Import 3 questions as drafts" }).click();
-  await expect(page).toHaveURL(/\/admin\/review\?batch=/);
+  await expect(page).toHaveURL(/\/manage\/review\?batch=/);
   await expect(page.getByRole("cell", { name: /^E2E-M-ALG-000[123]/ })).toHaveCount(3);
 
   await page.getByRole("button", { name: "Publish all clean questions" }).click();
@@ -49,13 +49,13 @@ test("admin imports a spreadsheet, reviews, publishes, and the question appears 
   await expect(student.getByText("2 questions match")).toBeVisible();
   await student.getByRole("button", { name: "Start drill" }).click();
   await expect(student).toHaveURL(/\/test\//);
-  await expect(student.getByText(/E2E-UNIQUE-STEM-(ONE|TWO)/)).toBeVisible();
+  await expect(student.getByText(/E2E-UNIQUE-STEM-(ONE|TWO)/).filter({ visible: true })).toBeVisible();
   await student.close();
 });
 
 test("admin creates and publishes a question in the editor", async ({ page }) => {
-  await signIn(page, "admin@e2e.test");
-  await page.goto("/admin/questions/new");
+  await signIn(page, "owner@e2e.test");
+  await page.goto("/manage/questions/new");
   await page.getByRole("button", { name: "Suggest next code" }).click();
   await expect(page.getByLabel("Code", { exact: true })).toHaveValue(/^LC-M-ALG-\d{4}$/);
   await page.getByLabel("Question", { exact: true }).fill("If $5x = 35$, what is the value of $x$?");
@@ -63,7 +63,7 @@ test("admin creates and publishes a question in the editor", async ({ page }) =>
   await page.getByLabel("Mark C as correct").check();
   await expect(page.locator(".katex").first()).toBeVisible(); // live preview
   await page.getByRole("button", { name: "Publish" }).click();
-  await expect(page).toHaveURL(/\/admin\/questions\/c[a-z0-9]+$/);
+  await expect(page).toHaveURL(/\/manage\/questions\/c[a-z0-9]+$/);
   await expect(page.getByText("Published").first()).toBeVisible();
   await expect(page.getByText("Version 1")).toHaveCount(0); // history shows once there are edits
 });

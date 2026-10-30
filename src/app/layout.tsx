@@ -21,7 +21,9 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: {
       icon: [
         { url: siteConfig.logo.mark, type: "image/svg+xml" },
+        { url: "/brand/favicon-16.png", sizes: "16x16", type: "image/png" },
         { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+        { url: "/brand/favicon-48.png", sizes: "48x48", type: "image/png" },
       ],
       apple: "/brand/apple-touch-icon.png",
     },

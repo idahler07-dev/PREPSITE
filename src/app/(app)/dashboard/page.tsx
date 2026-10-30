@@ -76,13 +76,13 @@ export default async function DashboardPage() {
         {/* Greeting */}
         <Tile className="lg:col-span-2">
           <div className="flex items-center gap-6">
-            <div className="flex-1 space-y-3">
+            <div className="min-w-0 flex-1 space-y-3">
               <h1 className="text-h2 font-semibold lg:text-h1">{first ? t("greeting", { name: first }) : t("greetingNoName")}</h1>
               <p className="max-w-[50ch] text-muted-foreground">{t("greetingSub")}</p>
               <div className="flex flex-wrap gap-2 pt-2">
                 {s.openAttemptId && (
-                  <Button asChild variant="secondary">
-                    <Link href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</Link>
+                  <Button asChild variant="secondary" className="h-auto min-h-10 max-w-full whitespace-normal">
+                    <a href={`/test/${s.openAttemptId}`}>{t("continueAttempt")}</a>
                   </Button>
                 )}
                 <Button asChild>

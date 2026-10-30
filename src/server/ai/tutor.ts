@@ -15,6 +15,7 @@ import { IMAGE_TYPES, storage } from "@/server/storage";
 import { aiAvailable, logAiUsage, models } from "./client";
 import { streamText, type TextContent } from "./stream-text";
 import { questionContext, TUTOR_MODES, TUTOR_SYSTEM_PROMPT, type TutorMode, type TutorQuestion } from "./tutor-prompt";
+import { isOwner } from "@/server/auth/owner";
 
 export const TUTOR_FEATURES = ["tutor", "tutor_chat"] as const;
 const MAX_TOKENS = 16_000; // includes the model's thinking
@@ -86,13 +87,13 @@ async function loadAccess(userId: string, attemptId: string, questionId: string,
   return { response: r, question: r.question, answered };
 }
 
-export async function tierOf(user: Pick<CurrentUser, "id" | "role">): Promise<AiTier> {
-  if (user.role === "EDITOR" || user.role === "ADMIN") return "staff";
+export async function tierOf(user: Pick<CurrentUser, "id" | "email" | "emailVerified">): Promise<AiTier> {
+  if (isOwner(user)) return "owner";
   return (await getEntitlement(user.id)).premium ? "premium" : "free";
 }
 
 /** New AI answers left today (cached answers don't count). */
-export async function remainingToday(user: Pick<CurrentUser, "id" | "role">): Promise<number> {
+export async function remainingToday(user: Pick<CurrentUser, "id" | "email" | "emailVerified">): Promise<number> {
   const limit = aiLimits.tutorPerDay[await tierOf(user)];
   const used = await db.aiUsage.count({
     where: { userId: user.id, feature: { in: [...TUTOR_FEATURES] }, createdAt: { gte: startOfDayInZone(new Date(), siteConfig.defaultTimeZone) } },
@@ -100,7 +101,7 @@ export async function remainingToday(user: Pick<CurrentUser, "id" | "role">): Pr
   return Math.max(0, limit - used);
 }
 
-async function requireQuota(user: Pick<CurrentUser, "id" | "role">) {
+async function requireQuota(user: Pick<CurrentUser, "id" | "email" | "emailVerified">) {
   if (!aiAvailable()) throw new HttpError(503, "AI_UNAVAILABLE");
   if ((await remainingToday(user)) <= 0) throw new HttpError(429, "QUOTA_EXCEEDED");
 }
@@ -159,7 +160,7 @@ async function recordDispute(questionId: string) {
  * held back; on DISAGREE the reply is dropped and the question flagged.
  */
 function streamReply(opts: {
-  user: Pick<CurrentUser, "id" | "role">;
+  user: Pick<CurrentUser, "id" | "email" | "emailVerified">;
   feature: (typeof TUTOR_FEATURES)[number];
   questionId: string;
   messages: { role: "user" | "assistant"; content: string | TextContent[] }[];

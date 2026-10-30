@@ -1,10 +1,11 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Otto, Satify's octopus. Flat vector, built from simple shapes so a designer
- * can swap in polished artwork later: everything outside this file only uses
- * <Mascot pose="..." />. Colors come from the --otto-* tokens.
+ * Pip, Satify's mascot: a lilac highlighter with a cobalt cap. Pip marks
+ * what matters and glows when you get it right. Soft 3D shading in plain SVG
+ * (gradients only, no filters). Everything outside this file only uses
+ * <Mascot pose="..." />. Colors come from the --mascot-* tokens.
  *
  * Poses: wave, think, cheer, focus, sleepy, point, juggle, confused.
  * Never shown inside test questions.
@@ -13,41 +14,23 @@ export type MascotPose = "wave" | "think" | "cheer" | "focus" | "sleepy" | "poin
 
 export const MASCOT_POSES: MascotPose[] = ["wave", "think", "cheer", "focus", "sleepy", "point", "juggle", "confused"];
 
-const BODY = "var(--otto-body)";
-const BELLY = "var(--otto-belly)";
-const ACCENT = "var(--otto-accent)";
-const EYE = "var(--otto-eye)";
-const INK = "var(--otto-ink)";
+const BODY = "var(--mascot-body)";
+const LIGHT = "var(--mascot-light)";
+const DARK = "var(--mascot-dark)";
+const CAP = "var(--mascot-cap)";
+const CAP_LIGHT = "var(--mascot-cap-light)";
+const CAP_DARK = "var(--mascot-cap-dark)";
+const ACCENT = "var(--mascot-accent)";
+const EYE = "var(--mascot-eye)";
+const INK = "var(--mascot-ink)";
 const ZZ = ["z", "z"];
 const QUESTION = "?";
 
-/** Arm roots along the bottom of the head, left to right. */
-const ROOTS = [62, 74, 86, 96, 104, 114, 126, 138];
+const BARREL = { x: 68, y: 72, w: 64, h: 82, r: 18 };
+const S_BODY = "M19 45C25 50 42 49.5 42 40.5C42 31.5 22 33 22 24.5C22 17 32 14.5 41 17.5";
+const S_TIP = "M36.5 12.5L44 16.5L40.5 24";
 
-/** A resting arm: down, then a little curl outward. */
-function restArm(i: number) {
-  const x = ROOTS[i]!;
-  const k = i < 4 ? -1 : 1;
-  const spread = [1.5, 1.1, 0.7, 0.3, 0.3, 0.7, 1.1, 1.5][i]!;
-  const len = [22, 27, 30, 32, 32, 30, 27, 22][i]!;
-  return `M${x} 132 q ${k * spread * 6} ${len * 0.8} ${k * (spread * 12 + 6)} ${len} q ${k * 7} 2 ${k * 6} -6`;
-}
-
-/** Arm raised up and out on one side (for waving, cheering, holding). */
-function upArm(side: -1 | 1, root: number, reach = 1) {
-  return `M${root} 124 q ${side * 20 * reach} -2 ${side * 26 * reach} -26 q ${side * 3} -12 ${side * -6} -13`;
-}
-
-function Arm({ d, dots = true, className, style }: { d: string; dots?: boolean; className?: string; style?: React.CSSProperties }) {
-  return (
-    <g className={className} style={style}>
-      <path d={d} fill="none" stroke={BODY} strokeWidth={11} strokeLinecap="round" strokeLinejoin="round" />
-      {dots && <path d={d} fill="none" stroke={ACCENT} strokeWidth={3} strokeLinecap="round" strokeDasharray="0.1 13" strokeDashoffset={-9} opacity={0.8} />}
-    </g>
-  );
-}
-
-/* ---------- Study tools (simple shapes) ---------- */
+/* ---------- Study props (simple shapes) ---------- */
 const Pencil = ({ x, y, r = 0 }: { x: number; y: number; r?: number }) => (
   <g transform={`translate(${x} ${y}) rotate(${r})`}>
     <rect x={-3.5} y={-20} width={7} height={30} rx={1.5} fill="var(--flagged)" />
@@ -58,9 +41,9 @@ const Pencil = ({ x, y, r = 0 }: { x: number; y: number; r?: number }) => (
 );
 const Book = ({ x, y, r = 0 }: { x: number; y: number; r?: number }) => (
   <g transform={`translate(${x} ${y}) rotate(${r})`}>
-    <rect x={-16} y={-12} width={32} height={24} rx={3} fill="var(--highlight)" />
-    <rect x={-13} y={-9} width={26} height={18} rx={2} fill={EYE} opacity={0.9} />
-    <path d="M0 -9 V9" stroke="var(--highlight)" strokeWidth={2} />
+    <rect x={-16} y={-12} width={32} height={24} rx={3} fill={CAP} />
+    <rect x={-13} y={-9} width={26} height={18} rx={2} fill={EYE} opacity={0.92} />
+    <path d="M0 -9 V9" stroke={CAP} strokeWidth={2} />
     <path d="M-9 -3 H-3 M-9 2 H-4 M3 -3 H9 M4 2 H9" stroke={INK} strokeOpacity={0.35} strokeWidth={1.4} strokeLinecap="round" />
   </g>
 );
@@ -78,141 +61,212 @@ const Timer = ({ x, y }: { x: number; y: number }) => (
     <path d="M0 0 V-7 M0 0 L5 3" stroke={ACCENT} strokeWidth={2.5} strokeLinecap="round" />
   </g>
 );
-const FlagTool = ({ x, y, r = 0 }: { x: number; y: number; r?: number }) => (
-  <g transform={`translate(${x} ${y}) rotate(${r})`}>
-    <path d="M0 14 V-16" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
-    <path d="M0 -16 H16 L12 -10 L16 -4 H0 Z" fill="var(--flagged)" />
-  </g>
-);
-const Highlighter = ({ x, y, r = 0 }: { x: number; y: number; r?: number }) => (
-  <g transform={`translate(${x} ${y}) rotate(${r})`}>
-    <rect x={-5} y={-16} width={10} height={24} rx={3} fill="var(--highlight)" />
-    <rect x={-5} y={-16} width={10} height={6} rx={2} fill={INK} opacity={0.7} />
-    <path d="M-4 8 H4 L2 14 H-2 Z" fill="var(--highlight)" />
-  </g>
+const Sparkle = ({ x, y, s = 1, fill = "var(--flagged)" }: { x: number; y: number; s?: number; fill?: string }) => (
+  <path transform={`translate(${x} ${y}) scale(${s})`} d="M0 -8 L2.2 -2.2 L8 0 L2.2 2.2 L0 8 L-2.2 2.2 L-8 0 L-2.2 -2.2 Z" fill={fill} />
 );
 
 /* ---------- Face ---------- */
-function Eyes({ mood }: { mood: "open" | "closed" | "happy" | "side" }) {
-  if (mood === "closed")
-    return (
-      <g stroke={INK} strokeWidth={3} strokeLinecap="round" fill="none">
-        <path d="M74 98 q 8 6 16 0" />
-        <path d="M110 98 q 8 6 16 0" />
-      </g>
-    );
-  if (mood === "happy")
-    return (
-      <g stroke={INK} strokeWidth={3.5} strokeLinecap="round" fill="none">
-        <path d="M74 99 q 8 -9 16 0" />
-        <path d="M110 99 q 8 -9 16 0" />
-      </g>
-    );
-  const dx = mood === "side" ? 3 : 0;
-  return (
-    <g className="otto-blink">
-      <ellipse cx={82} cy={97} rx={12} ry={14} fill={EYE} />
-      <ellipse cx={118} cy={97} rx={12} ry={14} fill={EYE} />
-      <circle cx={84 + dx} cy={99} r={6.5} fill={INK} />
-      <circle cx={120 + dx} cy={99} r={6.5} fill={INK} />
-      <circle cx={86.5 + dx} cy={95.5} r={2.3} fill={EYE} />
-      <circle cx={122.5 + dx} cy={95.5} r={2.3} fill={EYE} />
-    </g>
-  );
-}
+type Eyes = "open" | "closed" | "happy" | "side";
+type Mouth = "smile" | "open" | "o" | "flat";
 
-function Head({ eyes, mouth }: { eyes: "open" | "closed" | "happy" | "side"; mouth: "smile" | "open" | "o" | "flat" }) {
+function Face({ eyes, mouth }: { eyes: Eyes; mouth: Mouth }) {
+  const dx = eyes === "side" ? 2.5 : 0;
   return (
     <g>
-      {/* Dome head: a clear rounded top, not a blob. */}
-      <path d="M50 112 C 48 38, 152 38, 150 112 L 150 122 C 150 134, 140 138, 100 138 C 60 138, 50 134, 50 122 Z" fill={BODY} />
-      <ellipse cx={100} cy={122} rx={34} ry={13} fill={BELLY} />
-      <ellipse cx={76} cy={62} rx={11} ry={5} fill={EYE} opacity={0.2} transform="rotate(-30 76 62)" />
-      <Eyes mood={eyes} />
-      <ellipse cx={66} cy={114} rx={7} ry={4.5} fill={ACCENT} opacity={0.75} />
-      <ellipse cx={134} cy={114} rx={7} ry={4.5} fill={ACCENT} opacity={0.75} />
-      {mouth === "smile" && <path d="M92 116 q 8 7 16 0" fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
-      {mouth === "open" && <path d="M91 114 q 9 14 18 0 Z" fill={INK} />}
-      {mouth === "o" && <ellipse cx={100} cy={118} rx={4} ry={5} fill={INK} />}
-      {mouth === "flat" && <path d="M94 118 h 12" stroke={INK} strokeWidth={3} strokeLinecap="round" />}
+      {eyes === "closed" && (
+        <g stroke={INK} strokeWidth={2.6} strokeLinecap="round" fill="none">
+          <path d="M82 99 q 6 5 12 0" />
+          <path d="M106 99 q 6 5 12 0" />
+        </g>
+      )}
+      {eyes === "happy" && (
+        <g stroke={INK} strokeWidth={3} strokeLinecap="round" fill="none">
+          <path d="M82 100 q 6 -8 12 0" />
+          <path d="M106 100 q 6 -8 12 0" />
+        </g>
+      )}
+      {(eyes === "open" || eyes === "side") && (
+        <g className="mascot-blink">
+          <ellipse cx={88 + dx} cy={97} rx={6.2} ry={7.8} fill={INK} />
+          <ellipse cx={112 + dx} cy={97} rx={6.2} ry={7.8} fill={INK} />
+          <circle cx={90.2 + dx} cy={93.6} r={2.6} fill={EYE} />
+          <circle cx={114.2 + dx} cy={93.6} r={2.6} fill={EYE} />
+          <circle cx={85.8 + dx} cy={100.8} r={1.1} fill={EYE} opacity={0.75} />
+          <circle cx={109.8 + dx} cy={100.8} r={1.1} fill={EYE} opacity={0.75} />
+        </g>
+      )}
+      <ellipse cx={77} cy={110} rx={5.5} ry={3.2} fill={ACCENT} opacity={0.45} />
+      <ellipse cx={123} cy={110} rx={5.5} ry={3.2} fill={ACCENT} opacity={0.45} />
+      {mouth === "smile" && <path d="M94 111 q 6 6 12 0" fill="none" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />}
+      {mouth === "open" && <path d="M93 109 q 7 11 14 0 Z" fill={INK} />}
+      {mouth === "o" && <ellipse cx={100} cy={113} rx={3.2} ry={4} fill={INK} />}
+      {mouth === "flat" && <path d="M95 113 h 10" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />}
     </g>
   );
 }
 
-/** Arms resting except the ones a pose replaces. */
-function Rest({ skip = [] as number[] }) {
+/** An arm as a soft tube ending in a round hand. */
+function Arm({ d, hand, className, style }: { d: string; hand: [number, number]; className?: string; style?: React.CSSProperties }) {
   return (
-    <g className="otto-wiggle">
-      {ROOTS.map((_, i) => (skip.includes(i) ? null : <Arm key={i} d={restArm(i)} dots={i % 3 === 0} />))}
+    <g className={className} style={style} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} stroke={DARK} strokeWidth={9} />
+      <path d={d} stroke={BODY} strokeWidth={6.5} transform="translate(-.6 -.8)" />
+      <circle cx={hand[0]} cy={hand[1]} r={6.2} fill={LIGHT} />
+      <circle cx={hand[0] - 1.8} cy={hand[1] - 1.8} r={1.8} fill={EYE} opacity={0.6} />
     </g>
   );
 }
 
-function Pose({ pose }: { pose: MascotPose }): ReactNode {
+/* Arms at rest, by side. */
+const REST_L = { d: "M70 112 C60 116 56 126 57 136", hand: [57, 138] as [number, number] };
+const REST_R = { d: "M130 112 C140 116 144 126 143 136", hand: [143, 138] as [number, number] };
+
+/** Pip's body: cap with clip, barrel with label band, collar and chisel nib. */
+function Body({ id, eyes, mouth, glow = false }: { id: string; eyes: Eyes; mouth: Mouth; glow?: boolean }) {
+  const b = BARREL;
+  return (
+    <g>
+      {glow && <ellipse cx={100} cy={104} rx={74} ry={84} fill={`url(#${id}-glow)`} />}
+      {/* Collar and chisel nib */}
+      <path d="M70 150H130L122 168H78Z" fill={DARK} />
+      <path d="M73 153H127" stroke={EYE} strokeOpacity={0.25} strokeWidth={1.6} />
+      <path d="M80 168H120L113 190L87 182Z" fill={`url(#${id}-nib)`} />
+      <path d="M80 168H100L94 188L87 182Z" fill={EYE} opacity={0.3} />
+      {/* Barrel */}
+      <rect x={b.x} y={b.y} width={b.w} height={b.h} rx={b.r} fill={`url(#${id}-barrel)`} />
+      <g clipPath={`url(#${id}-clip)`}>
+        <rect x={b.x} y={b.y} width={b.w} height={b.h} fill={`url(#${id}-ao)`} />
+        <rect x={b.x} y={130} width={b.w} height={14} fill={EYE} opacity={0.88} />
+        <path d={`M${b.x} 130H${b.x + b.w}M${b.x} 144H${b.x + b.w}`} stroke={DARK} strokeOpacity={0.3} strokeWidth={1.2} />
+        <path d={`M${b.x + b.w - 5} ${b.y + 8}V${b.y + b.h - 6}`} stroke={EYE} strokeOpacity={0.35} strokeWidth={1.6} />
+      </g>
+      <rect x={76} y={80} width={7} height={44} rx={3.5} fill={`url(#${id}-spec)`} />
+      {/* The logo on the label band */}
+      <g transform="translate(94.2 131.2) scale(.18)">
+        <rect width={64} height={64} rx={18} fill={CAP} />
+        <g fill="none" stroke={EYE} strokeLinecap="round" strokeLinejoin="round">
+          <path d={S_BODY} strokeWidth={7.5} />
+          <path d={S_TIP} strokeWidth={6} />
+        </g>
+      </g>
+      {/* Cap, lip and pocket clip */}
+      <path d="M70 70V44C70 30 82 20 100 20C118 20 130 30 130 44V70Z" fill={`url(#${id}-cap)`} />
+      <path d="M77 44C78 33 87 26 99 25" stroke={EYE} strokeOpacity={0.45} strokeWidth={5} fill="none" strokeLinecap="round" />
+      <path d="M80 54H120M80 60H120" stroke={CAP_DARK} strokeOpacity={0.35} strokeWidth={1.6} strokeLinecap="round" />
+      <rect x={66} y={64} width={68} height={12} rx={6} fill={CAP_DARK} />
+      <rect x={70} y={65.5} width={60} height={3} rx={1.5} fill={EYE} opacity={0.22} />
+      <path d="M126 30H134C137 30 139 32 139 35V88C139 91.5 136.5 94 133 94C129.5 94 128 91.5 128 88V48" fill="#ECE9FF" stroke="#9A92D6" strokeWidth={1} />
+      <rect x={130.5} y={36} width={2.4} height={46} rx={1.2} fill={EYE} opacity={0.75} />
+      <Face eyes={eyes} mouth={mouth} />
+    </g>
+  );
+}
+
+function Defs({ id }: { id: string }) {
+  return (
+    <defs>
+      <linearGradient id={`${id}-barrel`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" style={{ stopColor: LIGHT }} />
+        <stop offset=".45" style={{ stopColor: BODY }} />
+        <stop offset="1" style={{ stopColor: DARK }} />
+      </linearGradient>
+      <linearGradient id={`${id}-cap`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" style={{ stopColor: CAP_LIGHT }} />
+        <stop offset=".5" style={{ stopColor: CAP }} />
+        <stop offset="1" style={{ stopColor: CAP_DARK }} />
+      </linearGradient>
+      <linearGradient id={`${id}-nib`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" style={{ stopColor: LIGHT }} />
+        <stop offset="1" style={{ stopColor: BODY }} />
+      </linearGradient>
+      <linearGradient id={`${id}-ao`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset=".55" stopColor="#1A1060" stopOpacity="0" />
+        <stop offset="1" stopColor="#1A1060" stopOpacity=".28" />
+      </linearGradient>
+      <linearGradient id={`${id}-spec`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff" stopOpacity=".8" />
+        <stop offset="1" stopColor="#fff" stopOpacity="0" />
+      </linearGradient>
+      <radialGradient id={`${id}-glow`}>
+        <stop offset="0" style={{ stopColor: LIGHT }} stopOpacity=".7" />
+        <stop offset="1" style={{ stopColor: LIGHT }} stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id={`${id}-shadow`}>
+        <stop offset="0" style={{ stopColor: INK }} stopOpacity=".22" />
+        <stop offset="1" style={{ stopColor: INK }} stopOpacity="0" />
+      </radialGradient>
+      <clipPath id={`${id}-clip`}>
+        <rect x={BARREL.x} y={BARREL.y} width={BARREL.w} height={BARREL.h} rx={BARREL.r} />
+      </clipPath>
+    </defs>
+  );
+}
+
+function Pose({ pose, id }: { pose: MascotPose; id: string }): ReactNode {
   switch (pose) {
     case "wave":
       return (
-        <>
-          <Rest skip={[7]} />
-          <Head eyes="open" mouth="smile" />
-          <g className="otto-wave" style={{ transformOrigin: "142px 124px" }}>
-            <Arm d={upArm(1, 142)} />
+        <g transform="rotate(-5 100 120)">
+          <Arm {...REST_L} />
+          <Body id={id} eyes="open" mouth="smile" />
+          <g className="mascot-wave" style={{ transformOrigin: "130px 110px" }}>
+            <Arm d="M130 110 C146 104 152 90 151 76" hand={[151, 72]} />
           </g>
-        </>
+        </g>
       );
     case "think":
       return (
         <>
-          <Rest skip={[5, 6]} />
-          <Head eyes="side" mouth="flat" />
-          <Arm d="M126 130 q 10 6 4 -2 q -4 -6 -14 -6" dots={false} />
-          <g fill={BODY} opacity={0.9}>
-            <circle cx={158} cy={64} r={4} />
-            <circle cx={168} cy={50} r={6} />
-            <circle cx={178} cy={32} r={9} />
+          <g transform="rotate(4 100 120)">
+            <Arm {...REST_L} />
+            <Body id={id} eyes="side" mouth="flat" />
+            <Arm d="M130 116 C146 120 146 106 136 102" hand={[134, 104]} />
+          </g>
+          <g fill={LIGHT}>
+            <circle cx={156} cy={52} r={4} />
+            <circle cx={166} cy={38} r={6} />
+            <circle cx={178} cy={20} r={9} />
           </g>
         </>
       );
     case "cheer":
       return (
         <>
-          <Rest skip={[0, 1, 6, 7]} />
-          <Head eyes="happy" mouth="open" />
-          <g className="otto-cheer">
-            <Arm d={upArm(-1, 58, 1.1)} />
-            <Arm d={upArm(-1, 70, 0.7)} />
-            <Arm d={upArm(1, 130, 0.7)} />
-            <Arm d={upArm(1, 142, 1.1)} />
+          <Body id={id} eyes="happy" mouth="open" glow />
+          <g className="mascot-cheer">
+            <Arm d="M70 108 C54 100 48 86 50 72" hand={[50, 68]} />
+            <Arm d="M130 108 C146 100 152 86 150 72" hand={[150, 68]} />
           </g>
-          <g fill={ACCENT}>
-            <circle cx={30} cy={60} r={3} />
-            <circle cx={172} cy={56} r={3} />
-            <circle cx={40} cy={40} r={2} fill="var(--highlight)" />
-            <circle cx={160} cy={36} r={2.5} fill="var(--highlight)" />
-          </g>
+          <Sparkle x={32} y={44} />
+          <Sparkle x={172} y={40} s={0.8} fill="var(--highlight)" />
+          <Sparkle x={160} y={150} s={0.6} fill={ACCENT} />
         </>
       );
     case "focus":
       return (
         <>
-          <Rest skip={[1, 6]} />
-          <Book x={70} y={150} r={-8} />
-          <Arm d="M74 132 q -4 14 -2 18" dots={false} />
-          <Head eyes="open" mouth="flat" />
-          <Pencil x={150} y={120} r={30} />
-          <Arm d="M126 130 q 14 4 20 -4" dots={false} />
+          {/* Highlighting a line: the nib leaves a lilac mark. */}
+          <path d="M22 192 H118" stroke="var(--highlight)" strokeWidth={10} strokeLinecap="round" opacity={0.55} />
+          <g transform="rotate(-28 100 120)">
+            <Arm {...REST_L} />
+            <Body id={id} eyes="open" mouth="flat" />
+            <Arm {...REST_R} />
+          </g>
         </>
       );
     case "sleepy":
       return (
         <>
-          <Rest />
-          <Head eyes="closed" mouth="o" />
+          <g transform="rotate(8 100 120)">
+            <Arm {...REST_L} />
+            <Body id={id} eyes="closed" mouth="o" />
+            <Arm {...REST_R} />
+          </g>
           <g fill={INK} opacity={0.55} fontFamily="var(--font-sans)" fontWeight={700}>
-            <text x={150} y={70} fontSize={18}>
+            <text x={150} y={40} fontSize={18}>
               {ZZ[0]}
             </text>
-            <text x={164} y={52} fontSize={13}>
+            <text x={164} y={22} fontSize={13}>
               {ZZ[1]}
             </text>
           </g>
@@ -220,38 +274,35 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
       );
     case "point":
       return (
-        <>
-          <Rest skip={[7]} />
-          <Head eyes="side" mouth="smile" />
-          <Arm d="M142 124 q 22 0 36 -10" />
-        </>
+        <g transform="rotate(-4 100 120)">
+          <Arm {...REST_L} />
+          <Body id={id} eyes="side" mouth="smile" />
+          <Arm d="M130 112 C146 112 160 106 172 98" hand={[175, 96]} />
+        </g>
       );
     case "juggle":
       return (
         <>
-          <Rest skip={[0, 1, 6, 7]} />
-          <Head eyes="open" mouth="smile" />
-          <g className="otto-juggle">
-            <Arm d={upArm(-1, 58, 1.1)} />
-            <Arm d={upArm(-1, 70, 0.7)} />
-            <Arm d={upArm(1, 130, 0.7)} />
-            <Arm d={upArm(1, 142, 1.1)} />
-            <Pencil x={30} y={70} r={-30} />
-            <Calculator x={62} y={44} r={-10} />
-            <Timer x={100} y={34} />
-            <FlagTool x={140} y={46} r={10} />
-            <Highlighter x={172} y={72} r={28} />
+          <Body id={id} eyes="open" mouth="smile" />
+          <g className="mascot-juggle">
+            <Arm d="M70 108 C54 100 48 86 50 72" hand={[50, 68]} />
+            <Arm d="M130 108 C146 100 152 86 150 72" hand={[150, 68]} />
+            <Pencil x={22} y={104} r={-30} />
+            <Calculator x={30} y={46} r={-12} />
+            <Timer x={172} y={40} />
+            <Book x={182} y={102} r={16} />
           </g>
-          <Book x={100} y={168} />
         </>
       );
     case "confused":
       return (
         <>
-          <Rest skip={[6]} />
-          <Head eyes="open" mouth="o" />
-          <Arm d="M128 128 q 12 -12 4 -30" dots={false} />
-          <text x={150} y={66} fontSize={34} fontWeight={700} fill="var(--highlight)" fontFamily="var(--font-sans)">
+          <g transform="rotate(10 100 120)">
+            <Arm {...REST_L} />
+            <Body id={id} eyes="open" mouth="o" />
+            <Arm d="M130 108 C144 96 142 74 132 60" hand={[130, 56]} />
+          </g>
+          <text x={150} y={46} fontSize={34} fontWeight={700} fill="var(--highlight)" fontFamily="var(--font-sans)">
             {QUESTION}
           </text>
         </>
@@ -261,22 +312,25 @@ function Pose({ pose }: { pose: MascotPose }): ReactNode {
 
 /**
  * <Mascot pose="wave" /> — decorative by default (aria-hidden); pass `label`
- * when Otto carries meaning. Plain SVG (no client JavaScript): idle blink and
- * arm wiggle, a short fade when the pose changes and a hover reaction are
+ * when Pip carries meaning. Plain SVG (no client JavaScript): idle blink and
+ * arm movement, a short fade when the pose changes and a hover reaction are
  * CSS animations, all off with reduced motion.
  */
 export function Mascot({ pose, className, label, hoverReact = false }: { pose: MascotPose; className?: string; label?: string; hoverReact?: boolean }) {
+  const id = `pip${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg
       viewBox="0 0 200 200"
-      className={cn("otto h-auto w-32 overflow-visible", hoverReact && "otto-react", className)}
+      className={cn("mascot h-auto w-32 overflow-visible", hoverReact && "mascot-react", className)}
       role={label ? "img" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
     >
+      <Defs id={id} />
+      <ellipse cx={100} cy={194} rx={44} ry={5.5} fill={`url(#${id}-shadow)`} />
       {/* Keyed by pose: a new pose remounts and fades in. */}
-      <g key={pose} className="otto-pose">
-        <Pose pose={pose} />
+      <g key={pose} className="mascot-pose">
+        <Pose pose={pose} id={id} />
       </g>
     </svg>
   );

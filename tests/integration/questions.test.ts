@@ -14,7 +14,7 @@ describe("question service", () => {
   beforeEach(resetDb);
 
   it("creates a question with version 1 and no flags when complete", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const { question } = await createQuestion(mathInput({ code: "LC-M-ALG-0001" }), editor, { origin: "MANUAL" });
     expect(question.version).toBe(1);
     expect(question.flags).toEqual([]);
@@ -24,13 +24,13 @@ describe("question service", () => {
   });
 
   it("rejects a duplicate code", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     await createQuestion(mathInput({ code: "LC-M-ALG-0001" }), editor, { origin: "MANUAL" });
     await expect(createQuestion(mathInput({ code: "lc-m-alg-0001" }), editor, { origin: "MANUAL" })).rejects.toMatchObject({ code: "DUPLICATE_CODE" });
   });
 
   it("flags incomplete content and blocks publishing until fixed", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const { question } = await createQuestion(mathInput({ correctAnswers: [] }), editor, { origin: "MANUAL" });
     expect(question.flags).toContain("MISSING_ANSWER");
     await expect(setQuestionStatus(question.id, "PUBLISHED", editor)).rejects.toMatchObject({ code: "BLOCKING_FLAGS" });
@@ -44,7 +44,7 @@ describe("question service", () => {
   });
 
   it("keeps a version for every save and detects conflicting edits", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const { question } = await createQuestion(mathInput(), editor, { origin: "MANUAL" });
     await updateQuestion(question.id, mathInput({ code: question.code, explanation: "Changed." }), editor, { expectedVersion: 1 });
     await expect(updateQuestion(question.id, mathInput({ code: question.code }), editor, { expectedVersion: 1 })).rejects.toMatchObject({
@@ -56,7 +56,7 @@ describe("question service", () => {
   });
 
   it("flags near-duplicates of existing questions", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     const stem = "A train travels 240 kilometers in 3 hours at a constant speed. How many kilometers does it travel in 5 hours?";
     await createQuestion(mathInput({ stem }), editor, { origin: "MANUAL" });
     const { question, nearDuplicates } = await createQuestion(mathInput({ stem: stem.replace("5 hours", "7 hours") }), editor, { origin: "MANUAL" });
@@ -65,7 +65,7 @@ describe("question service", () => {
   });
 
   it("suggests the next free code for a prefix and domain", async () => {
-    const editor = await makeUser("EDITOR");
+    const editor = await makeUser();
     await createQuestion(mathInput({ code: "LC-M-ALG-0007" }), editor, { origin: "MANUAL" });
     await createQuestion(mathInput({ code: "LC-M-ADV-0020", domain: "ADVANCED_MATH", skill: "EQUIVALENT_EXPRESSIONS" }), editor, { origin: "MANUAL" });
     expect(await suggestNextCodes("LC-M-", "ALGEBRA", 2)).toEqual(["LC-M-ALG-0008", "LC-M-ALG-0009"]);
@@ -73,7 +73,7 @@ describe("question service", () => {
   });
 
   it("unpublishes everything from a withdrawn source and blocks re-publishing", async () => {
-    const admin = await makeUser("ADMIN");
+    const admin = await makeUser();
     const source = await db.source.create({
       data: { name: "Worksheets", owner: "Centre", rightsStatement: "ok", rightsConfirmedById: admin.id, rightsConfirmedAt: new Date() },
     });
@@ -90,7 +90,7 @@ describe("question service", () => {
   });
 
   it("sends a reported question back to review, once per student", async () => {
-    const admin = await makeUser("ADMIN");
+    const admin = await makeUser();
     const student = await makeUser();
     const { question } = await createQuestion(mathInput(), admin, { origin: "MANUAL", status: "PUBLISHED" });
     await reportQuestion(question.id, student.id, "WRONG_ANSWER", "B is wrong");

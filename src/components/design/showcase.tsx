@@ -16,10 +16,11 @@ import { emphasis } from "@/components/motion/emphasis-tags";
 import { SkillMap } from "@/components/learning/skill-map";
 import { TrendChart } from "@/components/learning/trend-chart";
 import { ChoiceList } from "@/components/test/choice-list";
+import { ActivityHeatmap, DailyChart, PaceChart } from "@/components/learning/analytics-charts";
 import { EmptyStateDemo } from "./empty-state-demo";
 
 /*
- * Design system showcase (admin only, /admin/design). Sample labels here are
+ * Design system showcase (owners only, /manage/design). Sample labels here are
  * for designers, so they're plain constants rather than translations.
  */
 const TOKENS = ["background", "section-tint", "surface", "surface-2", "foreground", "muted-foreground", "border", "input", "primary", "primary-hover", "primary-soft", "accent", "accent-soft", "accent-ink", "highlight", "correct", "correct-soft", "correct-ink", "flagged", "warning-ink", "danger", "danger-soft", "danger-ink"];
@@ -36,7 +37,15 @@ const TYPE = [
 const CHOICES = ["11", "26", "30", "41"].map((html, i) => ({ key: "ABCD"[i]!, html }));
 const SKILLS = [0.92, 0.8, 0.66, 0.5, 0.35, 0.2, null].map((m, i) => ({ key: String(i), label: `Skill ${i + 1}`, mastery: m, detail: m == null ? undefined : `${Math.round(m * 100)}%` }));
 const TREND = [1180, 1220, 1210, 1290, 1340].map((value, i) => ({ label: `T${i + 1}`, value }));
-const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", test: "Answer choices", otto: "Otto poses", empty: "Empty state", emphasis: "Emphasis" };
+// Sample data for the chart showcase (fixed, so both theme panels match).
+const DAILY = Array.from({ length: 30 }, (_, i) => ({ day: `2026-10-${String(i + 1).padStart(2, "0")}`, correct: (i * 7) % 11, incorrect: (i * 3) % 5 }));
+const ACTIVITY = Array.from({ length: 18 * 7 }, (_, i) => ({ day: new Date(Date.UTC(2026, 5, 1) + i * 86_400_000).toISOString().slice(0, 10), count: (i * 13) % 23 < 6 ? 0 : (i * 13) % 23 }));
+const PACE = [
+  { difficulty: "EASY" as const, seconds: 58, n: 40 },
+  { difficulty: "MEDIUM" as const, seconds: 84, n: 35 },
+  { difficulty: "HARD" as const, seconds: 121, n: 18 },
+];
+const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", charts: "Charts", test: "Answer choices", mascot: "Pip poses", empty: "Empty state", emphasis: "Emphasis" };
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -136,15 +145,20 @@ export function Showcase() {
           </SpotlightCard>
         </div>
       </Block>
+      <Block title={H.charts}>
+        <DailyChart data={DAILY} />
+        <ActivityHeatmap days={ACTIVITY} />
+        <PaceChart section="Math" rows={PACE} target={95} />
+      </Block>
       <Block title={H.test}>
         <div className="max-w-md space-y-3">
-          <ChoiceList name="demo" choices={CHOICES} value={pick} eliminated={[]} eliminatorOn={false} correctAnswers={checked ? ["B"] : undefined} onSelect={setPick} onToggleEliminate={() => {}} />
+          <ChoiceList name="demo" choices={CHOICES} value={pick} eliminated={[]} correctAnswers={checked ? ["B"] : undefined} onSelect={setPick} onToggleEliminate={() => {}} />
           <Button size="sm" onClick={() => setChecked((c) => !c)}>
             {checked ? "Reset" : "Check"}
           </Button>
         </div>
       </Block>
-      <Block title={H.otto}>
+      <Block title={H.mascot}>
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {MASCOT_POSES.map((p) => (
             <li key={p} className="flex flex-col items-center gap-2 rounded-[14px] border bg-surface p-4">

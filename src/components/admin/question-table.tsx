@@ -76,7 +76,7 @@ export function QuestionTable({
                 </TableCell>
               )}
               <TableCell className="font-mono text-sm whitespace-nowrap">
-                <Link href={`/admin/questions/${r.id}`} className="text-primary hover:underline">
+                <Link href={`/manage/questions/${r.id}`} className="text-primary hover:underline">
                   {r.code}
                 </Link>
                 {r.isSample && (

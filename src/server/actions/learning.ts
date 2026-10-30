@@ -54,7 +54,7 @@ export async function removeNotebookItem(questionId: string) {
   return run(async () => {
     const user = await requireApiUser();
     await removeFromNotebook(user.id, z.string().max(40).parse(questionId));
-    revalidatePath("/[locale]/review", "page");
+    revalidatePath("/review", "page");
     return null;
   });
 }
@@ -88,7 +88,7 @@ export async function logOfficialScore(raw: unknown) {
       data: { userId: user.id, testName: s.testName, takenOn: new Date(`${s.takenOn}T00:00:00Z`), rw: s.rw, math: s.math, total: s.rw + s.math, missedSkills: skills },
     });
     await generatePlan(user.id, "official-score").catch(() => null);
-    revalidatePath("/[locale]/resources", "page");
+    revalidatePath("/resources", "page");
     return null;
   });
 }
@@ -97,7 +97,7 @@ export async function deleteOfficialScore(id: string) {
   return run(async () => {
     const user = await requireApiUser();
     await db.officialScore.deleteMany({ where: { id: z.string().max(40).parse(id), userId: user.id } });
-    revalidatePath("/[locale]/resources", "page");
+    revalidatePath("/resources", "page");
     return null;
   });
 }
@@ -107,7 +107,7 @@ export async function refreshStudyPlan() {
     const user = await requireApiUser();
     if (!(await rateLimit(`plan:${user.id}`, 5, 3600)).ok) throw new HttpError(429, "RATE_LIMITED");
     await generatePlan(user.id, "manual", { withMessage: true });
-    revalidatePath("/[locale]/plan", "page");
+    revalidatePath("/plan", "page");
     return null;
   });
 }

@@ -7,7 +7,7 @@ import { ArrowRight, Loader2, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/content/rich-text";
-import { DrawCheck, RadialFill, shake } from "@/components/test/answer-effects";
+import { DrawCheck, DrawX, RadialFill } from "@/components/test/answer-effects";
 import { checkLandingAnswer } from "@/server/actions/landing";
 import { spring, useLiteMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -58,7 +58,7 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
         className="rounded-2xl border bg-surface p-5 shadow-lg sm:p-6"
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.45 }}
+        transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.3 }}
       >
         <div className="mb-4 flex items-center justify-between gap-3">
           <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">{t("label")}</span>
@@ -82,8 +82,6 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
                 aria-label={t("choice", { key: c.key })}
                 disabled={!!result}
                 onClick={(e) => pick(c.key, e)}
-                animate={isWrong && !reduce ? shake.animate : { x: 0 }}
-                transition={shake.transition}
                 className={cn(
                   "relative isolate flex w-full items-center gap-3 overflow-hidden rounded-[var(--radius-input)] border px-3 py-2.5 text-start text-sm transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none disabled:cursor-default",
                   isCorrect ? "border-correct bg-correct-soft" : isWrong ? "border-danger bg-danger-soft" : selected ? "border-primary" : "border-border hover:border-primary/40",
@@ -100,6 +98,7 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
                 </span>
                 <RichText html={c.html} className="relative flex-1" />
                 {isCorrect && <DrawCheck />}
+                {isWrong && <DrawX />}
               </m.button>
             );
           })}

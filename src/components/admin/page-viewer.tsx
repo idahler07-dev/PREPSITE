@@ -35,7 +35,7 @@ export function PageViewer({ fileName, pages, initialPage }: { fileName: string;
           // eslint-disable-next-line @next/next/no-img-element
           <img
             key={page.id}
-            src={`/api/admin/import-pages/${page.id}/image`}
+            src={`/api/manage/import-pages/${page.id}/image`}
             alt={t("pageOf", { file: fileName, page: page.pageNumber })}
             className={cn("block h-auto", zoomed ? "w-[200%] max-w-none" : "w-full")}
           />

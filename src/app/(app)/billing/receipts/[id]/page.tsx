@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import siteConfig from "@site";
 import { db } from "@/lib/db";
-import { requireUser } from "@/server/auth/session";
+import { isOwner, requireUser } from "@/server/auth/session";
 import { formatMoney } from "@/server/payments/notify";
 import { Container } from "@/components/layout/page-header";
 import { PrintButton } from "@/components/billing/print-button";
@@ -11,8 +11,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const user = await requireUser(`/billing/receipts/${id}`);
   const order = await db.order.findUnique({ where: { id }, include: { user: { select: { name: true, email: true } }, subscription: true } });
-  const staff = user.role === "ADMIN" || user.role === "EDITOR";
-  if (!order || (order.userId !== user.id && !staff) || (order.status !== "PAID" && order.status !== "REFUNDED")) notFound();
+  if (!order || (order.userId !== user.id && !isOwner(user)) || (order.status !== "PAID" && order.status !== "REFUNDED")) notFound();
   const t = await getTranslations("billing");
   const format = await getFormatter();
   const locale = await getLocale();

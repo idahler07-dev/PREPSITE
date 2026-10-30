@@ -4,13 +4,14 @@ const PORT = Number(process.env.E2E_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 export const E2E_DATABASE_URL = process.env.E2E_DATABASE_URL ?? "postgresql://prep:prep@localhost:5432/prepsite_e2e";
 
-/** Environment for the app under test: its own database, dev mail outbox, known admin. */
+/** Environment for the app under test: its own database, dev mail outbox, known owner. */
 export const e2eEnv = {
   DATABASE_URL: E2E_DATABASE_URL,
   NEXT_PUBLIC_SITE_URL: BASE_URL,
   AUTH_URL: BASE_URL,
   AUTH_SECRET: "e2e-secret-e2e-secret-e2e-secret-e2e",
-  ADMIN_EMAILS: "admin@e2e.test",
+  // Two owners: the suite signs an owner in more often than the 5 emails per hour one address may get.
+  OWNER_EMAILS: "owner@e2e.test, owner2@e2e.test",
   EMAIL_TRANSPORT: "outbox",
   ALLOW_DEV_OUTBOX: "true",
   STORAGE_DRIVER: "local",

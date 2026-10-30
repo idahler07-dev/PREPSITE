@@ -33,7 +33,7 @@ export function TrendChart({ points, label, min = 400, max = 1600, height = 140 
         {[0.25, 0.5, 0.75].map((f) => (
           <line key={f} x1="0" x2={w} y1={h * f} y2={h * f} className="stroke-border" strokeDasharray="3 5" />
         ))}
-        <m.path d={`${line} L${xy.at(-1)![0]} ${h} L${xy[0]![0]} ${h} Z`} fill={`url(#${id}-g)`} initial={reduce ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.5 }} />
+        <m.path d={`${line} L${xy.at(-1)![0]} ${h} L${xy[0]![0]} ${h} Z`} fill={`url(#${id}-g)`} initial={reduce ? false : { opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }} />
         <m.path
           d={line}
           fill="none"
@@ -44,7 +44,7 @@ export function TrendChart({ points, label, min = 400, max = 1600, height = 140 
           initial={reduce ? false : { pathLength: 0 }}
           whileInView={{ pathLength: 1 }}
           viewport={{ once: true }}
-          transition={{ ...spring.soft, stiffness: 50 }}
+          transition={spring.soft}
         />
         {xy.map(([x, y], i) => (
           <m.circle key={i} cx={x} cy={y} r={i === xy.length - 1 ? 4.5 : 3} className={i === xy.length - 1 ? "fill-primary" : "fill-surface stroke-primary"} strokeWidth={2} initial={reduce ? false : { opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ ...spring.snappy, delay: 0.2 + i * 0.08 }} />

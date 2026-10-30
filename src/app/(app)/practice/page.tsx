@@ -1,7 +1,6 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { requireUser } from "@/server/auth/session";
-import { Link } from "@/i18n/navigation";
 import { Container, PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { DrillBuilder } from "@/components/practice/drill-builder";
@@ -38,7 +37,7 @@ export default async function PracticePage({ searchParams }: { searchParams: Pro
                   {th(`kinds.${a.kind}`)} · {format.dateTime(a.startedAt, { dateStyle: "medium", timeStyle: "short" })}
                 </span>
                 <Button asChild size="sm">
-                  <Link href={`/test/${a.id}`}>{t("resume")}</Link>
+                  <a href={`/test/${a.id}`}>{t("resume")}</a>
                 </Button>
               </li>
             ))}

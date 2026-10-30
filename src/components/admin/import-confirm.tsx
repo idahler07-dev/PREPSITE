@@ -21,7 +21,7 @@ export function ImportConfirm({ batchId, count }: { batchId: string; count: numb
           const res = await commitImport(batchId);
           if (res.ok) {
             toast.success(t("done", { count: res.created }));
-            router.push(`/admin/review?batch=${batchId}`);
+            router.push(`/manage/review?batch=${batchId}`);
           } else {
             toast.error(res.error === "SOURCE_WITHDRAWN" ? t("errors.SOURCE_WITHDRAWN") : c("unknownError"));
             router.refresh();

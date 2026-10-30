@@ -19,7 +19,7 @@ keeps students' personal data in the country, as Uzbek law may require (see the 
 4. Optional: load the 30 starter vocabulary words (and, only on a test copy, sample questions):
    `docker compose -f docker-compose.prod.yml exec app pnpm db:seed`, then **remove samples** with
    `docker compose -f docker-compose.prod.yml exec app pnpm samples:remove`.
-5. Sign in with an email from `ADMIN_EMAILS` to become admin.
+5. Sign in with an email from `OWNER_EMAILS` (email code or Google) to see **Manage**.
 
 **Updates:** `git pull && docker compose -f docker-compose.prod.yml up -d --build`
 
@@ -40,7 +40,7 @@ Works well, but the database and files are stored outside Uzbekistan — check t
 
 ## After deploying
 
-- Visit `/en`, sign in, open Admin → Overview.
-- Make a test purchase with each payment provider and refund it (Admin → Orders).
-- Check Admin → AI usage after a day if the AI is on.
+- Visit `/`, sign in with an owner email, open Manage → Overview.
+- Make a test purchase with each payment provider and refund it (Manage → Orders).
+- Check Manage → AI usage after a day if the AI is on.
 - Errors appear in the server logs as JSON lines; set `SENTRY_DSN` to also receive them in Sentry.

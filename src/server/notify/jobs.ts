@@ -17,7 +17,7 @@ export async function sendEveningReminders(now = new Date()) {
   const today = dayInZone(now, tz);
   const startToday = startOfDayInZone(now, tz);
   const active = await db.attempt.findMany({
-    where: { startedAt: { gte: new Date(now.getTime() - 14 * DAY) }, user: { role: "STUDENT" } },
+    where: { startedAt: { gte: new Date(now.getTime() - 14 * DAY) } },
     select: { userId: true, startedAt: true },
   });
   const byUser = new Map<string, Date[]>();
@@ -43,7 +43,7 @@ export async function announceNewTest(mockTestId: string, now = new Date()) {
   const mock = await db.mockTest.findUnique({ where: { id: mockTestId }, select: { title: true, status: true, kind: true } });
   if (!mock || mock.status !== "PUBLISHED" || mock.kind !== "CURATED") return 0;
   const users = await db.user.findMany({
-    where: { role: "STUDENT", attempts: { some: { startedAt: { gte: new Date(now.getTime() - 30 * DAY) } } } },
+    where: { attempts: { some: { startedAt: { gte: new Date(now.getTime() - 30 * DAY) } } } },
     select: recipientSelect,
     take: 5000,
   });

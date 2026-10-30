@@ -45,7 +45,7 @@ export function SpreadsheetImportForm({ sources, defaultPrefix }: { sources: { i
     form.set("difficulty", difficulty);
     setBusy(true);
     try {
-      const res = await fetch("/api/admin/imports/spreadsheet", { method: "POST", body: form });
+      const res = await fetch("/api/manage/imports/spreadsheet", { method: "POST", body: form });
       const body = (await res.json()) as { batchId?: string; error?: string; message?: string };
       if (!res.ok || !body.batchId) {
         const key = body.error as ImportErrorKey | "RIGHTS_REQUIRED" | undefined;
@@ -57,7 +57,7 @@ export function SpreadsheetImportForm({ sources, defaultPrefix }: { sources: { i
         else setError(c("unknownError"));
         return;
       }
-      router.push(`/admin/import/${body.batchId}`);
+      router.push(`/manage/import/${body.batchId}`);
     } catch {
       toast.error(c("networkError"));
     } finally {

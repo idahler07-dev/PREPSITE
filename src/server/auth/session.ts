@@ -5,15 +5,17 @@ import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { redirect } from "@/i18n/navigation";
-import type { Role } from "@/generated/prisma/client";
+import { isOwner } from "@/server/auth/owner";
 import { HttpError } from "@/server/http";
+
+export { isOwner };
 
 const userSelect = {
   id: true,
   name: true,
   email: true,
   image: true,
-  role: true,
+  emailVerified: true,
   locale: true,
   theme: true,
   timeZone: true,
@@ -39,12 +41,6 @@ export const getCurrentUser = cache(async () => {
   return loadUser(id);
 });
 
-export const STAFF_ROLES: readonly Role[] = ["EDITOR", "ADMIN"];
-
-export function isStaff(user: { role: Role } | null | undefined): boolean {
-  return !!user && STAFF_ROLES.includes(user.role);
-}
-
 /** For pages: redirect to the login page when signed out. */
 export async function requireUser(nextPath?: string): Promise<CurrentUser> {
   const user = await getCurrentUser();
@@ -56,11 +52,11 @@ export async function requireUser(nextPath?: string): Promise<CurrentUser> {
   return user!;
 }
 
-/** For pages: 404 unless the user has one of the roles (hides admin pages entirely). */
-export async function requireRole(roles: readonly Role[], nextPath?: string): Promise<CurrentUser> {
-  const user = await requireUser(nextPath);
-  if (!roles.includes(user.role)) notFound();
-  return user;
+/** For pages: 404 unless the user is an owner (signed out included), so manage pages look like they don't exist. */
+export async function requireOwner(): Promise<CurrentUser> {
+  const user = await getCurrentUser();
+  if (!isOwner(user)) notFound();
+  return user!;
 }
 
 /** For route handlers and server actions. */
@@ -70,8 +66,9 @@ export async function requireApiUser(): Promise<CurrentUser> {
   return user;
 }
 
-export async function requireApiRole(roles: readonly Role[]): Promise<CurrentUser> {
-  const user = await requireApiUser();
-  if (!roles.includes(user.role)) throw new HttpError(403, "FORBIDDEN");
-  return user;
+/** For manage route handlers and server actions: 404 for everyone but owners (signed out included). */
+export async function requireApiOwner(): Promise<CurrentUser> {
+  const user = await getCurrentUser();
+  if (!isOwner(user)) throw new HttpError(404, "NOT_FOUND");
+  return user!;
 }

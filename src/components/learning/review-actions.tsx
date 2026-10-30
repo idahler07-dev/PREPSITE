@@ -9,6 +9,7 @@ import { openDailyQuestion, removeNotebookItem, startReviewSession, updateQuesti
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { openTest } from "@/lib/open-test";
 
 function useLimitToast() {
   const tb = useTranslations("billing");
@@ -22,7 +23,6 @@ function useLimitToast() {
 }
 
 export function StartReviewButton({ source, disabled, label }: { source: "due" | "bookmarks"; disabled: boolean; label: string }) {
-  const router = useRouter();
   const [pending, start] = useTransition();
   const fail = useLimitToast();
   return (
@@ -31,7 +31,7 @@ export function StartReviewButton({ source, disabled, label }: { source: "due" |
       onClick={() =>
         start(async () => {
           const res = await startReviewSession({ source, count: 10 });
-          if (res.ok) router.push(`/test/${res.data}`);
+          if (res.ok) openTest(res.data);
           else fail(res);
         })
       }
@@ -42,7 +42,6 @@ export function StartReviewButton({ source, disabled, label }: { source: "due" |
 }
 
 export function DailyQuestionButton({ label }: { label: string }) {
-  const router = useRouter();
   const [pending, start] = useTransition();
   const fail = useLimitToast();
   return (
@@ -52,7 +51,7 @@ export function DailyQuestionButton({ label }: { label: string }) {
       onClick={() =>
         start(async () => {
           const res = await openDailyQuestion();
-          if (res.ok) router.push(`/test/${res.data}`);
+          if (res.ok) openTest(res.data);
           else fail(res);
         })
       }
