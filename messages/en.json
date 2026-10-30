@@ -223,17 +223,14 @@
   },
   "auth": {
     "signInTitle": "Sign in or create an account",
-    "signInSubtitle": "Use your email, Google or Telegram. New accounts are created automatically.",
+    "signInSubtitle": "New here? Your account is created automatically. Free to start, no card needed.",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
-    "sendLink": "Email me a sign-in link",
     "sending": "Sending…",
-    "orContinueWith": "or continue with",
     "google": "Continue with Google",
-    "telegramLoading": "Loading Telegram…",
     "termsNote": "By continuing you agree to our <terms>Terms of use</terms> and <privacy>Privacy policy</privacy>.",
     "checkEmailTitle": "Check your email",
-    "checkEmailBody": "We sent a sign-in link to your email address. Open it on this device to continue. The link works for one hour.",
+    "checkEmailBody": "We sent a sign-in code and link to your email. The code and link work for 15 minutes.",
     "checkEmailSpam": "Can’t find it? Check your spam folder or try again.",
     "tryAgain": "Use a different email",
     "signedOut": "You have been signed out.",
@@ -246,16 +243,42 @@
       "Configuration": "Sign-in is not configured correctly. Please contact us.",
       "RateLimited": "Too many attempts. Please wait a few minutes and try again.",
       "InvalidEmail": "Enter a valid email address.",
-      "Default": "Sign-in failed. Please try again."
+      "Default": "Sign-in failed. Please try again.",
+      "WrongCode": "That code isn’t right or has expired. Check the latest email and try again."
+    },
+    "sendCode": "Continue with email",
+    "or": "or",
+    "telegram": "Continue with Telegram",
+    "lastUsed": "Last used",
+    "codeTitle": "Check your email",
+    "codeSent": "We sent a 6-digit code to <b>{email}</b>.",
+    "codeLabel": "Sign-in code",
+    "verify": "Sign in",
+    "verifying": "Checking…",
+    "codeHint": "You can also open the link in the email. The code and link work for 15 minutes.",
+    "openMail": "Open {app}",
+    "resend": "Send a new code",
+    "resendIn": "New code in {seconds}s",
+    "resent": "A new code is on its way.",
+    "changeEmail": "Change email",
+    "demoEmailNote": "Emails aren’t delivered on the demo site. Use the demo buttons above.",
+    "perks": {
+      "title": "Get ready for the SAT, step by step",
+      "tests": "Full-length adaptive practice tests with estimated scores",
+      "explanations": "Step-by-step explanations for every question",
+      "plan": "A study plan that adapts to your weak spots",
+      "progress": "Mistake notebook, vocabulary cards and progress tracking",
+      "free": "Free to start, no card needed"
     }
   },
   "email": {
     "magicLink": {
-      "subject": "Your sign-in link for {name}",
-      "intro": "Click the button below to sign in to {name}.",
+      "subject": "{code} is your {name} sign-in code",
+      "intro": "Enter this code to sign in to {name}:",
       "button": "Sign in",
-      "expires": "This link expires in one hour and can be used once.",
-      "ignore": "If you did not request this email, you can safely ignore it."
+      "expires": "The code and link expire in 15 minutes and can be used once.",
+      "ignore": "If you did not request this email, you can safely ignore it.",
+      "orLink": "Or sign in with one click:"
     },
     "receipt": {
       "subject": "{name}: payment received (order {number})",

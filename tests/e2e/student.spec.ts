@@ -36,7 +36,7 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
 });
 
 test("answers survive a reload in the middle of a drill", async ({ page }) => {
-  await signIn(page, uniqueEmail("reload"));
+  await signIn(page, uniqueEmail("reload"), "link");
   await page.getByRole("button", { name: "Skip for now" }).click();
   await page.goto("/en/practice");
   await page.getByRole("button", { name: "10 reading & writing questions" }).click();
@@ -47,6 +47,20 @@ test("answers survive a reload in the middle of a drill", async ({ page }) => {
   await page.reload();
   await expect(page.getByRole("radio", { name: "Choice C" })).toBeChecked();
   await expect(page.getByRole("button", { name: "Marked for review" })).toBeVisible();
+});
+
+test("a wrong sign-in code is rejected", async ({ page }) => {
+  const email = uniqueEmail("code");
+  await page.goto("/en/login");
+  await page.getByLabel("Email address").fill(email);
+  await page.getByRole("button", { name: "Continue with email" }).click();
+  await expect(page.getByText(`We sent a 6-digit code to ${email}.`)).toBeVisible();
+  await page.getByLabel("Sign-in code").fill("000000");
+  await expect(page.getByRole("alert")).toContainText("That code isn’t right");
+  await expect(page).toHaveURL(/\/login/);
+  // "Change email" goes back to the first step.
+  await page.getByRole("button", { name: "Change email" }).click();
+  await expect(page.getByLabel("Email address")).toBeVisible();
 });
 
 test("students cannot open the admin area", async ({ page }) => {

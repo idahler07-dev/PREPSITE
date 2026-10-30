@@ -223,17 +223,14 @@
   },
   "auth": {
     "signInTitle": "Kiring yoki hisob yarating",
-    "signInSubtitle": "Elektron pochta, Google yoki Telegramdan foydalaning. Yangi hisob avtomatik yaratiladi.",
+    "signInSubtitle": "Yangimisiz? Hisobingiz avtomatik yaratiladi. Boshlash bepul, karta kerak emas.",
     "emailLabel": "Elektron pochta manzili",
     "emailPlaceholder": "you@example.com",
-    "sendLink": "Kirish havolasini yuborish",
     "sending": "Yuborilmoqda…",
-    "orContinueWith": "yoki quyidagi orqali kiring",
     "google": "Google orqali kirish",
-    "telegramLoading": "Telegram yuklanmoqda…",
     "termsNote": "Davom etish orqali <terms>Foydalanish shartlari</terms> va <privacy>Maxfiylik siyosati</privacy>ga rozilik bildirasiz.",
     "checkEmailTitle": "Pochtangizni tekshiring",
-    "checkEmailBody": "Pochtangizga kirish havolasini yubordik. Uni shu qurilmada oching. Havola bir soat amal qiladi.",
+    "checkEmailBody": "Pochtangizga kirish kodi va havolasini yubordik. Kod va havola 15 daqiqa amal qiladi.",
     "checkEmailSpam": "Topa olmadingizmi? «Spam» jildini tekshiring yoki qayta urinib koʻring.",
     "tryAgain": "Boshqa manzilni kiritish",
     "signedOut": "Hisobingizdan chiqdingiz.",
@@ -246,16 +243,42 @@
       "Configuration": "Kirish notoʻgʻri sozlangan. Biz bilan bogʻlaning.",
       "RateLimited": "Juda koʻp urinish. Bir necha daqiqa kutib, qayta urinib koʻring.",
       "InvalidEmail": "Toʻgʻri elektron pochta manzilini kiriting.",
-      "Default": "Kirib boʻlmadi. Qayta urinib koʻring."
+      "Default": "Kirib boʻlmadi. Qayta urinib koʻring.",
+      "WrongCode": "Kod notoʻgʻri yoki muddati oʻtgan. Soʻnggi xatni tekshirib, qayta urinib koʻring."
+    },
+    "sendCode": "Elektron pochta orqali davom etish",
+    "or": "yoki",
+    "telegram": "Telegram orqali davom etish",
+    "lastUsed": "Oxirgi marta",
+    "codeTitle": "Pochtangizni tekshiring",
+    "codeSent": "<b>{email}</b> manziliga 6 xonali kod yubordik.",
+    "codeLabel": "Kirish kodi",
+    "verify": "Kirish",
+    "verifying": "Tekshirilmoqda…",
+    "codeHint": "Xatdagi havolani ham ochishingiz mumkin. Kod va havola 15 daqiqa amal qiladi.",
+    "openMail": "{app}ni ochish",
+    "resend": "Yangi kod yuborish",
+    "resendIn": "Yangi kod {seconds} soniyadan keyin",
+    "resent": "Yangi kod yuborildi.",
+    "changeEmail": "Pochtani oʻzgartirish",
+    "demoEmailNote": "Demo saytda xatlar yuborilmaydi. Yuqoridagi demo tugmalaridan foydalaning.",
+    "perks": {
+      "title": "SATga bosqichma-bosqich tayyorlaning",
+      "tests": "Taxminiy ball bilan toʻliq adaptiv sinov testlari",
+      "explanations": "Har bir savol uchun bosqichma-bosqich tushuntirishlar",
+      "plan": "Zaif tomonlaringizga moslashadigan oʻquv reja",
+      "progress": "Xatolar daftari, soʻz kartalari va natijalarni kuzatish",
+      "free": "Boshlash bepul, karta kerak emas"
     }
   },
   "email": {
     "magicLink": {
-      "subject": "{name} uchun kirish havolangiz",
-      "intro": "{name} saytiga kirish uchun quyidagi tugmani bosing.",
+      "subject": "{name} uchun kirish kodingiz: {code}",
+      "intro": "{name} saytiga kirish uchun ushbu kodni kiriting:",
       "button": "Kirish",
-      "expires": "Havola bir soat amal qiladi va faqat bir marta ishlatiladi.",
-      "ignore": "Agar bu xatni siz soʻramagan boʻlsangiz, eʼtibor bermang."
+      "expires": "Kod va havola 15 daqiqa amal qiladi va faqat bir marta ishlatiladi.",
+      "ignore": "Agar bu xatni siz soʻramagan boʻlsangiz, eʼtibor bermang.",
+      "orLink": "Yoki bir bosishda kiring:"
     },
     "receipt": {
       "subject": "{name}: toʻlov qabul qilindi (buyurtma {number})",

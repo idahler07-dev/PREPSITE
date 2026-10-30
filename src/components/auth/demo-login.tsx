@@ -6,19 +6,21 @@ import { Button } from "@/components/ui/button";
 export async function DemoLogin() {
   const t = await getTranslations("demo");
   return (
-    <section aria-labelledby="demo-title" className="mb-8 space-y-3 rounded-lg border-2 border-primary/40 bg-accent/40 p-4">
-      <h2 id="demo-title" className="font-semibold">
+    <section aria-labelledby="demo-title" className="mb-6 space-y-3 rounded-xl border border-primary/30 bg-accent/40 p-4">
+      <h2 id="demo-title" className="text-sm font-semibold">
         {t("title")}
       </h2>
       <p className="text-sm text-muted-foreground">{t("body")}</p>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <form action={signInAsDemo}>
           <input type="hidden" name="role" value="student" />
-          <Button type="submit">{t("student")}</Button>
+          <Button type="submit" className="w-full">
+            {t("student")}
+          </Button>
         </form>
         <form action={signInAsDemo}>
           <input type="hidden" name="role" value="admin" />
-          <Button type="submit" variant="outline">
+          <Button type="submit" variant="outline" className="w-full bg-background">
             {t("admin")}
           </Button>
         </form>

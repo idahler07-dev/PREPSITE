@@ -14,18 +14,19 @@ function layout(body: string, footer: string) {
 </table></body></html>`;
 }
 
-export async function magicLinkEmail(to: string, url: string, locale: string): Promise<MailMessage> {
+export async function magicLinkEmail(to: string, url: string, code: string, locale: string): Promise<MailMessage> {
   const loc: AppLocale = isEnabledLocale(locale) ? locale : "en";
   const messages = (await loadMessages(loc)) as Messages;
   const t = createTranslator({ locale: loc, messages, namespace: "email.magicLink" });
   const name = siteConfig.name;
   const button = `<a href="${escapeHtml(url)}" style="display:inline-block;background:#2a4fb0;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600">${escapeHtml(t("button"))}</a>`;
+  const codeBox = `<p style="margin:16px 0;font-size:32px;font-weight:700;letter-spacing:8px;font-family:ui-monospace,Menlo,Consolas,monospace">${escapeHtml(code)}</p>`;
   const html = layout(
-    `<p>${escapeHtml(t("intro", { name }))}</p><p style="margin:24px 0">${button}</p><p style="color:#5b6170;font-size:13px">${escapeHtml(t("expires"))}</p><p style="color:#5b6170;font-size:13px;word-break:break-all">${escapeHtml(url)}</p>`,
+    `<p>${escapeHtml(t("intro", { name }))}</p>${codeBox}<p>${escapeHtml(t("orLink"))}</p><p style="margin:16px 0 24px">${button}</p><p style="color:#5b6170;font-size:13px">${escapeHtml(t("expires"))}</p><p style="color:#5b6170;font-size:13px;word-break:break-all">${escapeHtml(url)}</p>`,
     escapeHtml(t("ignore")),
   );
-  const text = `${t("intro", { name })}\n\n${url}\n\n${t("expires")}\n${t("ignore")}`;
-  return { to, subject: t("subject", { name }), html, text };
+  const text = `${t("intro", { name })}\n\n${code}\n\n${t("orLink")}\n${url}\n\n${t("expires")}\n${t("ignore")}`;
+  return { to, subject: t("subject", { name, code }), html, text };
 }
 
 async function translator(locale: string, namespace: string) {

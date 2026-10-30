@@ -1,9 +1,12 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import { env } from "@/lib/env";
 import { z } from "zod";
 import { AuthError } from "next-auth";
 import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
 import { signIn } from "@/lib/auth";
 import { clientIp } from "@/server/http";
 import { rateLimit } from "@/server/rate-limit";
@@ -31,6 +34,38 @@ export async function requestMagicLink(_prev: LoginState, form: FormData): Promi
     throw e;
   }
   return { email };
+}
+
+export type CodeState = { error?: string };
+
+const codeSchema = z.object({ email: z.email().max(254), code: z.string().regex(/^\d{6}$/), next: z.string().optional() });
+
+/** Wrong guesses allowed per email per hour, before a new code is needed. */
+const CODE_ATTEMPTS_PER_HOUR = 8;
+
+/**
+ * Check a 6-digit email code, then hand it to Auth.js's email callback (the
+ * same URL as the link in the email), which uses up the token and signs in.
+ */
+export async function verifyEmailCode(_prev: CodeState, form: FormData): Promise<CodeState> {
+  const parsed = codeSchema.safeParse({
+    email: String(form.get("email") ?? "").trim().toLowerCase(),
+    code: String(form.get("code") ?? "").replace(/\D/g, ""),
+    next: form.get("next") ?? undefined,
+  });
+  if (!parsed.success) return { error: "WrongCode" };
+  const { email, code } = parsed.data;
+
+  if (!(await rateLimit(`email-code:check:${email}`, CODE_ATTEMPTS_PER_HOUR, 3600)).ok) return { error: "RateLimited" };
+  // Auth.js stores sha256(token + secret); the email provider's secret is AUTH_SECRET.
+  const token = createHash("sha256").update(`${code}${env().AUTH_SECRET}`).digest("hex");
+  const found = await db.verificationToken.findFirst({ where: { identifier: email, token, expires: { gt: new Date() } }, select: { token: true } });
+  if (!found) return { error: "WrongCode" };
+
+  const locale = await getLocale();
+  const next = safeNextPath(parsed.data.next);
+  const callbackUrl = `/api/post-login?locale=${locale}&next=${encodeURIComponent(next ?? "")}`;
+  redirect(`/api/auth/callback/email?${new URLSearchParams({ callbackUrl, token: code, email })}`);
 }
 
 export async function signInWithGoogle(form: FormData) {

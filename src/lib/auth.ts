@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import NextAuth, { type DefaultSession } from "next-auth";
 import type { Provider } from "next-auth/providers";
 import type { EmailConfig } from "next-auth/providers/email";
@@ -23,20 +24,30 @@ function localeFromRequest(request: Request): string {
   return /(?:^|;\s*)NEXT_LOCALE=([^;]+)/.exec(cookie)?.[1] ?? "en";
 }
 
+/** Email sign-in codes (and the link in the same email) expire after this many seconds. */
+export const EMAIL_CODE_TTL_SEC = 15 * 60;
+
 const emailProvider: EmailConfig = {
   id: "email",
   type: "email",
   name: "Email",
-  maxAge: 60 * 60,
+  maxAge: EMAIL_CODE_TTL_SEC,
+  // The token is a 6-digit code the user can type in (verifyEmailCode) or open as a link.
+  // Guessing is capped per email in verifyEmailCode and in the auth route handler.
+  generateVerificationToken: () => String(randomInt(0, 1_000_000)).padStart(6, "0"),
+  // Set here so verifyEmailCode hashes codes with the same secret Auth.js uses.
+  get secret() {
+    return env().AUTH_SECRET;
+  },
   normalizeIdentifier(identifier) {
     const email = identifier.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) throw new Error("Invalid email");
     return email;
   },
-  async sendVerificationRequest({ identifier, url, request }) {
+  async sendVerificationRequest({ identifier, url, token, request }) {
     const limit = await rateLimit(`magic-link:email:${identifier}`, 5, 3600);
     if (!limit.ok) throw new Error("Too many sign-in emails. Try again later.");
-    await sendMail(await magicLinkEmail(identifier, url, localeFromRequest(request)));
+    await sendMail(await magicLinkEmail(identifier, url, token, localeFromRequest(request)));
   },
 };
 
