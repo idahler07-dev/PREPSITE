@@ -11,6 +11,8 @@ import { newStorageKey, storage } from "@/server/storage";
 
 import { MAX_PDF_BYTES } from "@/server/import/limits";
 
+export const maxDuration = 60;
+
 const bodySchema = z.object({
   sourceId: z.string().max(40).optional(),
   sourceName: z.string().trim().max(120).optional(),

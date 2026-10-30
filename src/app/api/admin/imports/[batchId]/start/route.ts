@@ -6,6 +6,8 @@ import { storage } from "@/server/storage";
 import { enqueue, JOBS } from "@/server/jobs/queue";
 import { MAX_PDF_BYTES } from "@/server/import/limits";
 
+export const maxDuration = 60;
+
 /** Step 2 of a PDF import: all files are uploaded — start reading them in the background. */
 export async function POST(req: Request, { params }: { params: Promise<{ batchId: string }> }) {
   try {

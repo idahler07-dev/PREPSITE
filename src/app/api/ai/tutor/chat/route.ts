@@ -4,6 +4,8 @@ import { assertSameOrigin, errorResponse, HttpError } from "@/server/http";
 import { rateLimit } from "@/server/rate-limit";
 import { tutorChatStream } from "@/server/ai/tutor";
 
+export const maxDuration = 60;
+
 /** Follow-up question to the AI tutor about one question (NDJSON stream). */
 export async function POST(req: Request) {
   try {
