@@ -39,6 +39,11 @@ function luminance(hex: string): number {
   return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
 }
 
+function blend(fg: string, bg: string, alpha: number): string {
+  const ch = (h: string, i: number) => parseInt(h.slice(i, i + 2), 16);
+  return `#${[1, 3, 5].map((i) => Math.round(ch(fg, i) * alpha + ch(bg, i) * (1 - alpha)).toString(16).padStart(2, "0")).join("")}`;
+}
+
 export function contrast(a: string, b: string): number {
   const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
   return (x! + 0.05) / (y! + 0.05);
@@ -52,25 +57,26 @@ const SURFACES = ["background", "surface", "surface-2"];
 const PAIRS: [string, string[], number, string][] = [
   ["foreground", SURFACES, TEXT, "body text"],
   ["muted-foreground", SURFACES, TEXT, "secondary text, captions"],
-  ["primary", SURFACES, TEXT, "links, active nav, turquoise text"],
-  ["secondary", ["background", "surface"], TEXT, "lapis text and icons"],
-  ["accent-ink", [...SURFACES, "accent-soft"], TEXT, "saffron text and flag icons"],
-  ["success", ["background", "surface"], TEXT, "correct answers, positive deltas"],
-  ["warning", ["background", "surface"], TEXT, "warnings, timer's last minutes"],
-  ["destructive", ["background", "surface"], TEXT, "errors, wrong answers"],
+  ["primary", [...SURFACES, "primary-soft"], TEXT, "links, active nav, selected answer text"],
+  ["accent-ink", [...SURFACES, "accent-soft"], TEXT, "coral text and icons"],
+  ["correct-ink", [...SURFACES, "correct-soft"], TEXT, "correct answers, positive deltas"],
+  ["warning-ink", [...SURFACES, "warning-soft"], TEXT, "warnings, timer's last minutes"],
+  ["danger-ink", [...SURFACES, "danger-soft"], TEXT, "errors, wrong answers"],
   ["primary-foreground", ["primary", "primary-hover"], TEXT, "primary button label"],
-  ["secondary-foreground", ["secondary"], TEXT, "lapis badge label"],
-  ["accent-foreground", ["accent"], TEXT, "accent (upgrade) button label, flag chip"],
+  ["accent-foreground", ["accent"], TEXT, "accent (upgrade) button label"],
+  ["on-fill", ["warning-fill", "correct", "accent"], TEXT, "text on bright fills: flag chip, mint badge, coral CTA"],
   ["success-foreground", ["success"], TEXT, "success badge label"],
   ["destructive-foreground", ["destructive"], TEXT, "destructive button label"],
-  ["foreground", ["primary-soft", "accent-soft", "success-muted", "warning-muted", "danger-muted"], TEXT, "text on tinted panels"],
-  ["primary", ["primary-soft"], TEXT, "selected answer text, chips"],
+  ["foreground", ["primary-soft", "accent-soft", "correct-soft", "warning-soft", "danger-soft"], TEXT, "text on tinted panels"],
   ["hl-text", ["hl-yellow", "hl-blue", "hl-pink"], TEXT, "highlighted passage text"],
   ["input", ["surface", "background"], UI, "input and checkbox borders"],
   ["ring", SURFACES, UI, "focus ring"],
-  ["primary", ["background", "surface"], UI, "primary button edge"],
-  ["brand", ["background", "surface"], UI, "logo star, chart lines, mastery tiles"],
+  ["primary", ["background", "surface"], UI, "primary button edge, chart lines, skill tiles"],
+  ["correct", ["surface"], 1.5, "mint check glow (decorative, paired with correct-ink text)"],
 ];
+
+/** The lilac highlighter is drawn at 45% over the page; text over it must stay AA. */
+const HIGHLIGHTER_ALPHA = 0.45;
 
 let failed = 0;
 for (const [theme, vars] of Object.entries(themes)) {
@@ -83,6 +89,10 @@ for (const [theme, vars] of Object.entries(themes)) {
       console.log(`  ${ok ? "✓" : "✗"} ${fg.padEnd(22)} on ${bg.padEnd(14)} ${ratio.toFixed(2).padStart(5)}:1  (≥${min}) ${use}`);
     }
   }
+  const bar = blend(resolve(vars, "highlight"), resolve(vars, "background"), HIGHLIGHTER_ALPHA);
+  const hr = contrast(resolve(vars, "foreground"), bar);
+  if (hr < TEXT) failed++;
+  console.log(`  ${hr >= TEXT ? "✓" : "✗"} ${"foreground".padEnd(22)} on ${"highlighter".padEnd(14)} ${hr.toFixed(2).padStart(5)}:1  (≥${TEXT}) <hl> emphasis bar at ${HIGHLIGHTER_ALPHA * 100}%`);
   const bg = resolve(vars, "background").toLowerCase();
   if (bg !== THEME_COLORS[theme as "light" | "dark"].toLowerCase()) {
     failed++;

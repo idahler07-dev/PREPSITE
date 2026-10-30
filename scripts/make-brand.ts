@@ -1,23 +1,24 @@
 /**
  * Generate the Satify brand assets in public/brand/:
- *   mark.svg / mark-dark.svg   the 8-point star (favicon; mark.svg follows the system theme)
- *   logo.svg / logo-dark.svg   star + "Satify" wordmark (text as paths, Literata SemiBold)
- *   icon-*.png, apple-touch-icon.png, favicon-32.png   app icons
- *   og.png                     1200×630 OpenGraph image
+ *   mark.svg / mark-dark.svg   rounded cobalt square with a rising "S" line (favicon; mark.svg follows the system theme)
+ *   logo.svg / logo-dark.svg   "Satify" wordmark in Geist Bold, the dot of the i in cobalt (text as paths)
+ *   logo-email.png             wordmark for email headers (mail apps don't show SVG)
+ *   icon-*.png, apple-touch-icon.png, favicon-32.png
+ *   og.png                     1200×630 OpenGraph image with the mesh gradient
  *
  *   pnpm tsx scripts/make-brand.ts
  *
  * Fonts are downloaded from Google Fonts at run time (static TTF instances).
  */
 import { writeFileSync } from "node:fs";
-import { createCanvas, GlobalFonts, loadImage, Path2D, type SKRSContext2D } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts, loadImage, type SKRSContext2D } from "@napi-rs/canvas";
 import opentype from "opentype.js";
-import { brandStarPath } from "../src/lib/brand-star";
+import { BRAND_MARK } from "../src/lib/brand-mark";
 
 const OUT = "public/brand";
 const C = {
-  light: { primary: "#0E8C8C", text: "#13202E", bg: "#F7F5F0", accent: "#E8A317", accentSoft: "#FCEFD2", muted: "#5B6676", border: "#E2DDD2" },
-  dark: { primary: "#2FC2BE", text: "#EAF0F6", bg: "#0D1520" },
+  light: { primary: "#2747F5", text: "#0E1222", muted: "#5A6178", bg: "#F5F6FA", border: "#E3E6EF", lilac: "#B7A6FF", coral: "#FF6B4A" },
+  dark: { primary: "#6F86FF", text: "#EEF0FA", bg: "#090C16" },
 };
 
 /** First TTF URL in a Google Fonts CSS response (no browser user agent → TTF). */
@@ -28,91 +29,97 @@ async function googleTtf(query: string): Promise<ArrayBuffer> {
   return (await fetch(url)).arrayBuffer();
 }
 
-function wordmarkSvg(font: opentype.Font, colors: { primary: string; text: string }) {
+/** "Satify" with a dotless ı; the dot is a separate circle so it can be colored (and animated on the site). */
+function wordmarkSvg(font: opentype.Font, colors: { text: string; primary: string }) {
   const size = 64;
-  const tracking = -0.02 * size;
-  // Lay the glyphs out by hand so the -0.02em tracking matches the site's headings.
+  const tracking = -0.04 * size;
+  const upm = font.unitsPerEm;
   let x = 0;
   const parts: string[] = [];
-  for (const g of font.stringToGlyphs("Satify")) {
+  let dot = { cx: 0, cy: 0, r: 0 };
+  for (const g of font.stringToGlyphs("Satıfy")) {
     parts.push(g.getPath(x, 0, size).toPathData(2));
-    x += ((g.advanceWidth ?? 0) / font.unitsPerEm) * size + tracking;
+    if (g.unicode === 0x131) {
+      const bb = g.getBoundingBox();
+      const stemW = ((bb.x2 - bb.x1) / upm) * size;
+      const top = (bb.y2 / upm) * size;
+      dot = { cx: x + (((bb.x1 + bb.x2) / 2) / upm) * size, cy: -(top + stemW * 1.05), r: stemW * 0.62 };
+    }
+    x += ((g.advanceWidth ?? 0) / upm) * size + tracking;
   }
-  const textWidth = x - tracking;
-  const ascent = ((font.tables.os2?.sCapHeight ?? font.ascender * 0.7) / font.unitsPerEm) * size;
-  const descent = (-font.descender / font.unitsPerEm) * size * 0.5;
-  const star = ascent * 1.15;
-  const gap = size * 0.22;
-  const pad = 4;
-  const w = Math.ceil(pad * 2 + star + gap + textWidth);
-  const h = Math.ceil(pad * 2 + Math.max(star, ascent + descent));
-  const baseline = pad + (h - pad * 2 + ascent - descent) / 2;
-  const starY = pad + (h - pad * 2 - star) / 2;
+  const width = x - tracking;
+  const ascent = ((font.ascender * 0.8) / upm) * size;
+  const descent = ((-font.descender * 0.9) / upm) * size;
+  const pad = 2;
+  const w = Math.ceil(width + pad * 2);
+  const h = Math.ceil(ascent + descent + pad * 2);
+  const base = pad + ascent;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Satify">
-  <path fill="${colors.primary}" fill-rule="evenodd" transform="translate(${pad} ${starY.toFixed(2)}) scale(${(star / 32).toFixed(4)})" d="${brandStarPath()}"/>
-  <path fill="${colors.text}" transform="translate(${(pad + star + gap).toFixed(2)} ${baseline.toFixed(2)})" d="${parts.join("")}"/>
+  <path fill="${colors.text}" transform="translate(${pad} ${base.toFixed(2)})" d="${parts.join("")}"/>
+  <circle fill="${colors.primary}" cx="${(pad + dot.cx).toFixed(2)}" cy="${(base + dot.cy).toFixed(2)}" r="${dot.r.toFixed(2)}"/>
 </svg>
 `;
 }
 
-const markSvg = (fill: string, darkFill?: string) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  ${darkFill ? `<style>path{fill:${fill}}@media (prefers-color-scheme:dark){path{fill:${darkFill}}}</style>` : ""}
-  <path fill="${fill}" fill-rule="evenodd" d="${brandStarPath()}"/>
+const markSvg = (bg: string, line: string, dark?: { bg: string; line: string }) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  ${dark ? `<style>.b{fill:${bg}}.l{stroke:${line}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.l{stroke:${dark.line}}}</style>` : ""}
+  <rect class="b" width="32" height="32" rx="${BRAND_MARK.radius}" fill="${bg}"/>
+  <path class="l" d="${BRAND_MARK.path}" fill="none" stroke="${line}" stroke-width="${BRAND_MARK.stroke}" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
 
-/** Faint 8-point star tiles, as on the site's hero. */
-function tilePattern(ctx: SKRSContext2D, w: number, h: number, color: string, alpha: number) {
-  const star = new Path2D(brandStarPath());
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.fillStyle = color;
-  for (let y = -24; y < h + 48; y += 72) {
-    for (let x = -24 + ((y / 72) % 2 ? 36 : 0); x < w + 48; x += 72) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(0.9, 0.9);
-      ctx.fill(star, "evenodd");
-      ctx.restore();
-    }
-  }
-  ctx.restore();
+/** Soft mesh gradient: cobalt, lilac and coral blobs at low opacity, as behind the hero. */
+function mesh(ctx: SKRSContext2D, w: number, h: number) {
+  const blob = (x: number, y: number, r: number, color: string, a: number) => {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, `${color}${Math.round(a * 255).toString(16).padStart(2, "0")}`);
+    g.addColorStop(1, `${color}00`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+  };
+  blob(w * 0.85, h * 0.15, w * 0.5, C.light.primary, 0.26);
+  blob(w * 0.62, h * 1.0, w * 0.45, C.light.lilac, 0.4);
+  blob(w * 1.02, h * 0.72, w * 0.36, C.light.coral, 0.24);
+}
+
+function dotGrid(ctx: SKRSContext2D, w: number, h: number) {
+  ctx.fillStyle = `${C.light.text}14`;
+  for (let y = 12; y < h; y += 24) for (let x = 12; x < w; x += 24) ctx.fillRect(x, y, 1.6, 1.6);
 }
 
 async function main() {
-  const [literata, literataItalic, onest, onestBold] = await Promise.all([
-    googleTtf("family=Literata:opsz,wght@72,600"),
-    googleTtf("family=Literata:ital,opsz,wght@1,72,600"),
-    googleTtf("family=Onest:wght@400"),
-    googleTtf("family=Onest:wght@700"),
+  const [geistBold, geist, geistSemi, serifItalic] = await Promise.all([
+    googleTtf("family=Geist:wght@700"),
+    googleTtf("family=Geist:wght@400"),
+    googleTtf("family=Geist:wght@600"),
+    googleTtf("family=Instrument+Serif:ital@1"),
   ]);
-  const font = opentype.parse(literata);
+  const font = opentype.parse(geistBold);
 
-  writeFileSync(`${OUT}/mark.svg`, markSvg(C.light.primary, C.dark.primary));
-  writeFileSync(`${OUT}/mark-dark.svg`, markSvg(C.dark.primary));
+  writeFileSync(`${OUT}/mark.svg`, markSvg(C.light.primary, "#FFFFFF", { bg: C.dark.primary, line: C.dark.bg }));
+  writeFileSync(`${OUT}/mark-dark.svg`, markSvg(C.dark.primary, C.dark.bg));
   writeFileSync(`${OUT}/logo.svg`, wordmarkSvg(font, C.light));
   writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, C.dark));
 
-  // Email header: PNG wordmark at 2× (many mail apps don't show SVG).
-  const emailLogo = await loadImage(Buffer.from(wordmarkSvg(font, C.light)));
+  const wordmark = await loadImage(Buffer.from(wordmarkSvg(font, C.light)));
   const eh = 64;
-  const el = createCanvas(Math.round((emailLogo.width / emailLogo.height) * eh), eh);
-  el.getContext("2d").drawImage(emailLogo, 0, 0, el.width, eh);
+  const el = createCanvas(Math.round((wordmark.width / wordmark.height) * eh), eh);
+  el.getContext("2d").drawImage(wordmark, 0, 0, el.width, eh);
   writeFileSync(`${OUT}/logo-email.png`, el.toBuffer("image/png"));
 
-  // App icons: the star on warm paper (maskable keeps it inside the safe zone).
-  const mark = await loadImage(Buffer.from(markSvg(C.light.primary)));
+  // App icons: the mark fills the icon; the maskable one keeps the line inside the safe zone.
+  const mark = await loadImage(Buffer.from(markSvg(C.light.primary, "#FFFFFF")));
   for (const [size, name, inset] of [
-    [32, "favicon-32.png", 0.06],
-    [180, "apple-touch-icon.png", 0.18],
-    [192, "icon-192.png", 0.16],
-    [512, "icon-512.png", 0.16],
-    [512, "icon-maskable-512.png", 0.26],
+    [32, "favicon-32.png", 0],
+    [180, "apple-touch-icon.png", 0],
+    [192, "icon-192.png", 0],
+    [512, "icon-512.png", 0],
+    [512, "icon-maskable-512.png", 0.18],
   ] as const) {
     const c = createCanvas(size, size);
     const ctx = c.getContext("2d");
-    if (name !== "favicon-32.png") {
-      ctx.fillStyle = C.light.bg;
+    if (inset) {
+      ctx.fillStyle = C.light.primary;
       ctx.fillRect(0, 0, size, size);
     }
     const i = size * inset;
@@ -121,49 +128,44 @@ async function main() {
   }
 
   // OpenGraph image.
-  GlobalFonts.register(Buffer.from(literata), "Literata");
-  GlobalFonts.register(Buffer.from(literataItalic), "Literata Italic");
-  GlobalFonts.register(Buffer.from(onest), "Onest");
-  GlobalFonts.register(Buffer.from(onestBold), "Onest Bold");
+  GlobalFonts.register(Buffer.from(geist), "Geist");
+  GlobalFonts.register(Buffer.from(geistSemi), "Geist SemiBold");
+  GlobalFonts.register(Buffer.from(geistBold), "Geist Bold");
+  GlobalFonts.register(Buffer.from(serifItalic), "Instrument Serif");
   const W = 1200;
   const H = 630;
   const og = createCanvas(W, H);
   const ctx = og.getContext("2d");
   ctx.fillStyle = C.light.bg;
   ctx.fillRect(0, 0, W, H);
-  tilePattern(ctx, W, H, C.light.primary, 0.06);
-  const logo = await loadImage(Buffer.from(wordmarkSvg(font, C.light)));
-  const logoH = 72;
-  ctx.drawImage(logo, 88, 92, (logo.width / logo.height) * logoH, logoH);
+  mesh(ctx, W, H);
+  dotGrid(ctx, W, H);
+  ctx.drawImage(wordmark, 88, 84, (wordmark.width / wordmark.height) * 60, 60);
 
-  // "Your SAT score, *planned* and **proven**."
-  ctx.textBaseline = "alphabetic";
-  const y1 = 330;
-  const y2 = 420;
-  const draw = (text: string, x: number, y: number, font: string, color: string) => {
-    ctx.font = font;
+  const draw = (text: string, x: number, y: number, f: string, color: string) => {
+    ctx.font = f;
     ctx.fillStyle = color;
     ctx.fillText(text, x, y);
     return x + ctx.measureText(text).width;
   };
-  draw("Your SAT score,", 88, y1, "600 76px Literata", C.light.text);
-  ctx.font = "600 76px 'Literata Italic'";
-  const plannedW = ctx.measureText("planned").width;
-  // Saffron highlighter bar behind the emphasized word.
-  ctx.fillStyle = C.light.accentSoft;
+  ctx.textBaseline = "alphabetic";
+  const size = 84;
+  draw("Your SAT score,", 88, 318, `${size}px 'Geist SemiBold'`, C.light.text);
+  let x = draw("planned", 88, 412, `italic ${size + 10}px 'Instrument Serif'`, C.light.primary);
+  x = draw(" and ", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
+  ctx.font = `${size}px 'Geist Bold'`;
+  const pw = ctx.measureText("proven").width;
+  // Lilac highlighter behind the lower half of the bold word.
+  ctx.fillStyle = `${C.light.lilac}73`;
   ctx.beginPath();
-  ctx.moveTo(84, y2 + 14);
-  ctx.lineTo(88 + plannedW + 8, y2 + 6);
-  ctx.lineTo(88 + plannedW + 8, y2 - 22);
-  ctx.lineTo(84, y2 - 14);
+  ctx.roundRect(x - 4, 412 - size * 0.34, pw + 8, size * 0.42, 10);
   ctx.fill();
-  let x = draw("planned", 88, y2, "600 76px 'Literata Italic'", C.light.primary);
-  x = draw(" and ", x, y2, "600 76px Literata", C.light.text);
-  draw("proven.", x, y2, "800 76px Literata", C.light.text);
-  draw("Adaptive SAT practice, real progress tracking and clear explanations.", 88, 500, "32px Onest", C.light.muted);
+  x = draw("proven", x, 412, `${size}px 'Geist Bold'`, C.light.text);
+  draw(".", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
+  draw("Adaptive SAT practice, clear explanations, progress you can trust.", 88, 494, "30px Geist", C.light.muted);
   ctx.fillStyle = C.light.border;
-  ctx.fillRect(88, 548, W - 176, 2);
-  draw("SAT® is a trademark of the College Board, which does not endorse this site.", 88, 586, "22px Onest", C.light.muted);
+  ctx.fillRect(88, 540, W - 176, 2);
+  draw("SAT® is a trademark of the College Board, which does not endorse this site.", 88, 580, "21px Geist", C.light.muted);
   writeFileSync(`${OUT}/og.png`, og.toBuffer("image/png"));
 
   console.log(`Brand assets written to ${OUT}/`);

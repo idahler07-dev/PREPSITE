@@ -76,7 +76,8 @@
     "billing": "Plan and payments",
     "plan": "Plan",
     "review": "Review",
-    "vocab": "Vocabulary"
+    "vocab": "Vocabulary",
+    "howItWorks": "How it works"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -371,7 +372,8 @@
     "quickMath": "10 math questions",
     "quickRw": "10 reading & writing questions",
     "inProgress": "In progress",
-    "resume": "Resume"
+    "resume": "Resume",
+    "drillStarted": "Drill started. Good luck!"
   },
   "test": {
     "drillTitle": "Practice drill",
@@ -1714,7 +1716,32 @@
     "banner": "Demo site — test payments only, data may be reset."
   },
   "brand": {
-    "tagline": "Your SAT score, <i>planned</i> and <b>proven</b>.",
+    "tagline": "Your SAT score, <i>planned</i> and <hl>proven</hl>.",
     "taglinePlain": "Your SAT score, planned and proven."
+  },
+  "command": {
+    "title": "Command palette",
+    "description": "Search pages, start a drill or change settings.",
+    "open": "Open command palette",
+    "placeholder": "Search pages, drills and settings…",
+    "placeholderShort": "Search…",
+    "empty": "Nothing found. Try “math” or “settings”.",
+    "pages": "Go to",
+    "drills": "Start a drill",
+    "drillSection": "10 {section} questions",
+    "drillDomain": "Drill: {domain}",
+    "settings": "Settings",
+    "themeTo": "Theme: {theme}"
+  },
+  "shell": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "more": "More",
+    "appNavigation": "App navigation",
+    "tabs": "Main sections",
+    "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
+    "countdownShort": "{days, plural, =0 {Today} other {#d}}",
+    "countdownLabel": "Your SAT is on {date}",
+    "closeMenu": "Close menu"
   }
 }

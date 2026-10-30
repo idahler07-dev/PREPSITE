@@ -6,7 +6,7 @@ import { isEnabledLocale, type AppLocale } from "@/i18n/locales";
 import { escapeHtml, type MailMessage } from "./index";
 
 /** Brand colors for email (mail apps don't support CSS variables); same values as the light theme. */
-const MAIL = { bg: "#F7F5F0", surface: "#FFFFFF", text: "#13202E", muted: "#5B6676", border: "#E2DDD2", button: "#0A7373" };
+const MAIL = { bg: "#F5F6FA", surface: "#FFFFFF", text: "#0E1222", muted: "#5A6178", border: "#E3E6EF", button: "#2747F5" };
 
 function layout(body: string, footer: string) {
   const site = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
