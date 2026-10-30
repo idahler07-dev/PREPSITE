@@ -54,10 +54,10 @@ export default async function HomePage() {
 
           <div className="relative mx-auto w-full max-w-md lg:me-0">
             <Mascot pose="wave" hoverReact className="absolute -top-[5.5rem] right-2 z-0 w-36 sm:-top-28 sm:right-0 sm:w-44" />
-            <Floating className="-bottom-10 -left-6 sm:-left-16" delay={0.6}>
+            <Floating className="-bottom-10 -left-6 sm:-bottom-24 sm:-left-16" delay={0.6}>
               <ScoreMini />
             </Floating>
-            <Floating className="-top-14 -left-2 sm:-top-10 sm:-left-24" delay={1.8} drift={0.05}>
+            <Floating className="-top-14 -left-2 sm:top-auto sm:-bottom-16 sm:left-auto sm:right-6" delay={1.8} drift={0.05}>
               <StreakMini />
             </Floating>
             <div className="relative z-10">{question ? <LiveQuestion question={question} ctaHref={startHref} /> : <TutorMockup />}</div>
@@ -136,7 +136,7 @@ export default async function HomePage() {
           }
         />
         <div className="relative mx-auto max-w-5xl [perspective:1600px]">
-          <Floating className="-top-16 right-2 sm:-top-14 sm:-right-10" delay={1}>
+          <Floating className="-top-16 right-2 sm:-top-14 xl:-right-10" delay={1}>
             <TimerMini />
           </Floating>
           <Reveal>

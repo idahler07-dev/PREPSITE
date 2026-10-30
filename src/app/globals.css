@@ -259,7 +259,7 @@
   --shadow-md: var(--elev-md);
   --shadow-lg: var(--elev-lg);
 
-  --animate-logo-dot: logo-dot 520ms cubic-bezier(0.34, 1.6, 0.64, 1);
+  --animate-logo-dot: logo-dot 400ms cubic-bezier(0.34, 1.6, 0.64, 1);
 }
 
 @layer base {
@@ -403,7 +403,7 @@
   animation: mascot-fade 180ms ease-out;
 }
 .mascot.mascot-react {
-  transition: transform 450ms cubic-bezier(0.34, 1.6, 0.64, 1);
+  transition: transform 400ms cubic-bezier(0.34, 1.6, 0.64, 1);
 }
 .mascot.mascot-react:hover {
   transform: scale(1.04) rotate(-3deg);
@@ -432,7 +432,7 @@
 /* Hero headline: words rise in one by one with CSS (paints immediately, no JS needed). */
 .hero-word {
   display: inline-block;
-  animation: hero-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: hero-rise 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(80ms + var(--i, 0) * 40ms);
 }
 @keyframes hero-rise {

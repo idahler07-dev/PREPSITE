@@ -37,7 +37,7 @@ export function DrawCheck({ className = "size-5" }: { className?: string }) {
           className="absolute inset-[-6px] rounded-full bg-correct/40 blur-md"
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: [0, 1, 0], scale: [0.6, 1.25, 1.4] }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         />
       )}
       <svg viewBox="0 0 24 24" className={className} aria-hidden>

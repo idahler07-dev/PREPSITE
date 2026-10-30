@@ -38,7 +38,7 @@ export function Celebration({ className }: { className?: string }) {
               className={`absolute top-1/2 left-1/2 size-2 rounded-full ${TONES[i % 3]}`}
               initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
               animate={{ x: Math.cos(a) * r, y: Math.sin(a) * r, opacity: 0, scale: 0.6 }}
-              transition={{ ...spring.bouncy, opacity: { duration: 0.9, ease: "easeOut" } }}
+              transition={{ ...spring.bouncy, opacity: { duration: 0.4, ease: "easeOut" } }}
             />
           );
         })}

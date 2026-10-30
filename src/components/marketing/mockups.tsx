@@ -8,7 +8,7 @@ import { Mascot } from "@/components/mascot/mascot";
 import { SkillMap } from "@/components/learning/skill-map";
 import { TrendChart } from "@/components/learning/trend-chart";
 import { Odometer } from "@/components/motion/odometer";
-import { useLiteMotion } from "@/lib/motion";
+import { spring, useLiteMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /*
@@ -276,7 +276,7 @@ export function CountdownMock({ days = 38 }: { days?: number }) {
       </p>
       <p className="mt-2 text-small text-muted-foreground">{t("days", { count: days })}</p>
       <div className="mt-4 h-2 overflow-hidden rounded-full bg-surface-2">
-        <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: 0.62 }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26 }} />
+        <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: 0.62 }} viewport={{ once: true }} transition={spring.soft} />
       </div>
     </div>
   );
@@ -320,7 +320,7 @@ export function PacingMock() {
             <span className="font-mono tabular-nums">{t("secs", { count: p.s })}</span>
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-surface-2">
-            <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: p.s / p.max }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 170, damping: 26, delay: p.n * 0.1 }} />
+            <m.div className="h-full origin-left rounded-full bg-primary" initial={{ scaleX: 0 }} whileInView={{ scaleX: p.s / p.max }} viewport={{ once: true }} transition={{ ...spring.soft, delay: p.n * 0.06 }} />
           </div>
         </li>
       ))}

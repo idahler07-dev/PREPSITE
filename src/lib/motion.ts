@@ -8,11 +8,15 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion, type Transition, type Variants } from "motion/react";
 
+/**
+ * Springs with a fixed visual duration, so nothing in the interface takes
+ * longer than 400ms to settle (bounce only changes the feel).
+ */
 export const spring = {
-  soft: { type: "spring", stiffness: 170, damping: 26 },
-  snappy: { type: "spring", stiffness: 400, damping: 32 },
+  soft: { type: "spring", visualDuration: 0.35, bounce: 0.1 },
+  snappy: { type: "spring", visualDuration: 0.25, bounce: 0.1 },
   /** Celebrations only. */
-  bouncy: { type: "spring", stiffness: 260, damping: 18 },
+  bouncy: { type: "spring", visualDuration: 0.4, bounce: 0.35 },
 } as const satisfies Record<string, Transition>;
 
 export const ease = {

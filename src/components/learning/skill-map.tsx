@@ -36,7 +36,7 @@ export function SkillMap({ tiles, onPick, columns = "grid-cols-3 sm:grid-cols-4 
           </>
         );
         const cls = cn(
-          "flex h-full min-h-[76px] w-full flex-col justify-between rounded-[12px] p-3 text-start transition-colors duration-500",
+          "flex h-full min-h-[76px] w-full flex-col justify-between rounded-[12px] p-3 text-start transition-colors duration-300",
           dark ? "text-primary-foreground" : "text-foreground",
         );
         return (

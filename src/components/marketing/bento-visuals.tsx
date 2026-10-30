@@ -82,7 +82,7 @@ export function TrendVisual() {
         initial={reduce ? false : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
       />
       <m.path
         d={line}
@@ -94,7 +94,7 @@ export function TrendVisual() {
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true }}
-        transition={{ ...spring.soft, stiffness: 60 }}
+        transition={spring.soft}
       />
     </svg>
   );

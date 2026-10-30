@@ -58,7 +58,7 @@ export function LiveQuestion({ question, ctaHref }: { question: FeaturedQuestion
         className="rounded-2xl border bg-surface p-5 shadow-lg sm:p-6"
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.45 }}
+        transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: 0.3 }}
       >
         <div className="mb-4 flex items-center justify-between gap-3">
           <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">{t("label")}</span>
