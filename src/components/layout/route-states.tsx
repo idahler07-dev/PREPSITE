@@ -20,7 +20,7 @@ export function PageSkeleton() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }, (_, i) => (
-          <Skeleton key={i} className="h-32 rounded-[20px]" />
+          <Skeleton key={i} className="h-32 rounded-[20px] sm:max-lg:last:col-span-2" />
         ))}
       </div>
       <div className="space-y-2">

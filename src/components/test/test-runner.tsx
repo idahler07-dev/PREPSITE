@@ -36,6 +36,7 @@ import { CalculatorPanel } from "./calculator";
 import { ReferenceSheet } from "./reference-sheet";
 import { HighlightablePassage, type Highlight, type HighlightColor } from "./highlightable";
 import { LineReader } from "./line-reader";
+import { playSfx } from "@/lib/sfx";
 import { TestToolbar } from "./test-toolbar";
 import { QuestionHeader } from "./question-header";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -247,6 +248,7 @@ export function TestRunner({
 
   const selectChoice = (key: string) => {
     if (item.feedback) return;
+    if (initial.feedbackMode === "IMMEDIATE") playSfx("select");
     // Choosing a crossed-out answer un-crosses it.
     update(item.position, { answer: key, ...(item.eliminated.includes(key) ? { eliminated: item.eliminated.filter((k) => k !== key) } : {}) });
   };
@@ -272,6 +274,7 @@ export function TestRunner({
       const feedback = (await res.json()) as Feedback;
       setCheckedTime((prev) => ({ ...prev, [item.position]: (spent.current[item.position] ?? 0) + timeAcc.current }));
       setItems((prev) => prev.map((it) => (it.position === item.position ? { ...it, feedback } : it)));
+      playSfx(feedback.isCorrect ? "correct" : "incorrect");
     } catch {
       toast.error(c("networkError"));
     } finally {
@@ -380,6 +383,7 @@ export function TestRunner({
             <SaveIndicator status={autosave.status} compact />
           </span>
           <TestToolbar
+            showSound={immediate}
             isMath={isMath}
             calcOpen={calcOpen}
             onCalculator={() => setCalcOpen((x) => !x)}

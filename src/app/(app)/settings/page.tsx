@@ -11,6 +11,7 @@ import { NotificationSettings } from "@/components/account/notification-settings
 import { resolvePrefs } from "@/config/notifications";
 import { db } from "@/lib/db";
 import { DarkModeSwitch, ThemeToggle } from "@/components/layout/theme-toggle";
+import { SoundSwitch } from "@/components/account/sound-switch";
 
 export async function generateMetadata() {
   const t = await getTranslations("settings");
@@ -51,6 +52,10 @@ export default async function SettingsPage() {
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium">{tt("darkMode")}</span>
             <DarkModeSwitch signedIn />
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">{t("sound")}</span>
+            <SoundSwitch />
           </div>
         </CardContent>
       </Card>

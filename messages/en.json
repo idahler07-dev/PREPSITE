@@ -611,6 +611,7 @@
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
       "shortcuts": "Keyboard shortcuts",
+      "sound": "Sound effects",
       "exit": "Exit"
     },
     "calculator": {
@@ -790,6 +791,7 @@
     "telegram": "Telegram",
     "notConnected": "Not connected",
     "preferences": "Preferences",
+    "sound": "Sound effects",
     "theme": "Theme",
     "goal": "Goal",
     "saved": "Settings saved",
