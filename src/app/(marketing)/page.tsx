@@ -9,6 +9,7 @@ import { Mascot } from "@/components/mascot/mascot";
 import { Section, SectionHead, SectionPill } from "@/components/marketing/section";
 import { HowPath } from "@/components/marketing/how-path";
 import { HeroHeadline } from "@/components/marketing/hero-headline";
+import { HeroWaves } from "@/components/marketing/hero-waves";
 import { LiveQuestion } from "@/components/marketing/live-question";
 import { FaqList } from "@/components/marketing/faq-list";
 import { PlanCards } from "@/components/billing/plan-cards";
@@ -33,6 +34,7 @@ export default async function HomePage() {
       {/* 2. Hero */}
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[640px] bg-[radial-gradient(60%_60%_at_80%_10%,color-mix(in_oklab,var(--primary)_10%,transparent),transparent_70%)]" />
+        <HeroWaves />
         <div className="section-inner relative grid items-center gap-16 pt-16 pb-24 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pt-24 lg:pb-40">
           <div>
             <HeroHeadline raw={t.raw("title") as string} className="text-[2.75rem] leading-[1.05] font-semibold tracking-[-0.03em] sm:text-hero" />

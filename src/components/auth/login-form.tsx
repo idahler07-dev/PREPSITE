@@ -3,6 +3,8 @@
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeft, ExternalLink, Loader2, Mail } from "lucide-react";
+import CodeSlots from "@/components/fx/CodeSlots";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -154,7 +156,7 @@ function CodeStep({
   const [wait, setWait] = useState(RESEND_AFTER_SEC);
   const [resent, setResent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const wide = useMediaQuery("(min-width: 640px)");
   const busy = verifying || !!state.redirectTo;
   const mailApp = MAIL_APPS.find((m) => m.domains.includes(email.split("@")[1] ?? ""));
 
@@ -170,7 +172,6 @@ function CodeStep({
     if (state.redirectTo) window.location.assign(state.redirectTo);
     else if (state.error) {
       setCode("");
-      inputRef.current?.focus();
     }
   }, [state]);
 
@@ -208,23 +209,27 @@ function CodeStep({
       <form ref={formRef} action={verify} className="space-y-3">
         <input type="hidden" name="email" value={email} />
         <input type="hidden" name="next" value={next ?? ""} />
-        <Label htmlFor="code">{t("codeLabel")}</Label>
-        <Input
-          ref={inputRef}
-          id="code"
-          name="code"
-          value={code}
-          onChange={(e) => onChange(e.target.value)}
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="\d{6}"
-          maxLength={6}
-          required
-          autoFocus
-          aria-invalid={!!error}
-          aria-describedby={error ? "code-error" : "code-hint"}
-          className="h-14 text-center font-mono text-2xl tracking-[0.5em]"
-        />
+        <input type="hidden" name="code" value={code} />
+        <p className="text-sm font-medium">{t("codeLabel")}</p>
+        <div className="flex justify-center py-1">
+          <CodeSlots
+            length={6}
+            value={code}
+            onChange={onChange}
+            status={state.redirectTo ? "success" : state.error && !code ? "error" : "idle"}
+            disabled={busy}
+            autoFocus
+            ariaLabel={t("codeLabel")}
+            slotSize={wide ? 48 : 40}
+            gap={wide ? 8 : 6}
+            radius={12}
+            slotColor="var(--surface-2)"
+            inkColor="var(--foreground)"
+            accentColor="var(--primary)"
+            digitColor="var(--primary-foreground)"
+            dangerColor="var(--danger)"
+          />
+        </div>
         {error && (
           <p id="code-error" role="alert" className="text-sm text-destructive">
             {error}

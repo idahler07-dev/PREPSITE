@@ -1,0 +1,27 @@
+interface Props {
+  length?: number;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (code: string) => void;
+  onComplete?: (code: string) => void;
+  status?: "idle" | "success" | "error";
+  mask?: boolean;
+  caret?: boolean;
+  disabled?: boolean;
+  autoFocus?: boolean;
+  accentColor?: string;
+  inkColor?: string;
+  slotColor?: string;
+  digitColor?: string;
+  dangerColor?: string;
+  slotSize?: number;
+  gap?: number;
+  radius?: number;
+  bounce?: number;
+  settle?: number;
+  rise?: number;
+  cascade?: number;
+  ariaLabel?: string;
+  className?: string;
+}
+export default function CodeSlots(props: Props): React.JSX.Element;

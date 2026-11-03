@@ -10,12 +10,12 @@ All colors are CSS variables in `src/app/globals.css`, mapped to Tailwind (`bg-p
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `background` | #FFFFFF | #0A0D18 | page |
-| `section-tint` | #F4F6FB | #0F1324 | alternate landing sections |
-| `surface` / `surface-2` | #FFFFFF / #F1F3F8 | #131830 / #1A2040 | cards / wells, hovers |
-| `foreground` / `muted-foreground` | #0E1222 / #5A6178 | #EEF0FA / #9AA0BC | text |
-| `border` / `input` | #E5E8F0 / #7E86A0 | #262C4A / #5F688E | dividers / control borders (3:1) |
-| `primary` (cobalt) | #2747F5, hover #1C36D1, soft #E8ECFF | #6F86FF, hover #8C9EFF, soft #1C2452 | actions, links, data, selected answers |
+| `background` | #FFFFFF | #08142A | page |
+| `section-tint` | #F0F6FF | #0C1A33 | alternate landing sections |
+| `surface` / `surface-2` | #FFFFFF / #EEF4FD | #0F1E3A / #162A4D | cards / wells, hovers |
+| `foreground` / `muted-foreground` | #0B1F3B / #52607A | #ECF2FF / #9FB0CF | text |
+| `border` / `input` | #DCE6F5 / #7E86A0 | #223457 / #62779F | dividers / control borders (3:1) |
+| `primary` (cobalt) | #2747F5, hover #1C36D1, soft #E8EEFF | #849AFF, hover #A0B0FF, soft #14245A | actions, links, data, selected answers |
 | `accent` (coral) | #FF6B4A, soft #FFEDE7, ink #CF2600 | #FF8A6E, soft #3A1E17 | **upgrade CTAs and Pip's accents only** |
 | `highlight` (lilac) | #B7A6FF | #9C88FF | `<hl>` underline and gradients only |
 | `correct` (mint) | #12B886, soft #E0F7EF, ink #0C7B5A | #3DD6A3, soft #0F3329 | right answers (review only) |
@@ -25,6 +25,20 @@ All colors are CSS variables in `src/app/globals.css`, mapped to Tailwind (`bg-p
 AA adjustments: in light mode, coral, mint, amber and red are too light for text on white. They're used as **fills with dark text** (`text-on-fill`) and for graphics, and each has an **-ink** shade of the same hue for text and icons. White text appears only on cobalt and the red ink. In dark mode, filled controls use dark text.
 
 Pip has its own tokens (`--mascot-body`, `--mascot-light`, `--mascot-dark`, `--mascot-cap`, `--mascot-cap-light`, `--mascot-cap-dark`, `--mascot-accent`, `--mascot-eye`, `--mascot-ink`) so it looks the same in both themes, a touch brighter in dark.
+
+### Principles
+
+Nine design principles, applied to Satify (one rule each):
+
+- **Balance**: layouts are two-column grids with equal visual weight; the hero text is balanced by Pip and the cards, not by empty space.
+- **Contrast**: navy ink on near-white, cobalt on tint. Nothing relies on a pair that fails `pnpm check:contrast`.
+- **Emphasis**: one loud color. Cobalt marks the single action or answer that matters on a screen; everything else stays quiet.
+- **Repetition**: the same card, radius (20px / 12px), spacing scale and control sizes everywhere, so new screens feel familiar.
+- **Alignment**: one left edge per section; labels, values and actions share columns.
+- **Hierarchy**: three levels of text per screen (title, body, muted), distinguished by size and weight before color.
+- **Proportion**: large for what the student acts on (the question, the answer, the word), small for chrome and metadata.
+- **Movement**: motion shows cause and effect (a fill from the click, a card that flips, a switch that squishes) and ends within 400ms.
+- **Rhythm**: a fixed spacing scale; repeated items (choices, rows, cards) get identical gaps.
 
 ## Typography
 
@@ -153,6 +167,20 @@ Rules:
 **Navigation.** Desktop sidebar in three groups: Study (Home, Plan, Analytics, Mistakes, Vocabulary), Practice (Question bank, Drills, Mock tests, History), Account (Settings, Plan and payments, Official resources, Manage for owners); it collapses to icons. Phones: Home, Practice, Question bank, Tests, More, with a sliding pill. The demo notice is 32px and can be hidden for the session (`NEXT_PUBLIC_DEMO_BANNER`).
 
 **States.** Every data page has a loading skeleton (`PageSkeleton`), an error state with retry (`RouteError`) and an empty state (`EmptyState`, a Pip pose + one sentence + one action). Checked at 360/390/768/1440px in both themes with no horizontal scrolling.
+
+### Animated controls (`src/components/fx`)
+
+Copied from React Bits and themed with our tokens (they take colors as props, we pass `var(--…)`). Where they're used:
+
+| Control | Where |
+|---|---|
+| `FlipCard` | vocabulary flashcards (the "Show meaning" button still works for keyboard users) |
+| `CodeSlots` | the six-digit email sign-in code (one real input underneath, so paste, autofill and screen readers work) |
+| `LatticeLoader` | page loading skeletons and the AI tutor's "Thinking" state |
+| `RubberSegment` | the Reading and Writing / Math switch in the question bank |
+| `SquishSwitch` | notification toggles and the dark mode switch in Settings |
+| `BellToggle` | "Remind me to practise" in Settings (study reminders on every channel the student can receive) |
+| `GradientWaves` | a faint cobalt and lilac wave behind the landing hero (WebGL, loaded after the page, still for reduced motion) |
 
 ## Micro-details
 

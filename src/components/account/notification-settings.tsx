@@ -5,24 +5,50 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { NOTIFICATION_CHANNELS, NOTIFICATION_KINDS, type NotificationPrefs } from "@/config/notifications";
 import { saveNotificationPrefs } from "@/server/actions/preferences";
+import BellToggle from "@/components/fx/BellToggle";
+import SquishSwitch from "@/components/fx/SquishSwitch";
 
 export function NotificationSettings({ initial, hasEmail, hasTelegram }: { initial: NotificationPrefs; hasEmail: boolean; hasTelegram: boolean }) {
   const t = useTranslations("settings.notifications");
   const [prefs, setPrefs] = useState(initial);
   const available = { email: hasEmail, telegram: hasTelegram };
 
-  async function toggle(ch: (typeof NOTIFICATION_CHANNELS)[number], k: (typeof NOTIFICATION_KINDS)[number], value: boolean) {
-    const next = { ...prefs, [ch]: { ...prefs[ch], [k]: value } };
+  const channels = NOTIFICATION_CHANNELS.filter((ch) => available[ch]);
+
+  async function save(next: NotificationPrefs) {
+    const before = prefs;
     setPrefs(next);
     const res = await saveNotificationPrefs(next).catch(() => ({ ok: false }));
     if (!res.ok) {
-      setPrefs(prefs);
+      setPrefs(before);
       toast.error(t("error"));
     }
   }
 
+  const toggle = (ch: (typeof NOTIFICATION_CHANNELS)[number], k: (typeof NOTIFICATION_KINDS)[number], value: boolean) => save({ ...prefs, [ch]: { ...prefs[ch], [k]: value } });
+
+  /** The bell: study reminders on every channel the student can receive. */
+  const setStudy = (value: boolean) => save(Object.fromEntries(NOTIFICATION_CHANNELS.map((ch) => [ch, { ...prefs[ch], study: available[ch] ? value : prefs[ch].study }])) as NotificationPrefs);
+
   return (
     <div className="space-y-3">
+      <BellToggle
+        offLabel={t("bellOff")}
+        onLabel={t("bellOn")}
+        pressed={channels.length > 0 && channels.every((ch) => prefs[ch].study)}
+        onChange={(on) => void setStudy(on)}
+        disabled={channels.length === 0}
+        badge={false}
+        waves={false}
+        size="sm"
+        radius={14}
+        ringDuration={480}
+        crossfadeMs={160}
+        color="var(--foreground)"
+        background="var(--surface-2)"
+        onColor="var(--primary-foreground)"
+        onBackground="var(--primary)"
+      />
       <table className="w-full text-sm">
         <caption className="sr-only">{t("title")}</caption>
         <thead>
@@ -46,14 +72,22 @@ export function NotificationSettings({ initial, hasEmail, hasTelegram }: { initi
               </th>
               {NOTIFICATION_CHANNELS.map((ch) => (
                 <td key={ch} className="text-center">
-                  <input
-                    type="checkbox"
-                    className="size-4"
-                    disabled={!available[ch]}
-                    checked={available[ch] && prefs[ch][k]}
-                    onChange={(e) => void toggle(ch, k, e.target.checked)}
-                    aria-label={`${t(`kinds.${k}.label`)} — ${t(`channels.${ch}`)}`}
-                  />
+                  <span className="flex justify-center">
+                    <SquishSwitch
+                      checked={available[ch] && prefs[ch][k]}
+                      onChange={(on) => void toggle(ch, k, on)}
+                      disabled={!available[ch]}
+                      ariaLabel={`${t(`kinds.${k}.label`)} — ${t(`channels.${ch}`)}`}
+                      width={44}
+                      height={26}
+                      radius={13}
+                      stretch={20}
+                      trackColor="var(--input)"
+                      trackOnColor="var(--primary)"
+                      thumbColor="var(--background)"
+                      thumbOnColor="var(--primary-foreground)"
+                    />
+                  </span>
                 </td>
               ))}
             </tr>

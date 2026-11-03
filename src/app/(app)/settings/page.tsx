@@ -10,7 +10,7 @@ import { DeleteAccount } from "@/components/account/delete-account";
 import { NotificationSettings } from "@/components/account/notification-settings";
 import { resolvePrefs } from "@/config/notifications";
 import { db } from "@/lib/db";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { DarkModeSwitch, ThemeToggle } from "@/components/layout/theme-toggle";
 
 export async function generateMetadata() {
   const t = await getTranslations("settings");
@@ -20,6 +20,7 @@ export async function generateMetadata() {
 export default async function SettingsPage() {
   const user = await requireUser("/settings");
   const t = await getTranslations("settings");
+  const tt = await getTranslations("theme");
   const prefs = await db.user.findUnique({ where: { id: user.id }, select: { notificationPrefs: true, telegramId: true } });
   return (
     <Container className="max-w-3xl space-y-6">
@@ -46,6 +47,10 @@ export default async function SettingsPage() {
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium">{t("theme")}</span>
             <ThemeToggle signedIn />
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">{tt("darkMode")}</span>
+            <DarkModeSwitch signedIn />
           </div>
         </CardContent>
       </Card>

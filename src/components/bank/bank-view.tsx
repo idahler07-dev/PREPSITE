@@ -14,7 +14,10 @@ import { practiceFromBank } from "@/server/actions/bank";
 import { openTest } from "@/lib/open-test";
 import { DOMAINS } from "@/lib/taxonomy";
 import { cn } from "@/lib/utils";
+import RubberSegment from "@/components/fx/RubberSegment";
 import type { BankFilters, BankRow } from "@/server/bank/query";
+
+const SECTIONS = ["RW", "MATH"] as const;
 
 const DIFFS = ["EASY", "MEDIUM", "HARD"] as const;
 const STATUSES = ["unattempted", "correct", "incorrect", "flagged"] as const;
@@ -188,23 +191,19 @@ export function BankView({ filters, page, counts, progress }: Props) {
   return (
     <div className="space-y-6">
       {/* Section tabs */}
-      <div role="tablist" aria-label={t("title")} className="inline-flex rounded-full border bg-surface p-1">
-        {(["RW", "MATH"] as const).map((s) => (
-          <button
-            key={s}
-            type="button"
-            role="tab"
-            aria-selected={filters.section === s}
-            onClick={() => setParams({ section: s, domain: undefined, skill: undefined })}
-            className={cn(
-              "h-9 rounded-full px-4 text-sm font-semibold transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
-              filters.section === s ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {t(`sections.${s}`)}
-          </button>
-        ))}
-      </div>
+      <RubberSegment
+        items={SECTIONS.map((s) => t(`sections.${s}`))}
+        value={t(`sections.${filters.section}`)}
+        onChange={(_, i) => setParams({ section: SECTIONS[i]!, domain: undefined, skill: undefined })}
+        aria-label={t("title")}
+        trackColor="var(--surface-2)"
+        thumbColor="var(--primary)"
+        textColor="var(--foreground)"
+        activeTextColor="var(--primary-foreground)"
+        radius={14}
+        speed={1.4}
+        stretch={60}
+      />
 
       {/* Per-domain progress */}
       <ul className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
