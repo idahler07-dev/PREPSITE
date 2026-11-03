@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { gradeVocabCard } from "@/server/actions/learning";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import FlipCard from "@/components/fx/FlipCard";
 
 interface Card {
   id: string;
@@ -64,24 +65,51 @@ export function Flashcards({ cards }: { cards: Card[] }) {
       <p className="text-sm text-muted-foreground" aria-live="polite">
         {t("progress", { current: index + 1, total: cards.length })}
       </p>
-      <section aria-label={t("card")} className="min-h-64 space-y-4 rounded-xl border bg-card p-8 shadow-sm">
-        <div className="flex items-center gap-2">
-          <h2 className="text-3xl font-bold">{card.word}</h2>
-          <span className="text-muted-foreground">{card.partOfSpeech}</span>
-          {card.isNew && <Badge variant="secondary">{t("new")}</Badge>}
-        </div>
-        <Example text={card.example} word={card.word} />
-        {shown ? (
-          <div className="space-y-2 border-t pt-4">
-            <p>{card.definition}</p>
-            {card.translation && <p className="text-muted-foreground">{card.translation}</p>}
-          </div>
-        ) : (
+      <section aria-label={t("card")} className="flex justify-center">
+        <FlipCard
+          key={card.id}
+          flipped={shown}
+          onFlipChange={setShown}
+          ariaLabel={t("flip")}
+          width={640}
+          height={340}
+          radius={20}
+          background="var(--surface)"
+          color="var(--foreground)"
+          shadowColor="var(--foreground)"
+          shadowOpacity={0.12}
+          tiltMax={5}
+          glareOpacity={0.12}
+          hoverScale={1.015}
+          stiffness={260}
+          damping={28}
+          className="[&_.flip-card__face]:shadow-[inset_0_0_0_1px_var(--border)]"
+          front={
+            <div className="flex h-full flex-col justify-center gap-4 p-6 text-left sm:p-8">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-3xl font-bold">{card.word}</h2>
+                <span className="text-muted-foreground">{card.partOfSpeech}</span>
+                {card.isNew && <Badge variant="secondary">{t("new")}</Badge>}
+              </div>
+              <Example text={card.example} word={card.word} />
+            </div>
+          }
+          back={
+            <div className="flex h-full flex-col justify-center gap-3 p-6 text-left sm:p-8">
+              <h2 className="text-xl font-bold text-muted-foreground">{card.word}</h2>
+              <p className="text-xl leading-relaxed">{card.definition}</p>
+              {card.translation && <p className="text-muted-foreground">{card.translation}</p>}
+            </div>
+          }
+        />
+      </section>
+      {!shown && (
+        <div className="flex justify-center">
           <Button onClick={() => setShown(true)} autoFocus>
             {t("show")}
           </Button>
-        )}
-      </section>
+        </div>
+      )}
       {shown && (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label={t("howWell")}>
           {GRADES.map((g) => (

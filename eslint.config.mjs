@@ -6,7 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
 const eslintConfig = [
-  { ignores: ["src/generated/**", ".next/**", "node_modules/**", "playwright-report/**", "next-env.d.ts"] },
+  { ignores: ["src/components/fx/**", "src/generated/**", ".next/**", "node_modules/**", "playwright-report/**", "next-env.d.ts"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {

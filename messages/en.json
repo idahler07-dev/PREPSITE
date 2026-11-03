@@ -112,6 +112,7 @@
     "label": "Theme",
     "light": "Light",
     "dark": "Dark",
+    "darkMode": "Dark mode",
     "system": "System"
   },
   "home": {
@@ -829,6 +830,8 @@
         }
       },
       "telegramHint": "Telegram messages need a sign-in with Telegram.",
+      "bellOff": "Remind me to practise",
+      "bellOn": "Study reminders on",
       "error": "Could not save. Please try again."
     }
   },
@@ -1830,6 +1833,7 @@
     "card": "Flashcard",
     "new": "new",
     "show": "Show meaning",
+    "flip": "Flip card",
     "howWell": "How well did you know it?",
     "grades": {
       "again": "Again",

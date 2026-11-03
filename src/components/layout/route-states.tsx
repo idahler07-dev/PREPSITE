@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import LatticeLoader from "@/components/fx/LatticeLoader";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Container } from "@/components/layout/page-header";
@@ -8,9 +9,11 @@ import { EmptyState } from "@/components/layout/empty-state";
 
 /** Generic page skeleton: a title, a row of tiles and a list (used by the loading.tsx files). */
 export function PageSkeleton() {
+  const t = useTranslations("common");
   return (
     <Container className="space-y-6">
       <div className="contents" aria-busy="true" aria-live="polite">
+      <LatticeLoader label={t("loading")} showTimer={false} color="var(--primary)" cellSize={5} className="text-muted-foreground" />
       <div className="space-y-3">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-5 w-96 max-w-full" />

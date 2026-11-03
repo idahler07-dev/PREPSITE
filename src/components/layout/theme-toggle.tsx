@@ -19,6 +19,7 @@ import {
 import { saveThemePreference } from "@/server/actions/preferences";
 import { THEME_COLORS } from "@/config/theme-colors";
 import { spring } from "@/lib/motion";
+import SquishSwitch from "@/components/fx/SquishSwitch";
 
 type ViewTransitionDoc = Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
 
@@ -100,6 +101,37 @@ export function ThemeToggle({ signedIn }: { signedIn: boolean }) {
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+/** A light/dark switch for the settings page; the menu above also offers "System". */
+export function DarkModeSwitch({ signedIn }: { signedIn: boolean }) {
+  const t = useTranslations("theme");
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const change = useAnimatedThemeChange(ref);
+  useEffect(() => setMounted(true), []);
+  return (
+    <span ref={ref} className="inline-flex">
+      <SquishSwitch
+        checked={mounted && resolvedTheme === "dark"}
+        onChange={(on) => {
+          const value = on ? "dark" : "light";
+          change(value);
+          if (signedIn) void saveThemePreference(value);
+        }}
+        ariaLabel={t("darkMode")}
+        width={52}
+        height={30}
+        radius={15}
+        stretch={24}
+        trackColor="var(--input)"
+        trackOnColor="var(--primary)"
+        thumbColor="var(--background)"
+        thumbOnColor="var(--primary-foreground)"
+      />
+    </span>
   );
 }
 

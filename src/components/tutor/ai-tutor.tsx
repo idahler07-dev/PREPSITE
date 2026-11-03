@@ -3,7 +3,8 @@
 import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Lightbulb, Loader2, Send } from "lucide-react";
+import { Lightbulb, Send } from "lucide-react";
+import LatticeLoader from "@/components/fx/LatticeLoader";
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/mascot/mascot";
 import { Textarea } from "@/components/ui/textarea";
@@ -177,9 +178,7 @@ export function AiTutor({
       {mode && (
         <div ref={live} aria-live="polite" aria-busy={busy} className="space-y-3">
           {busy && !text && !flagged && (
-            <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="size-4 animate-spin" aria-hidden /> {t("thinking")}
-            </p>
+            <LatticeLoader label={t("thinking")} color="var(--primary)" cellSize={5} fontSize={14} className="text-muted-foreground" />
           )}
           {flagged ? <p className="rounded-md bg-background p-3 text-sm">{t("flagged")}</p> : text && <Answer text={text} className="rounded-md bg-background p-3" />}
 

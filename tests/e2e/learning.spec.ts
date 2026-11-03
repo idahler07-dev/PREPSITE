@@ -32,9 +32,9 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
   await expect(page.getByText(/Card 2 of/)).toBeVisible();
 
   await page.goto("/settings");
-  const box = page.getByRole("checkbox", { name: "Study reminders — Email" });
+  const box = page.getByRole("switch", { name: "Study reminders — Email" });
   await expect(box).not.toBeChecked();
   await box.check();
   await page.reload();
-  await expect(page.getByRole("checkbox", { name: "Study reminders — Email" })).toBeChecked();
+  await expect(page.getByRole("switch", { name: "Study reminders — Email" })).toBeChecked();
 });
