@@ -21,23 +21,23 @@
   --radius-input: 12px;
 
   --background: #ffffff;
-  --section-tint: #f4f6fb;
-  --foreground: #0e1222;
+  --section-tint: #f0f6ff;
+  --foreground: #0b1f3b;
   --surface: #ffffff;
-  --surface-2: #f1f3f8;
+  --surface-2: #eef4fd;
   --muted: var(--surface-2);
-  --muted-foreground: #5a6178;
-  --border: #e5e8f0;
+  --muted-foreground: #52607a;
+  --border: #dce6f5;
   --input: #7e86a0;
 
   --primary: #2747f5;
   --primary-hover: #1c36d1;
   --primary-foreground: #ffffff;
-  --primary-soft: #e8ecff;
+  --primary-soft: #e8eeff;
   --ring: var(--primary);
 
   --accent: #ff6b4a;
-  --accent-foreground: #0e1222;
+  --accent-foreground: #0b1f3b;
   --accent-soft: #ffede7;
   --accent-ink: #cf2600;
 
@@ -53,7 +53,7 @@
   --danger-soft: #fde8e8;
   --danger-ink: #c8191f;
   /* Text on bright fills (amber flag, mint, coral) in both themes. */
-  --on-fill: #0e1222;
+  --on-fill: #0b1f3b;
 
   /* shadcn names, mapped onto the palette. */
   --secondary: var(--surface-2);
@@ -79,15 +79,15 @@
   --hl-yellow: #fbe6a6;
   --hl-blue: #cfdcff;
   --hl-pink: #ffd9cf;
-  --hl-text: #0e1222;
+  --hl-text: #0b1f3b;
 
   /* Layered shadows: a tight one plus a large faint one. */
-  --elev-sm: 0 1px 2px rgb(14 18 34 / 0.06), 0 6px 16px -8px rgb(14 18 34 / 0.08);
-  --elev-md: 0 1px 2px rgb(14 18 34 / 0.06), 0 12px 32px -12px rgb(14 18 34 / 0.14);
-  --elev-lg: 0 2px 4px rgb(14 18 34 / 0.06), 0 24px 56px -16px rgb(14 18 34 / 0.22);
+  --elev-sm: 0 1px 2px rgb(11 31 59 / 0.06), 0 6px 16px -8px rgb(11 31 59 / 0.08);
+  --elev-md: 0 1px 2px rgb(11 31 59 / 0.06), 0 12px 32px -12px rgb(11 31 59 / 0.14);
+  --elev-lg: 0 2px 4px rgb(11 31 59 / 0.06), 0 24px 56px -16px rgb(11 31 59 / 0.22);
   --glass: rgb(255 255 255 / 0.72);
-  --overlay: rgb(14 18 34 / 0.32);
-  --dot-color: rgb(14 18 34 / 0.09);
+  --overlay: rgb(11 31 59 / 0.32);
+  --dot-color: rgb(11 31 59 / 0.09);
   --mesh-opacity: 0.55;
 
   /* Charts: correct / incorrect series (validated with the dataviz palette checks against each surface). */
@@ -103,23 +103,23 @@
   --mascot-cap-dark: #1c32c4;
   --mascot-accent: #ff6b4a;
   --mascot-eye: #ffffff;
-  --mascot-ink: #0e1222;
+  --mascot-ink: #0b1f3b;
 }
 
 .dark {
-  --background: #0a0d18;
-  --section-tint: #0f1324;
-  --foreground: #eef0fa;
-  --surface: #131830;
-  --surface-2: #1a2040;
-  --muted-foreground: #9aa0bc;
-  --border: #262c4a;
-  --input: #5f688e;
+  --background: #08142a;
+  --section-tint: #0c1a33;
+  --foreground: #ecf2ff;
+  --surface: #0f1e3a;
+  --surface-2: #162a4d;
+  --muted-foreground: #9fb0cf;
+  --border: #223457;
+  --input: #62779f;
 
-  --primary: #6f86ff;
-  --primary-hover: #8c9eff;
+  --primary: #849aff;
+  --primary-hover: #a0b0ff;
   --primary-foreground: #090c16;
-  --primary-soft: #1c2452;
+  --primary-soft: #14245a;
 
   --accent: #ff8a6e;
   --accent-foreground: #090c16;
@@ -151,9 +151,9 @@
   --elev-sm: inset 0 1px 0 rgb(255 255 255 / 0.05);
   --elev-md: inset 0 1px 0 rgb(255 255 255 / 0.06);
   --elev-lg: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 24px 56px -16px rgb(0 0 0 / 0.6);
-  --glass: rgb(17 21 42 / 0.7);
-  --overlay: rgb(3 5 12 / 0.6);
-  --dot-color: rgb(238 240 250 / 0.07);
+  --glass: rgb(15 30 58 / 0.7);
+  --overlay: rgb(3 8 20 / 0.6);
+  --dot-color: rgb(236 242 255 / 0.07);
   --mesh-opacity: 0.4;
   --chart-correct: #26ad83;
   --chart-incorrect: #f2585e;
