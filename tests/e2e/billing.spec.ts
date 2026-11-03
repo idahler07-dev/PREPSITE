@@ -29,7 +29,7 @@ test("free limit → upgrade with the test provider → premium unlocked, receip
   await expect(page.getByText("Payment received. Premium is active")).toBeVisible();
 
   await page.goto("/billing");
-  await expect(page.getByText("Premium", { exact: true })).toBeVisible();
+  await expect(page.getByText("Premium", { exact: true }).filter({ visible: true })).toBeVisible();
   await expect(page.getByRole("cell", { name: "Paid" })).toBeVisible();
   await page.getByRole("link", { name: "Receipt" }).click();
   await expect(page.getByRole("heading", { name: "Receipt" })).toBeVisible();

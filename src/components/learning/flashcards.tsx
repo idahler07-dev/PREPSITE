@@ -70,7 +70,7 @@ export function Flashcards({ cards }: { cards: Card[] }) {
           key={card.id}
           flipped={shown}
           onFlipChange={setShown}
-          ariaLabel={t("flip")}
+          ariaLabel=""
           width={640}
           height={340}
           radius={20}
@@ -83,7 +83,7 @@ export function Flashcards({ cards }: { cards: Card[] }) {
           hoverScale={1.015}
           stiffness={260}
           damping={28}
-          className="[&_.flip-card__face]:shadow-[inset_0_0_0_1px_var(--border)]"
+          className="[&_.flip-card__face]:border [&_.flip-card__face]:border-border"
           front={
             <div className="flex h-full flex-col justify-center gap-4 p-6 text-left sm:p-8">
               <div className="flex flex-wrap items-center gap-2">

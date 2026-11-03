@@ -212,7 +212,7 @@ export default function FlipCard({
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-pressed={shown}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel || undefined}
       aria-disabled={disabled || undefined}
       className={`flip-card${className ? ` ${className}` : ''}`}
       data-axis={axis}
