@@ -2,7 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { Calculator, Keyboard, Maximize, Minimize, Minus, Plus, ScanLine, Sigma, Wrench } from "lucide-react";
+import { Calculator, Keyboard, Maximize, Minimize, Minus, Plus, ScanLine, Sigma, Volume2, VolumeX, Wrench } from "lucide-react";
+import { setSfxEnabled, useSfxEnabled } from "@/lib/sfx";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
@@ -29,6 +30,8 @@ export interface ToolbarProps {
   canZoomOut: boolean;
   onZoom: (dir: 1 | -1) => void;
   onShortcuts: () => void;
+  /** Show the sound switch (drills only; mock tests are silent). */
+  showSound?: boolean;
 }
 
 /** The "on" dot for toggles in the phone menu. */
@@ -54,6 +57,8 @@ function Tool({ label, keys, pressed, disabled, onClick, children }: { label: st
 /** Test tools: icons with labels on tablets and up, a single "Tools" menu on phones. */
 export function TestToolbar(p: ToolbarProps) {
   const t = useTranslations("test");
+  const sound = useSfxEnabled();
+  const soundLabel = t("tools.sound");
   const fsLabel = p.fullscreen ? t("tools.exitFullscreen") : t("tools.fullscreen");
   return (
     <>
@@ -80,6 +85,11 @@ export function TestToolbar(p: ToolbarProps) {
         <Tool label={fsLabel} keys={FULLSCREEN_KEY} pressed={p.fullscreen} onClick={p.onFullscreen}>
           {p.fullscreen ? <Minimize aria-hidden /> : <Maximize aria-hidden />}
         </Tool>
+        {p.showSound && (
+          <Tool label={soundLabel} pressed={sound} onClick={() => setSfxEnabled(!sound)}>
+            {sound ? <Volume2 aria-hidden /> : <VolumeX aria-hidden />}
+          </Tool>
+        )}
         <Tool label={t("tools.shortcuts")} keys="?" onClick={p.onShortcuts}>
           <Keyboard aria-hidden />
         </Tool>
@@ -116,6 +126,12 @@ export function TestToolbar(p: ToolbarProps) {
             <DropdownMenuItem disabled={!p.canZoomOut} onSelect={(e) => (e.preventDefault(), p.onZoom(-1))}>
               <Minus aria-hidden /> {t("tools.zoomOut")}
             </DropdownMenuItem>
+            {p.showSound && (
+              <DropdownMenuItem onSelect={(e) => (e.preventDefault(), setSfxEnabled(!sound))} aria-checked={sound} role="menuitemcheckbox">
+                {sound ? <Volume2 aria-hidden /> : <VolumeX aria-hidden />} {soundLabel}
+                {sound && <On />}
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onSelect={p.onFullscreen}>
               {p.fullscreen ? <Minimize aria-hidden /> : <Maximize aria-hidden />} {fsLabel}
               <DropdownMenuShortcut>{FULLSCREEN_KEY}</DropdownMenuShortcut>
