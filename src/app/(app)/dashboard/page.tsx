@@ -35,7 +35,7 @@ export async function generateMetadata() {
 /** A bento card: 14px radius, 20/32px padding, cursor spotlight on desktop. */
 function Tile({ title, action, className, children }: { title?: React.ReactNode; action?: React.ReactNode; className?: string; children: React.ReactNode }) {
   return (
-    <SpotlightCard className={`rounded-[26px] p-5 lg:p-8 ${className ?? ""}`}>
+    <SpotlightCard className={`rounded-2xl p-5 lg:p-8 ${className ?? ""}`}>
       {(title || action) && (
         <div className="mb-5 flex items-center justify-between gap-3">
           {title && <h2 className="font-semibold">{title}</h2>}
@@ -96,7 +96,6 @@ export default async function DashboardPage() {
             <div className="min-w-0 flex-1 space-y-3">
               <p className="text-sm font-semibold text-muted-foreground">{format.dateTime(new Date(), { weekday: "long", day: "numeric", month: "long", timeZone: user.timeZone })}</p>
               <h1 className="text-h2 font-semibold lg:text-h1">{first ? t("greeting", { name: first }) : t("greetingNoName")}</h1>
-              <p className="max-w-[50ch] text-muted-foreground">{t("greetingSub")}</p>
               <div className="flex flex-wrap gap-2 pt-2">
                 {s.openAttemptId && (
                   <Button asChild variant="secondary" className="h-auto min-h-10 max-w-full whitespace-normal">

@@ -82,7 +82,6 @@ export function TestRunner({
   const [submitting, setSubmitting] = useState(false);
   const [checking, setChecking] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [showTip, setShowTip] = useState(false);
   const [annotations, setAnnotations] = useState<Annotations>(initialAnnotations);
   const [highlighterOn, setHighlighterOn] = useState(false);
   const [hlColor, setHlColor] = useState<HighlightColor>("yellow");
@@ -166,7 +165,6 @@ export function TestRunner({
         setReloadedForCalc(true);
         setCalcOpen(true);
       }
-      setShowTip(window.matchMedia("(max-width: 767px)").matches && !localStorage.getItem("mobile-tip-dismissed"));
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -400,24 +398,6 @@ export function TestRunner({
         </div>
       </header>
 
-      {showTip && (
-        <div className="flex items-start gap-2 border-b bg-primary-soft px-4 py-2 text-sm text-foreground">
-          <p className="flex-1">{t("mobileTip")}</p>
-          <button
-            type="button"
-            className="underline"
-            onClick={() => {
-              setShowTip(false);
-              try {
-                localStorage.setItem("mobile-tip-dismissed", "1");
-              } catch {}
-            }}
-          >
-            {t("dismiss")}
-          </button>
-        </div>
-      )}
-
       {/* Main */}
       {/* One scroll area on phones; side-by-side panes that scroll separately on large screens. */}
       <div className="flex min-h-0 flex-1">
@@ -473,10 +453,10 @@ export function TestRunner({
           // Keyed by question so both panes start at the top for each question.
           <div key={item.position} className={cn("grid grid-cols-[minmax(0,1fr)] lg:h-full", item.passageHtml && "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:divide-x")}>
             {item.passageHtml && (
-              <section aria-label={t("passage")} className="border-b bg-surface p-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
+              <section aria-label={t("passage")} className="border-b bg-surface px-5 py-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
                 <div className="mb-3 flex flex-wrap items-center gap-1">
                   <Button variant={highlighterOn ? "secondary" : "ghost"} size="sm" onClick={() => setHighlighterOn((x) => !x)} aria-pressed={highlighterOn}>
-                    <Highlighter aria-hidden /> {highlighterOn ? t("tools.highlighterOn") : t("tools.highlighter")}
+                    <Highlighter aria-hidden /> <span className="max-sm:sr-only">{highlighterOn ? t("tools.highlighterOn") : t("tools.highlighter")}</span>
                   </Button>
                   {highlighterOn && (
                     <div role="radiogroup" aria-label={t("tools.highlightColor")} className="flex gap-1">
@@ -496,7 +476,7 @@ export function TestRunner({
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="ghost" size="sm" className="ms-auto">
-                        <NotebookPen aria-hidden /> {annotation?.note ? t("tools.editNote") : t("tools.addNote")}
+                        <NotebookPen aria-hidden /> <span className="max-sm:sr-only">{annotation?.note ? t("tools.editNote") : t("tools.addNote")}</span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent align="end" className="w-80">
@@ -525,8 +505,8 @@ export function TestRunner({
                 />
               </section>
             )}
-            <section aria-label={t("question")} className="px-3 py-4 sm:p-6 lg:overflow-y-auto">
-              <div className="mx-auto w-full max-w-[680px] space-y-5 rounded-[26px] border bg-surface p-4 shadow-[var(--glass-shadow)] sm:p-7">
+            <section aria-label={t("question")} className="px-5 py-5 sm:p-6 lg:overflow-y-auto">
+              <div className="mx-auto w-full max-w-[680px] space-y-5 max-sm:space-y-4 sm:rounded-2xl sm:border sm:bg-surface sm:p-7 sm:shadow-[var(--glass-shadow)]">
                 <QuestionHeader number={index + 1} item={item} onToggleFlag={toggleFlag} />
 
                 <RichText html={item.stemHtml} className="q-stem" />

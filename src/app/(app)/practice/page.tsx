@@ -26,13 +26,13 @@ export default async function PracticePage({ searchParams }: { searchParams: Pro
   });
   return (
     <Container className="max-w-4xl">
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader title={t("title")} />
       {open.length > 0 && (
-        <section className="mb-6 rounded-xl border bg-primary-soft/50 p-4">
+        <section className="glass-card mb-6 rounded-2xl p-4">
           <h2 className="mb-2 font-semibold">{t("inProgress")}</h2>
-          <ul className="space-y-2">
-            {open.map((a) => (
-              <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
+          <ul className="divide-y divide-border/60">
+            {open.slice(0, 1).map((a) => (
+              <li key={a.id} className="flex items-center justify-between gap-3 py-1 text-sm">
                 <span>
                   {th(`kinds.${a.kind}`)} · {format.dateTime(a.startedAt, { dateStyle: "medium", timeStyle: "short" })}
                 </span>
@@ -42,6 +42,23 @@ export default async function PracticePage({ searchParams }: { searchParams: Pro
               </li>
             ))}
           </ul>
+          {open.length > 1 && (
+            <details className="mt-1">
+              <summary className="cursor-pointer py-2 text-sm text-muted-foreground">{t("moreInProgress", { count: open.length - 1 })}</summary>
+              <ul className="divide-y divide-border/60">
+                {open.slice(1).map((a) => (
+                  <li key={a.id} className="flex items-center justify-between gap-3 py-1 text-sm">
+                    <span>
+                      {th(`kinds.${a.kind}`)} · {format.dateTime(a.startedAt, { dateStyle: "medium", timeStyle: "short" })}
+                    </span>
+                    <Button asChild size="sm" variant="secondary">
+                      <a href={`/test/${a.id}`}>{t("resume")}</a>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
         </section>
       )}
       <DrillBuilder

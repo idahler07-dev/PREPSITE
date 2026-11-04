@@ -20,7 +20,7 @@ export function ScoreGauge({ score, low, high, min = 400, max = 1600 }: { score:
       <div className="relative h-2.5 rounded-full bg-foreground/10" aria-hidden>
         {hasRange && (
         <m.span
-          className="absolute inset-y-0 rounded-full bg-gradient-to-r from-[color-mix(in_oklab,var(--primary),white_35%)] to-primary"
+          className="absolute inset-y-0 rounded-full bg-gradient-to-r from-primary to-accent"
           initial={reduce ? false : { left: pct(score), width: 0 }}
           animate={{ left: pct(low), width: `calc(${pct(high)} - ${pct(low)})` }}
           transition={transition}

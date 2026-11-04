@@ -29,26 +29,22 @@ export function QuestionHeader({
   const te = useTranslations("enums.difficulty");
   const section = tx(`sections.${item.section}`);
   return (
-    <div className="flex items-start gap-2 border-b pb-3">
+    <div className="flex items-center gap-2.5 border-b pb-3">
       <span className="flex h-8 min-w-8 shrink-0 items-center justify-center rounded-lg bg-foreground px-2 text-sm font-bold text-background tabular-nums">
         {number}
       </span>
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 pt-0.5">
-        <span className="block h-7 max-w-full truncate rounded-full bg-surface-2 leading-7 px-3 text-xs font-medium text-muted-foreground">
-          {item.meta
-            ? `${section} · ${tx(`skills.${item.meta.skill as "INFERENCES"}`)}`
-            : section}
+      <div className="flex min-w-0 flex-1 items-center gap-2 self-center">
+        <span className="min-w-0 truncate text-sm font-medium text-muted-foreground">
+          <span className="max-sm:hidden">{section} · </span>
+          {item.meta ? tx(`skills.${item.meta.skill as "INFERENCES"}`) : section}
         </span>
         {item.meta && (
-          <span className="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs font-medium">
-            <span
-              className={cn("size-2 rounded-full", DOT[item.meta.difficulty])}
-              aria-hidden
-            />
-            <span aria-hidden>{te(item.meta.difficulty)}</span>
-            <span className="sr-only">
-              {t("difficultyChip", { level: te(item.meta.difficulty) })}
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-muted-foreground">
+            <span className={cn("size-2 rounded-full", DOT[item.meta.difficulty])} aria-hidden />
+            <span className="max-sm:sr-only" aria-hidden>
+              {te(item.meta.difficulty)}
             </span>
+            <span className="sr-only">{t("difficultyChip", { level: te(item.meta.difficulty) })}</span>
           </span>
         )}
       </div>

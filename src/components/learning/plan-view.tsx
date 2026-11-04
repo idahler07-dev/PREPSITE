@@ -26,7 +26,7 @@ export async function TaskList({ tasks }: { tasks: PlanTask[] }) {
   const tx = await getTranslations("taxonomy");
   if (!tasks.length) return <p className="text-sm text-muted-foreground">{t("nothing")}</p>;
   return (
-    <ul className="glass-card divide-y divide-border/60 overflow-hidden rounded-[22px]">
+    <ul className="glass-card divide-y divide-border/60 overflow-hidden rounded-2xl">
       {tasks.map((task, i) => {
         const Icon = ICONS[task.kind];
         const label =

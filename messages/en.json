@@ -520,7 +520,8 @@
     "quickRw": "10 reading & writing questions",
     "inProgress": "In progress",
     "resume": "Resume",
-    "drillStarted": "Drill started. Good luck!"
+    "drillStarted": "Drill started. Good luck!",
+    "moreInProgress": "{count, plural, one {# more in progress} other {# more in progress}}"
   },
   "test": {
     "drillTitle": "Practice drill",
