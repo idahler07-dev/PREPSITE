@@ -6,7 +6,6 @@ import { ArrowLeft, ExternalLink, Loader2, Mail } from "lucide-react";
 import CodeSlots from "@/components/fx/CodeSlots";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { requestMagicLink, signInWithGoogle, verifyEmailCode, type CodeState, type LoginState } from "@/server/actions/login";
 import { TelegramLoginButton } from "./telegram-login";
@@ -79,10 +78,10 @@ export function LoginForm({
             {google && (
               <form action={signInWithGoogle} onSubmit={() => rememberMethod("google")} className="relative">
                 <input type="hidden" name="next" value={next ?? ""} />
-                <Button type="submit" variant="outline" size="lg" className="w-full">
+                <button type="submit" className="auth-social">
                   <GoogleIcon />
                   {t("google")}
-                </Button>
+                </button>
                 <LastUsed show={last === "google"} />
               </form>
             )}
@@ -104,25 +103,29 @@ export function LoginForm({
       <form action={action} onSubmit={() => rememberMethod("email")} className="space-y-3">
         <input type="hidden" name="next" value={next ?? ""} />
         <div className="space-y-2">
-          <Label htmlFor="email">{t("emailLabel")}</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            inputMode="email"
-            required
-            className="h-11"
-            placeholder={t("emailPlaceholder")}
-            defaultValue={state.email}
-            aria-describedby={emailNote ? "email-note" : undefined}
-          />
+          <Label htmlFor="email" className="font-semibold">
+            {t("emailLabel")}
+          </Label>
+          <div className="auth-field">
+            <Mail className="size-[18px] shrink-0" aria-hidden />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              required
+              placeholder={t("emailPlaceholder")}
+              defaultValue={state.email}
+              aria-describedby={emailNote ? "email-note" : undefined}
+            />
+          </div>
         </div>
         <div className="relative">
-          <Button type="submit" size="lg" className="w-full" disabled={pending}>
-            {pending ? <Loader2 className="animate-spin" aria-hidden /> : <Mail aria-hidden />}
+          <button type="submit" className="auth-submit mt-2" disabled={pending}>
+            {pending && <Loader2 className="size-4 animate-spin" aria-hidden />}
             {pending ? t("sending") : t("sendCode")}
-          </Button>
+          </button>
           <LastUsed show={last === "email"} />
         </div>
         {emailNote && (

@@ -36,6 +36,8 @@ Adapted from Uiverse.io (CSS in `globals.css`, classes `theme-switch`, `uv-switc
 | On/off pill switch | `ToggleSwitch` | sound effects, notification toggles |
 | Menu bars that fold into an arrow | `MenuBars` | ☰ in the top bar; the arrow closes the side menu |
 | Trash icon that widens into a "Delete" pill | `DeleteButton` | deleting a saved practice score |
+| Pencil that draws a circle and erases it (loading) | `PencilLoader` | page loading skeletons, the AI tutor's "Thinking" |
+| Sign-in form: bordered field with an icon, dark submit, outlined social button | classes `auth-field`, `auth-submit`, `auth-social` | the sign-in page |
 
 ### Score entry (tape-measure rulers)
 
