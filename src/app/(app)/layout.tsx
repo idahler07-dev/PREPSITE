@@ -7,7 +7,7 @@ import { Logo } from "@/components/layout/logo";
 import { CountdownChip } from "@/components/layout/countdown-chip";
 import { CommandPaletteButton } from "@/components/layout/command-palette-button";
 import { CommandPaletteHost } from "@/components/layout/command-palette-host";
-import { ThemeSync, ThemeToggle } from "@/components/layout/theme-toggle";
+import { ThemeOrb, ThemeSync } from "@/components/layout/theme-toggle";
 import { UserMenu } from "@/components/layout/user-menu";
 import { PageTransition } from "@/components/motion/page-transition";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -72,7 +72,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         <div className="ms-auto flex items-center gap-2">
           <CountdownChip testDate={user.testDate} />
           <CommandPaletteButton />
-          <ThemeToggle signedIn />
+          <ThemeOrb signedIn />
           <ThemeSync theme={user.theme} />
           <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
         </div>

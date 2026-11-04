@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { requireOwner } from "@/server/auth/session";
 import { Logo } from "@/components/layout/logo";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { ThemeOrb } from "@/components/layout/theme-toggle";
 import { UserMenu } from "@/components/layout/user-menu";
 import { AdminNav } from "@/components/admin/admin-nav";
 
@@ -25,7 +25,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         <Logo href="/manage" />
         <span className="rounded bg-primary-soft px-2 py-0.5 text-xs font-semibold text-foreground">{t("title")}</span>
         <div className="ms-auto flex items-center gap-1">
-          <ThemeToggle signedIn />
+          <ThemeOrb signedIn />
           <UserMenu name={user.name} email={user.email} isOwner />
         </div>
       </header>

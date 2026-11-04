@@ -104,6 +104,38 @@ export function ThemeToggle({ signedIn }: { signedIn: boolean }) {
   );
 }
 
+/** The header's day/night button: a pressable glass orb. Press it for dark, again for light ("System" is in Settings). */
+export function ThemeOrb({ signedIn }: { signedIn: boolean }) {
+  const t = useTranslations("theme");
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const change = useAnimatedThemeChange(ref);
+  useEffect(() => setMounted(true), []);
+  const dark = mounted && resolvedTheme === "dark";
+  return (
+    <span ref={ref} className="relative inline-block size-11 shrink-0">
+      <span className="orb">
+        <input
+          type="checkbox"
+          role="switch"
+          checked={dark}
+          aria-label={t("darkMode")}
+          onChange={(e) => {
+            const value = e.target.checked ? "dark" : "light";
+            change(value);
+            if (signedIn) void saveThemePreference(value);
+          }}
+        />
+        <span className="orb-button" aria-hidden />
+        <span className="orb-icon" aria-hidden>
+          {dark ? <Moon className="size-9" strokeWidth={1.6} /> : <Sun className="size-9" strokeWidth={1.6} />}
+        </span>
+      </span>
+    </span>
+  );
+}
+
 /** A light/dark switch for the settings page; the menu above also offers "System". */
 export function DarkModeSwitch({ signedIn }: { signedIn: boolean }) {
   const t = useTranslations("theme");
