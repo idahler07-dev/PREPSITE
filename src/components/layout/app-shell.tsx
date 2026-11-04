@@ -140,7 +140,7 @@ export function AppShell({
         href={i.href}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "relative flex h-10 items-center gap-3 rounded-[var(--radius-input)] px-3 text-sm font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
+          "relative flex h-10 items-center gap-3 rounded-[var(--radius-input)] px-3 text-sm font-medium transition-[color,background-color,transform] duration-200 motion-safe:active:scale-[0.97] focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
           active ? "text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
         )}
       >
@@ -294,7 +294,7 @@ export function AppShell({
                                   onClick={() => setMenuOpen(false)}
                                   aria-current={active ? "page" : undefined}
                                   className={cn(
-                                    "relative flex h-11 items-center gap-3 rounded-[var(--radius-input)] px-3 text-[15px] font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
+                                    "relative flex h-11 items-center gap-3 rounded-[var(--radius-input)] px-3 text-[15px] font-medium transition-[color,background-color,transform] duration-200 motion-safe:active:scale-[0.97] focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
                                     active ? "text-primary" : "text-foreground hover:bg-surface-2",
                                   )}
                                 >

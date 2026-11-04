@@ -38,3 +38,24 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
   await page.reload();
   await expect(page.getByRole("switch", { name: "Study reminders — Email" })).toBeChecked();
 });
+
+test("a student who already took a practice test enters the score with the rulers", async ({ page }) => {
+  await signIn(page, uniqueEmail("score"));
+  await page.getByRole("button", { name: "Skip for now" }).click();
+  await page.goto("/dashboard");
+  await page.getByRole("button", { name: "I already took a practice test" }).click();
+
+  const math = page.getByRole("slider", { name: "Math" });
+  const rw = page.getByRole("slider", { name: "Reading and Writing" });
+  await expect(math).toHaveAttribute("aria-valuenow", "600");
+  await math.focus();
+  for (let i = 0; i < 3; i++) await page.keyboard.press("ArrowRight");
+  await rw.focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(math).toHaveAttribute("aria-valuenow", "630");
+  await expect(rw).toHaveAttribute("aria-valuenow", "590");
+
+  await page.getByRole("button", { name: "Save score" }).click();
+  await expect(page.getByText("From your practice test on").filter({ visible: true })).toBeVisible();
+  await expect(page.getByText("Reading and Writing 590 · Math 630").filter({ visible: true })).toBeVisible();
+});

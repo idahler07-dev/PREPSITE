@@ -14,15 +14,18 @@ export function ScoreGauge({ score, low, high, min = 400, max = 1600 }: { score:
   const reduce = useReducedMotion();
   const pct = (v: number) => `${Math.min(100, Math.max(0, ((v - min) / (max - min)) * 100))}%`;
   const transition = reduce ? { duration: 0 } : spring.soft;
+  const hasRange = high > low;
   return (
     <div className="mt-4">
       <div className="relative h-2.5 rounded-full bg-foreground/10" aria-hidden>
+        {hasRange && (
         <m.span
           className="absolute inset-y-0 rounded-full bg-gradient-to-r from-[color-mix(in_oklab,var(--primary),white_35%)] to-primary"
           initial={reduce ? false : { left: pct(score), width: 0 }}
           animate={{ left: pct(low), width: `calc(${pct(high)} - ${pct(low)})` }}
           transition={transition}
         />
+        )}
         <m.span
           className="absolute top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-primary bg-surface shadow-[var(--glass-shadow)]"
           initial={reduce ? false : { left: pct(min) }}
@@ -34,7 +37,7 @@ export function ScoreGauge({ score, low, high, min = 400, max = 1600 }: { score:
         <span>{min}</span>
         <span>{max}</span>
       </div>
-      <p className="sr-only">{t("range", { low, high })}</p>
+      {hasRange && <p className="sr-only">{t("range", { low, high })}</p>}
     </div>
   );
 }

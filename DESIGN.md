@@ -26,6 +26,15 @@ AA adjustments: in light mode, coral, mint, amber and red are too light for text
 
 Pip has its own tokens (`--mascot-body`, `--mascot-light`, `--mascot-dark`, `--mascot-cap`, `--mascot-cap-light`, `--mascot-cap-dark`, `--mascot-accent`, `--mascot-eye`, `--mascot-ink`) so it looks the same in both themes, a touch brighter in dark.
 
+### Score entry (tape-measure rulers)
+
+Students who already took a practice test enter their score on the dashboard ("I already took a practice test"). One ruler per section (Reading and Writing, Math), 200–800 in steps of 10:
+
+- Drag the tape under the needle: it coasts and snaps to a tick (ticks 14px apart, a number every 100). Buttons and arrow keys work too (Shift or Page Up/Down for 50). The control is a single `role="slider"`.
+- The big number above each ruler and the total roll like an odometer as the tape moves; phones get a tiny haptic tick.
+- Saving uses the existing practice-score log, so the study plan picks it up. The estimate tile then shows the total on a 400–1600 gauge. A real mock test score takes priority when there is one.
+- Components: `ScoreRuler`, `ScoreEntry`, `ScoreGauge` in `components/learning`.
+
 ### Principles
 
 Nine design principles, applied to Satify (one rule each):

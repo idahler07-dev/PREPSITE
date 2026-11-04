@@ -21,6 +21,7 @@ import { Odometer } from "@/components/motion/odometer";
 import { SpotlightCard } from "@/components/motion/interactive-card";
 import { TaskList } from "@/components/learning/plan-view";
 import { ScoreGauge } from "@/components/learning/score-gauge";
+import { ScoreEntry } from "@/components/learning/score-entry";
 import { WeekDots, type WeekDay } from "@/components/learning/week-dots";
 import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { DailyQuestionButton } from "@/components/learning/review-actions";
@@ -56,13 +57,15 @@ export default async function DashboardPage() {
   const s = await getDashboardStats(user.id, user.timeZone);
   const days = user.testDate ? daysUntil(user.testDate) : null;
   const today = dayInZone(new Date(), siteConfig.defaultTimeZone);
-  const [planRow, notebook, vocab, lastMock, week] = await Promise.all([
+  const [planRow, notebook, vocab, lastMock, week, official] = await Promise.all([
     currentPlan(user.id),
     notebookCounts(user.id),
     vocabCounts(user.id),
     db.attempt.findFirst({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "desc" }, select: { scores: true } }),
     activityDays(user.id, user.timeZone, 1),
+    db.officialScore.findFirst({ where: { userId: user.id }, orderBy: [{ takenOn: "desc" }, { createdAt: "desc" }], select: { rw: true, math: true, total: true, takenOn: true } }),
   ]);
+  const todayUtc = new Date().toISOString().slice(0, 10);
   const todayLocal = dayInZone(new Date(), user.timeZone);
   const weekDays: WeekDay[] = week.map((d) => {
     const name = format.dateTime(new Date(`${d.day}T12:00:00Z`), { weekday: "long", timeZone: "UTC" });
@@ -127,6 +130,7 @@ export default async function DashboardPage() {
         </section>
 
         </StaggerItem>
+        {s.weakSkills.length > 0 && (
         <StaggerItem className="order-5 lg:order-none">
         {/* Weakest skills */}
         <Tile title={t("weakest")}>
@@ -148,6 +152,7 @@ export default async function DashboardPage() {
         </Tile>
 
         </StaggerItem>
+        )}
         <StaggerItem className="order-6 lg:order-none">
         {/* Skill map */}
         <Tile title={t("skillMap")} action={<span className="hidden text-label text-muted-foreground sm:inline">{t("skillMapHint")}</span>}>
@@ -209,14 +214,31 @@ export default async function DashboardPage() {
               <p className="mt-2 font-mono text-small text-muted-foreground">{t("range", { low: estimate.low, high: estimate.high })}</p>
               <p className="mt-3 text-label text-muted-foreground">{t("estimate.label")}</p>
             </div>
+          ) : official ? (
+            <div>
+              <p className="text-[3.5rem] leading-none font-bold">
+                <Odometer value={official.total} className="font-mono" />
+              </p>
+              <ScoreGauge score={official.total} low={official.total} high={official.total} min={400} max={1600} />
+              <p className="mt-2 font-mono text-small text-muted-foreground">
+                {tx("sections.RW")} {official.rw} · {tx("sections.MATH")} {official.math}
+              </p>
+              <p className="mt-3 text-label text-muted-foreground">{t("scoreEntry.from", { date: format.dateTime(official.takenOn, { dateStyle: "medium", timeZone: "UTC" }) })}</p>
+              <div className="mt-3">
+                <ScoreEntry today={todayUtc} initial={{ rw: official.rw ?? 600, math: official.math ?? 600 }} trigger={<Button size="sm" variant="secondary">{t("scoreEntry.update")}</Button>} />
+              </div>
+            </div>
           ) : (
             <div className="flex items-center gap-4">
               <Mascot pose="think" className="w-20 shrink-0" />
               <div className="space-y-3">
                 <p className="text-small text-muted-foreground">{t("estimateEmpty")}</p>
-                <Button asChild size="sm" variant="secondary">
-                  <Link href="/mocks">{t("takeTest")}</Link>
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button asChild size="sm">
+                    <Link href="/mocks">{t("takeTest")}</Link>
+                  </Button>
+                  <ScoreEntry today={todayUtc} trigger={<Button size="sm" variant="secondary">{t("scoreEntry.open")}</Button>} />
+                </div>
                 <p className="text-label text-muted-foreground">{t("estimate.label")}</p>
               </div>
             </div>
