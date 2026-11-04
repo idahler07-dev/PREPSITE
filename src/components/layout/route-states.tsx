@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import LatticeLoader from "@/components/fx/LatticeLoader";
+import { PencilLoader } from "@/components/ui/pencil-loader";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Container } from "@/components/layout/page-header";
@@ -13,7 +13,10 @@ export function PageSkeleton() {
   return (
     <Container className="space-y-6">
       <div className="contents" aria-busy="true" aria-live="polite">
-      <LatticeLoader label={t("loading")} showTimer={false} color="var(--primary)" cellSize={5} className="text-muted-foreground" />
+      <div role="status" className="flex items-center gap-3 text-sm text-muted-foreground">
+        <PencilLoader size={56} />
+        {t("loading")}
+      </div>
       <div className="space-y-3">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-5 w-96 max-w-full" />

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "./logo";
 import { NavLink } from "./nav-link";
 import { MobileNav } from "./mobile-nav";
-import { ThemeToggle, ThemeSync } from "./theme-toggle";
+import { ThemeOrb, ThemeSync } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 import { ScrollHeader } from "./scroll-header";
 import { CommandPaletteButton } from "./command-palette-button";
@@ -42,7 +42,7 @@ export async function SiteHeader() {
         </nav>
         <div className="ms-auto flex items-center gap-2">
           <CommandPaletteButton className="hidden sm:inline-flex" />
-          <ThemeToggle signedIn={!!user} />
+          <ThemeOrb signedIn={!!user} />
           {user ? (
             <>
               <ThemeSync theme={user.theme} />

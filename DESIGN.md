@@ -26,6 +26,35 @@ AA adjustments: in light mode, coral, mint, amber and red are too light for text
 
 Pip has its own tokens (`--mascot-body`, `--mascot-light`, `--mascot-dark`, `--mascot-cap`, `--mascot-cap-light`, `--mascot-cap-dark`, `--mascot-accent`, `--mascot-eye`, `--mascot-ink`) so it looks the same in both themes, a touch brighter in dark.
 
+### Uiverse-derived controls (`components/ui`)
+
+Adapted from Uiverse.io (CSS in `globals.css`, classes `theme-switch`, `uv-switch`, `uv-bars`, `uv-trash`). Each is a real input or button underneath, so keyboard and screen readers work, and each has a no-animation version for reduced motion.
+
+| Control | Component | Where |
+|---|---|---|
+| Day/night sky switch (clouds, stars, sun, moon) | `DayNightSwitch` via `ThemeOrb` | headers, Settings |
+| On/off pill switch | `ToggleSwitch` | sound effects, notification toggles |
+| Menu bars that fold into an arrow | `MenuBars` | ☰ in the top bar; the arrow closes the side menu |
+| Trash icon that widens into a "Delete" pill | `DeleteButton` | deleting a saved practice score |
+| Pencil that draws a circle and erases it (loading) | `PencilLoader` | page loading skeletons, the AI tutor's "Thinking" |
+| Sign-in form: bordered field with an icon, dark submit, outlined social button | classes `auth-field`, `auth-submit`, `auth-social` | the sign-in page |
+
+### Landing page motion
+
+- **Skills strip** (`SkillMarquee`): two endless rows of the 30 skills, Reading and Writing one way and Math the other; pauses on hover; still (and scrollable by hand) with reduced motion.
+- **App showcase** (`ContainerScroll`): a device frame that tilts back 20° and settles flat as it scrolls in, the title lifting with it. Real dashboard screenshots in `public/landing/` (desktop and phone, light and dark). No tilt with reduced motion.
+- **Rotating words** (`RotatingWords`, fancy `text-rotate`): "One place for Math / Reading and Writing / …" letter by letter in a cobalt pill; screen readers get the full list once.
+- **Liquid glass button** (`LiquidButton`): the hero's second action. **Metal button** (`MetalButton`): the final call to action only.
+
+### Score entry (tape-measure rulers)
+
+Students who already took a practice test enter their score on the dashboard ("I already took a practice test"). One ruler per section (Reading and Writing, Math), 200–800 in steps of 10:
+
+- Drag the tape under the needle: it coasts and snaps to a tick (ticks 14px apart, a number every 100). Buttons and arrow keys work too (Shift or Page Up/Down for 50). The control is a single `role="slider"`.
+- The big number above each ruler and the total roll like an odometer as the tape moves; phones get a tiny haptic tick.
+- Saving uses the existing practice-score log, so the study plan picks it up. The estimate tile then shows the total on a 400–1600 gauge. A real mock test score takes priority when there is one.
+- Components: `ScoreRuler`, `ScoreEntry`, `ScoreGauge` in `components/learning`.
+
 ### Principles
 
 Nine design principles, applied to Satify (one rule each):
@@ -99,7 +128,7 @@ One idea per section: a pill label with a colored icon (`SectionPill`), a big he
 | SkillMap / TrendChart | `learning/` | Tiles shaded by mastery; line chart that draws in. |
 | Odometer | `motion/odometer.tsx` | Numbers roll up from 0 and to new values. |
 | Command palette | `layout/command-palette.tsx` | Ctrl/Cmd + K, glass. |
-| AppShell | `layout/app-shell.tsx` | Sidebar (collapses, remembered in a cookie); bottom tab bar + "More" sheet on phones. |
+| AppShell | `layout/app-shell.tsx` | Sidebar (collapses, remembered in a cookie); on phones and tablets a side menu from the ☰ button (slides in, links stagger in, swipe left to close). |
 
 Glass (`.glass`) is only for the sticky top bars, the command palette and floating panels (calculator, reference sheet).
 

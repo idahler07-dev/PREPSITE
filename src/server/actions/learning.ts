@@ -89,6 +89,7 @@ export async function logOfficialScore(raw: unknown) {
     });
     await generatePlan(user.id, "official-score").catch(() => null);
     revalidatePath("/resources", "page");
+    revalidatePath("/dashboard", "page");
     return null;
   });
 }

@@ -9,13 +9,13 @@ import { Slot } from "radix-ui"
  * scales to 0.97 and springs back (CSS spring easing; see lib/motion.ts).
  */
 const buttonVariants = cva(
-  "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-[var(--radius-input)] text-sm font-semibold whitespace-nowrap outline-none select-none transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.34,1.4,0.64,1)] focus-visible:ring-[3px] focus-visible:ring-ring/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.97]",
+  "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-sm font-semibold whitespace-nowrap outline-none select-none transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.34,1.4,0.64,1)] focus-visible:ring-[3px] focus-visible:ring-ring/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.97]",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md",
-        secondary: "border border-border bg-surface text-foreground shadow-sm hover:border-primary/50 hover:shadow-md",
-        outline: "border border-border bg-surface text-foreground shadow-sm hover:border-primary/50 hover:shadow-md",
+        default: "bg-gradient-to-b from-[color-mix(in_oklab,var(--primary),white_16%)] to-primary text-primary-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_6px_16px_-6px_color-mix(in_oklab,var(--primary),transparent_35%)] hover:to-primary-hover hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_10px_22px_-6px_color-mix(in_oklab,var(--primary),transparent_30%)]",
+        secondary: "glass-card text-foreground hover:border-primary/40",
+        outline: "glass-card text-foreground hover:border-primary/40",
         ghost: "text-foreground hover:bg-surface-2 motion-safe:hover:translate-y-0",
         accent: "bg-accent text-accent-foreground shadow-sm hover:shadow-md hover:brightness-105",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:brightness-110 focus-visible:ring-destructive/40",

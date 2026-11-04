@@ -3,11 +3,12 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { DOMAINS } from "@/lib/taxonomy";
 import { deleteOfficialScore, logOfficialScore } from "@/server/actions/learning";
 import { Button } from "@/components/ui/button";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -73,14 +74,13 @@ export function OfficialScoreForm() {
 
 export function DeleteScoreButton({ id }: { id: string }) {
   const t = useTranslations("resources.log");
+  const tc = useTranslations("common");
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
-    <Button
-      size="icon"
-      variant="ghost"
-      className="size-7"
-      aria-label={t("delete")}
+    <DeleteButton
+      label={t("delete")}
+      text={tc("delete")}
       disabled={pending}
       onClick={() =>
         start(async () => {
@@ -88,8 +88,6 @@ export function DeleteScoreButton({ id }: { id: string }) {
           router.refresh();
         })
       }
-    >
-      <Trash2 aria-hidden />
-    </Button>
+    />
   );
 }

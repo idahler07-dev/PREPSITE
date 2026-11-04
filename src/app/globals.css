@@ -90,6 +90,16 @@
   --dot-color: rgb(11 31 59 / 0.09);
   --mesh-opacity: 0.55;
 
+  /* Glass: translucent surfaces with a bright top edge. Blur is only for things that float over content. */
+  --glass-top: rgb(255 255 255 / 0.82);
+  --glass-bottom: rgb(255 255 255 / 0.58);
+  --glass-hi: rgb(255 255 255 / 0.95);
+  --glass-edge: rgb(255 255 255 / 0.7);
+  --glass-shadow: 0 12px 32px -14px rgb(27 45 106 / 0.3), 0 1px 3px rgb(27 45 106 / 0.08);
+  --ambient-a: rgb(150 168 255 / 0.7);
+  --ambient-b: rgb(218 192 255 / 0.62);
+  --ambient-c: rgb(255 204 188 / 0.55);
+
   /* Charts: correct / incorrect series (validated with the dataviz palette checks against each surface). */
   --chart-correct: #12b886;
   --chart-incorrect: #e5484d;
@@ -155,6 +165,14 @@
   --overlay: rgb(3 8 20 / 0.6);
   --dot-color: rgb(236 242 255 / 0.07);
   --mesh-opacity: 0.4;
+  --glass-top: rgb(255 255 255 / 0.13);
+  --glass-bottom: rgb(255 255 255 / 0.05);
+  --glass-hi: rgb(255 255 255 / 0.28);
+  --glass-edge: rgb(255 255 255 / 0.13);
+  --glass-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.65);
+  --ambient-a: rgb(47 76 255 / 0.42);
+  --ambient-b: rgb(143 107 255 / 0.3);
+  --ambient-c: rgb(255 107 74 / 0.16);
   --chart-correct: #26ad83;
   --chart-incorrect: #f2585e;
   --mascot-body: #b3a4ff;
@@ -345,11 +363,53 @@
   background-size: 24px 24px;
 }
 
-/* Glass: only the sticky top bar, command palette and floating panels (calculator, reference). */
+/* Glass for bars and floating panels (top bar, drawer, dock, menus, sheets): blur and saturate what's behind. */
 .glass {
   background-color: var(--glass);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border-color: var(--glass-edge);
+}
+
+/* Glass cards and chips: translucent with a bright top edge. No blur (it's invisible on smooth colour and costs frames). */
+.glass-card {
+  background-image: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1.5px 0 var(--glass-hi), var(--glass-shadow);
+}
+
+/* Soft colour behind the app so the glass has something to show: three static radial washes. */
+.app-ambient {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(62% 46% at 6% 0%, var(--ambient-a), transparent 72%),
+    radial-gradient(52% 42% at 100% 36%, var(--ambient-b), transparent 72%),
+    radial-gradient(58% 44% at 0% 100%, var(--ambient-c), transparent 72%),
+    var(--background);
+}
+
+/* Solid fallbacks: reduce transparency, and phones that struggle with blur (set by <GlassMode />). */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--surface);
+  }
+  .glass-card {
+    background-image: none;
+    background-color: var(--surface);
+  }
+  .app-ambient {
+    display: none;
+  }
+}
+html[data-glass="solid"] .glass {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background-color: color-mix(in oklab, var(--surface) 94%, transparent);
 }
 
 /* Gradient text (cobalt → coral): the hero headline only. */
@@ -632,4 +692,532 @@ mark.hl {
   color: var(--hl-text);
   border-radius: 2px;
   padding: 0 1px;
+}
+
+/* ---- Controls adapted from Uiverse.io: day/night (Galahhad), pill switch, menu bars, trash button (vinodjangid07) ---- */
+
+/* Day/night: sky switch with clouds, stars, sun and moon. Sized by --toggle-size. */
+.theme-switch {
+  --toggle-size: 9px;
+  --container-width: 5.625em;
+  --container-height: 2.5em;
+  --container-radius: 6.25em;
+  --container-light-bg: #3d7eae;
+  --container-night-bg: #1d1f2c;
+  --circle-container-diameter: 3.375em;
+  --sun-moon-diameter: 2.125em;
+  --sun-bg: #eca72f;
+  --moon-bg: #c4c9d1;
+  --spot-color: #959db1;
+  --circle-container-offset: calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
+  --stars-color: #fff;
+  --clouds-color: #f3fdff;
+  --back-clouds-color: #aacadf;
+  --transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+  --circle-transition: 0.3s cubic-bezier(0, -0.02, 0.35, 1.17);
+  position: relative;
+  display: inline-block;
+  font-size: var(--toggle-size);
+}
+.theme-switch *,
+.theme-switch *::before,
+.theme-switch *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: var(--toggle-size);
+}
+.theme-switch__checkbox {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.theme-switch__checkbox:focus-visible + .theme-switch__container {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.theme-switch__container,
+.theme-switch__sun-moon-container,
+.theme-switch__moon {
+  display: block;
+}
+.theme-switch__container {
+  position: relative;
+  width: var(--container-width);
+  height: var(--container-height);
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: var(--container-radius);
+  background-color: var(--container-light-bg);
+  box-shadow: 0 -0.062em 0.062em rgb(0 0 0 / 0.25), 0 0.062em 0.125em rgb(255 255 255 / 0.94);
+  transition: var(--transition);
+}
+.theme-switch__container::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: var(--container-radius);
+  box-shadow: 0 0.05em 0.187em rgb(0 0 0 / 0.25) inset, 0 0.05em 0.187em rgb(0 0 0 / 0.25) inset;
+}
+.theme-switch__circle-container {
+  position: absolute;
+  left: var(--circle-container-offset);
+  top: var(--circle-container-offset);
+  display: flex;
+  width: var(--circle-container-diameter);
+  height: var(--circle-container-diameter);
+  border-radius: var(--container-radius);
+  background-color: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 3.375em rgb(255 255 255 / 0.1), 0 0 0 0.625em rgb(255 255 255 / 0.1), 0 0 0 1.25em rgb(255 255 255 / 0.1);
+  transition: var(--circle-transition);
+  pointer-events: none;
+}
+.theme-switch__sun-moon-container {
+  position: relative;
+  z-index: 2;
+  width: var(--sun-moon-diameter);
+  height: var(--sun-moon-diameter);
+  margin: auto;
+  overflow: hidden;
+  border-radius: var(--container-radius);
+  background-color: var(--sun-bg);
+  box-shadow: 0.062em 0.062em 0.062em rgb(254 255 239 / 0.61) inset, 0 -0.062em 0.062em #a1872a inset;
+  filter: drop-shadow(0.062em 0.125em 0.125em rgb(0 0 0 / 0.25)) drop-shadow(0 0.062em 0.125em rgb(0 0 0 / 0.25));
+  transition: var(--transition);
+}
+.theme-switch__moon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--moon-bg);
+  box-shadow: 0.062em 0.062em 0.062em rgb(254 255 239 / 0.61) inset, 0 -0.062em 0.062em #969696 inset;
+  transform: translateX(100%);
+  transition: var(--transition);
+}
+.theme-switch__spot {
+  position: absolute;
+  top: 0.75em;
+  left: 0.312em;
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: var(--container-radius);
+  background-color: var(--spot-color);
+  box-shadow: 0 0.031em 0.062em rgb(0 0 0 / 0.25) inset;
+}
+.theme-switch__spot:nth-of-type(2) {
+  top: 0.937em;
+  left: 1.375em;
+  width: 0.375em;
+  height: 0.375em;
+}
+.theme-switch__spot:nth-of-type(3) {
+  top: 0.312em;
+  left: 0.812em;
+  width: 0.25em;
+  height: 0.25em;
+}
+.theme-switch__clouds {
+  position: absolute;
+  bottom: -0.625em;
+  left: 0.312em;
+  width: 1.25em;
+  height: 1.25em;
+  border-radius: var(--container-radius);
+  background-color: var(--clouds-color);
+  box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0 var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--back-clouds-color);
+  transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+}
+.theme-switch__stars-container {
+  position: absolute;
+  top: -100%;
+  left: 0.312em;
+  width: 2.75em;
+  height: auto;
+  color: var(--stars-color);
+  transition: var(--transition);
+}
+.theme-switch__checkbox:checked + .theme-switch__container {
+  background-color: var(--container-night-bg);
+}
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container {
+  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter));
+}
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon {
+  transform: translate(0);
+}
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds {
+  bottom: -4.062em;
+}
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container {
+  top: 50%;
+  transform: translateY(-50%);
+}
+@media (hover: hover) {
+  .theme-switch__checkbox:hover + .theme-switch__container .theme-switch__circle-container {
+    left: calc(var(--circle-container-offset) + 0.187em);
+  }
+  .theme-switch__checkbox:checked:hover + .theme-switch__container .theme-switch__circle-container {
+    left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em);
+  }
+}
+
+/* Pill switch (on/off): the thumb is a ring that fills when on. */
+.uv-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.uv-switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.uv-switch__track {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background-color: var(--input);
+  transition: background-color 0.2s;
+  pointer-events: none;
+}
+.uv-switch__track::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  box-sizing: content-box;
+  border: 5px solid #fff;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 5px 2px 7px rgb(8 8 8 / 0.26);
+  transition: transform 0.2s, background-color 0.2s;
+}
+.uv-switch input:checked + .uv-switch__track {
+  background-color: var(--primary);
+}
+.uv-switch input:checked + .uv-switch__track::after {
+  transform: translateX(calc(100% + 5px));
+  background-color: #fff;
+}
+.uv-switch input:focus-visible + .uv-switch__track {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.uv-switch input:disabled {
+  cursor: not-allowed;
+}
+.uv-switch input:disabled + .uv-switch__track {
+  opacity: 0.45;
+}
+
+/* Menu bars: three bars that fold into an arrow when open. Drawn at 40px, scaled by the wrapper. */
+.uv-bars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 40px;
+  height: 40px;
+  transform-origin: center;
+  transition: transform 0.3s;
+}
+.uv-bars i {
+  display: block;
+  width: 100%;
+  height: 4px;
+  border-radius: 5px;
+  background-color: currentColor;
+  transition: transform 0.3s;
+}
+.uv-bars[data-open="true"] {
+  transform: rotate(-90deg);
+}
+.uv-bars[data-open="true"] i:nth-child(2) {
+  z-index: 2;
+  transform: translateY(14px) rotate(60deg);
+  transform-origin: right;
+}
+.uv-bars[data-open="true"] i:nth-child(1) {
+  z-index: 1;
+  transform: translateY(28px) rotate(-60deg);
+  transform-origin: left;
+}
+
+/* Trash button: a round icon that widens into a labelled pill on hover or focus. */
+.uv-trash {
+  --size: 40px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: #1f2937;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgb(0 0 0 / 0.16);
+  transition: width 0.3s, background-color 0.3s;
+}
+.uv-trash svg {
+  width: 13px;
+  fill: currentColor;
+  transition: transform 0.3s, width 0.3s;
+}
+.uv-trash span {
+  position: absolute;
+  top: -20px;
+  opacity: 0;
+  font-size: 2px;
+  transition: all 0.3s;
+}
+.uv-trash:hover,
+.uv-trash:focus-visible {
+  width: calc(var(--size) * 2.7);
+  background-color: #e5484d;
+}
+.uv-trash:hover svg,
+.uv-trash:focus-visible svg {
+  width: 36px;
+  transform: translateY(60%);
+}
+.uv-trash:hover span,
+.uv-trash:focus-visible span {
+  font-size: 13px;
+  opacity: 1;
+  transform: translateY(30px);
+}
+.uv-trash:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.uv-trash:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch *,
+  .theme-switch *::before,
+  .theme-switch *::after,
+  .uv-switch__track,
+  .uv-switch__track::after,
+  .uv-bars,
+  .uv-bars i,
+  .uv-trash,
+  .uv-trash * {
+    transition: none !important;
+  }
+}
+
+/* ---- Pencil loader (adapted from Uiverse.io by gustavofusco). Size it with font-size on the wrapper. ---- */
+.pencil {
+  display: block;
+  width: 10em;
+  height: 10em;
+}
+.pencil__body1,
+.pencil__body2,
+.pencil__body3,
+.pencil__eraser,
+.pencil__eraser-skew,
+.pencil__point,
+.pencil__rotate,
+.pencil__stroke {
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.pencil__body1,
+.pencil__body2,
+.pencil__body3 {
+  transform: rotate(-90deg);
+}
+.pencil__body1 { animation-name: pencilBody1; }
+.pencil__body2 { animation-name: pencilBody2; }
+.pencil__body3 { animation-name: pencilBody3; }
+.pencil__eraser {
+  animation-name: pencilEraser;
+  transform: rotate(-90deg) translate(49px, 0);
+}
+.pencil__eraser-skew {
+  animation-name: pencilEraserSkew;
+  animation-timing-function: ease-in-out;
+}
+.pencil__point {
+  animation-name: pencilPoint;
+  transform: rotate(-90deg) translate(49px, -30px);
+}
+.pencil__rotate { animation-name: pencilRotate; }
+.pencil__stroke {
+  animation-name: pencilStroke;
+  transform: translate(100px, 100px) rotate(-113deg);
+}
+@keyframes pencilBody1 {
+  from, to { stroke-dashoffset: 351.86; transform: rotate(-90deg); }
+  50% { stroke-dashoffset: 150.8; transform: rotate(-225deg); }
+}
+@keyframes pencilBody2 {
+  from, to { stroke-dashoffset: 406.84; transform: rotate(-90deg); }
+  50% { stroke-dashoffset: 174.36; transform: rotate(-225deg); }
+}
+@keyframes pencilBody3 {
+  from, to { stroke-dashoffset: 296.88; transform: rotate(-90deg); }
+  50% { stroke-dashoffset: 127.23; transform: rotate(-225deg); }
+}
+@keyframes pencilEraser {
+  from, to { transform: rotate(-45deg) translate(49px, 0); }
+  50% { transform: rotate(0deg) translate(49px, 0); }
+}
+@keyframes pencilEraserSkew {
+  from, 32.5%, 67.5%, to { transform: skewX(0); }
+  35%, 65% { transform: skewX(-4deg); }
+  37.5%, 62.5% { transform: skewX(8deg); }
+  40%, 45%, 50%, 55%, 60% { transform: skewX(-15deg); }
+  42.5%, 47.5%, 52.5%, 57.5% { transform: skewX(15deg); }
+}
+@keyframes pencilPoint {
+  from, to { transform: rotate(-90deg) translate(49px, -30px); }
+  50% { transform: rotate(-225deg) translate(49px, -30px); }
+}
+@keyframes pencilRotate {
+  from { transform: translate(100px, 100px) rotate(0); }
+  to { transform: translate(100px, 100px) rotate(720deg); }
+}
+@keyframes pencilStroke {
+  from { stroke-dashoffset: 439.82; transform: translate(100px, 100px) rotate(-113deg); }
+  50% { stroke-dashoffset: 164.93; transform: translate(100px, 100px) rotate(-113deg); }
+  75%, to { stroke-dashoffset: 439.82; transform: translate(100px, 100px) rotate(112deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pencil * { animation-play-state: paused; }
+}
+
+/* ---- Sign-in form: bordered field with an icon, dark submit, outlined social button (after Uiverse.io, JohnnyCSilva) ---- */
+.auth-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 14px;
+  border: 1.5px solid var(--input);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--muted-foreground);
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.auth-field:focus-within {
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+.auth-field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 16px;
+}
+.auth-field input::placeholder {
+  color: var(--muted-foreground);
+}
+.auth-submit,
+.auth-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+.auth-submit {
+  border: 0;
+  background: var(--foreground);
+  color: var(--background);
+}
+.auth-submit:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--foreground), var(--primary) 30%);
+}
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.auth-social {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+}
+.auth-social:hover {
+  border-color: var(--primary);
+}
+.auth-submit:focus-visible,
+.auth-social:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---- Marquee: an endless sliding row (two copies of the track move together) ---- */
+.marquee {
+  --gap: 0.75rem;
+  display: flex;
+  gap: var(--gap);
+  overflow: hidden;
+  padding: 0.5rem 0;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--gap);
+  min-width: 100%;
+  justify-content: space-around;
+  animation: marquee-scroll 60s linear infinite;
+}
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+  .marquee__track {
+    animation: none;
+  }
 }

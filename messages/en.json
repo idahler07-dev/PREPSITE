@@ -216,6 +216,19 @@
     "faq": {
       "label": "FAQ",
       "title": "Questions, <i>answered</i>"
+    },
+    "skillsStrip": "Every skill on the Digital SAT, practised one by one",
+    "showcase": {
+      "title": "One place for",
+      "words": [
+        "Math",
+        "Reading and Writing",
+        "full practice tests",
+        "your study plan",
+        "every mistake"
+      ],
+      "sub": "Your plan, your score and your next drill on one calm screen. Scroll to see it.",
+      "alt": "The Satify dashboard: today's plan, the estimated score and the skill map"
     }
   },
   "about": {
@@ -448,6 +461,27 @@
     "takeTest": "Take a practice test",
     "recentEmpty": "Your finished drills and tests will appear here.",
     "firstDrill": "Start your first drill",
+    "scoreEntry": {
+      "open": "I already took a practice test",
+      "update": "Update my score",
+      "title": "Add your practice test score",
+      "description": "Slide each ruler to the score you got. Use the result of a full practice test, for example an official one.",
+      "testName": "Practice test",
+      "total": "Total",
+      "outOf": "out of 1600",
+      "date": "When did you take it?",
+      "save": "Save score",
+      "saved": "Score saved",
+      "error": "Could not save. Please check the date and try again.",
+      "from": "From your practice test on {date}"
+    },
+    "showAllSkills": "Show all {count} skills",
+    "showFewerSkills": "Show fewer",
+    "weekDone": "{day}: practised",
+    "weekToday": "{day}: today",
+    "weekMissed": "{day}: no practice",
+    "weekFuture": "{day}",
+    "thisWeek": "This week",
     "quick": "Quick practice",
     "mastery": "{pct}% correct",
     "range": "Range {low}–{high}"
@@ -1921,9 +1955,9 @@
   "shell": {
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar",
-    "more": "More",
     "appNavigation": "App navigation",
-    "tabs": "Main sections",
+    "menu": "Menu",
+    "openMenu": "Open menu",
     "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
     "countdownShort": "{days, plural, =0 {Today} other {#d}}",
     "countdownLabel": "Your SAT is on {date}",

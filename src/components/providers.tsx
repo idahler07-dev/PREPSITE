@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeMeta } from "@/components/layout/theme-toggle";
+import { GlassMode } from "@/components/layout/glass-mode";
 
 const loadMotionFeatures = () => import("@/lib/motion-features").then((r) => r.default);
 
@@ -25,6 +26,7 @@ export function Providers({ children, nonce }: { children: ReactNode; nonce?: st
         <TooltipProvider delayDuration={300}>
           {children}
           <ThemeMeta />
+          <GlassMode />
           <Toaster position="top-center" />
         </TooltipProvider>
       </QueryClientProvider>

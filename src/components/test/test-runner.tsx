@@ -360,7 +360,7 @@ export function TestRunner({
   return (
     <div className="flex h-dvh flex-col bg-background">
       {/* Top bar: exit and title | timer | tools. The timer stays centered. */}
-      <header className="grid h-14 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b bg-surface px-2 sm:px-4">
+      <header className="grid h-14 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b glass px-2 sm:px-4">
         <div className="flex min-w-0 items-center gap-1">
           <Button variant="ghost" size="sm" onClick={() => setConfirmExit(true)} aria-label={initial.returnTo ? t("backToBank") : t("tools.exit")} className="shrink-0">
             {initial.returnTo ? <ChevronLeft aria-hidden /> : <LogOut aria-hidden />}
@@ -526,7 +526,7 @@ export function TestRunner({
               </section>
             )}
             <section aria-label={t("question")} className="px-3 py-4 sm:p-6 lg:overflow-y-auto">
-              <div className="mx-auto w-full max-w-[680px] space-y-5 rounded-[20px] border bg-surface p-4 shadow-sm sm:p-7">
+              <div className="mx-auto w-full max-w-[680px] space-y-5 rounded-[26px] border bg-surface p-4 shadow-[var(--glass-shadow)] sm:p-7">
                 <QuestionHeader number={index + 1} item={item} onToggleFlag={toggleFlag} />
 
                 <RichText html={item.stemHtml} className="q-stem" />
@@ -566,7 +566,7 @@ export function TestRunner({
       </div>
 
       {/* Bottom bar: Back | navigator | Next on phones (with the safe area); save status on the left from tablets up. */}
-      <footer className="shrink-0 border-t bg-surface pb-[env(safe-area-inset-bottom)]">
+      <footer className="glass shrink-0 border-t pb-[env(safe-area-inset-bottom)]">
         <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:px-4">
           <div className="flex min-w-0 items-center">
             <Button variant="outline" className="h-11 md:hidden" onClick={prev} disabled={view === "question" && index === 0} aria-label={c("back")}>
