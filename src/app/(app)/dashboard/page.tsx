@@ -30,7 +30,7 @@ export async function generateMetadata() {
 /** A bento card: 14px radius, 20/32px padding, cursor spotlight on desktop. */
 function Tile({ title, action, className, children }: { title?: React.ReactNode; action?: React.ReactNode; className?: string; children: React.ReactNode }) {
   return (
-    <SpotlightCard className={`rounded-[20px] p-5 lg:p-8 ${className ?? ""}`}>
+    <SpotlightCard className={`rounded-[26px] p-5 lg:p-8 ${className ?? ""}`}>
       {(title || action) && (
         <div className="mb-5 flex items-center justify-between gap-3">
           {title && <h2 className="font-semibold">{title}</h2>}
@@ -77,6 +77,7 @@ export default async function DashboardPage() {
         <Tile className="lg:col-span-2">
           <div className="flex items-center gap-6">
             <div className="min-w-0 flex-1 space-y-3">
+              <p className="text-sm font-semibold text-muted-foreground">{format.dateTime(new Date(), { weekday: "long", day: "numeric", month: "long", timeZone: user.timeZone })}</p>
               <h1 className="text-h2 font-semibold lg:text-h1">{first ? t("greeting", { name: first }) : t("greetingNoName")}</h1>
               <p className="max-w-[50ch] text-muted-foreground">{t("greetingSub")}</p>
               <div className="flex flex-wrap gap-2 pt-2">
@@ -121,23 +122,26 @@ export default async function DashboardPage() {
         </Tile>
 
         {/* Today's tasks */}
-        <Tile
-          className="lg:col-span-2"
-          title={tc("today")}
-          action={
+        <section className="lg:col-span-2" aria-labelledby="today-heading">
+          <div className="mb-3 flex items-center justify-between gap-3 px-1">
+            <h2 id="today-heading" className="text-lg font-semibold tracking-tight">
+              {tc("today")}
+            </h2>
             <Link href="/plan" className="text-small font-medium text-primary hover:underline">
               {tc("seeWeek")}
             </Link>
-          }
-        >
+          </div>
           <TaskList tasks={todayTasks} />
-        </Tile>
+        </section>
 
         {/* Streak + days to test */}
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-1">
           <Tile>
             <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
-              <Flame className="size-4 text-accent-ink" aria-hidden /> {t("streakTitle")}
+              <span className="flex size-6 items-center justify-center rounded-full bg-gradient-to-b from-[#ffa070] to-accent text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.45)]">
+                <Flame className="size-3.5" aria-hidden />
+              </span>{" "}
+              {t("streakTitle")}
             </p>
             <p className="mt-2 text-[2.5rem] leading-none font-bold">
               <Odometer value={s.streak} className="font-mono" />

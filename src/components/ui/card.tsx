@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-/** Cards: 12px radius, soft shadow in light mode, border only in dark mode. `interactive` lifts on hover. */
+/** Cards: 24px radius, translucent glass with a bright top edge. `interactive` lifts on hover. */
 function Card({ className, interactive = false, ...props }: React.ComponentProps<"div"> & { interactive?: boolean }) {
   return (
     <div
@@ -10,7 +10,7 @@ function Card({ className, interactive = false, ...props }: React.ComponentProps
       className={cn(
         interactive &&
           "transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
-        "flex flex-col gap-5 rounded-lg border bg-card py-5 text-card-foreground shadow-sm lg:gap-6 lg:py-8",
+        "glass-card flex flex-col gap-5 rounded-[24px] py-5 text-card-foreground lg:gap-6 lg:py-8",
         className
       )}
       {...props}

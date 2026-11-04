@@ -1,10 +1,18 @@
 import { getFormatter, getTranslations } from "next-intl/server";
-import { BookOpen, Brain, Coffee, FileText, RotateCcw } from "lucide-react";
+import { BookOpen, Brain, ChevronRight, Coffee, FileText, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { PlanTask, WeeklyPlan } from "@/lib/coach/plan";
 import { cn } from "@/lib/utils";
 
 const ICONS = { drill: BookOpen, review: RotateCcw, mock: FileText, vocab: Brain, rest: Coffee } as const;
+/** Icon tile colours, one per kind (gradient top to bottom, white icon). */
+const TILE: Record<PlanTask["kind"], string> = {
+  drill: "from-[#6f86ff] to-[#2747f5]",
+  review: "from-[#ff7a85] to-[#e5484d]",
+  mock: "from-[#a897ff] to-[#6b55e8]",
+  vocab: "from-[#ffb25e] to-[#f08a1c]",
+  rest: "from-[#8fd8b8] to-[#2fae82]",
+};
 const HREF: Record<PlanTask["kind"], (t: PlanTask) => string | null> = {
   drill: (t) => (t.skill ? `/practice?skill=${t.skill}` : "/practice"),
   review: () => "/review",
@@ -18,7 +26,7 @@ export async function TaskList({ tasks }: { tasks: PlanTask[] }) {
   const tx = await getTranslations("taxonomy");
   if (!tasks.length) return <p className="text-sm text-muted-foreground">{t("nothing")}</p>;
   return (
-    <ul className="space-y-2">
+    <ul className="glass-card divide-y divide-border/60 overflow-hidden rounded-[22px]">
       {tasks.map((task, i) => {
         const Icon = ICONS[task.kind];
         const label =
@@ -30,19 +38,22 @@ export async function TaskList({ tasks }: { tasks: PlanTask[] }) {
         const href = HREF[task.kind](task);
         const body = (
           <>
-            <Icon className="size-4 shrink-0 text-primary" aria-hidden />
-            <span className="flex-1">{label}</span>
-            {task.minutes > 0 && <span className="text-xs text-muted-foreground tabular-nums">{t("minutes", { count: task.minutes })}</span>}
+            <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-b text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.4)]", TILE[task.kind])}>
+              <Icon className="size-[18px]" aria-hidden />
+            </span>
+            <span className="flex-1 text-[15px] leading-snug font-medium">{label}</span>
+            {task.minutes > 0 && <span className="text-sm text-muted-foreground tabular-nums">{t("minutes", { count: task.minutes })}</span>}
+            {href && <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" aria-hidden />}
           </>
         );
         return (
           <li key={i}>
             {href ? (
-              <Link href={href} className="flex items-center gap-2 rounded-md border p-2 text-sm hover:bg-muted">
+              <Link href={href} className="flex min-h-14 items-center gap-3 px-4 py-2.5 transition-colors hover:bg-primary-soft/50 active:bg-primary-soft">
                 {body}
               </Link>
             ) : (
-              <span className="flex items-center gap-2 rounded-md border border-dashed p-2 text-sm text-muted-foreground">{body}</span>
+              <span className="flex min-h-14 items-center gap-3 px-4 py-2.5 text-muted-foreground">{body}</span>
             )}
           </li>
         );

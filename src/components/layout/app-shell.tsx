@@ -163,13 +163,14 @@ export function AppShell({
 
   return (
     <MenuContext.Provider value={{ open: menuOpen, setOpen: setMenuOpen }}>
-    <div className="flex min-h-dvh flex-col">
+    <div className="relative isolate flex min-h-dvh flex-col">
+      <div className="app-ambient" aria-hidden />
       <div className="flex flex-1">
         <m.aside
           layout
           transition={transition}
           className={cn(
-            "sticky top-0 hidden h-dvh shrink-0 flex-col border-e bg-surface py-4 lg:flex",
+            "sticky top-0 hidden h-dvh shrink-0 flex-col border-e border-[var(--glass-edge)] bg-[color-mix(in_oklab,var(--surface)_58%,transparent)] py-4 lg:flex",
             collapsed ? "w-[76px] px-3" : "w-64 px-4",
           )}
           aria-label={t("appNavigation")}
@@ -237,7 +238,7 @@ export function AppShell({
               </Dialog.Overlay>
               <Dialog.Content asChild forceMount aria-describedby={undefined}>
                 <m.div
-                  className="fixed inset-y-0 start-0 z-50 flex w-[min(20rem,86vw)] flex-col border-e bg-surface pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-[var(--elev-lg)] outline-none lg:hidden"
+                  className="fixed inset-y-0 start-0 z-50 flex w-[min(20rem,86vw)] flex-col border-e glass pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-[var(--glass-shadow)] outline-none lg:hidden"
                   initial={reduce ? { opacity: 0 } : { x: "-100%" }}
                   animate={reduce ? { opacity: 1 } : { x: 0 }}
                   exit={reduce ? { opacity: 0 } : { x: "-100%" }}

@@ -44,7 +44,7 @@ export function SpotlightCard({ className, tilt = false, children, ...props }: C
       onPointerLeave={onLeave}
       style={tilt && !lite ? { rotateX: srx, rotateY: sry, transformPerspective: 900 } : undefined}
       className={cn(
-        "spotlight rounded-lg border bg-surface shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-primary/30 hover:shadow-lg",
+        "spotlight glass-card rounded-[24px] transition-[box-shadow,border-color] duration-300 hover:border-primary/30",
         className,
       )}
       {...(props as ComponentProps<typeof m.div>)}

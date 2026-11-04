@@ -24,7 +24,7 @@ export function MobileSheet({ open, onOpenChange, title, children }: { open: boo
             </DialogPrimitive.Overlay>
             <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
               <m.div
-                className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-2xl border-t bg-surface px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-lg outline-none"
+                className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto glass rounded-t-[28px] border-t px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[var(--glass-shadow)] outline-none"
                 initial={reduce ? { opacity: 0 } : { y: "100%" }}
                 animate={reduce ? { opacity: 1 } : { y: 0 }}
                 exit={reduce ? { opacity: 0 } : { y: "100%" }}

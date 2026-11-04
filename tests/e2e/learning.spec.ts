@@ -13,7 +13,7 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
   await expect(page).toHaveURL(/\/test\//);
   // The daily question changes by date: multiple choice or a typed answer.
   const typed = page.getByLabel("Your answer");
-  await expect(page.getByRole("radio").first().or(typed)).toBeVisible();
+  await expect(page.getByRole("radio").first().or(typed).first()).toBeVisible();
   if (await typed.isVisible()) await typed.fill("0");
   else await page.getByRole("radio").first().check({ force: true });
   await page.getByRole("button", { name: "Check answer" }).click();
