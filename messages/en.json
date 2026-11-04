@@ -1921,9 +1921,9 @@
   "shell": {
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar",
-    "more": "More",
     "appNavigation": "App navigation",
-    "tabs": "Main sections",
+    "menu": "Menu",
+    "openMenu": "Open menu",
     "countdown": "{days, plural, =0 {Test day!} one {# day to test day} other {# days to test day}}",
     "countdownShort": "{days, plural, =0 {Today} other {#d}}",
     "countdownLabel": "Your SAT is on {date}",

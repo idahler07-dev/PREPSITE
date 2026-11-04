@@ -99,7 +99,7 @@ One idea per section: a pill label with a colored icon (`SectionPill`), a big he
 | SkillMap / TrendChart | `learning/` | Tiles shaded by mastery; line chart that draws in. |
 | Odometer | `motion/odometer.tsx` | Numbers roll up from 0 and to new values. |
 | Command palette | `layout/command-palette.tsx` | Ctrl/Cmd + K, glass. |
-| AppShell | `layout/app-shell.tsx` | Sidebar (collapses, remembered in a cookie); bottom tab bar + "More" sheet on phones. |
+| AppShell | `layout/app-shell.tsx` | Sidebar (collapses, remembered in a cookie); on phones and tablets a side menu from the ☰ button (slides in, links stagger in, swipe left to close). |
 
 Glass (`.glass`) is only for the sticky top bars, the command palette and floating panels (calculator, reference sheet).
 
