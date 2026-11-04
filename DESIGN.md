@@ -26,6 +26,17 @@ AA adjustments: in light mode, coral, mint, amber and red are too light for text
 
 Pip has its own tokens (`--mascot-body`, `--mascot-light`, `--mascot-dark`, `--mascot-cap`, `--mascot-cap-light`, `--mascot-cap-dark`, `--mascot-accent`, `--mascot-eye`, `--mascot-ink`) so it looks the same in both themes, a touch brighter in dark.
 
+### Uiverse-derived controls (`components/ui`)
+
+Adapted from Uiverse.io (CSS in `globals.css`, classes `theme-switch`, `uv-switch`, `uv-bars`, `uv-trash`). Each is a real input or button underneath, so keyboard and screen readers work, and each has a no-animation version for reduced motion.
+
+| Control | Component | Where |
+|---|---|---|
+| Day/night sky switch (clouds, stars, sun, moon) | `DayNightSwitch` via `ThemeOrb` | headers, Settings |
+| On/off pill switch | `ToggleSwitch` | sound effects, notification toggles |
+| Menu bars that fold into an arrow | `MenuBars` | ☰ in the top bar; the arrow closes the side menu |
+| Trash icon that widens into a "Delete" pill | `DeleteButton` | deleting a saved practice score |
+
 ### Score entry (tape-measure rulers)
 
 Students who already took a practice test enter their score on the dashboard ("I already took a practice test"). One ruler per section (Reading and Writing, Math), 200–800 in steps of 10:

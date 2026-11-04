@@ -14,18 +14,17 @@ import {
   LayoutDashboard,
   Library,
   ListChecks,
-  Menu,
   NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
   Shield,
-  X,
   Zap,
   type LucideIcon,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/layout/logo";
+import { MenuBars } from "@/components/ui/menu-bars";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { fade, spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -81,7 +80,7 @@ export function ShellMenuButton() {
       aria-haspopup="dialog"
       aria-expanded={menu.open}
     >
-      <Menu className="size-5" aria-hidden />
+      <MenuBars />
     </m.button>
   );
 }
@@ -261,7 +260,7 @@ export function AppShell({
                         className="flex size-10 items-center justify-center rounded-[var(--radius-input)] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none"
                         aria-label={t("closeMenu")}
                       >
-                        <X className="size-5" aria-hidden />
+                        <MenuBars open />
                       </m.button>
                     </Dialog.Close>
                   </div>

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { NOTIFICATION_CHANNELS, NOTIFICATION_KINDS, type NotificationPrefs } from "@/config/notifications";
 import { saveNotificationPrefs } from "@/server/actions/preferences";
 import BellToggle from "@/components/fx/BellToggle";
-import SquishSwitch from "@/components/fx/SquishSwitch";
+import { ToggleSwitch } from "@/components/ui/toggle-switch";
 
 export function NotificationSettings({ initial, hasEmail, hasTelegram }: { initial: NotificationPrefs; hasEmail: boolean; hasTelegram: boolean }) {
   const t = useTranslations("settings.notifications");
@@ -73,19 +73,11 @@ export function NotificationSettings({ initial, hasEmail, hasTelegram }: { initi
               {NOTIFICATION_CHANNELS.map((ch) => (
                 <td key={ch} className="text-center">
                   <span className="flex justify-center">
-                    <SquishSwitch
+                    <ToggleSwitch
                       checked={available[ch] && prefs[ch][k]}
                       onChange={(on) => void toggle(ch, k, on)}
                       disabled={!available[ch]}
-                      ariaLabel={`${t(`kinds.${k}.label`)} — ${t(`channels.${ch}`)}`}
-                      width={44}
-                      height={26}
-                      radius={13}
-                      stretch={20}
-                      trackColor="var(--input)"
-                      trackOnColor="var(--primary)"
-                      thumbColor="var(--background)"
-                      thumbOnColor="var(--primary-foreground)"
+                      label={`${t(`kinds.${k}.label`)} — ${t(`channels.${ch}`)}`}
                     />
                   </span>
                 </td>

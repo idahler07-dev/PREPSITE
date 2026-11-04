@@ -19,7 +19,7 @@ import {
 import { saveThemePreference } from "@/server/actions/preferences";
 import { THEME_COLORS } from "@/config/theme-colors";
 import { spring } from "@/lib/motion";
-import SquishSwitch from "@/components/fx/SquishSwitch";
+import { DayNightSwitch } from "@/components/ui/day-night-switch";
 
 type ViewTransitionDoc = Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
 
@@ -104,40 +104,8 @@ export function ThemeToggle({ signedIn }: { signedIn: boolean }) {
   );
 }
 
-/** The header's day/night button: a pressable glass orb. Press it for dark, again for light ("System" is in Settings). */
-export function ThemeOrb({ signedIn }: { signedIn: boolean }) {
-  const t = useTranslations("theme");
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
-  const change = useAnimatedThemeChange(ref);
-  useEffect(() => setMounted(true), []);
-  const dark = mounted && resolvedTheme === "dark";
-  return (
-    <span ref={ref} className="relative inline-block size-11 shrink-0">
-      <span className="orb">
-        <input
-          type="checkbox"
-          role="switch"
-          checked={dark}
-          aria-label={t("darkMode")}
-          onChange={(e) => {
-            const value = e.target.checked ? "dark" : "light";
-            change(value);
-            if (signedIn) void saveThemePreference(value);
-          }}
-        />
-        <span className="orb-button" aria-hidden />
-        <span className="orb-icon" aria-hidden>
-          {dark ? <Moon className="size-9" strokeWidth={1.6} /> : <Sun className="size-9" strokeWidth={1.6} />}
-        </span>
-      </span>
-    </span>
-  );
-}
-
-/** A light/dark switch for the settings page; the menu above also offers "System". */
-export function DarkModeSwitch({ signedIn }: { signedIn: boolean }) {
+/** The day/night switch used in the headers and in Settings ("System" stays in the Theme menu). */
+export function ThemeOrb({ signedIn, size = 9 }: { signedIn: boolean; size?: number }) {
   const t = useTranslations("theme");
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -146,25 +114,23 @@ export function DarkModeSwitch({ signedIn }: { signedIn: boolean }) {
   useEffect(() => setMounted(true), []);
   return (
     <span ref={ref} className="inline-flex">
-      <SquishSwitch
-        checked={mounted && resolvedTheme === "dark"}
-        onChange={(on) => {
-          const value = on ? "dark" : "light";
+      <DayNightSwitch
+        dark={mounted && resolvedTheme === "dark"}
+        label={t("darkMode")}
+        size={size}
+        onChange={(dark) => {
+          const value = dark ? "dark" : "light";
           change(value);
           if (signedIn) void saveThemePreference(value);
         }}
-        ariaLabel={t("darkMode")}
-        width={52}
-        height={30}
-        radius={15}
-        stretch={24}
-        trackColor="var(--input)"
-        trackOnColor="var(--primary)"
-        thumbColor="var(--background)"
-        thumbOnColor="var(--primary-foreground)"
       />
     </span>
   );
+}
+
+/** Same switch, larger, for the settings page. */
+export function DarkModeSwitch({ signedIn }: { signedIn: boolean }) {
+  return <ThemeOrb signedIn={signedIn} size={11} />;
 }
 
 /** Apply the theme saved in the user's profile on a new device. */
