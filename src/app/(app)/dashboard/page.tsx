@@ -8,6 +8,7 @@ import { daysUntil } from "@/lib/goals";
 import { db } from "@/lib/db";
 import { DOMAINS } from "@/lib/taxonomy";
 import { dayInZone } from "@/lib/stats/streak";
+import { activityDays } from "@/server/stats/analytics";
 import type { WeeklyPlan } from "@/lib/coach/plan";
 import type { ScoreEstimate } from "@/lib/mock/scoring";
 import { currentPlan } from "@/server/coach/service";
@@ -19,6 +20,9 @@ import { Mascot } from "@/components/mascot/mascot";
 import { Odometer } from "@/components/motion/odometer";
 import { SpotlightCard } from "@/components/motion/interactive-card";
 import { TaskList } from "@/components/learning/plan-view";
+import { ScoreGauge } from "@/components/learning/score-gauge";
+import { WeekDots, type WeekDay } from "@/components/learning/week-dots";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { DailyQuestionButton } from "@/components/learning/review-actions";
 import { DrillSkillMap, PracticeSkillButton } from "@/components/learning/practice-skill";
 
@@ -52,12 +56,20 @@ export default async function DashboardPage() {
   const s = await getDashboardStats(user.id, user.timeZone);
   const days = user.testDate ? daysUntil(user.testDate) : null;
   const today = dayInZone(new Date(), siteConfig.defaultTimeZone);
-  const [planRow, notebook, vocab, lastMock] = await Promise.all([
+  const [planRow, notebook, vocab, lastMock, week] = await Promise.all([
     currentPlan(user.id),
     notebookCounts(user.id),
     vocabCounts(user.id),
     db.attempt.findFirst({ where: { userId: user.id, kind: "MOCK", status: "COMPLETED" }, orderBy: { completedAt: "desc" }, select: { scores: true } }),
+    activityDays(user.id, user.timeZone, 1),
   ]);
+  const todayLocal = dayInZone(new Date(), user.timeZone);
+  const weekDays: WeekDay[] = week.map((d) => {
+    const name = format.dateTime(new Date(`${d.day}T12:00:00Z`), { weekday: "long", timeZone: "UTC" });
+    const state = d.day === todayLocal ? "today" : d.count == null ? "future" : d.count > 0 ? "done" : "missed";
+    const key = state === "done" || (state === "today" && (d.count ?? 0) > 0) ? "weekDone" : state === "today" ? "weekToday" : state === "missed" ? "weekMissed" : "weekFuture";
+    return { label: format.dateTime(new Date(`${d.day}T12:00:00Z`), { weekday: "narrow", timeZone: "UTC" }), state: state === "today" && (d.count ?? 0) > 0 ? "done" : state, description: t(key, { day: name }) };
+  });
   const todayTasks = ((planRow.plan as unknown as WeeklyPlan).days.find((d) => d.date === today)?.tasks ?? []).slice(0, 3);
   const estimate = (lastMock?.scores as ScoreEstimate | null)?.total ?? null;
   const skillRows = new Map(s.bySkill.map((r) => [r.key, r]));
@@ -72,9 +84,11 @@ export default async function DashboardPage() {
 
   return (
     <Container>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <Stagger className="flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:items-start">
+        <div className="contents lg:col-span-2 lg:flex lg:flex-col lg:gap-6">
+        <StaggerItem className="order-1 lg:order-none">
         {/* Greeting */}
-        <Tile className="lg:col-span-2">
+        <Tile>
           <div className="flex items-center gap-6">
             <div className="min-w-0 flex-1 space-y-3">
               <p className="text-sm font-semibold text-muted-foreground">{format.dateTime(new Date(), { weekday: "long", day: "numeric", month: "long", timeZone: user.timeZone })}</p>
@@ -97,32 +111,10 @@ export default async function DashboardPage() {
           </div>
         </Tile>
 
-        {/* Estimated score */}
-        <Tile title={t("estimate.title")}>
-          {estimate ? (
-            <div>
-              <p className="text-[3.5rem] leading-none font-bold">
-                <Odometer value={estimate.score} className="font-mono" />
-              </p>
-              <p className="mt-2 font-mono text-small text-muted-foreground">{t("range", { low: estimate.low, high: estimate.high })}</p>
-              <p className="mt-3 text-label text-muted-foreground">{t("estimate.label")}</p>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              <Mascot pose="think" className="w-20 shrink-0" />
-              <div className="space-y-3">
-                <p className="text-small text-muted-foreground">{t("estimateEmpty")}</p>
-                <Button asChild size="sm" variant="secondary">
-                  <Link href="/mocks">{t("takeTest")}</Link>
-                </Button>
-                <p className="text-label text-muted-foreground">{t("estimate.label")}</p>
-              </div>
-            </div>
-          )}
-        </Tile>
-
+        </StaggerItem>
+        <StaggerItem className="order-3 lg:order-none">
         {/* Today's tasks */}
-        <section className="lg:col-span-2" aria-labelledby="today-heading">
+        <section aria-labelledby="today-heading">
           <div className="mb-3 flex items-center justify-between gap-3 px-1">
             <h2 id="today-heading" className="text-lg font-semibold tracking-tight">
               {tc("today")}
@@ -134,36 +126,8 @@ export default async function DashboardPage() {
           <TaskList tasks={todayTasks} />
         </section>
 
-        {/* Streak + days to test */}
-        <div className="grid grid-cols-2 gap-6 lg:grid-cols-1">
-          <Tile>
-            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
-              <span className="flex size-6 items-center justify-center rounded-full bg-gradient-to-b from-[#ffa070] to-accent text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.45)]">
-                <Flame className="size-3.5" aria-hidden />
-              </span>{" "}
-              {t("streakTitle")}
-            </p>
-            <p className="mt-2 text-[2.5rem] leading-none font-bold">
-              <Odometer value={s.streak} className="font-mono" />
-            </p>
-            {s.streak === 0 && <p className="mt-2 text-label text-muted-foreground">{t("streakReminder")}</p>}
-          </Tile>
-          <Tile>
-            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
-              <CalendarDays className="size-4 text-primary" aria-hidden /> {t("daysToTest")}
-            </p>
-            {days !== null && days >= 0 ? (
-              <p className="mt-2 text-[2.5rem] leading-none font-bold">
-                <Odometer value={days} className="font-mono" />
-              </p>
-            ) : (
-              <Link href="/settings" className="mt-3 inline-flex min-h-11 items-center text-small font-medium text-primary hover:underline">
-                {t("noTestDate")}
-              </Link>
-            )}
-          </Tile>
-        </div>
-
+        </StaggerItem>
+        <StaggerItem className="order-5 lg:order-none">
         {/* Weakest skills */}
         <Tile title={t("weakest")}>
           {s.weakSkills.length === 0 ? (
@@ -183,15 +147,18 @@ export default async function DashboardPage() {
           )}
         </Tile>
 
+        </StaggerItem>
+        <StaggerItem className="order-6 lg:order-none">
         {/* Skill map */}
-        <Tile className="lg:col-span-2" title={t("skillMap")} action={<span className="hidden text-label text-muted-foreground sm:inline">{t("skillMapHint")}</span>}>
+        <Tile title={t("skillMap")} action={<span className="hidden text-label text-muted-foreground sm:inline">{t("skillMapHint")}</span>}>
           <DrillSkillMap tiles={tiles} />
         </Tile>
 
+        </StaggerItem>
+        <StaggerItem className="order-8 lg:order-none">
         {/* Recent tests */}
         <Tile
-          className="lg:col-span-2"
-          title={t("recent")}
+                    title={t("recent")}
           action={
             <Link href="/history" className="text-small font-medium text-primary hover:underline">
               {t("viewAll")}
@@ -227,6 +194,70 @@ export default async function DashboardPage() {
           )}
         </Tile>
 
+        </StaggerItem>
+        </div>
+        <div className="contents lg:flex lg:flex-col lg:gap-6">
+        <StaggerItem className="order-2 lg:order-none">
+        {/* Estimated score */}
+        <Tile title={t("estimate.title")}>
+          {estimate ? (
+            <div>
+              <p className="text-[3.5rem] leading-none font-bold">
+                <Odometer value={estimate.score} className="font-mono" />
+              </p>
+              <ScoreGauge score={estimate.score} low={estimate.low} high={estimate.high} />
+              <p className="mt-2 font-mono text-small text-muted-foreground">{t("range", { low: estimate.low, high: estimate.high })}</p>
+              <p className="mt-3 text-label text-muted-foreground">{t("estimate.label")}</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Mascot pose="think" className="w-20 shrink-0" />
+              <div className="space-y-3">
+                <p className="text-small text-muted-foreground">{t("estimateEmpty")}</p>
+                <Button asChild size="sm" variant="secondary">
+                  <Link href="/mocks">{t("takeTest")}</Link>
+                </Button>
+                <p className="text-label text-muted-foreground">{t("estimate.label")}</p>
+              </div>
+            </div>
+          )}
+        </Tile>
+
+        </StaggerItem>
+        <StaggerItem className="order-4 lg:order-none">
+        {/* Streak + days to test */}
+        <div className="flex flex-col gap-6">
+          <Tile>
+            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
+              <span className="flex size-6 items-center justify-center rounded-full bg-gradient-to-b from-[#ffa070] to-accent text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.45)]">
+                <Flame className="size-3.5" aria-hidden />
+              </span>{" "}
+              {t("streakTitle")}
+            </p>
+            <p className="mt-2 text-[2.5rem] leading-none font-bold">
+              <Odometer value={s.streak} className="font-mono" />
+            </p>
+            <WeekDots days={weekDays} />
+            {s.streak === 0 && <p className="mt-3 text-label text-muted-foreground">{t("streakReminder")}</p>}
+          </Tile>
+          <Tile>
+            <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
+              <CalendarDays className="size-4 text-primary" aria-hidden /> {t("daysToTest")}
+            </p>
+            {days !== null && days >= 0 ? (
+              <p className="mt-2 text-[2.5rem] leading-none font-bold">
+                <Odometer value={days} className="font-mono" />
+              </p>
+            ) : (
+              <Link href="/settings" className="mt-3 inline-flex min-h-11 items-center text-small font-medium text-primary hover:underline">
+                {t("noTestDate")}
+              </Link>
+            )}
+          </Tile>
+        </div>
+
+        </StaggerItem>
+        <StaggerItem className="order-7 lg:order-none">
         {/* Quick practice */}
         <Tile title={t("quick")}>
           <div className="space-y-2">
@@ -239,7 +270,9 @@ export default async function DashboardPage() {
             </Link>
           </div>
         </Tile>
-      </div>
+        </StaggerItem>
+        </div>
+      </Stagger>
     </Container>
   );
 }

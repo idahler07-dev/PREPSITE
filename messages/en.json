@@ -448,6 +448,11 @@
     "takeTest": "Take a practice test",
     "recentEmpty": "Your finished drills and tests will appear here.",
     "firstDrill": "Start your first drill",
+    "weekDone": "{day}: practised",
+    "weekToday": "{day}: today",
+    "weekMissed": "{day}: no practice",
+    "weekFuture": "{day}",
+    "thisWeek": "This week",
     "quick": "Quick practice",
     "mastery": "{pct}% correct",
     "range": "Range {low}–{high}"
