@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { m, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion, type Variants } from "motion/react";
+import { Dialog } from "radix-ui";
 import {
   BarChart3,
   BookOpen,
@@ -13,20 +14,20 @@ import {
   LayoutDashboard,
   Library,
   ListChecks,
-  MoreHorizontal,
+  Menu,
   NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
   Shield,
+  X,
   Zap,
   type LucideIcon,
 } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/layout/logo";
-import { MobileSheet } from "@/components/ui/mobile-sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { spring } from "@/lib/motion";
+import { fade, spring } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export const SIDEBAR_COOKIE = "sidebar";
@@ -54,22 +55,53 @@ export interface ShellItem {
   key: keyof typeof ICONS;
   href: string;
   label: string;
-  /** Sidebar group (desktop). */
+  /** Group in the sidebar and the phone menu. */
   group: (typeof SHELL_GROUPS)[number];
-  /** Position in the phone tab bar (1–4); items without one live under "More". */
-  tab?: number;
-  /** Shorter label for the phone tab bar. */
-  tabLabel?: string;
 }
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`) || (href === "/practice" && pathname.startsWith("/attempts"));
 }
 
+const MenuContext = createContext<{ open: boolean; setOpen: (open: boolean) => void } | null>(null);
+
+/** The ☰ button in the phone and tablet top bar; opens the side menu. */
+export function ShellMenuButton() {
+  const t = useTranslations("shell");
+  const menu = useContext(MenuContext);
+  if (!menu) return null;
+  return (
+    <m.button
+      type="button"
+      onClick={() => menu.setOpen(true)}
+      whileTap={{ scale: 0.9 }}
+      transition={spring.snappy}
+      className="-ms-2 flex size-10 items-center justify-center rounded-[var(--radius-input)] text-foreground transition-colors hover:bg-surface-2 focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none lg:hidden"
+      aria-label={t("openMenu")}
+      aria-haspopup="dialog"
+      aria-expanded={menu.open}
+    >
+      <Menu className="size-5" aria-hidden />
+    </m.button>
+  );
+}
+
+/** Menu links: the panel slides in, then the groups and links follow in a short stagger. */
+const listVariants: Variants = {
+  closed: {},
+  open: { transition: { staggerChildren: 0.025, delayChildren: 0.06 } },
+};
+const itemVariants: Variants = {
+  closed: { opacity: 0, x: -12 },
+  open: { opacity: 1, x: 0, transition: spring.soft },
+};
+
 /**
  * App pages: sidebar on desktop (collapses to icons; remembered in a cookie so
- * there's no layout shift on load), bottom tab bar on phones with a "More"
- * sheet. The active item's pill slides between links (spring.snappy).
+ * there's no layout shift on load); on phones and tablets the same groups live
+ * in a side menu opened from the ☰ button. The panel slides in (spring.soft),
+ * links follow in a short stagger, a swipe left closes it, and the active
+ * item's pill slides between links (spring.snappy).
  */
 export function AppShell({
   items,
@@ -88,7 +120,7 @@ export function AppShell({
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [collapsed, setCollapsed] = useState(initialCollapsed);
-  const [moreOpen, setMoreOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const transition = reduce ? { duration: 0 } : spring.snappy;
 
   function toggle() {
@@ -97,9 +129,8 @@ export function AppShell({
     document.cookie = `${SIDEBAR_COOKIE}=${next ? "collapsed" : "open"}; path=/; max-age=31536000; samesite=lax`;
   }
 
-  const tabs = items.filter((i) => i.tab).sort((a, b) => a.tab! - b.tab!);
-  const inMore = items.filter((i) => !i.tab);
-  const moreActive = inMore.some((i) => isActive(pathname, i.href));
+  // Close the menu after navigating (also covers back/forward).
+  useEffect(() => setMenuOpen(false), [pathname]);
 
   const link = (i: ShellItem) => {
     const Icon = ICONS[i.key] ?? LayoutDashboard;
@@ -131,6 +162,7 @@ export function AppShell({
   };
 
   return (
+    <MenuContext.Provider value={{ open: menuOpen, setOpen: setMenuOpen }}>
     <div className="flex min-h-dvh flex-col">
       <div className="flex flex-1">
         <m.aside
@@ -183,72 +215,106 @@ export function AppShell({
         <m.div layout transition={transition} className="flex min-w-0 flex-1 flex-col">
           {banner}
           {topBar}
-          <main id="main" className="flex flex-1 flex-col pb-20 lg:pb-0">
+          <main id="main" className="flex flex-1 flex-col">
             {children}
           </main>
         </m.div>
       </div>
 
-      {/* Phones: bottom tab bar. */}
-      <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
-        aria-label={t("tabs")}
-      >
-        <ul className="mx-auto grid max-w-lg grid-cols-5">
-          {tabs.map((i) => {
-            const Icon = ICONS[i.key] ?? LayoutDashboard;
-            const active = isActive(pathname, i.href);
-            return (
-              <li key={i.href}>
-                <Link
-                  href={i.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn("relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium", active ? "text-primary" : "text-muted-foreground")}
+      {/* Phones and tablets: side menu. */}
+      <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
+        <AnimatePresence>
+          {menuOpen && (
+            <Dialog.Portal forceMount>
+              <Dialog.Overlay asChild forceMount>
+                <m.div
+                  className="fixed inset-0 z-50 bg-overlay backdrop-blur-[2px] lg:hidden"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={fade}
+                />
+              </Dialog.Overlay>
+              <Dialog.Content asChild forceMount aria-describedby={undefined}>
+                <m.div
+                  className="fixed inset-y-0 start-0 z-50 flex w-[min(20rem,86vw)] flex-col border-e bg-surface pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-[var(--elev-lg)] outline-none lg:hidden"
+                  initial={reduce ? { opacity: 0 } : { x: "-100%" }}
+                  animate={reduce ? { opacity: 1 } : { x: 0 }}
+                  exit={reduce ? { opacity: 0 } : { x: "-100%" }}
+                  transition={reduce ? fade : spring.soft}
+                  drag={reduce ? false : "x"}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={{ left: 0.5, right: 0 }}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -80 || info.velocity.x < -500) setMenuOpen(false);
+                  }}
                 >
-                  {active && <m.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
-                  <Icon className="relative size-5" aria-hidden />
-                  <span className="relative">{i.tabLabel ?? i.label}</span>
-                </Link>
-              </li>
-            );
-          })}
-          <li>
-            <button
-              type="button"
-              onClick={() => setMoreOpen(true)}
-              className={cn("relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[11px] font-medium", moreActive ? "text-primary" : "text-muted-foreground")}
-              aria-haspopup="dialog"
-            >
-              {moreActive && <m.span layoutId="tab-active" className="absolute top-1.5 h-8 w-14 rounded-full bg-primary-soft" transition={transition} aria-hidden />}
-              <MoreHorizontal className="relative size-5" aria-hidden />
-              <span className="relative">{t("more")}</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <MobileSheet open={moreOpen} onOpenChange={setMoreOpen} title={t("more")}>
-        <nav className="grid grid-cols-3 gap-2 pb-2" aria-label={t("more")}>
-          {inMore.map((i) => {
-            const Icon = ICONS[i.key] ?? LayoutDashboard;
-            const active = isActive(pathname, i.href);
-            return (
-              <Link
-                key={i.href}
-                href={i.href}
-                onClick={() => setMoreOpen(false)}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex flex-col items-center gap-2 rounded-lg border p-3 text-center text-xs font-medium transition-colors",
-                  active ? "border-primary/40 bg-primary-soft text-primary" : "bg-background hover:bg-surface-2",
-                )}
-              >
-                <Icon className="size-5" aria-hidden />
-                {i.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </MobileSheet>
+                  <div className="flex h-16 items-center justify-between border-b px-4">
+                    <Logo href="/dashboard" />
+                    <Dialog.Title className="sr-only">{t("menu")}</Dialog.Title>
+                    <Dialog.Close asChild>
+                      <m.button
+                        type="button"
+                        whileTap={{ scale: 0.9 }}
+                        transition={spring.snappy}
+                        className="flex size-10 items-center justify-center rounded-[var(--radius-input)] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none"
+                        aria-label={t("closeMenu")}
+                      >
+                        <X className="size-5" aria-hidden />
+                      </m.button>
+                    </Dialog.Close>
+                  </div>
+                  <m.nav
+                    className="flex flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-3 py-4"
+                    aria-label={t("appNavigation")}
+                    variants={reduce ? undefined : listVariants}
+                    initial="closed"
+                    animate="open"
+                  >
+                    {SHELL_GROUPS.map((g, gi) => {
+                      const groupItems = items.filter((i) => i.group === g);
+                      if (!groupItems.length) return null;
+                      return (
+                        <div key={g} role="group" aria-labelledby={`menu-group-${g}`} className="flex flex-col gap-1">
+                          <m.p
+                            id={`menu-group-${g}`}
+                            variants={reduce ? undefined : itemVariants}
+                            className={cn("px-3 pb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase", gi > 0 && "pt-4")}
+                          >
+                            {t(`groups.${g}`)}
+                          </m.p>
+                          {groupItems.map((i) => {
+                            const Icon = ICONS[i.key] ?? LayoutDashboard;
+                            const active = isActive(pathname, i.href);
+                            return (
+                              <m.div key={i.href} variants={reduce ? undefined : itemVariants}>
+                                <Link
+                                  href={i.href}
+                                  onClick={() => setMenuOpen(false)}
+                                  aria-current={active ? "page" : undefined}
+                                  className={cn(
+                                    "relative flex h-11 items-center gap-3 rounded-[var(--radius-input)] px-3 text-[15px] font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
+                                    active ? "text-primary" : "text-foreground hover:bg-surface-2",
+                                  )}
+                                >
+                                  {active && <m.span layoutId="menu-active" className="absolute inset-0 rounded-[var(--radius-input)] bg-primary-soft" transition={transition} aria-hidden />}
+                                  <Icon className={cn("relative size-[18px] shrink-0", !active && "text-muted-foreground")} aria-hidden />
+                                  <span className="relative truncate">{i.label}</span>
+                                </Link>
+                              </m.div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </m.nav>
+                </m.div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          )}
+        </AnimatePresence>
+      </Dialog.Root>
     </div>
+    </MenuContext.Provider>
   );
 }

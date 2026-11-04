@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { getCurrentUser, isOwner } from "@/server/auth/session";
-import { AppShell, SIDEBAR_COOKIE, type ShellItem } from "@/components/layout/app-shell";
+import { AppShell, SIDEBAR_COOKIE, ShellMenuButton, type ShellItem } from "@/components/layout/app-shell";
 import { Logo } from "@/components/layout/logo";
 import { CountdownChip } from "@/components/layout/countdown-chip";
 import { CommandPaletteButton } from "@/components/layout/command-palette-button";
@@ -15,7 +15,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CookieNotice } from "@/components/layout/cookie-notice";
 import { DemoBanner, showDemoBanner } from "@/components/layout/demo-banner";
 
-/** Signed-in app pages: sidebar (desktop) / bottom tabs (phones), top bar with countdown and search. */
+/** Signed-in app pages: sidebar (desktop) / side menu from the ☰ button (phones, tablets), top bar with countdown and search. */
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser();
   const demo = showDemoBanner() ? <DemoBanner /> : null;
@@ -36,16 +36,16 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   }
 
   const t = await getTranslations("nav");
-  // Sidebar groups (desktop); `tab` puts an item in the phone tab bar, in that order, with an optional shorter label.
+  // Groups for the sidebar and the phone menu.
   const items: ShellItem[] = [
-    { key: "dashboard", href: "/dashboard", label: t("home"), group: "study", tab: 1 },
+    { key: "dashboard", href: "/dashboard", label: t("home"), group: "study" },
     { key: "plan", href: "/plan", label: t("plan"), group: "study" },
     { key: "analytics", href: "/analytics", label: t("analytics"), group: "study" },
     { key: "mistakes", href: "/review", label: t("mistakes"), group: "study" },
     { key: "vocab", href: "/vocab", label: t("vocab"), group: "study" },
-    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "practice", tab: 3 },
-    { key: "practice", href: "/practice", label: t("drills"), tabLabel: t("practice"), group: "practice", tab: 2 },
-    { key: "mocks", href: "/mocks", label: t("mockTests"), tabLabel: t("tests"), group: "practice", tab: 4 },
+    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "practice" },
+    { key: "practice", href: "/practice", label: t("drills"), group: "practice" },
+    { key: "mocks", href: "/mocks", label: t("mockTests"), group: "practice" },
     { key: "history", href: "/history", label: t("history"), group: "practice" },
     { key: "settings", href: "/settings", label: t("settings"), group: "account" },
     { key: "billing", href: "/billing", label: t("billing"), group: "account" },
@@ -65,7 +65,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         {c("skipToContent")}
       </a>
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 px-4 sm:px-6">
-        <div className="lg:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
+          <ShellMenuButton />
           <Logo href="/dashboard" />
         </div>
         <div className="ms-auto flex items-center gap-2">
