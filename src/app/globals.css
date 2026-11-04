@@ -1033,7 +1033,14 @@ mark.hl {
   }
 }
 
-/* ---- Loading: a slim bar that slides, and three soft dots ---- */
+/* ---- Loading: the mark breathes, a slim bar slides, three soft dots ---- */
+.loading-breathe {
+  animation: loading-breathe 2.4s ease-in-out infinite;
+}
+@keyframes loading-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
 .loading-bar {
   position: relative;
   width: 9rem;
@@ -1074,6 +1081,7 @@ mark.hl {
 }
 @media (prefers-reduced-motion: reduce) {
   .loading-bar::after { animation: none; width: 100%; opacity: 0.35; }
+  .loading-breathe { animation: none; }
   .loading-dots i { animation: none; opacity: 0.6; }
 }
 
