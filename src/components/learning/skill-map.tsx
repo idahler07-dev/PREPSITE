@@ -13,51 +13,51 @@ export interface SkillTile {
 }
 
 /**
- * Skill map: rounded tiles shaded from light to deep cobalt by mastery.
- * Tiles ripple in from the top-left on first load and recolor smoothly.
- * With `onPick`, tiles are buttons (start a drill on that skill); each tile
- * has a layoutId so it can grow into the drill.
+ * Skill map: a list, one row per skill, with its full name, a thin mastery
+ * bar that fills in when it scrolls into view (spring.soft), and the
+ * percentage. With `onPick`, each row is a button that starts a drill on
+ * that skill. Two columns from small screens up.
  */
-export function SkillMap({ tiles, onPick, columns = "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5", className }: { tiles: SkillTile[]; onPick?: (key: string) => void; columns?: string; className?: string }) {
+export function SkillMap({ tiles, onPick, className }: { tiles: SkillTile[]; onPick?: (key: string) => void; columns?: string; className?: string }) {
   const reduce = useReducedMotion();
-  const cols = 5;
   return (
-    <ul className={cn("grid gap-2", columns, className)}>
+    <ul className={cn("grid gap-x-8 sm:grid-cols-2", className)}>
       {tiles.map((t, i) => {
-        const mastery = t.mastery;
-        const pct = mastery == null ? 0 : Math.round(12 + mastery * 88);
-        // White text only on the deep tiles, where it stays AA.
-        const dark = mastery != null && mastery >= 0.75;
-        const style = { backgroundColor: mastery == null ? "var(--surface-2)" : `color-mix(in oklab, var(--primary) ${pct}%, var(--primary-soft))` };
+        const pct = t.mastery == null ? null : Math.round(t.mastery * 100);
         const body = (
           <>
-            <span className="line-clamp-2 text-[0.8125rem] leading-tight font-medium">{t.label}</span>
-            {t.detail && <span className={cn("mt-1 block font-mono text-label tabular-nums", dark ? "opacity-90" : "text-muted-foreground")}>{t.detail}</span>}
+            <span className="min-w-0 flex-1 text-[0.9375rem] leading-snug font-medium">{t.label}</span>
+            <span className="flex w-28 shrink-0 items-center gap-2.5">
+              <span className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-foreground/10" aria-hidden>
+                {pct != null && (
+                  <m.span
+                    className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[color-mix(in_oklab,var(--primary),white_30%)] to-primary"
+                    initial={reduce ? false : { width: 0 }}
+                    whileInView={{ width: `${Math.max(4, pct)}%` }}
+                    viewport={{ once: true }}
+                    transition={reduce ? { duration: 0 } : { ...spring.soft, delay: Math.min(i, 12) * 0.03 }}
+                  />
+                )}
+              </span>
+              <span className={cn("w-9 text-end text-sm tabular-nums", pct == null ? "text-muted-foreground" : "font-semibold")}>{pct == null ? "–" : `${pct}%`}</span>
+            </span>
           </>
         );
-        const cls = cn(
-          "flex h-full min-h-[76px] w-full flex-col justify-between rounded-[12px] p-3 text-start transition-colors duration-300",
-          dark ? "text-primary-foreground" : "text-foreground",
-        );
+        const cls = "flex min-h-12 w-full items-center gap-4 border-b border-border/70 py-2.5 text-start";
         return (
-          <m.li
-            key={t.key}
-            layoutId={onPick ? `skill-${t.key}` : undefined}
-            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={reduce ? { duration: 0.2 } : { ...spring.soft, delay: ((i % cols) + Math.floor(i / cols)) * 0.04 }}
-          >
+          <li key={t.key}>
             {onPick ? (
-              <button type="button" onClick={() => onPick(t.key)} className={cn(cls, "focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none hover:brightness-105")} style={style}>
+              <button
+                type="button"
+                onClick={() => onPick(t.key)}
+                className={cn(cls, "-mx-2 w-[calc(100%+1rem)] rounded-lg px-2 transition-colors hover:bg-primary-soft/60 focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none motion-safe:active:scale-[0.99]")}
+              >
                 {body}
               </button>
             ) : (
-              <div className={cls} style={style}>
-                {body}
-              </div>
+              <div className={cls}>{body}</div>
             )}
-          </m.li>
+          </li>
         );
       })}
     </ul>

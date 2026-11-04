@@ -3,16 +3,15 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Loader2, Play, Zap } from "lucide-react";
+import { ChevronRight, Loader2, Play, Zap } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { DOMAINS, type SectionKey } from "@/lib/taxonomy";
 import { MAX_DRILL_QUESTIONS } from "@/lib/practice/drill";
-import { secondsPerQuestion } from "@/config/test-structure";
 import { countMatchingQuestions, startDrill } from "@/server/actions/practice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { openTest } from "@/lib/open-test";
 
@@ -78,20 +77,19 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Zap className="size-4 text-primary" aria-hidden /> {t("quickStart")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-2">
+      <section aria-labelledby="quick-start">
+        <h2 id="quick-start" className="mb-3 flex items-center gap-2 text-base font-semibold">
+          <Zap className="size-4 text-primary" aria-hidden /> {t("quickStart")}
+        </h2>
+        <div className="grid gap-2 sm:grid-cols-3">
           {quick.map((q) => (
-            <Button key={q.label} variant="secondary" disabled={pending} onClick={() => launch({ ...q.cfg, feedback: "IMMEDIATE", unseenFirst: true })}>
+            <Button key={q.label} variant="secondary" className="h-12 justify-between px-4" disabled={pending} onClick={() => launch({ ...q.cfg, feedback: "IMMEDIATE", unseenFirst: true })}>
               {q.label}
+              <ChevronRight className="text-muted-foreground" aria-hidden />
             </Button>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
       <Card>
         <CardContent className="space-y-6 pt-6">
@@ -116,7 +114,7 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
 
           <fieldset>
             <legend className="mb-2 text-sm font-medium">{t("domains")}</legend>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {visibleDomains.map((d) => (
                 <Chip
                   key={d.key}
@@ -183,7 +181,6 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
                   {t("timed")}
                 </Chip>
               </div>
-              {timed && <p className="mt-1 text-sm text-muted-foreground">{t("timedHelp", { seconds: secondsPerQuestion(section ?? "MIXED") })}</p>}
             </fieldset>
             <fieldset>
               <legend className="mb-2 text-sm font-medium">{t("feedback")}</legend>
@@ -213,7 +210,6 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
                 <Label htmlFor="codeTo">{t("codeTo")}</Label>
                 <Input id="codeTo" value={codeTo} onChange={(e) => setCodeTo(e.target.value.toUpperCase())} className="font-mono" />
               </div>
-              <p className="text-sm text-muted-foreground sm:col-span-2">{t("codeRangeHelp")}</p>
             </div>
           </details>
 
@@ -240,9 +236,9 @@ function Chip({ active, onClick, children, small }: { active: boolean; onClick: 
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "rounded-full border px-3 py-1.5 text-sm transition-colors",
-        small && "px-2.5 py-1 text-xs",
-        active ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:bg-surface-2 hover:text-foreground",
+        "rounded-lg border px-3 py-2 text-start text-sm transition-colors",
+        small && "px-2.5 py-1.5 text-xs",
+        active ? "border-primary bg-primary text-primary-foreground" : "border-transparent bg-surface-2 hover:border-border hover:text-foreground",
       )}
     >
       {children}

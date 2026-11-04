@@ -18,7 +18,7 @@ export default async function QuestionBankPage({ searchParams }: { searchParams:
   const [page, counts, progress] = await Promise.all([getBankPage(user.id, filters), getDifficultyCounts(user.id, filters), getDomainProgress(user.id, filters.section)]);
   return (
     <Container className="space-y-6">
-      <PageHeader title={t("title")} description={t("description")} />
+      <PageHeader title={t("title")} />
       <BankView filters={filters} page={page} counts={counts} progress={progress} />
     </Container>
   );

@@ -10,7 +10,7 @@ function Card({ className, interactive = false, ...props }: React.ComponentProps
       className={cn(
         interactive &&
           "transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
-        "glass-card flex flex-col gap-5 rounded-[24px] py-5 text-card-foreground lg:gap-6 lg:py-8",
+        "glass-card flex flex-col gap-5 rounded-2xl py-5 text-card-foreground lg:gap-6 lg:py-8",
         className
       )}
       {...props}

@@ -462,8 +462,8 @@
     "recentEmpty": "Your finished drills and tests will appear here.",
     "firstDrill": "Start your first drill",
     "scoreEntry": {
-      "open": "I already took a practice test",
-      "update": "Update my score",
+      "open": "Enter my score",
+      "update": "Update",
       "title": "Add your practice test score",
       "description": "Slide each ruler to the score you got. Use the result of a full practice test, for example an official one.",
       "testName": "Practice test",
@@ -473,7 +473,7 @@
       "save": "Save score",
       "saved": "Score saved",
       "error": "Could not save. Please check the date and try again.",
-      "from": "From your practice test on {date}"
+      "from": "Practice test, {date}"
     },
     "showAllSkills": "Show all {count} skills",
     "showFewerSkills": "Show fewer",
@@ -520,7 +520,8 @@
     "quickRw": "10 reading & writing questions",
     "inProgress": "In progress",
     "resume": "Resume",
-    "drillStarted": "Drill started. Good luck!"
+    "drillStarted": "Drill started. Good luck!",
+    "moreInProgress": "{count, plural, one {# more in progress} other {# more in progress}}"
   },
   "test": {
     "drillTitle": "Practice drill",

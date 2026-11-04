@@ -43,7 +43,7 @@ test("a student who already took a practice test enters the score with the ruler
   await signIn(page, uniqueEmail("score"));
   await page.getByRole("button", { name: "Skip for now" }).click();
   await page.goto("/dashboard");
-  await page.getByRole("button", { name: "I already took a practice test" }).click();
+  await page.getByRole("button", { name: "Enter my score" }).click();
 
   const math = page.getByRole("slider", { name: "Math" });
   const rw = page.getByRole("slider", { name: "Reading and Writing" });
@@ -56,6 +56,6 @@ test("a student who already took a practice test enters the score with the ruler
   await expect(rw).toHaveAttribute("aria-valuenow", "590");
 
   await page.getByRole("button", { name: "Save score" }).click();
-  await expect(page.getByText("From your practice test on").filter({ visible: true })).toBeVisible();
+  await expect(page.getByText("Practice test,").filter({ visible: true })).toBeVisible();
   await expect(page.getByText("Reading and Writing 590 · Math 630").filter({ visible: true })).toBeVisible();
 });
