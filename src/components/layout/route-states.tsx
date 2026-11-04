@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { PencilLoader } from "@/components/ui/pencil-loader";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Container } from "@/components/layout/page-header";
@@ -13,9 +12,8 @@ export function PageSkeleton() {
   return (
     <Container className="space-y-6">
       <div className="contents" aria-busy="true" aria-live="polite">
-      <div role="status" className="flex items-center gap-3 text-sm text-muted-foreground">
-        <PencilLoader size={56} />
-        {t("loading")}
+      <div role="status" className="loading-bar">
+        <span className="sr-only">{t("loading")}</span>
       </div>
       <div className="space-y-3">
         <Skeleton className="h-10 w-64" />

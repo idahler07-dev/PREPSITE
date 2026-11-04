@@ -4,7 +4,6 @@ import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Lightbulb, Send } from "lucide-react";
-import { PencilLoader } from "@/components/ui/pencil-loader";
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/mascot/mascot";
 import { Textarea } from "@/components/ui/textarea";
@@ -179,7 +178,12 @@ export function AiTutor({
         <div ref={live} aria-live="polite" aria-busy={busy} className="space-y-3">
           {busy && !text && !flagged && (
             <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
-              <PencilLoader size={40} /> {t("thinking")}
+              <span className="loading-dots" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>{" "}
+              {t("thinking")}
             </p>
           )}
           {flagged ? <p className="rounded-md bg-background p-3 text-sm">{t("flagged")}</p> : text && <Answer text={text} className="rounded-md bg-background p-3" />}

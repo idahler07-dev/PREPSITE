@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         )}
         <StaggerItem className="order-6 lg:order-none">
         {/* Skill map */}
-        <Tile title={t("skillMap")} action={<span className="hidden text-label text-muted-foreground sm:inline">{t("skillMapHint")}</span>}>
+        <Tile title={t("skillMap")}>
           <DrillSkillMap tiles={tiles} />
         </Tile>
 
@@ -212,7 +212,6 @@ export default async function DashboardPage() {
               </p>
               <ScoreGauge score={estimate.score} low={estimate.low} high={estimate.high} />
               <p className="mt-2 font-mono text-small text-muted-foreground">{t("range", { low: estimate.low, high: estimate.high })}</p>
-              <p className="mt-3 text-label text-muted-foreground">{t("estimate.label")}</p>
             </div>
           ) : official ? (
             <div>
@@ -230,16 +229,14 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              <Mascot pose="think" className="w-20 shrink-0" />
-              <div className="space-y-3">
+              <div className="min-w-0 flex-1 space-y-3">
                 <p className="text-small text-muted-foreground">{t("estimateEmpty")}</p>
-                <div className="flex flex-wrap gap-2">
-                  <Button asChild size="sm">
+                <div className="flex flex-col gap-2">
+                  <Button asChild size="sm" className="h-auto min-h-9 whitespace-normal">
                     <Link href="/mocks">{t("takeTest")}</Link>
                   </Button>
-                  <ScoreEntry today={todayUtc} trigger={<Button size="sm" variant="secondary">{t("scoreEntry.open")}</Button>} />
+                  <ScoreEntry today={todayUtc} trigger={<Button size="sm" variant="secondary" className="h-auto min-h-9 whitespace-normal">{t("scoreEntry.open")}</Button>} />
                 </div>
-                <p className="text-label text-muted-foreground">{t("estimate.label")}</p>
               </div>
             </div>
           )}
@@ -260,7 +257,6 @@ export default async function DashboardPage() {
               <Odometer value={s.streak} className="font-mono" />
             </p>
             <WeekDots days={weekDays} />
-            {s.streak === 0 && <p className="mt-3 text-label text-muted-foreground">{t("streakReminder")}</p>}
           </Tile>
           <Tile>
             <p className="flex items-center gap-2 text-small font-medium text-muted-foreground">
