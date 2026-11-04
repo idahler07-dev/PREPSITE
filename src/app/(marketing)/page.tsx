@@ -4,7 +4,13 @@ import { Link } from "@/i18n/navigation";
 import { getCurrentUser } from "@/server/auth/session";
 import { getFeaturedQuestion } from "@/server/landing";
 import { paidPlanCards } from "@/server/billing/plan-cards";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { LiquidButton, MetalButton } from "@/components/ui/liquid-button";
+import { ContainerScroll } from "@/components/marketing/container-scroll";
+import { RotatingWords } from "@/components/marketing/rotating-words";
+import { SkillMarquee } from "@/components/marketing/skill-marquee";
+import { DOMAINS } from "@/lib/taxonomy";
 import { Mascot } from "@/components/mascot/mascot";
 import { Section, SectionHead, SectionPill } from "@/components/marketing/section";
 import { HowPath } from "@/components/marketing/how-path";
@@ -23,11 +29,15 @@ const FAQ_KEYS = ["official", "score", "language", "device", "mistake"] as const
 export default async function HomePage() {
   const t = await getTranslations("home");
   const f = await getTranslations("faq");
+  const tx = await getTranslations("taxonomy");
   const user = await getCurrentUser();
   const question = await getFeaturedQuestion();
   const plans = await paidPlanCards("UZS", !!user);
   const startHref = user ? "/practice" : "/login";
   const diagnosticHref = user ? "/mocks" : `/login?next=${encodeURIComponent("/mocks")}`;
+
+  const skillItems = (section: "RW" | "MATH") =>
+    DOMAINS.filter((d) => d.section === section).flatMap((d) => d.skills.map((k) => ({ label: tx(`skills.${k as "INFERENCES"}`), tone: section === "RW" ? ("rw" as const) : ("math" as const) })));
 
   return (
     <>
@@ -46,9 +56,9 @@ export default async function HomePage() {
                 </Button>
               </Magnetic>
               <Magnetic>
-                <Button asChild size="lg" variant="secondary" className="rounded-full px-7">
+                <LiquidButton asChild size="lg">
                   <Link href={diagnosticHref}>{t("ctaSecondary")}</Link>
-                </Button>
+                </LiquidButton>
               </Magnetic>
             </div>
             <p className="mt-4 text-small text-muted-foreground">{t("noCard")}</p>
@@ -67,6 +77,15 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* 2b. Skills strip: two endless rows, opposite directions */}
+      <section aria-labelledby="skills-strip" className="space-y-2 border-y border-[var(--glass-edge)] bg-section-tint py-8">
+        <p id="skills-strip" className="mb-3 px-4 text-center text-sm font-semibold text-muted-foreground">
+          {t("skillsStrip")}
+        </p>
+        <SkillMarquee items={skillItems("RW")} />
+        <SkillMarquee items={skillItems("MATH")} reverse seconds={70} />
+      </section>
+
       {/* 3. How it works */}
       <Section id="how" tint>
         <SectionHead
@@ -77,6 +96,29 @@ export default async function HomePage() {
         />
         <HowPath steps={(["diagnose", "plan", "practice"] as const).map((k) => ({ title: t(`how.steps.${k}.title`), body: t(`how.steps.${k}.body`) }))} />
       </Section>
+
+      {/* 3b. The app, tilting into view as you scroll */}
+      <section aria-labelledby="showcase-heading" className="overflow-hidden">
+        <ContainerScroll
+          title={
+            <div className="mb-10 md:mb-16">
+              <h2 id="showcase-heading" className="text-h1 font-semibold lg:text-section">
+                {t("showcase.title")}
+                <br />
+                <RotatingWords words={t.raw("showcase.words") as string[]} />
+              </h2>
+              <p className="mx-auto mt-5 max-w-[48ch] text-lead text-muted-foreground">{t("showcase.sub")}</p>
+            </div>
+          }
+        >
+          <div className="relative h-full w-full">
+            <Image src="/landing/app-desktop-light.jpg" alt={t("showcase.alt")} fill sizes="(min-width: 768px) 1024px, 100vw" className="hidden object-cover object-top md:block md:dark:hidden" />
+            <Image src="/landing/app-desktop-dark.jpg" alt={t("showcase.alt")} fill sizes="(min-width: 768px) 1024px, 100vw" className="hidden object-cover object-top md:dark:block" />
+            <Image src="/landing/app-mobile-light.jpg" alt={t("showcase.alt")} fill sizes="22rem" className="object-cover object-top md:hidden dark:hidden" />
+            <Image src="/landing/app-mobile-dark.jpg" alt={t("showcase.alt")} fill sizes="22rem" className="hidden object-cover object-top dark:block md:dark:hidden" />
+          </div>
+        </ContainerScroll>
+      </section>
 
       {/* 4. Question bank + Ask Pip: full-width mockup */}
       <Section id="features">
@@ -229,9 +271,11 @@ export default async function HomePage() {
             <Mascot pose="cheer" className="mx-auto mb-6 w-36" />
             <h2 className="mx-auto max-w-[18ch] text-h1 font-semibold lg:text-section">{t.rich("final.title", emphasis)}</h2>
             <p className="mx-auto mt-5 max-w-[50ch] text-lead text-muted-foreground">{t("final.body")}</p>
-            <Button asChild size="lg" className="mt-8 rounded-full px-8">
-              <Link href={startHref}>{t("final.cta")}</Link>
-            </Button>
+            <div className="mt-8 flex justify-center">
+              <MetalButton asChild variant="primary" className="h-12 px-8 text-base">
+                <Link href={startHref}>{t("final.cta")}</Link>
+              </MetalButton>
+            </div>
           </div>
         </div>
       </section>

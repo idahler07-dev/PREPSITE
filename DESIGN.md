@@ -39,6 +39,13 @@ Adapted from Uiverse.io (CSS in `globals.css`, classes `theme-switch`, `uv-switc
 | Pencil that draws a circle and erases it (loading) | `PencilLoader` | page loading skeletons, the AI tutor's "Thinking" |
 | Sign-in form: bordered field with an icon, dark submit, outlined social button | classes `auth-field`, `auth-submit`, `auth-social` | the sign-in page |
 
+### Landing page motion
+
+- **Skills strip** (`SkillMarquee`): two endless rows of the 30 skills, Reading and Writing one way and Math the other; pauses on hover; still (and scrollable by hand) with reduced motion.
+- **App showcase** (`ContainerScroll`): a device frame that tilts back 20° and settles flat as it scrolls in, the title lifting with it. Real dashboard screenshots in `public/landing/` (desktop and phone, light and dark). No tilt with reduced motion.
+- **Rotating words** (`RotatingWords`, fancy `text-rotate`): "One place for Math / Reading and Writing / …" letter by letter in a cobalt pill; screen readers get the full list once.
+- **Liquid glass button** (`LiquidButton`): the hero's second action. **Metal button** (`MetalButton`): the final call to action only.
+
 ### Score entry (tape-measure rulers)
 
 Students who already took a practice test enter their score on the dashboard ("I already took a practice test"). One ruler per section (Reading and Writing, Math), 200–800 in steps of 10:

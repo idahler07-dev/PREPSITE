@@ -216,6 +216,19 @@
     "faq": {
       "label": "FAQ",
       "title": "Questions, <i>answered</i>"
+    },
+    "skillsStrip": "Every skill on the Digital SAT, practised one by one",
+    "showcase": {
+      "title": "One place for",
+      "words": [
+        "Math",
+        "Reading and Writing",
+        "full practice tests",
+        "your study plan",
+        "every mistake"
+      ],
+      "sub": "Your plan, your score and your next drill on one calm screen. Scroll to see it.",
+      "alt": "The Satify dashboard: today's plan, the estimated score and the skill map"
     }
   },
   "about": {

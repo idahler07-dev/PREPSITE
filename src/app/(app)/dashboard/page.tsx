@@ -220,7 +220,7 @@ export default async function DashboardPage() {
                 <Odometer value={official.total} className="font-mono" />
               </p>
               <ScoreGauge score={official.total} low={official.total} high={official.total} min={400} max={1600} />
-              <p className="mt-2 font-mono text-small text-muted-foreground">
+              <p className="mt-2 text-small text-muted-foreground tabular-nums">
                 {tx("sections.RW")} {official.rw} · {tx("sections.MATH")} {official.math}
               </p>
               <p className="mt-3 text-label text-muted-foreground">{t("scoreEntry.from", { date: format.dateTime(official.takenOn, { dateStyle: "medium", timeZone: "UTC" }) })}</p>

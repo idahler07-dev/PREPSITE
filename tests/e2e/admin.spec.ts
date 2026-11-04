@@ -43,7 +43,7 @@ test("admin imports a spreadsheet, reviews, publishes, and the question appears 
   await signIn(student, uniqueEmail("drill"));
   await student.getByRole("button", { name: "Skip for now" }).click();
   await student.goto("/practice");
-  await student.getByText("Question code range").click();
+  await student.getByText("Question code range").filter({ visible: true }).click();
   await student.getByLabel("From code").fill("E2E-M-ALG-0001");
   await student.getByLabel("To code").fill("E2E-M-ALG-9999");
   await expect(student.getByText("2 questions match")).toBeVisible();
