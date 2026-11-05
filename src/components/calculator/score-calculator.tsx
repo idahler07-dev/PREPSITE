@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, LayoutGroup, m, useReducedMotion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
+import { LiquidGroup } from "@/components/motion/liquid-group";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Minus, Plus, Share2 } from "lucide-react";
 import { toast } from "sonner";
@@ -22,7 +23,6 @@ const SPRING = { type: "spring", stiffness: 400, damping: 30 } as const;
  */
 export function ScoreCalculator({ ctaHref }: { ctaHref: string }) {
   const t = useTranslations("calc");
-  const reduce = useReducedMotion();
   const [mode, setMode] = useState<"estimate" | "target">("estimate");
   const [rw, setRw] = useState<SectionInput>({ m1: 20, m2: 18, route: "harder" });
   const [math, setMath] = useState<SectionInput>({ m1: 16, m2: 14, route: "harder" });
@@ -59,23 +59,21 @@ export function ScoreCalculator({ ctaHref }: { ctaHref: string }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_420px] lg:items-start">
       <div className="space-y-4">
-        <LayoutGroup id="calc-mode">
-          <div role="tablist" aria-label={t("title")} className="flex w-full rounded-2xl border border-border bg-surface p-1 shadow-sm sm:w-fit">
+        <LiquidGroup activeKey={mode} role="tablist" aria-label={t("title")} className="flex w-full rounded-2xl border border-border bg-surface p-1 shadow-sm sm:w-fit" indicatorClassName="rounded-xl bg-primary shadow-[0_3px_0_var(--primary-edge)]">
             {(["estimate", "target"] as const).map((k) => (
               <button
                 key={k}
                 type="button"
                 role="tab"
+                data-liquid-key={k}
                 aria-selected={mode === k}
                 onClick={() => setMode(k)}
                 className={cn("relative flex-1 rounded-xl px-5 py-2 font-display text-sm font-extrabold transition-colors sm:flex-none", mode === k ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
               >
-                {mode === k && <m.span layoutId="calc-pill" className="absolute inset-0 rounded-xl bg-primary shadow-[0_3px_0_var(--primary-edge)]" transition={reduce ? { duration: 0 } : SPRING} />}
                 <span className="relative">{k === "estimate" ? t("modeEstimate") : t("modeTarget")}</span>
               </button>
             ))}
-          </div>
-        </LayoutGroup>
+          </LiquidGroup>
 
         <AnimatePresence mode="wait" initial={false}>
           {mode === "estimate" ? (
@@ -182,7 +180,7 @@ function SectionCard({ section, title, value, onChange, score, tone }: { section
         <RawRow id={`${section}-m2`} label={t("m2")} max={max} value={value.m2} onChange={(m2) => onChange({ m2 })} />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-muted-foreground">{t("route")}</span>
-          <RouteToggle id={section} value={value.route} onChange={(route) => onChange({ route })} />
+          <RouteToggle value={value.route} onChange={(route) => onChange({ route })} />
         </div>
         <AnimatePresence initial={false}>
           {value.route === "easier" && (
@@ -246,27 +244,24 @@ function StepButton({ label, onClick, disabled, children }: { label: string; onC
   );
 }
 
-function RouteToggle({ id, value, onChange }: { id: string; value: Route; onChange: (r: Route) => void }) {
+function RouteToggle({ value, onChange }: { value: Route; onChange: (r: Route) => void }) {
   const t = useTranslations("calc");
-  const reduce = useReducedMotion();
   return (
-    <LayoutGroup id={`route-${id}`}>
-      <div role="radiogroup" aria-label={t("route")} className="flex rounded-xl bg-surface-2 p-1">
+    <LiquidGroup activeKey={value} role="radiogroup" aria-label={t("route")} className="flex rounded-xl bg-surface-2 p-1" indicatorClassName="rounded-lg bg-surface shadow-sm">
         {(["harder", "easier"] as const).map((r) => (
           <button
             key={r}
             type="button"
             role="radio"
+            data-liquid-key={r}
             aria-checked={value === r}
             onClick={() => onChange(r)}
             className={cn("relative rounded-lg px-3.5 py-1.5 text-sm font-bold transition-colors", value === r ? "text-foreground" : "text-muted-foreground")}
           >
-            {value === r && <m.span layoutId={`route-pill-${id}`} className="absolute inset-0 rounded-lg bg-surface shadow-sm" transition={reduce ? { duration: 0 } : SPRING} />}
             <span className="relative">{r === "harder" ? t("harder") : t("easier")}</span>
           </button>
         ))}
-      </div>
-    </LayoutGroup>
+      </LiquidGroup>
   );
 }
 

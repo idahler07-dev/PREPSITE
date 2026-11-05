@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, LayoutGroup, m, useReducedMotion, type Variants } from "motion/react";
+import { AnimatePresence, m, useReducedMotion, type Variants } from "motion/react";
+import { LiquidGroup } from "@/components/motion/liquid-group";
 import { Dialog } from "radix-ui";
 import {
   BarChart3,
@@ -124,11 +125,11 @@ export function AppShell({
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
-  const transition = reduce ? { duration: 0 } : { type: "spring" as const, stiffness: 400, damping: 30 };
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
   const activeTabs = tabs.find((g) => g.items.some((i) => isActive(pathname, i)));
+  const activeHref = items.find((i) => isActive(pathname, i))?.href ?? null;
 
   return (
     <MenuContext.Provider value={{ open: menuOpen, setOpen: setMenuOpen }}>
@@ -139,14 +140,14 @@ export function AppShell({
             <div className="mb-7 px-2">
               <Logo href="/sat" />
             </div>
-            <LayoutGroup id="sidebar">
-              <nav className="flex flex-col gap-1.5">
+            <LiquidGroup as="nav" activeKey={activeHref} className="flex flex-col gap-1.5" indicatorClassName="rounded-2xl border-2 border-primary/45 bg-primary-soft">
                 {items.map((i) => {
                   const Icon = ICONS[i.key] ?? Route;
                   const active = isActive(pathname, i);
                   return (
                     <Link
                       key={i.href}
+                      data-liquid-key={i.href}
                       href={i.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
@@ -154,14 +155,12 @@ export function AppShell({
                         active ? "text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
                       )}
                     >
-                      {active && <m.span layoutId="side-pill" className="absolute inset-0 rounded-2xl border-2 border-primary/45 bg-primary-soft" transition={transition} aria-hidden />}
                       <Icon className="relative size-5 shrink-0" strokeWidth={2.25} aria-hidden />
                       <span className="relative">{i.label}</span>
                     </Link>
                   );
                 })}
-              </nav>
-            </LayoutGroup>
+            </LiquidGroup>
             <div className="mt-auto border-t border-border pt-4">
               <p className="px-3.5 pb-1 text-xs font-semibold text-muted-foreground">{t("more")}</p>
               {more.map((i) => {
@@ -194,24 +193,14 @@ export function AppShell({
 
         {/* Phones and tablets: bottom tab bar */}
         <nav aria-label={t("appNavigation")} className="glass fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] lg:hidden">
-          <LayoutGroup id="tabbar">
-            <ul className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2">
+          <LiquidGroup as="ul" activeKey={activeHref} className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2" indicatorClassName="rounded-full bg-primary-soft">
               {items.map((i) => {
                 const Icon = ICONS[i.key] ?? Route;
                 const active = isActive(pathname, i);
                 return (
                   <li key={i.href} className="flex">
                     <Link href={i.href} aria-current={active ? "page" : undefined} className="relative flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none">
-                      <span className="relative grid h-8 w-14 place-items-center">
-                        {active && (
-                          <m.span
-                            layoutId="tab-blob"
-                            className="absolute inset-0 rounded-full bg-primary-soft"
-                            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 28, mass: 0.9 }}
-                            style={{ borderRadius: 999 }}
-                            aria-hidden
-                          />
-                        )}
+                      <span data-liquid-key={i.href} className="relative grid h-8 w-14 place-items-center">
                         <m.span className="relative" animate={active && !reduce ? { y: [0, -3, 0] } : { y: 0 }} transition={{ duration: 0.35 }}>
                           <Icon className={cn("size-[22px]", active ? "text-primary" : "text-muted-foreground")} strokeWidth={active ? 2.5 : 2} aria-hidden />
                         </m.span>
@@ -221,8 +210,7 @@ export function AppShell({
                   </li>
                 );
               })}
-            </ul>
-          </LayoutGroup>
+          </LiquidGroup>
         </nav>
 
         {/* Phones and tablets: "more" menu from ☰ */}
@@ -292,31 +280,34 @@ export function AppShell({
   );
 }
 
-/** Tabs inside a destination, with a liquid pill under the active one. */
+/** Tabs inside a destination: the highlight glides between them like liquid. */
 function SectionTabs({ items, pathname }: { items: ShellItem[]; pathname: string }) {
-  const reduce = useReducedMotion();
+  const activeHref = items.find((i) => isActive(pathname, i))?.href ?? null;
   return (
     <div className="border-b border-border bg-background/80">
-      <LayoutGroup id="section-tabs">
-        <nav className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6">
-          {items.map((i) => {
-            const Icon = ICONS[i.key] ?? Route;
-            const active = isActive(pathname, i);
-            return (
-              <Link
-                key={i.href}
-                href={i.href}
-                aria-current={active ? "page" : undefined}
-                className={cn("relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-bold transition-colors", active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
-              >
-                {active && <m.span layoutId="section-pill" className="absolute inset-0 rounded-full bg-primary shadow-[0_3px_0_var(--primary-edge)]" transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }} aria-hidden />}
-                <Icon className="relative size-4" aria-hidden />
-                <span className="relative">{i.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </LayoutGroup>
+      <LiquidGroup
+        as="nav"
+        activeKey={activeHref}
+        className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6"
+        indicatorClassName="rounded-full bg-primary shadow-[0_3px_0_var(--primary-edge)]"
+      >
+        {items.map((i) => {
+          const Icon = ICONS[i.key] ?? Route;
+          const active = isActive(pathname, i);
+          return (
+            <Link
+              key={i.href}
+              href={i.href}
+              data-liquid-key={i.href}
+              aria-current={active ? "page" : undefined}
+              className={cn("relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-bold transition-colors", active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+            >
+              <Icon className="relative size-4" aria-hidden />
+              <span className="relative">{i.label}</span>
+            </Link>
+          );
+        })}
+      </LiquidGroup>
     </div>
   );
 }

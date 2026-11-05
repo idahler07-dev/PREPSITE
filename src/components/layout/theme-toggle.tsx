@@ -19,6 +19,7 @@ import {
 import { saveThemePreference } from "@/server/actions/preferences";
 import { THEME_COLORS } from "@/config/theme-colors";
 import { spring } from "@/lib/motion";
+import { LiquidGroup } from "@/components/motion/liquid-group";
 import { DayNightSwitch } from "@/components/ui/day-night-switch";
 
 type ViewTransitionDoc = Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
@@ -163,11 +164,10 @@ export function ThemeMeta() {
   return null;
 }
 
-/** Settings: Light / Dark / System as a segmented control with a liquid pill (brief §9). */
+/** Settings: Light / Dark / System as a segmented control; the highlight glides between them. */
 export function ThemeSegmented({ signedIn }: { signedIn: boolean }) {
   const t = useTranslations("theme");
   const { theme } = useTheme();
-  const reduce = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const change = useAnimatedThemeChange(ref);
@@ -179,24 +179,26 @@ export function ThemeSegmented({ signedIn }: { signedIn: boolean }) {
     { value: "system", label: t("system"), icon: Monitor },
   ];
   return (
-    <div ref={ref} role="radiogroup" aria-label={t("label")} className="inline-flex rounded-2xl bg-surface-2 p-1">
-      {options.map((o) => (
-        <button
-          key={o.value}
-          type="button"
-          role="radio"
-          aria-checked={current === o.value}
-          onClick={() => {
-            change(o.value);
-            if (signedIn) void saveThemePreference(o.value);
-          }}
-          className={`relative flex h-9 items-center gap-1.5 rounded-xl px-3.5 text-sm font-bold transition-colors ${current === o.value ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          {current === o.value && <m.span layoutId="theme-pill" className="absolute inset-0 rounded-xl bg-surface shadow-sm" transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }} />}
-          <o.icon className="relative size-4" aria-hidden />
-          <span className="relative">{o.label}</span>
-        </button>
-      ))}
+    <div ref={ref}>
+      <LiquidGroup activeKey={current} role="radiogroup" aria-label={t("label")} className="inline-flex rounded-2xl bg-surface-2 p-1" indicatorClassName="rounded-xl bg-surface shadow-sm">
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            data-liquid-key={o.value}
+            aria-checked={current === o.value}
+            onClick={() => {
+              change(o.value);
+              if (signedIn) void saveThemePreference(o.value);
+            }}
+            className={`relative flex h-9 items-center gap-1.5 rounded-xl px-3.5 text-sm font-bold transition-colors ${current === o.value ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            <o.icon className="relative size-4" aria-hidden />
+            <span className="relative">{o.label}</span>
+          </button>
+        ))}
+      </LiquidGroup>
     </div>
   );
 }

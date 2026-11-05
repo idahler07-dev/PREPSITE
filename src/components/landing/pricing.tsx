@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, LayoutGroup, m, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
+import { LiquidGroup } from "@/components/motion/liquid-group";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -50,23 +51,21 @@ export function Pricing({ signedIn, startHref, canPay, planNames }: { signedIn: 
         <h2 id="pricing-title" className="text-center font-display text-3xl font-extrabold tracking-tight sm:text-5xl">
           {t("title")}
         </h2>
-        <LayoutGroup id="currency">
-          <div role="radiogroup" aria-label={`${t("uzs")} / ${t("usd")}`} className="mx-auto mt-8 flex w-fit rounded-full border border-border bg-surface p-1 shadow-sm">
+        <LiquidGroup activeKey={cur} role="radiogroup" aria-label={`${t("uzs")} / ${t("usd")}`} className="mx-auto mt-8 flex w-fit rounded-full border border-border bg-surface p-1 shadow-sm" indicatorClassName="rounded-full bg-primary shadow-[0_3px_0_var(--primary-edge)]">
             {(["UZS", "USD"] as const).map((c) => (
               <button
                 key={c}
                 type="button"
                 role="radio"
+                data-liquid-key={c}
                 aria-checked={cur === c}
                 onClick={() => setCur(c)}
                 className={cn("relative rounded-full px-5 py-1.5 font-display text-sm font-extrabold transition-colors", cur === c ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
               >
-                {cur === c && <m.span layoutId="cur-pill" className="absolute inset-0 rounded-full bg-primary shadow-[0_3px_0_var(--primary-edge)]" transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }} />}
                 <span className="relative">{c === "UZS" ? t("uzs") : t("usd")}</span>
               </button>
             ))}
-          </div>
-        </LayoutGroup>
+          </LiquidGroup>
 
         <ul className="swipe-row -mx-4 mt-10 flex gap-4 overflow-x-auto px-4 pt-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 lg:grid-cols-4">
           {cards.map((c, i) => (

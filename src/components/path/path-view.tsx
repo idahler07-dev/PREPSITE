@@ -173,8 +173,10 @@ const GLYPHS = {
 /** Tiny deterministic random, so glyphs sit in the same places on every render. */
 function rand(seed: number) {
   const x = Math.sin(seed * 9301 + 49297) * 233280;
-  return x - Math.floor(x);
+  // Rounded, so the server and the browser print identical style values (no hydration mismatch).
+  return Math.round((x - Math.floor(x)) * 1000) / 1000;
 }
+const r2 = (v: number) => Math.round(v * 100) / 100;
 
 /**
  * Behind each unit: a giant outlined unit number that drifts with scroll
@@ -200,9 +202,9 @@ function UnitBackdrop({ index, rw, height }: { index: number; rw: boolean; heigh
       </m.span>
       {Array.from({ length: 8 }, (_, i) => {
         const side = i % 2 === 0 ? "left" : "right";
-        const x = 3 + rand(index * 31 + i) * 22;
-        const top = 8 + ((i + rand(index * 7 + i)) / 8) * 84;
-        const size = 22 + rand(index * 13 + i) * 26;
+        const x = r2(3 + rand(index * 31 + i) * 22);
+        const top = r2(8 + ((i + rand(index * 7 + i)) / 8) * 84);
+        const size = r2(22 + rand(index * 13 + i) * 26);
         return (
           <span
             key={i}
@@ -212,7 +214,7 @@ function UnitBackdrop({ index, rw, height }: { index: number; rw: boolean; heigh
                 [side]: `${x}%`,
                 top: `${top}%`,
                 fontSize: size,
-                opacity: 0.12 + rand(index * 5 + i) * 0.1,
+                opacity: r2(0.12 + rand(index * 5 + i) * 0.1),
                 "--r": `${Math.round(rand(index * 3 + i) * 40 - 20)}deg`,
                 "--dx": `${Math.round(rand(index + i * 11) * 16 - 8)}px`,
                 "--t": `${7 + rand(index * 17 + i) * 6}s`,
