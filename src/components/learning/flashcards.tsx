@@ -46,7 +46,7 @@ export function Flashcards({ cards }: { cards: Card[] }) {
         <CheckCircle2 className="mx-auto size-10 text-success" aria-hidden />
         <p className="text-lg font-semibold">{cards.length ? t("doneSession") : t("nothingDue")}</p>
         <Button asChild variant="outline">
-          <Link href="/dashboard">{t("back")}</Link>
+          <Link href="/sat">{t("back")}</Link>
         </Button>
       </div>
     );

@@ -83,8 +83,8 @@ export function Showcase() {
         </div>
       </Block>
       <Block title={H.emphasis}>
-        <p className="text-h2 font-semibold">{emphasis.i("Practice")} smarter</p>
-        <p className="text-h2 font-semibold">From 1200 to {emphasis.hl("1500")}</p>
+        <p className="text-h2 font-extrabold">{emphasis.i("Practice")} smarter</p>
+        <p className="text-h2 font-extrabold">From 1200 to {emphasis.hl("1500")}</p>
       </Block>
       <Block title={H.buttons}>
         <div className="flex flex-wrap gap-3">

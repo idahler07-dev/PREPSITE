@@ -86,7 +86,11 @@
     "manage": "Manage",
     "questionBank": "Question bank",
     "drills": "Drills",
-    "tests": "Tests"
+    "tests": "Tests",
+    "path": "Path",
+    "progress": "Progress",
+    "profile": "Profile",
+    "overview": "Overview"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -1971,7 +1975,13 @@
       "study": "Study",
       "practice": "Practice",
       "account": "Account"
-    }
+    },
+    "more": "More",
+    "streak": "{count, plural, one {# day streak} other {# day streak}}",
+    "xp": "{count} XP",
+    "score": "Estimated score {score}",
+    "noScore": "No estimate yet",
+    "daysLeft": "{days, plural, =0 {Test day} one {# day to your SAT} other {# days to your SAT}}"
   },
   "analytics": {
     "title": "Analytics",
@@ -2317,5 +2327,51 @@
     "shareFooter": "Estimated with satify. Not an official score.",
     "easierCap": "The easier Module 2 caps this section at about 600.",
     "rwShort": "R&W"
+  },
+  "path": {
+    "title": "Your path",
+    "unit": "Unit {n}",
+    "start": "Start",
+    "startBubble": "Start",
+    "again": "Practise again",
+    "review": "Review",
+    "lesson": "Lesson {i} of {n}",
+    "mastered": "Mastered",
+    "progress": "{pct}% right so far",
+    "notStarted": "10 questions on this skill",
+    "lockedTitle": "Locked",
+    "lockedBody": "Finish the lessons before this one to open it.",
+    "chest": "Unit review",
+    "chestBody": "10 mixed questions from this unit.",
+    "test": "Unit test",
+    "testBody": "20 questions on this unit, timed.",
+    "reviewNode": "Mistakes due",
+    "reviewBody": "{count, plural, one {# question is} other {# questions are}} ready for another try.",
+    "units": "Units",
+    "jump": "Jump to the current lesson",
+    "rail": {
+      "score": "Estimated score",
+      "noScore": "No score yet",
+      "addScore": "Add a score",
+      "week": "This week",
+      "quests": "Daily quests",
+      "q1": "Answer {n} questions",
+      "q2": "Score 90% on a drill",
+      "q3": "Clear your mistakes",
+      "weak": "Weak spots"
+    },
+    "newUser": {
+      "title": "Find your starting score",
+      "body": "Take a short practice test, or add a score you already have.",
+      "test": "Take a practice test",
+      "have": "I have a score",
+      "skip": "Start at Unit 1"
+    },
+    "past": {
+      "title": "How did it go?",
+      "body": "Your test date has passed. Log your score and pick what's next.",
+      "log": "Log my score",
+      "newDate": "Set a new date"
+    }
   }
 }

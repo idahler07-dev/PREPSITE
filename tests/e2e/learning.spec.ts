@@ -5,10 +5,10 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
   await signIn(page, uniqueEmail("learner"));
   await page.getByRole("button", { name: "Skip for now" }).click();
 
-  // Dashboard: today's plan and the question of the day.
-  await page.goto("/dashboard");
+  // Path: daily quests and the question of the day.
+  await page.goto("/sat?start=1");
   // While a route streams in, React keeps a hidden copy of the page for a moment.
-  await expect(page.getByText("Today's plan", { exact: true }).filter({ visible: true })).toBeVisible();
+  await expect(page.getByText("Daily quests", { exact: true }).filter({ visible: true })).toBeVisible();
   await page.getByRole("button", { name: "Question of the day" }).click();
   await expect(page).toHaveURL(/\/test\//);
   // The daily question changes by date: multiple choice or a typed answer.
@@ -42,8 +42,8 @@ test("plan, mistake notebook, vocabulary and notification settings", async ({ pa
 test("a student who already took a practice test enters the score with the rulers", async ({ page }) => {
   await signIn(page, uniqueEmail("score"));
   await page.getByRole("button", { name: "Skip for now" }).click();
-  await page.goto("/dashboard");
-  await page.getByRole("button", { name: "Enter my score" }).click();
+  await page.goto("/sat");
+  await page.getByRole("button", { name: "I have a score" }).click();
 
   const math = page.getByRole("slider", { name: "Math" });
   const rw = page.getByRole("slider", { name: "Reading and Writing" });

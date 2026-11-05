@@ -8,7 +8,7 @@ export function EmptyState({ pose = "think", title, body, action, className }: {
     <div className={cn("rounded-[20px] border border-dashed bg-surface px-6 py-12 text-center", className)}>
       <div className="mx-auto flex max-w-sm flex-col items-center gap-3">
         <Mascot pose={pose} className="w-28" />
-        {title && <h2 className="text-h3 font-semibold">{title}</h2>}
+        {title && <h2 className="text-h3 font-bold">{title}</h2>}
         <p className="text-muted-foreground">{body}</p>
         {action && <div className="mt-2">{action}</div>}
       </div>

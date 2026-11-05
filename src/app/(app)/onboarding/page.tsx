@@ -8,7 +8,7 @@ export default async function OnboardingPage() {
   const t = await getTranslations("onboarding");
   return (
     <div className="mx-auto max-w-xl px-6 py-12 lg:py-16">
-      <h1 className="text-h2 font-semibold">{t("title")}</h1>
+      <h1 className="text-h2 font-extrabold">{t("title")}</h1>
       <p className="mt-3 text-lead text-muted-foreground">{t("subtitle")}</p>
       <div className="my-8 flex items-end gap-4">
         <Mascot pose="point" className="w-24 shrink-0" />

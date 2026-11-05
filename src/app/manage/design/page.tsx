@@ -15,7 +15,7 @@ export default async function DesignPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-h2 font-semibold">{TITLE}</h1>
+        <h1 className="text-h2 font-extrabold">{TITLE}</h1>
         <p className="text-muted-foreground">{SUB}</p>
       </header>
       <LogoConcepts />

@@ -10,7 +10,7 @@ export function PageHeader({ title, description, actions, eyebrow }: { title: Re
     <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0 space-y-2">
         {eyebrow && <p className="text-small font-semibold tracking-wide text-primary uppercase">{eyebrow}</p>}
-        <h1 className="text-h2 font-semibold lg:text-h1">{title}</h1>
+        <h1 className="text-h2 font-extrabold lg:text-h1">{title}</h1>
         {description && <p className="max-w-[70ch] text-lead text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}

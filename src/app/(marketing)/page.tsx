@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import {
   BarChart3,
@@ -54,7 +55,9 @@ export default async function HomePage() {
   const tx = await getTranslations("taxonomy");
   const b = await getTranslations("billing");
   const user = await getCurrentUser();
-  const startHref = user ? "/dashboard" : "/login";
+  // Signed-in students go straight to their path (brief §5).
+  if (user) redirect("/sat");
+  const startHref = "/login";
 
   const skills: MarqueeItem[] = DOMAINS.flatMap((d) =>
     d.skills.map((k) => ({ label: tx(`skills.${k as "INFERENCES"}`), icon: DOMAIN_ICON[d.key] ?? Target, tone: d.section === "RW" ? ("rw" as const) : ("math" as const) })),
@@ -79,7 +82,7 @@ export default async function HomePage() {
       <Bento />
       <TestDay />
       <Testimonials />
-      <Pricing signedIn={!!user} startHref={startHref} canPay={{ UZS: enabledProviders("UZS").length > 0, USD: enabledProviders("USD").length > 0 }} planNames={planNames} />
+      <Pricing signedIn={false} startHref={startHref} canPay={{ UZS: enabledProviders("UZS").length > 0, USD: enabledProviders("USD").length > 0 }} planNames={planNames} />
 
       <section aria-labelledby="faq-title" className="mx-auto w-full max-w-[720px] px-4 py-20 sm:px-6 lg:py-28">
         <h2 id="faq-title" className="mb-8 text-center font-display text-3xl font-extrabold tracking-tight sm:text-5xl">

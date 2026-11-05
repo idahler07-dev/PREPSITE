@@ -18,7 +18,7 @@ test("public pages", async ({ page }) => {
 test("student pages", async ({ page }) => {
   await signIn(page, uniqueEmail("a11y"));
   await page.getByRole("button", { name: "Skip for now" }).click();
-  for (const url of ["/dashboard", "/practice", "/mocks", "/plan", "/review", "/vocab", "/billing", "/settings"]) await check(page, url);
+  for (const url of ["/sat", "/practice", "/mocks", "/plan", "/review", "/vocab", "/billing", "/settings"]) await check(page, url);
   await page.goto("/practice");
   await page.getByRole("button", { name: "10 math questions" }).click();
   await page.waitForURL(/\/test\//);

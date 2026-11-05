@@ -92,7 +92,7 @@ test("the owner sees Manage and can open it", async ({ page }) => {
   await signIn(page, "owner2@e2e.test");
   if (page.url().includes("onboarding"))
     await page.getByRole("button", { name: "Skip for now" }).click();
-  await page.goto("/dashboard");
+  await page.goto("/sat");
   await page.getByRole("button", { name: "Account" }).click();
   await page.getByRole("menuitem", { name: "Manage" }).click();
   await expect(page).toHaveURL(/\/manage$/);

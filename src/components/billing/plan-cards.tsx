@@ -43,7 +43,7 @@ export function PlanCards({ plans, compact = false }: { plans: PlanCardData[]; c
             {p.badge && (
               <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm">{p.badge}</span>
             )}
-            <h3 className="text-h3 font-semibold">{p.name}</h3>
+            <h3 className="text-h3 font-bold">{p.name}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>
             <p className="mt-5 font-mono text-[2rem] leading-none font-semibold tracking-tight tabular-nums" data-numeric>
               {p.price}
@@ -79,7 +79,7 @@ export function PlanSummary({ id, name, price, children }: { id: string; name: s
   return (
     <m.div layoutId={`plan-card-${id}`} transition={spring.soft} className="border-gradient mb-6 rounded-lg p-5 shadow-md">
       <div className="flex items-baseline justify-between gap-4">
-        <p className="text-h3 font-semibold">{name}</p>
+        <p className="text-h3 font-bold">{name}</p>
         <p className="font-mono text-xl font-semibold tabular-nums" data-numeric>
           {price}
         </p>

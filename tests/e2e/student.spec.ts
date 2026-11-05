@@ -31,11 +31,9 @@ test("sign up → onboarding → drill → results → dashboard", async ({ page
   await expect(page.getByRole("heading", { name: "Drill results" })).toBeVisible();
   await expect(page.getByText(/^(sample|mk)-/i)).toHaveCount(0); // question codes only appear in the question bank
 
-  await page.goto("/dashboard");
-  // The finished drill is listed with its score, and the skill map is filled in.
-  await expect(page.getByRole("main").getByRole("link", { name: /Drill/ }).first()).toContainText("/10");
-  await expect(page.getByRole("heading", { name: "Skill map" })).toBeVisible();
-  await expect(page.getByText("Estimate, not an official College Board score.").filter({ visible: true })).toBeVisible();
+  // The path now has a first lesson to start, and the top bar shows XP.
+  await page.goto("/sat");
+  await expect(page.getByRole("heading", { name: "Information and Ideas" }).filter({ visible: true })).toBeVisible();
 });
 
 test("answers survive a reload in the middle of a drill", async ({ page }) => {

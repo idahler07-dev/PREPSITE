@@ -39,7 +39,7 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-12 sm:px-6 lg:py-16">
       <header className="mx-auto mb-10 max-w-2xl text-center">
-        <h1 className="text-h1 font-semibold">{t.rich("pricing.title", emphasis)}</h1>
+        <h1 className="text-h1 font-extrabold">{t.rich("pricing.title", emphasis)}</h1>
         <p className="mt-4 text-lead text-muted-foreground">{t("pricing.subtitle")}</p>
         <div className="mt-6 flex flex-col items-center gap-2">
           <CurrencySwitch
@@ -73,7 +73,7 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
       </div>
 
       <section className="mt-14" aria-labelledby="compare">
-        <h2 id="compare" className="mb-4 text-h2 font-semibold">
+        <h2 id="compare" className="mb-4 text-h2 font-extrabold">
           {c("title")}
         </h2>
         <div className="overflow-x-auto rounded-lg border bg-surface shadow-sm">
