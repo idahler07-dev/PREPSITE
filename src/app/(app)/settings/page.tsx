@@ -10,7 +10,7 @@ import { DeleteAccount } from "@/components/account/delete-account";
 import { NotificationSettings } from "@/components/account/notification-settings";
 import { resolvePrefs } from "@/config/notifications";
 import { db } from "@/lib/db";
-import { DarkModeSwitch, ThemeToggle } from "@/components/layout/theme-toggle";
+import { ThemeSegmented } from "@/components/layout/theme-toggle";
 import { SoundSwitch } from "@/components/account/sound-switch";
 
 export async function generateMetadata() {
@@ -21,7 +21,6 @@ export async function generateMetadata() {
 export default async function SettingsPage() {
   const user = await requireUser("/settings");
   const t = await getTranslations("settings");
-  const tt = await getTranslations("theme");
   const prefs = await db.user.findUnique({ where: { id: user.id }, select: { notificationPrefs: true, telegramId: true } });
   return (
     <Container className="max-w-3xl space-y-6">
@@ -44,17 +43,13 @@ export default async function SettingsPage() {
         <CardHeader>
           <CardTitle>{t("preferences")}</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">{t("theme")}</span>
-            <ThemeToggle signedIn />
+        <CardContent className="divide-y divide-border">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+            <span className="text-sm font-semibold">{t("theme")}</span>
+            <ThemeSegmented signedIn />
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">{tt("darkMode")}</span>
-            <DarkModeSwitch signedIn />
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">{t("sound")}</span>
+          <div className="flex items-center justify-between gap-3 pt-4">
+            <span className="text-sm font-semibold">{t("sound")}</span>
             <SoundSwitch />
           </div>
         </CardContent>

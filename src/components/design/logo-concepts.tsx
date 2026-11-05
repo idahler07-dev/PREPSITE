@@ -26,7 +26,7 @@ export function LogoConcepts() {
   return (
     <section className="space-y-6 rounded-[20px] border bg-background p-6 lg:p-10" aria-labelledby="logo-concepts">
       <div>
-        <h2 id="logo-concepts" className="text-h3 font-semibold">
+        <h2 id="logo-concepts" className="text-h3 font-bold">
           Logo concepts
         </h2>
         <p className="max-w-[70ch] text-muted-foreground">{WHY}</p>

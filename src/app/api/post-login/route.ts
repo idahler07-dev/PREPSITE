@@ -8,5 +8,5 @@ export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.redirect(new URL("/login", url));
   const next = safeNextPath(url.searchParams.get("next"));
-  return NextResponse.redirect(new URL(!user.onboardedAt ? "/onboarding" : (next ?? "/dashboard"), url));
+  return NextResponse.redirect(new URL(!user.onboardedAt ? "/onboarding" : (next ?? "/sat"), url));
 }

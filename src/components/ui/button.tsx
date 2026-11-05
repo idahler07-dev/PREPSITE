@@ -4,32 +4,35 @@ import { cn } from "@/lib/utils"
 import { Slot } from "radix-ui"
 
 /**
- * Buttons: primary (cobalt), secondary (outline), ghost, accent (coral:
- * upgrade/pricing CTAs only), destructive and link. Hover lifts 2px, press
- * scales to 0.97 and springs back (CSS spring easing; see lib/motion.ts).
+ * Buttons. Primary is chunky: a darker 4px bottom edge, and the face presses
+ * down 2px onto it. Secondary/outline are a quiet bordered surface. Accent
+ * (amber) is for streak/XP moments only.
  */
+const press =
+  "motion-safe:active:translate-y-[2px] transition-[transform,background-color,border-color,color,box-shadow,filter] duration-150 ease-out"
+
 const buttonVariants = cva(
-  "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold whitespace-nowrap outline-none select-none transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.34,1.4,0.64,1)] focus-visible:ring-[3px] focus-visible:ring-ring/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.97]",
+  "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-lg font-display text-sm font-bold whitespace-nowrap outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-b from-[color-mix(in_oklab,var(--primary),white_16%)] to-primary text-primary-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_6px_16px_-6px_color-mix(in_oklab,var(--primary),transparent_35%)] hover:to-primary-hover hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_10px_22px_-6px_color-mix(in_oklab,var(--primary),transparent_30%)]",
-        secondary: "glass-card text-foreground hover:border-primary/40",
-        outline: "glass-card text-foreground hover:border-primary/40",
-        ghost: "text-foreground hover:bg-surface-2 motion-safe:hover:translate-y-0",
-        accent: "bg-accent text-accent-foreground shadow-sm hover:shadow-md hover:brightness-105",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:brightness-110 focus-visible:ring-destructive/40",
-        link: "h-auto px-0 text-primary underline-offset-4 hover:underline motion-safe:hover:translate-y-0 motion-safe:active:scale-100",
+        default: `${press} bg-primary text-primary-foreground shadow-[0_4px_0_var(--primary-edge)] hover:brightness-[1.06] active:shadow-[0_2px_0_var(--primary-edge)]`,
+        secondary: `${press} border border-border bg-surface text-foreground shadow-[0_3px_0_var(--border)] hover:bg-surface-2 active:shadow-[0_1px_0_var(--border)]`,
+        outline: `${press} border border-border bg-surface text-foreground shadow-[0_3px_0_var(--border)] hover:bg-surface-2 active:shadow-[0_1px_0_var(--border)]`,
+        ghost: "transition-colors text-foreground hover:bg-surface-2",
+        accent: `${press} bg-accent text-accent-foreground shadow-[0_4px_0_color-mix(in_oklab,var(--accent),black_22%)] hover:brightness-105 active:shadow-[0_2px_0_color-mix(in_oklab,var(--accent),black_22%)]`,
+        destructive: `${press} bg-destructive text-destructive-foreground shadow-[0_4px_0_color-mix(in_oklab,var(--destructive),black_25%)] hover:brightness-110 active:shadow-[0_2px_0_color-mix(in_oklab,var(--destructive),black_25%)] focus-visible:ring-destructive/40`,
+        link: "h-auto px-0 font-sans font-semibold text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 has-[>svg]:px-3.5",
-        xs: "h-7 gap-1 px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-12 px-6 text-base has-[>svg]:px-5",
-        icon: "size-10",
-        "icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-8",
-        "icon-lg": "size-12",
+        default: "h-11 px-5 has-[>svg]:px-4",
+        xs: "h-7 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-9 gap-1.5 rounded-md px-3.5 has-[>svg]:px-3",
+        lg: "h-13 px-7 text-base has-[>svg]:px-6",
+        icon: "size-11",
+        "icon-xs": "size-7 rounded-md [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-9 rounded-md",
+        "icon-lg": "size-13",
       },
     },
     defaultVariants: {

@@ -1,14 +1,6 @@
-"use client";
-
-import { m, useReducedMotion } from "motion/react";
 import { Mascot, type MascotPose } from "./mascot";
 
-/** Pip gently floating (404, error pages). */
+/** The owl on the 404 and error pages (it bobs on its own). */
 export function FloatingMascot({ pose, className }: { pose: MascotPose; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <m.div animate={reduce ? undefined : { y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-      <Mascot pose={pose} className={className} />
-    </m.div>
-  );
+  return <Mascot pose={pose} className={className} />;
 }

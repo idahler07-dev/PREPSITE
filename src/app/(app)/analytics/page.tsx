@@ -1,5 +1,5 @@
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Play } from "lucide-react";
+import { Play, Flame, CheckCircle2, Target } from "lucide-react";
 import { requireUser } from "@/server/auth/session";
 import { getDashboardStats } from "@/server/stats/dashboard";
 import { db } from "@/lib/db";
@@ -81,10 +81,34 @@ export default async function AnalyticsPage() {
     return total && m.completedAt ? [{ label: format.dateTime(m.completedAt, { month: "short", day: "numeric" }), value: total.score }] : [];
   });
   const card = "rounded-[20px] p-5 lg:p-8";
+  // Longest run of days with practice in the activity window.
+  let best = 0;
+  let run = 0;
+  for (const d of activity) {
+    run = (d.count ?? 0) > 0 ? run + 1 : 0;
+    best = Math.max(best, run);
+  }
+  const stats = [
+    { label: t("stats.best"), value: t("stats.days", { count: Math.max(best, s.streak) }), tone: "text-accent-ink", icon: Flame },
+    { label: t("stats.current"), value: t("stats.days", { count: s.streak }), tone: "text-foreground", icon: Flame },
+    { label: t("stats.answered"), value: String(s.answered), tone: "text-primary", icon: CheckCircle2 },
+    { label: t("stats.accuracy"), value: s.graded ? `${Math.round((s.correct / s.graded) * 100)}%` : "–", tone: "text-correct-ink", icon: Target },
+  ];
 
   return (
     <Container>
       {header}
+      <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {stats.map((st) => (
+          <div key={st.label} className="flex flex-col-reverse rounded-3xl border border-border bg-surface p-4 shadow-sm">
+            <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <st.icon className="size-4" aria-hidden />
+              {st.label}
+            </dt>
+            <dd className={`font-display text-2xl font-extrabold tabular-nums ${st.tone}`}>{st.value}</dd>
+          </div>
+        ))}
+      </dl>
       <div className="grid gap-6 lg:grid-cols-3">
         <SpotlightCard className={`${card} lg:col-span-2`}>
           <h2 className="font-semibold">{t("daily.title")}</h2>

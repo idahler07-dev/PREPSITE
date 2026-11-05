@@ -16,44 +16,52 @@
 /* .light lets a panel show the light theme inside dark mode (e.g. /admin/design). */
 :root,
 .light {
-  --radius: 14px;
-  --radius-large: 20px;
+  /* Radii: 12 inputs, 16 buttons, 24 cards, 32 hero. */
+  --radius: 16px;
+  --radius-large: 24px;
   --radius-input: 12px;
+  --radius-hero: 32px;
 
-  --background: #ffffff;
-  --section-tint: #f0f6ff;
-  --foreground: #0b1f3b;
+  --background: #f7f8fa;
+  --section-tint: #eef1f6;
+  --foreground: #0f172a;
   --surface: #ffffff;
-  --surface-2: #eef4fd;
+  --surface-2: #f1f4f9;
   --muted: var(--surface-2);
-  --muted-foreground: #52607a;
-  --border: #dce6f5;
-  --input: #7e86a0;
+  --muted-foreground: #5b6b82;
+  --border: #e5e7eb;
+  --input: #7b8598;
 
-  --primary: #2747f5;
-  --primary-hover: #1c36d1;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-edge: #1d4ed8;
   --primary-foreground: #ffffff;
-  --primary-soft: #e8eeff;
+  --primary-soft: #eaf1fe;
   --ring: var(--primary);
 
-  --accent: #ff6b4a;
-  --accent-foreground: #0b1f3b;
-  --accent-soft: #ffede7;
-  --accent-ink: #cf2600;
+  /* Amber: streaks and XP only. */
+  --accent: #f59e0b;
+  --accent-foreground: #0f172a;
+  --accent-soft: #fef3c7;
+  --accent-ink: #a34a06;
 
-  --highlight: #b7a6ff;
+  /* Marked for review. */
+  --review: #7c3aed;
+  --review-soft: #ede9fe;
+  --highlight: #7c3aed;
 
-  --correct: #12b886;
-  --correct-soft: #e0f7ef;
-  --correct-ink: #0c7b5a;
-  --warning-fill: #f2a20c;
-  --warning-soft: #fdf0d6;
-  --warning-ink: #946307;
-  --danger: #e5484d;
-  --danger-soft: #fde8e8;
-  --danger-ink: #c8191f;
-  /* Text on bright fills (amber flag, mint, coral) in both themes. */
-  --on-fill: #0b1f3b;
+  --correct: #16a34a;
+  --correct-soft: #dcfce7;
+  --correct-ink: #147a3b;
+  --correct-edge: #15803d;
+  --warning-fill: #f59e0b;
+  --warning-soft: #fef3c7;
+  --warning-ink: #a34a06;
+  --danger: #dc2626;
+  --danger-soft: #fee2e2;
+  --danger-ink: #b91c1c;
+  --danger-edge: #b91c1c;
+  --on-fill: #0f172a;
 
   /* shadcn names, mapped onto the palette. */
   --secondary: var(--surface-2);
@@ -70,124 +78,130 @@
   --card-foreground: var(--foreground);
   --popover: var(--surface);
   --popover-foreground: var(--foreground);
-  --flag: var(--warning-fill);
-  --flagged: var(--warning-fill);
+  --flag: var(--review);
+  --flagged: var(--review);
   --wrong: var(--danger);
   --wrong-soft: var(--danger-soft);
   --wrong-ink: var(--danger-ink);
-  --highlight-yellow: #fbe6a6;
-  --hl-yellow: #fbe6a6;
-  --hl-blue: #cfdcff;
-  --hl-pink: #ffd9cf;
-  --hl-text: #0b1f3b;
+  --highlight-yellow: #fdeaa0;
+  --hl-yellow: #fdeaa0;
+  --hl-blue: #cfe0ff;
+  --hl-pink: #fcd5e4;
+  --hl-text: #0f172a;
 
-  /* Layered shadows: a tight one plus a large faint one. */
-  --elev-sm: 0 1px 2px rgb(11 31 59 / 0.06), 0 6px 16px -8px rgb(11 31 59 / 0.08);
-  --elev-md: 0 1px 2px rgb(11 31 59 / 0.06), 0 12px 32px -12px rgb(11 31 59 / 0.14);
-  --elev-lg: 0 2px 4px rgb(11 31 59 / 0.06), 0 24px 56px -16px rgb(11 31 59 / 0.22);
-  --glass: rgb(255 255 255 / 0.72);
-  --overlay: rgb(11 31 59 / 0.32);
-  --dot-color: rgb(11 31 59 / 0.09);
-  --mesh-opacity: 0.55;
+  /* Soft layered shadows: a hairline plus a wide, faint one. */
+  --elev-sm: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 12px -6px rgb(15 23 42 / 0.06);
+  --elev-md: 0 1px 2px rgb(15 23 42 / 0.05), 0 12px 28px -12px rgb(15 23 42 / 0.12);
+  --elev-lg: 0 2px 4px rgb(15 23 42 / 0.05), 0 28px 60px -20px rgb(15 23 42 / 0.2);
+  --glass: rgb(247 248 250 / 0.78);
+  --overlay: rgb(15 23 42 / 0.36);
+  --dot-color: rgb(15 23 42 / 0.07);
+  --mesh-opacity: 0.5;
 
-  /* Glass: translucent surfaces with a bright top edge. Blur is only for things that float over content. */
-  --glass-top: rgb(255 255 255 / 0.82);
-  --glass-bottom: rgb(255 255 255 / 0.58);
-  --glass-hi: rgb(255 255 255 / 0.95);
-  --glass-edge: rgb(255 255 255 / 0.7);
-  --glass-shadow: 0 12px 32px -14px rgb(27 45 106 / 0.3), 0 1px 3px rgb(27 45 106 / 0.08);
-  --ambient-a: rgb(150 168 255 / 0.7);
-  --ambient-b: rgb(218 192 255 / 0.62);
-  --ambient-c: rgb(255 204 188 / 0.55);
+  /* Cards are solid now; the names stay so older components keep working. */
+  --glass-top: var(--surface);
+  --glass-bottom: var(--surface);
+  --glass-hi: rgb(255 255 255 / 0);
+  --glass-edge: var(--border);
+  --glass-shadow: var(--elev-sm);
+  --ambient-a: transparent;
+  --ambient-b: transparent;
+  --ambient-c: transparent;
 
-  /* Charts: correct / incorrect series (validated with the dataviz palette checks against each surface). */
-  --chart-correct: #12b886;
-  --chart-incorrect: #e5484d;
+  --chart-correct: #16a34a;
+  --chart-incorrect: #dc2626;
 
-  /* Pip, the mascot: a lilac highlighter with a cobalt cap. A touch brighter in dark. */
-  --mascot-body: #a897ff;
-  --mascot-light: #d3c9ff;
-  --mascot-dark: #7a66f2;
-  --mascot-cap: #2747f5;
-  --mascot-cap-light: #5c76ff;
-  --mascot-cap-dark: #1c32c4;
-  --mascot-accent: #ff6b4a;
+  /* Legacy mascot vars (the owl is an SVG file now). */
+  --mascot-body: #2563eb;
+  --mascot-light: #eaf1fe;
+  --mascot-dark: #1d4ed8;
+  --mascot-cap: #2563eb;
+  --mascot-cap-light: #5b8cff;
+  --mascot-cap-dark: #1d4ed8;
+  --mascot-accent: #f59e0b;
   --mascot-eye: #ffffff;
-  --mascot-ink: #0b1f3b;
+  --mascot-ink: #0f172a;
 }
 
 .dark {
-  --background: #0a1020;
-  --section-tint: #0e1630;
-  --foreground: #eef2ff;
-  --surface: #121b36;
-  --surface-2: #1b2749;
-  --muted-foreground: #9aa8c9;
-  --border: #26345a;
-  --input: #6b7ba6;
+  --background: #0e1117;
+  --section-tint: #12161e;
+  --foreground: #e8ecf2;
+  --surface: #171c26;
+  --surface-2: #1e2431;
+  --muted-foreground: #94a0b4;
+  --border: #262d3a;
+  --input: #6b7588;
 
-  --primary: #8aa0ff;
-  --primary-hover: #a6b6ff;
-  --primary-foreground: #090c16;
-  --primary-soft: #1a2760;
+  --primary: #5b8cff;
+  --primary-hover: #7aa2ff;
+  --primary-edge: #3d6fe8;
+  --primary-foreground: #0b1020;
+  --primary-soft: #1a2540;
 
-  --accent: #ff8a6e;
-  --accent-foreground: #090c16;
-  --accent-soft: #3a1e17;
-  --accent-ink: #ff8a6e;
+  --accent: #fbbf24;
+  --accent-foreground: #0b1020;
+  --accent-soft: #2e2512;
+  --accent-ink: #fbbf24;
 
-  --highlight: #9c88ff;
+  --review: #a78bfa;
+  --review-soft: #241d3d;
+  --highlight: #a78bfa;
 
-  --correct: #3dd6a3;
-  --correct-soft: #0f3329;
-  --correct-ink: #3dd6a3;
-  --warning-fill: #ffc145;
-  --warning-soft: #3a2c0c;
-  --warning-ink: #ffc145;
-  --danger: #ff6b70;
-  --danger-soft: #3d1619;
-  --danger-ink: #ff6b70;
-  --on-fill: #090c16;
+  --correct: #4ade80;
+  --correct-soft: #10291b;
+  --correct-ink: #4ade80;
+  --correct-edge: #22a95a;
+  --warning-fill: #fbbf24;
+  --warning-soft: #2e2512;
+  --warning-ink: #fbbf24;
+  --danger: #f87171;
+  --danger-soft: #331718;
+  --danger-ink: #f87171;
+  --danger-edge: #d94c4c;
+  --on-fill: #0b1020;
 
-  --success-foreground: #090c16;
-  --destructive-foreground: #090c16;
+  --success-foreground: #0b1020;
+  --destructive-foreground: #0b1020;
   --highlight-yellow: #5c4c14;
-  --hl-yellow: #e9cf6e;
-  --hl-blue: #b3c3ff;
-  --hl-pink: #ffc2b3;
-  --hl-text: #090c16;
+  --hl-yellow: #f2d675;
+  --hl-blue: #b7cbff;
+  --hl-pink: #f9bfd5;
+  --hl-text: #0b1020;
 
-  /* Dark mode: 1px borders plus a faint inner top highlight instead of shadows. */
-  --elev-sm: inset 0 1px 0 rgb(255 255 255 / 0.05);
-  --elev-md: inset 0 1px 0 rgb(255 255 255 / 0.06);
-  --elev-lg: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 24px 56px -16px rgb(0 0 0 / 0.6);
-  --glass: rgb(14 22 46 / 0.8);
-  --overlay: rgb(3 8 20 / 0.6);
-  --dot-color: rgb(236 242 255 / 0.07);
-  --mesh-opacity: 0.4;
-  --glass-top: rgb(29 41 78 / 0.8);
-  --glass-bottom: rgb(20 30 62 / 0.92);
-  --glass-hi: rgb(255 255 255 / 0.1);
-  --glass-edge: rgb(255 255 255 / 0.1);
-  --glass-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.65);
-  --ambient-a: rgb(60 90 255 / 0.3);
-  --ambient-b: rgb(143 107 255 / 0.2);
-  --ambient-c: rgb(255 120 90 / 0.17);
-  --chart-correct: #26ad83;
-  --chart-incorrect: #f2585e;
-  --mascot-body: #b3a4ff;
-  --mascot-light: #ddd5ff;
-  --mascot-dark: #846ff7;
-  --mascot-cap: #4a66ff;
-  --mascot-cap-light: #7f95ff;
-  --mascot-cap-dark: #2a3fd6;
-  --mascot-accent: #ff8a6e;
+  /* Dark mode: lighter surfaces and hairline borders instead of glows. */
+  --elev-sm: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --elev-md: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  --elev-lg: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 56px -20px rgb(0 0 0 / 0.55);
+  --glass: rgb(14 17 23 / 0.78);
+  --overlay: rgb(5 7 12 / 0.6);
+  --dot-color: rgb(232 236 242 / 0.06);
+  --mesh-opacity: 0.35;
+  --glass-top: var(--surface);
+  --glass-bottom: var(--surface);
+  --glass-hi: rgb(255 255 255 / 0.04);
+  --glass-edge: var(--border);
+  --glass-shadow: none;
+  --ambient-a: transparent;
+  --ambient-b: transparent;
+  --ambient-c: transparent;
+  --chart-correct: #3fbf6f;
+  --chart-incorrect: #ef6b6b;
+  --mascot-body: #5b8cff;
+  --mascot-light: #1a2540;
+  --mascot-dark: #3d6fe8;
+  --mascot-cap: #5b8cff;
+  --mascot-cap-light: #7aa2ff;
+  --mascot-cap-dark: #3d6fe8;
+  --mascot-accent: #fbbf24;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  /* No monospace anywhere: numbers use Inter with tabular figures. */
+  --font-mono: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Type scale (rem): hero / section / h2 / h3 / lead / body / small / label. */
   --text-hero: 4rem;
@@ -240,6 +254,11 @@
   --color-accent-soft: var(--accent-soft);
   --color-accent-ink: var(--accent-ink);
   --color-highlight: var(--highlight);
+  --color-review: var(--review);
+  --color-review-soft: var(--review-soft);
+  --color-primary-edge: var(--primary-edge);
+  --color-correct-edge: var(--correct-edge);
+  --color-danger-edge: var(--danger-edge);
   --color-correct: var(--correct);
   --color-correct-soft: var(--correct-soft);
   --color-correct-ink: var(--correct-ink);
@@ -269,8 +288,9 @@
   --radius-sm: 8px;
   --radius-md: var(--radius-input);
   --radius-lg: var(--radius);
-  --radius-xl: var(--radius-large);
-  --radius-2xl: 24px;
+  --radius-xl: 20px;
+  --radius-2xl: var(--radius-large);
+  --radius-3xl: var(--radius-hero);
 
   --shadow-xs: var(--elev-sm);
   --shadow-sm: var(--elev-sm);
@@ -311,11 +331,20 @@
   h2,
   h3 {
     text-wrap: balance;
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    word-spacing: 0.06em;
   }
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  /* Numbers use tabular figures (set per element: Inter's tnum also widens punctuation, so not on body). */
   /* Numbers that change (timers, scores, stats) keep their width. */
   time,
   [data-numeric] {
-    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
   :focus-visible {
@@ -414,7 +443,7 @@ html[data-glass="solid"] .glass {
 
 /* Gradient text (cobalt → coral): the hero headline only. */
 .text-gradient {
-  background-image: linear-gradient(100deg, var(--primary) 10%, var(--highlight) 55%, var(--accent) 95%);
+  background-image: linear-gradient(100deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 70%, var(--review)) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -425,7 +454,7 @@ html[data-glass="solid"] .glass {
   border: 1.5px solid transparent;
   background:
     linear-gradient(var(--surface), var(--surface)) padding-box,
-    linear-gradient(135deg, var(--primary), var(--highlight), var(--accent)) border-box;
+    linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 55%, var(--review))) border-box;
 }
 
 /* Bento cards: a faint radial spotlight follows the cursor (set by <Spotlight>). */
@@ -674,9 +703,9 @@ html {
 
 /* Test passages stay plain and exam-like: the UI sans, no decorative emphasis. */
 .passage {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.65;
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
 
 /* Passage highlights (test screen). Dark text on light tints in both themes. */
@@ -1188,6 +1217,201 @@ mark.hl {
     mask-image: none;
   }
   .marquee__track {
+    animation: none;
+  }
+}
+
+/* ---------- Landing (brief §3) ---------- */
+
+/* Lenis smooth scroll (marketing pages only). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Morphing liquid blobs behind the hero: blurred, 10–20% opacity. Mobile keeps them still. */
+.blob {
+  position: absolute;
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  filter: blur(56px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+.dark .blob {
+  opacity: 0.13;
+}
+@media (min-width: 768px) {
+  .blob {
+    animation: blob-morph 22s ease-in-out infinite alternate;
+  }
+  .blob:nth-child(2) {
+    animation-duration: 28s;
+    animation-delay: -7s;
+  }
+  .blob:nth-child(3) {
+    animation-duration: 34s;
+    animation-delay: -15s;
+  }
+}
+@keyframes blob-morph {
+  0% {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    border-radius: 63% 37% 38% 62% / 55% 61% 39% 45%;
+    transform: translate(4%, -5%) rotate(28deg) scale(1.08);
+  }
+  100% {
+    border-radius: 36% 64% 52% 48% / 62% 38% 62% 38%;
+    transform: translate(-4%, 4%) rotate(-18deg) scale(0.95);
+  }
+}
+
+/* Film grain over the hero, so flat colour doesn't look digital. */
+.grain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.dark .grain {
+  opacity: 0.08;
+  filter: invert(1);
+}
+
+/* Floating chips and the current path node pulse. */
+@keyframes node-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+.node-pulse {
+  animation: node-pulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Horizontal swipe rows (pricing on phones): snap, no scrollbar. */
+.swipe-row {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.swipe-row::-webkit-scrollbar {
+  display: none;
+}
+.swipe-row > * {
+  scroll-snap-align: center;
+}
+
+/* Chunky range slider (score calculator). The filled part comes from --fill (0–100%). */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+.range::-webkit-slider-runnable-track {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--track, var(--primary)) var(--fill, 0%), var(--surface-2) var(--fill, 0%));
+}
+.range::-moz-range-track {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--track, var(--primary)) var(--fill, 0%), var(--surface-2) var(--fill, 0%));
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  margin-top: -8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 3px solid var(--track, var(--primary));
+  box-shadow: 0 3px 0 color-mix(in oklab, var(--track, var(--primary)), black 22%);
+  transition: transform 150ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 3px solid var(--track, var(--primary));
+  box-shadow: 0 3px 0 color-mix(in oklab, var(--track, var(--primary)), black 22%);
+}
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.range:focus-visible {
+  outline: none;
+}
+.range:focus-visible::-webkit-slider-thumb {
+  outline: 3px solid color-mix(in oklab, var(--ring), transparent 50%);
+  outline-offset: 2px;
+}
+
+/* Path backdrop: SAT glyphs drift slowly behind the road. */
+@keyframes glyph-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translate3d(var(--dx, 6px), -14px, 0) rotate(calc(var(--r, 0deg) + 8deg));
+  }
+}
+.path-glyph {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  animation: glyph-drift var(--t, 9s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.unit-numeral {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke-width: 2.5px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Landing ribbons: endless text bands crossing like tape. */
+.ribbon {
+  --gap: 1.5rem;
+  gap: var(--gap);
+  overflow: hidden;
+}
+.ribbon__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--gap);
+  min-width: 100%;
+  justify-content: space-around;
+  animation: marquee-scroll 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ribbon__track {
     animation: none;
   }
 }

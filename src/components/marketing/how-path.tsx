@@ -40,7 +40,7 @@ export function HowPath({ steps }: { steps: { title: string; body: string }[] })
                 <Icon className="size-7" aria-hidden />
               </span>
               <div className="space-y-2">
-                <h3 className="text-h3 font-semibold">{s.title}</h3>
+                <h3 className="text-h3 font-bold">{s.title}</h3>
                 <p className="max-w-[34ch] text-muted-foreground">{s.body}</p>
               </div>
             </m.li>

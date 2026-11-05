@@ -5,7 +5,7 @@ import { LogoConcepts } from "@/components/design/logo-concepts";
 export const metadata = { title: "Design system", robots: { index: false } };
 
 const TITLE = "Design system";
-const SUB = "Every component, token and Pip pose in both themes. See DESIGN.md for the rules.";
+const SUB = "Every component, token and owl pose in both themes. See DESIGN.md for the rules.";
 const LIGHT = "Light";
 const DARK = "Dark";
 
@@ -15,7 +15,7 @@ export default async function DesignPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-h2 font-semibold">{TITLE}</h1>
+        <h1 className="text-h2 font-extrabold">{TITLE}</h1>
         <p className="text-muted-foreground">{SUB}</p>
       </header>
       <LogoConcepts />

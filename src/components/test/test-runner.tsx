@@ -42,6 +42,8 @@ import { QuestionHeader } from "./question-header";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { AiTutor } from "@/components/tutor/ai-tutor";
+import { Owl } from "@/components/mascot/owl";
+import { LessonCheckBar, LessonHeader } from "./lesson-chrome";
 
 type Annotations = Record<string, { highlights: Highlight[]; note: string | null }>;
 const HL_COLORS: HighlightColor[] = ["yellow", "blue", "pink"];
@@ -93,6 +95,10 @@ export function TestRunner({
   const reopenCalcKey = `reopen-calc:${attemptId}`;
   const [refOpen, setRefOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  // Bluebook's ABC tool and the draggable divider between passage and question (percent of the width).
+  const [elimMode, setElimMode] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const [split, setSplit] = useState(50);
   const annotationTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const submittedRef = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
@@ -233,6 +239,9 @@ export function TestRunner({
     else void document.documentElement.requestFullscreen?.().catch(() => toast.error(t("tools.fullscreenFailed")));
   };
 
+  const immediate = initial.feedbackMode === "IMMEDIATE";
+  // Untimed practice with checking (Path lessons, drills, review) gets the lesson screen (brief §7); tests keep Bluebook (§8).
+  const lessonMode = immediate && initial.kind !== "MOCK" && !initial.module.deadline && !initial.returnTo;
   const item = items[index]!;
   const isMath = (initial.module.section ?? item.section) === "MATH";
   const annotation = annotations[item.questionId];
@@ -280,6 +289,20 @@ export function TestRunner({
     }
   }
 
+  function lessonContinue() {
+    if (index === items.length - 1) void submitNow("user");
+    else go(index + 1);
+  }
+  const checkedCount = items.filter((it) => it.feedback).length;
+  const combo = (() => {
+    let n = 0;
+    for (const it of items) {
+      if (!it.feedback) continue;
+      n = it.feedback.isCorrect ? n + 1 : 0;
+    }
+    return n;
+  })();
+
   const go = useCallback(
     (i: number) => {
       setView("question");
@@ -304,9 +327,20 @@ export function TestRunner({
           if (e.shiftKey) toggleEliminate(key);
           else selectChoice(key);
         }
-      } else if (k === "arrowright" || k === "n") {
+      } else if (k === "enter" && view === "question" && immediate) {
+        if (target.closest("button, a")) return;
         e.preventDefault();
-        next();
+        if (item.feedback) {
+          if (lessonMode) lessonContinue();
+        } else void check();
+      } else if (k === "e" && !lessonMode && item.type === "MCQ") {
+        e.preventDefault();
+        setElimMode((x) => !x);
+      } else if (k === "arrowright" || k === "n") {
+        if (lessonMode && !item.feedback) return;
+        e.preventDefault();
+        if (lessonMode) lessonContinue();
+        else next();
       } else if (k === "arrowleft" || k === "p") {
         e.preventDefault();
         prev();
@@ -340,7 +374,6 @@ export function TestRunner({
   const navItems = useMemo(() => items.map((it) => ({ answered: !!it.answer, flagged: it.flagged })), [items]);
   const unanswered = navItems.filter((n) => !n.answered).length;
   const marked = navItems.filter((n) => n.flagged).length;
-  const immediate = initial.feedbackMode === "IMMEDIATE";
   const title =
     initial.kind === "DRILL" || !initial.module.section
       ? t("drillTitle")
@@ -355,6 +388,129 @@ export function TestRunner({
     } catch {}
   };
 
+  if (lessonMode && view === "question") {
+    const fb = item.feedback;
+    const barState = fb ? (fb.isCorrect ? "right" : "wrong") : item.answer ? "ready" : "empty";
+    const owlPose = fb ? (fb.isCorrect ? "correct" : "oops") : "thinking";
+    const wrong = !!fb && !fb.isCorrect;
+    return (
+      <div className="flex h-dvh flex-col bg-background">
+        <LessonHeader
+          done={checkedCount}
+          total={items.length}
+          combo={combo}
+          onClose={() => setConfirmExit(true)}
+          tools={
+            <TestToolbar
+              showSound
+              isMath={isMath}
+              calcOpen={calcOpen}
+              onCalculator={() => setCalcOpen((x) => !x)}
+              onReference={() => setRefOpen(true)}
+              lineReader={lineReader}
+              onLineReader={() => setLineReader((x) => !x)}
+              fullscreen={fullscreen}
+              onFullscreen={toggleFullscreen}
+              canZoomIn={zoom < ZOOM_STEPS.at(-1)!}
+              canZoomOut={zoom > ZOOM_STEPS[0]!}
+              onZoom={setZoomLevel}
+              onShortcuts={() => setShortcutsOpen(true)}
+            />
+          }
+        />
+        <div className="flex min-h-0 flex-1">
+          {isMath && (
+            <CalculatorPanel
+              open={calcOpen}
+              onClose={() => setCalcOpen(false)}
+              desmosKey={desmosKey}
+              demoKey={desmosDemoKey}
+              attemptId={attemptId}
+              initialState={initial.calculatorState}
+              side={calcSide}
+              onNeedsReload={null}
+              onSideChange={setCalcSide}
+            />
+          )}
+          <main ref={mainRef} id="main" className="min-h-0 min-w-0 flex-1 overflow-y-auto" style={{ fontSize: `${zoom}rem` }}>
+            <m.div
+              key={item.position}
+              className="mx-auto w-full max-w-[720px] space-y-6 px-4 pt-16 pb-8 sm:px-6"
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 28 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={spring.soft}
+            >
+              <div className="relative rounded-3xl border-2 border-border bg-surface p-5 sm:p-6">
+                <div className="absolute -top-[64px] right-4 w-[76px]">
+                  <Owl pose={owlPose} className="w-full" />
+                </div>
+                {item.passageHtml && <RichText html={item.passageHtml} className="passage mb-4 border-b border-border pb-4" />}
+                <RichText html={item.stemHtml} className="q-stem font-medium" />
+              </div>
+              <m.div
+                key={wrong ? "wrong" : "open"}
+                initial={false}
+                animate={wrong && !reduceMotion ? { x: [0, -4, 4, -4, 4, -4, 0] } : { x: 0 }}
+                transition={{ duration: 0.36 }}
+              >
+                {item.type === "MCQ" ? (
+                  <ChoiceList
+                    variant="lesson"
+                    name={`q-${item.position}`}
+                    choices={item.choices}
+                    value={item.answer}
+                    eliminated={item.eliminated}
+                    disabled={!!fb}
+                    correctAnswers={fb?.correctAnswers}
+                    onSelect={selectChoice}
+                    onToggleEliminate={toggleEliminate}
+                  />
+                ) : (
+                  <SprInput value={item.answer ?? ""} onChange={(v) => update(item.position, { answer: v || null })} disabled={!!fb} />
+                )}
+              </m.div>
+            </m.div>
+          </main>
+        </div>
+        <LessonCheckBar
+          key={item.position}
+          state={barState}
+          answer={fb?.correctAnswers.join(", ") ?? ""}
+          explanationHtml={fb?.explanationHtml ?? null}
+          rationaleHtml={fb?.rationaleHtml ?? null}
+          checking={checking || submitting}
+          last={index === items.length - 1}
+          attemptId={attemptId}
+          questionId={item.questionId}
+          canCheck={!!item.answer && !(item.type === "SPR" && !!validateSprInput(item.answer ?? ""))}
+          onCheck={() => void check()}
+          onContinue={lessonContinue}
+        />
+        <AlertDialog open={confirmExit} onOpenChange={setConfirmExit}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("exitConfirm.title")}</AlertDialogTitle>
+              <AlertDialogDescription>{t("exitConfirm.body")}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t("exitConfirm.stay")}</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  await autosave.flush();
+                  router.push("/sat");
+                }}
+              >
+                {t("exitConfirm.leave")}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        {lineReader && <LineReader />}
+        {isMath && <ReferenceSheet open={refOpen} onOpenChange={setRefOpen} />}
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-dvh flex-col bg-background">
       {/* Top bar: exit and title | timer | tools. The timer stays centered. */}
@@ -364,7 +520,18 @@ export function TestRunner({
             {initial.returnTo ? <ChevronLeft aria-hidden /> : <LogOut aria-hidden />}
             <span className="hidden sm:inline">{initial.returnTo ? t("backToBank") : t("exit")}</span>
           </Button>
-          <h1 className="hidden min-w-0 truncate text-sm font-semibold sm:block">{title}</h1>
+          <div className="hidden min-w-0 sm:block">
+            <h1 className="truncate text-sm font-bold">{title}</h1>
+            <Popover>
+              <PopoverTrigger className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-foreground">
+                {t("directions")}
+                <ChevronDown className="size-3.5" aria-hidden />
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-96 text-sm leading-relaxed">
+                {t(`directionsBody.${isMath ? "MATH" : "RW"}`)}
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
         <div>
           {initial.module.deadline && (
@@ -397,6 +564,10 @@ export function TestRunner({
           />
         </div>
       </header>
+      {/* Bluebook's dashed rule, with a thin bar for how many questions are answered. */}
+      <div aria-hidden className="relative h-[3px] shrink-0 bg-[repeating-linear-gradient(90deg,var(--foreground)_0_10px,transparent_10px_14px,var(--primary)_14px_24px,transparent_24px_28px)] opacity-80">
+        <m.span className="absolute inset-y-0 left-0 bg-primary" initial={false} animate={{ width: `${(navItems.filter((n) => n.answered).length / items.length) * 100}%` }} transition={spring.soft} />
+      </div>
 
       {/* Main */}
       {/* One scroll area on phones; side-by-side panes that scroll separately on large screens. */}
@@ -451,7 +622,11 @@ export function TestRunner({
           </div>
         ) : (
           // Keyed by question so both panes start at the top for each question.
-          <div key={item.position} className={cn("grid grid-cols-[minmax(0,1fr)] lg:h-full", item.passageHtml && "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:divide-x")}>
+          <div
+            key={item.position}
+            className={cn("grid grid-cols-[minmax(0,1fr)] lg:h-full", item.passageHtml && "lg:grid-cols-[minmax(0,var(--split))_12px_minmax(0,1fr)]")}
+            style={{ ["--split" as string]: `${split}%` }}
+          >
             {item.passageHtml && (
               <section aria-label={t("passage")} className="border-b bg-surface px-5 py-4 sm:p-6 lg:overflow-y-auto lg:border-b-0">
                 <div className="mb-3 flex flex-wrap items-center gap-1">
@@ -505,9 +680,36 @@ export function TestRunner({
                 />
               </section>
             )}
+            {item.passageHtml && (
+              <button
+                type="button"
+                aria-label={t("resizePanes")}
+                onPointerDown={(e) => {
+                  const box = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  const move = (ev: PointerEvent) => setSplit(Math.min(70, Math.max(30, ((ev.clientX - box.left) / box.width) * 100)));
+                  const up = () => {
+                    window.removeEventListener("pointermove", move);
+                    window.removeEventListener("pointerup", up);
+                  };
+                  window.addEventListener("pointermove", move);
+                  window.addEventListener("pointerup", up);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowLeft") setSplit((v) => Math.max(30, v - 5));
+                  if (e.key === "ArrowRight") setSplit((v) => Math.min(70, v + 5));
+                }}
+                className="group relative hidden cursor-col-resize lg:block"
+              >
+                <span className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-foreground/80" />
+                <span className="absolute top-1/2 left-1/2 grid h-10 w-[18px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-md bg-foreground transition-transform group-hover:scale-110">
+                  <span className="h-4 w-[2px] rounded bg-background/70" />
+                </span>
+              </button>
+            )}
             <section aria-label={t("question")} className="px-5 py-5 sm:p-6 lg:overflow-y-auto">
               <div className="mx-auto w-full max-w-[680px] space-y-5 max-sm:space-y-4 sm:rounded-2xl sm:border sm:bg-surface sm:p-7 sm:shadow-[var(--glass-shadow)]">
-                <QuestionHeader number={index + 1} item={item} onToggleFlag={toggleFlag} />
+                <QuestionHeader number={index + 1} item={item} onToggleFlag={toggleFlag} elimMode={elimMode} onToggleElim={() => setElimMode((x) => !x)} />
 
                 <RichText html={item.stemHtml} className="q-stem" />
 
@@ -521,6 +723,7 @@ export function TestRunner({
                     correctAnswers={item.feedback?.correctAnswers}
                     onSelect={selectChoice}
                     onToggleEliminate={toggleEliminate}
+                    showEliminate={elimMode}
                   />
                 ) : (
                   <SprInput value={item.answer ?? ""} onChange={(v) => update(item.position, { answer: v || null })} disabled={!!item.feedback} />
@@ -623,8 +826,10 @@ export function TestRunner({
                 ["A–D / 1–4", "choose"],
                 ["→ / N", "next"],
                 ["← / P", "previous"],
+                ["Enter", "check"],
                 ["M", "mark"],
-                ["E", "eliminate"],
+                ["E", "eliminator"],
+                ["Shift + A–D", "eliminate"],
                 ["H", "highlight"],
                 ["L", "lineReader"],
                 ["C", "calculator"],

@@ -3,4 +3,4 @@
  * (<meta name="theme-color">, the PWA manifest). Keep in sync with
  * --background in src/app/globals.css (pnpm check:contrast verifies it).
  */
-export const THEME_COLORS = { light: "#FFFFFF", dark: "#0A1020" } as const;
+export const THEME_COLORS = { light: "#F7F8FA", dark: "#0E1117" } as const;

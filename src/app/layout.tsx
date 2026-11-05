@@ -7,7 +7,7 @@ import siteConfig from "@site";
 import { ServiceWorkerRegister } from "@/components/layout/sw-register";
 import { Providers } from "@/components/providers";
 import { THEME_COLORS } from "@/config/theme-colors";
-import { geist, geistMono, instrumentSerif } from "./fonts";
+import { inter, jakarta, sourceSerif } from "./fonts";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -53,7 +53,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
+    <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${jakarta.variable} ${sourceSerif.variable}`}>
       <body className="min-h-dvh font-sans">
         <NextIntlClientProvider>
           <Providers nonce={nonce}>{children}</Providers>

@@ -5,6 +5,8 @@ import { Bookmark } from "lucide-react";
 import type { RunnerItem } from "@/server/attempts/service";
 import { cn } from "@/lib/utils";
 
+const ELIM_LABEL = "ABC";
+
 const DOT = {
   EASY: "bg-correct",
   MEDIUM: "bg-flagged",
@@ -19,10 +21,15 @@ export function QuestionHeader({
   number,
   item,
   onToggleFlag,
+  elimMode,
+  onToggleElim,
 }: {
   number: number;
   item: RunnerItem;
   onToggleFlag: () => void;
+  /** Bluebook's ABC cross-out tool (MCQ only). */
+  elimMode?: boolean;
+  onToggleElim?: () => void;
 }) {
   const t = useTranslations("test");
   const tx = useTranslations("taxonomy");
@@ -55,14 +62,14 @@ export function QuestionHeader({
         className={cn(
           "inline-flex h-8 min-w-8 shrink-0 items-center justify-center gap-1.5 rounded-full px-2 text-sm sm:px-3 font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
           item.flagged
-            ? "bg-flagged/20 text-warning-ink"
+            ? "bg-review-soft text-review"
             : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
         )}
       >
         <Bookmark
           className={cn(
             "size-4",
-            item.flagged && "fill-flagged text-warning-ink",
+            item.flagged && "fill-current text-review",
           )}
           aria-hidden
         />
@@ -70,6 +77,21 @@ export function QuestionHeader({
           {item.flagged ? t("marked") : t("markForReview")}
         </span>
       </button>
+      {onToggleElim && item.type === "MCQ" && (
+        <button
+          type="button"
+          onClick={onToggleElim}
+          aria-pressed={elimMode}
+          aria-label={t("eliminator")}
+          title={t("eliminator")}
+          className={cn(
+            "inline-flex h-7 shrink-0 items-center rounded-md border-2 px-1.5 text-[11px] font-extrabold line-through decoration-2 transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
+            elimMode ? "border-primary bg-primary text-primary-foreground" : "border-foreground/70 text-foreground hover:bg-surface-2",
+          )}
+        >
+          {ELIM_LABEL}
+        </button>
+      )}
     </div>
   );
 }

@@ -86,7 +86,11 @@
     "manage": "Manage",
     "questionBank": "Question bank",
     "drills": "Drills",
-    "tests": "Tests"
+    "tests": "Tests",
+    "path": "Path",
+    "progress": "Progress",
+    "profile": "Profile",
+    "overview": "Overview"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -181,8 +185,8 @@
     },
     "bank": {
       "label": "Question bank",
-      "title": "Stuck? <i>Ask</i> Pip.",
-      "body": "Every question is written and checked by teachers. When you get one wrong, Pip explains it step by step, and every explanation is checked against the answer key.",
+      "title": "Stuck? <i>Ask</i> the owl.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, the owl explains it step by step, and every explanation is checked against the answer key.",
       "cta": "Try a drill"
     },
     "plan": {
@@ -261,6 +265,10 @@
       "mistake": {
         "q": "I think a question has a mistake. What do I do?",
         "a": "Use the “Report a problem” button after you answer. A teacher reviews every report."
+      },
+      "pay": {
+        "q": "How do I pay?",
+        "a": "With Payme or Click in so'm. Each plan is a one-time payment, so nothing renews on its own."
       }
     }
   },
@@ -408,7 +416,7 @@
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
     },
-    "tip": "Tip from Pip: a test date helps me spread your practice across the weeks you have."
+    "tip": "Tip: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -454,7 +462,7 @@
     "practiceNow": "Practice now",
     "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
     "streakTitle": "Day streak",
-    "streakReminder": "Pip misses you. Ten questions keeps your streak alive.",
+    "streakReminder": "The owl misses you. Ten questions keeps your streak alive.",
     "daysToTest": "Days to test",
     "noTestDate": "Set your test date",
     "estimateEmpty": "Take a practice test to see your estimate.",
@@ -536,7 +544,7 @@
     },
     "markForReview": "Mark for review",
     "marked": "Marked for review",
-    "eliminator": "Cross out answer choices",
+    "eliminator": "Answer eliminator",
     "eliminatorOn": "Cross-out mode on",
     "crossOut": "Cross out choice {choice}",
     "undoCrossOut": "Undo cross-out of choice {choice}",
@@ -613,7 +621,9 @@
       "lineReader": "Toggle the line reader (↑ ↓ to move it)",
       "calculator": "Open or close the calculator (Math)",
       "reference": "Open the reference sheet (Math)",
-      "fullscreen": "Full screen"
+      "fullscreen": "Full screen",
+      "check": "Check answer",
+      "eliminator": "Answer eliminator on or off"
     },
     "passage": "Passage",
     "question": "Question",
@@ -724,7 +734,27 @@
       "explainDifferently": "Explain differently",
       "askFollowUp": "Ask a follow-up"
     },
-    "backToBank": "Back to bank"
+    "backToBank": "Back to bank",
+    "lesson": {
+      "close": "Close lesson",
+      "progress": "{done} of {total} done",
+      "combo": "{count} in a row",
+      "pick": "Pick an answer first.",
+      "check": "Check",
+      "continue": "Continue",
+      "finish": "Finish",
+      "correct": "Nice one! +10 XP",
+      "wrong": "Not quite. Answer: {answer}",
+      "why": "Why?",
+      "hideWhy": "Hide",
+      "steps": "How to get there"
+    },
+    "directions": "Directions",
+    "directionsBody": {
+      "RW": "The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table or graph. Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).",
+      "MATH": "The questions in this section address a number of important math skills. Use of a calculator is permitted for all questions. Unless otherwise indicated, all variables and expressions represent real numbers, figures are drawn to scale, and all figures lie in a plane."
+    },
+    "resizePanes": "Resize panes"
   },
   "results": {
     "title": "Results",
@@ -873,11 +903,11 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Pip can't find that page",
+    "notFoundTitle": "We can’t find that page",
     "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Pip dropped a few things. Try again, and if it keeps happening, let us know.",
+    "errorBody": "Something slipped. Try again, and if it keeps happening, let us know.",
     "goDashboard": "Go to my dashboard",
     "tryAgain": "Try again"
   },
@@ -1632,7 +1662,7 @@
     }
   },
   "tutor": {
-    "title": "Ask Pip",
+    "title": "Ask the owl",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1640,7 +1670,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Pip is thinking…",
+    "thinking": "Thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1654,7 +1684,7 @@
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
     },
-    "askPip": "Ask Pip",
+    "askPip": "Ask the owl",
     "stepByStep": "Step by step"
   },
   "billing": {
@@ -1857,14 +1887,20 @@
     "myNote": "My note",
     "noteSaved": "Saved",
     "noteUnsaved": "Not saved yet — click outside the box to save",
-    "emptyCta": "Start a drill"
+    "emptyCta": "Start a drill",
+    "hero": {
+      "due": "due today",
+      "dueLabel": "{count, plural, one {question is} other {questions are}} ready for another try.",
+      "caught": "All caught up",
+      "caughtBody": "Nothing to review today. Wrong answers come back here on a schedule."
+    }
   },
   "vocab": {
     "title": "Vocabulary",
-    "subtitle": "Words in context, on a spaced schedule. Due now: {due} · learning: {learning} · new: {unseen}",
+    "subtitle": "Words in context, on a spaced schedule.",
     "doneSession": "Session done! Come back tomorrow for the next cards.",
     "nothingDue": "No cards are due right now.",
-    "back": "Back to dashboard",
+    "back": "Back to your path",
     "error": "Could not save. Please try again.",
     "progress": "Card {current} of {total}",
     "card": "Flashcard",
@@ -1876,7 +1912,16 @@
       "hard": "Hard",
       "good": "Good",
       "easy": "Easy"
-    }
+    },
+    "stats": {
+      "due": "Due",
+      "learning": "Learning",
+      "new": "New"
+    },
+    "flip": "Flip card",
+    "doneTitle": "Deck cleared!",
+    "reviewed": "{count, plural, one {# card} other {# cards}} reviewed",
+    "keys": "Keys 1 to 4"
   },
   "coach": {
     "title": "Study plan",
@@ -1967,7 +2012,13 @@
       "study": "Study",
       "practice": "Practice",
       "account": "Account"
-    }
+    },
+    "more": "More",
+    "streak": "{count, plural, one {# day streak} other {# day streak}}",
+    "xp": "{count} XP",
+    "score": "Estimated score {score}",
+    "noScore": "No estimate yet",
+    "daysLeft": "{days, plural, =0 {Test day} one {# day to your SAT} other {# days to your SAT}}"
   },
   "analytics": {
     "title": "Analytics",
@@ -2013,7 +2064,14 @@
       "bar": "{difficulty}: {seconds}s average over {count} questions",
       "overTarget": "(slower than the target pace)"
     },
-    "skillsByAccuracy": "Accuracy by skill"
+    "skillsByAccuracy": "Accuracy by skill",
+    "stats": {
+      "best": "Best streak",
+      "current": "Current streak",
+      "answered": "Answered",
+      "accuracy": "Accuracy",
+      "days": "{count, plural, one {# day} other {# days}}"
+    }
   },
   "bank": {
     "title": "Question bank",
@@ -2071,5 +2129,311 @@
     "next": "Next",
     "flagged": "Flagged",
     "spr": "Typed answer"
+  },
+  "landing": {
+    "nav": {
+      "how": "How it works",
+      "calc": "Score calculator",
+      "pricing": "Pricing",
+      "start": "Start free",
+      "login": "Log in",
+      "dashboard": "Open Satify"
+    },
+    "hero": {
+      "badge": "Built for the Digital SAT",
+      "title": "SAT prep that actually",
+      "words": [
+        "sticks.",
+        "works.",
+        "feels fun.",
+        "pays off."
+      ],
+      "sub": "Bite-size lessons, real test practice, and an owl that keeps you going.",
+      "start": "Start free",
+      "calc": "Calculate my score",
+      "alt": "The Satify learning path: finished lessons, today's lesson and what comes next"
+    },
+    "mock": {
+      "brand": "satify",
+      "nav": [
+        "Path",
+        "Practice",
+        "Tests",
+        "Progress",
+        "Mistakes",
+        "Profile"
+      ],
+      "unit": "Unit 3: Algebra",
+      "unitTitle": "Systems of equations",
+      "start": "Start",
+      "days": "31",
+      "streak": "12",
+      "xp": "340",
+      "score": "1340",
+      "scoreMax": "/ 1600",
+      "scoreDelta": "+50",
+      "week": "Week",
+      "weekDays": [
+        "M",
+        "T",
+        "W",
+        "T",
+        "F",
+        "S",
+        "S"
+      ],
+      "weekCount": "3/5",
+      "quests": "Daily quests",
+      "quest1": "20 questions",
+      "quest1n": "14/20",
+      "quest2": "90% on a drill",
+      "quest2n": "1/1",
+      "quest3": "Review mistakes",
+      "quest3n": "0/4",
+      "weak": "Weak spots",
+      "weak1": "Inferences",
+      "weak1n": "30%",
+      "weak2": "Trig",
+      "weak2n": "22%",
+      "chipStreak": "12",
+      "chipScore": "+50",
+      "chipCorrect": "Correct!"
+    },
+    "marquee": {
+      "label": "Every skill on the test, one at a time",
+      "features": [
+        "Bluebook-style tests",
+        "Desmos built in",
+        "Mistakes come back",
+        "Daily quests",
+        "Streaks and XP",
+        "Owl explanations",
+        "Vocabulary decks",
+        "Score calculator",
+        "Works on any phone",
+        "Dark mode"
+      ]
+    },
+    "stats": {
+      "skills": "SAT skills",
+      "practice": "practice on paid plans",
+      "free": "Free",
+      "freeLabel": "to start"
+    },
+    "how": {
+      "title": "How it works",
+      "steps": [
+        {
+          "title": "Find your score",
+          "body": "A short check shows where you stand."
+        },
+        {
+          "title": "Get your path",
+          "body": "Lessons ordered by what moves your score most."
+        },
+        {
+          "title": "Practise daily",
+          "body": "Five minutes a day. The owl keeps the streak alive."
+        },
+        {
+          "title": "Take real tests",
+          "body": "Full adaptive tests on a Bluebook-style screen."
+        }
+      ],
+      "q": "Most octopuses opened the jar, and many opened it faster on later attempts.",
+      "choices": [
+        "Faster on later tries",
+        "Refused other food",
+        "Only a few opened it"
+      ],
+      "estimate": "Your estimate",
+      "rw": "Reading and Writing",
+      "math": "Math"
+    },
+    "bento": {
+      "title": "Everything that moves your score",
+      "bluebook": {
+        "title": "Bluebook practice",
+        "body": "The same screen, tools and timer as test day."
+      },
+      "owl": {
+        "title": "Owl explanations",
+        "body": "Wrong answer? Three short steps, not an essay.",
+        "steps": [
+          "Find the claim",
+          "Match the evidence",
+          "Cross out the rest"
+        ]
+      },
+      "mistakes": {
+        "title": "Mistakes come back",
+        "due": "4",
+        "dueLabel": "due today"
+      },
+      "streaks": {
+        "title": "Streaks and quests"
+      },
+      "climb": {
+        "title": "Watch your score climb"
+      },
+      "calc": {
+        "title": "Score calculator",
+        "cta": "Try it"
+      }
+    },
+    "testday": {
+      "title": "Feels like test day.",
+      "section": "Section 1, Module 1: Reading and Writing",
+      "directions": "Directions",
+      "hide": "Hide",
+      "show": "Show",
+      "tools": [
+        "Highlights & Notes",
+        "Line Reader",
+        "Text Size",
+        "More"
+      ],
+      "passage": "Marine biologist Dilnoza Karimova studies how octopuses solve problems. In one experiment, she placed food inside a jar sealed with a screw-top lid. Most octopuses opened the jar within minutes, and <hl>many opened it faster on later attempts</hl>. Karimova argues that this improvement shows the animals were not simply trying random movements but were remembering what had worked before.",
+      "number": "4",
+      "mark": "Mark for Review",
+      "prompt": "Which choice best states the reason Karimova believes the octopuses were remembering their earlier attempts?",
+      "choices": [
+        "The octopuses opened the jar more quickly on later attempts.",
+        "The octopuses refused food that was not placed in a jar.",
+        "Only a few octopuses were able to open the jar at all.",
+        "The jar was sealed with a lid that was difficult to turn."
+      ],
+      "check": "Check answer",
+      "hint": "Press A to D to choose",
+      "correct": "Nice one! +10 XP",
+      "wrong": "Not quite. Answer: A",
+      "again": "Try again",
+      "elim": "Cross out choice {key}",
+      "resize": "Resize panes"
+    },
+    "testimonials": {
+      "title": "Students say"
+    },
+    "pricing": {
+      "title": "Start free. Go further when ready.",
+      "uzs": "UZS",
+      "usd": "USD",
+      "free": "Free",
+      "freePrice": "0",
+      "freeNote": "{count} questions a day",
+      "start": "Start",
+      "choose": "Choose",
+      "best": "Best value",
+      "monthlyNote": "Unlimited practice",
+      "testdayNote": "Until your SAT",
+      "perDay": "≈ {amount} a day",
+      "pay": "Payme or Click. No automatic renewals.",
+      "soon": "Coming soon"
+    },
+    "faq": {
+      "title": "Questions"
+    },
+    "final": {
+      "title": "Your first lesson takes 5 minutes.",
+      "cta": "Start free"
+    },
+    "ribbon": {
+      "a": [
+        "Practise daily",
+        "Bluebook-ready",
+        "Five minutes a day",
+        "Mistakes come back",
+        "Streaks and XP",
+        "Built for the Digital SAT"
+      ],
+      "b": [
+        "Reading and Writing",
+        "Math",
+        "Desmos built in",
+        "Real test timing",
+        "Owl explanations",
+        "Score calculator"
+      ]
+    }
+  },
+  "calc": {
+    "metaTitle": "SAT Score Calculator (Digital SAT)",
+    "metaDescription": "Estimate your Digital SAT score from right answers in each module, or see what you need for your target score. Free, instant, no sign-up.",
+    "title": "SAT score calculator",
+    "sub": "Move the sliders. Your score updates as you go.",
+    "modeEstimate": "My score",
+    "modeTarget": "What do I need?",
+    "rw": "Reading and Writing",
+    "math": "Math",
+    "m1": "Module 1",
+    "m2": "Module 2",
+    "route": "Module 2 was",
+    "harder": "Harder",
+    "easier": "Easier",
+    "of": "of {n}",
+    "minus": "One fewer",
+    "plus": "One more",
+    "total": "Total",
+    "sectionRange": "200–800",
+    "note": "Estimate only — not an official College Board score.",
+    "cta": "Practise to raise it",
+    "share": "Share my score",
+    "shared": "Image saved",
+    "target": "Target score",
+    "need": "You need about",
+    "needRow": "{correct} of {of} right",
+    "needHint": "on the harder Module 2 in each section",
+    "reached": "Target reached!",
+    "away": "{points} points to go",
+    "shareTitle": "My estimated SAT score",
+    "shareFooter": "Estimated with satify. Not an official score.",
+    "easierCap": "The easier Module 2 caps this section at about 600.",
+    "rwShort": "R&W"
+  },
+  "path": {
+    "title": "Your path",
+    "unit": "Unit {n}",
+    "start": "Start",
+    "startBubble": "Start",
+    "again": "Practise again",
+    "review": "Review",
+    "lesson": "Lesson {i} of {n}",
+    "mastered": "Mastered",
+    "progress": "{pct}% right so far",
+    "notStarted": "10 questions on this skill",
+    "lockedTitle": "Locked",
+    "lockedBody": "Finish the lessons before this one to open it.",
+    "chest": "Unit review",
+    "chestBody": "10 mixed questions from this unit.",
+    "test": "Unit test",
+    "testBody": "20 questions on this unit, timed.",
+    "reviewNode": "Mistakes due",
+    "reviewBody": "{count, plural, one {# question is} other {# questions are}} ready for another try.",
+    "units": "Units",
+    "jump": "Jump to the current lesson",
+    "rail": {
+      "score": "Estimated score",
+      "noScore": "No score yet",
+      "addScore": "Add a score",
+      "week": "This week",
+      "quests": "Daily quests",
+      "q1": "Answer {n} questions",
+      "q2": "Score 90% on a drill",
+      "q3": "Clear your mistakes",
+      "weak": "Weak spots"
+    },
+    "newUser": {
+      "title": "Find your starting score",
+      "body": "Take a short practice test, or add a score you already have.",
+      "test": "Take a practice test",
+      "have": "I have a score",
+      "skip": "Start at Unit 1"
+    },
+    "past": {
+      "title": "How did it go?",
+      "body": "Your test date has passed. Log your score and pick what's next.",
+      "log": "Log my score",
+      "newDate": "Set a new date"
+    }
   }
 }

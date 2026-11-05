@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
-import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { getCurrentUser, isOwner } from "@/server/auth/session";
-import { AppShell, SIDEBAR_COOKIE, ShellMenuButton, type ShellItem } from "@/components/layout/app-shell";
+import { AppShell, ShellMenuButton, type ShellItem, type ShellTabs } from "@/components/layout/app-shell";
+import { TopStats } from "@/components/layout/top-stats";
+import { topBarStats } from "@/server/stats/topbar";
 import { Logo } from "@/components/layout/logo";
-import { CountdownChip } from "@/components/layout/countdown-chip";
 import { CommandPaletteButton } from "@/components/layout/command-palette-button";
 import { CommandPaletteHost } from "@/components/layout/command-palette-host";
 import { ThemeOrb, ThemeSync } from "@/components/layout/theme-toggle";
@@ -15,7 +15,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CookieNotice } from "@/components/layout/cookie-notice";
 import { DemoBanner, showDemoBanner } from "@/components/layout/demo-banner";
 
-/** Signed-in app pages: sidebar (desktop) / side menu from the ☰ button (phones, tablets), top bar with countdown and search. */
+/** Signed-in app pages: five destinations in a slim sidebar (desktop) or bottom tab bar (phones), and a top bar with days to the SAT, streak, XP and estimated score. */
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser();
   const demo = showDemoBanner() ? <DemoBanner /> : null;
@@ -36,25 +36,47 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   }
 
   const t = await getTranslations("nav");
-  // Groups for the sidebar and the phone menu.
+  // The five destinations (brief §5), then their tabs, then everything else.
   const items: ShellItem[] = [
-    { key: "dashboard", href: "/dashboard", label: t("home"), group: "study" },
-    { key: "plan", href: "/plan", label: t("plan"), group: "study" },
-    { key: "analytics", href: "/analytics", label: t("analytics"), group: "study" },
-    { key: "mistakes", href: "/review", label: t("mistakes"), group: "study" },
-    { key: "vocab", href: "/vocab", label: t("vocab"), group: "study" },
-    { key: "bank", href: "/question-bank", label: t("questionBank"), group: "practice" },
-    { key: "practice", href: "/practice", label: t("drills"), group: "practice" },
-    { key: "mocks", href: "/mocks", label: t("mockTests"), group: "practice" },
-    { key: "history", href: "/history", label: t("history"), group: "practice" },
-    { key: "settings", href: "/settings", label: t("settings"), group: "account" },
-    { key: "billing", href: "/billing", label: t("billing"), group: "account" },
-    { key: "resources", href: "/resources", label: t("resources"), group: "account" },
-    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage"), group: "account" } as const] : []),
+    { key: "path", href: "/sat", label: t("path"), match: ["/dashboard", "/plan", "/onboarding"] },
+    { key: "practice", href: "/practice", label: t("practice"), match: ["/question-bank", "/review", "/vocab", "/attempts"] },
+    { key: "tests", href: "/mocks", label: t("tests") },
+    { key: "progress", href: "/analytics", label: t("progress"), match: ["/history"] },
+    { key: "profile", href: "/settings", label: t("profile"), match: ["/billing"] },
+  ];
+  const tabs: ShellTabs[] = [
+    {
+      parent: "/practice",
+      items: [
+        { key: "drills", href: "/practice", label: t("drills"), match: ["/attempts"] },
+        { key: "bank", href: "/question-bank", label: t("questionBank") },
+        { key: "review", href: "/review", label: t("review") },
+        { key: "vocab", href: "/vocab", label: t("vocab") },
+      ],
+    },
+    {
+      parent: "/analytics",
+      items: [
+        { key: "analytics", href: "/analytics", label: t("overview") },
+        { key: "history", href: "/history", label: t("history") },
+      ],
+    },
+    {
+      parent: "/settings",
+      items: [
+        { key: "settings", href: "/settings", label: t("settings") },
+        { key: "billing", href: "/billing", label: t("billing") },
+      ],
+    },
+  ];
+  const more: ShellItem[] = [
+    { key: "plan", href: "/plan", label: t("plan") },
+    { key: "resources", href: "/resources", label: t("resources") },
+    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage") } as const] : []),
   ];
 
-  const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "collapsed";
   const c = await getTranslations("common");
+  const stats = await topBarStats(user.id, user.timeZone);
 
   const topBar = (
     <header className="glass sticky top-0 z-30 border-b">
@@ -67,12 +89,15 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 px-4 sm:px-6">
         <div className="flex items-center gap-1 lg:hidden">
           <ShellMenuButton />
-          <Logo href="/dashboard" />
+          <Logo href="/sat" compact className="sm:hidden" />
+          <Logo href="/sat" className="hidden sm:inline-flex" />
         </div>
-        <div className="ms-auto flex items-center gap-2">
-          <CountdownChip testDate={user.testDate} />
-          <CommandPaletteButton />
-          <ThemeOrb signedIn />
+        <div className="ms-auto flex items-center gap-1 sm:gap-2">
+          <TopStats stats={stats} testDate={user.testDate} />
+          <CommandPaletteButton className="hidden md:inline-flex" />
+          <span className="hidden sm:inline-flex">
+            <ThemeOrb signedIn />
+          </span>
           <ThemeSync theme={user.theme} />
           <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
         </div>
@@ -81,7 +106,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <AppShell items={items} initialCollapsed={collapsed} topBar={topBar} banner={demo}>
+    <AppShell items={items} more={more} tabs={tabs} topBar={topBar} banner={demo}>
       <PageTransition>{children}</PageTransition>
       <CommandPaletteHost signedIn />
     </AppShell>

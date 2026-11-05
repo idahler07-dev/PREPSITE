@@ -15,11 +15,11 @@ export async function SiteHeader() {
   const t = await getTranslations("nav");
   const c = await getTranslations("common");
   const user = await getCurrentUser();
-  const h = await getTranslations("home.nav");
+  const h = await getTranslations("landing.nav");
   const items = [
-    { href: "/#features", label: h("features") },
-    { href: "/pricing", label: h("pricing") },
-    { href: "/faq", label: h("faq") },
+    { href: "/#how", label: h("how") },
+    { href: "/sat/score-calculator", label: h("calc") },
+    { href: "/#pricing", label: h("pricing") },
   ];
 
   return (
@@ -30,7 +30,7 @@ export async function SiteHeader() {
       >
         {c("skipToContent")}
       </a>
-      <div className="mx-auto flex h-full max-w-[1296px] items-center gap-2 px-6 lg:px-12">
+      <div className="mx-auto flex h-full max-w-[1208px] items-center gap-2 px-4 sm:px-6">
         <MobileNav items={items} />
         <Logo href="/" />
         <nav className="ms-6 hidden items-center gap-1 md:flex" aria-label={t("mainNavigation")}>
@@ -47,7 +47,7 @@ export async function SiteHeader() {
             <>
               <ThemeSync theme={user.theme} />
               <Button asChild size="sm" className="hidden sm:inline-flex">
-                <Link href="/dashboard">{t("dashboard")}</Link>
+                <Link href="/sat">{h("dashboard")}</Link>
               </Button>
               <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
             </>
@@ -56,7 +56,7 @@ export async function SiteHeader() {
               <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
                 <Link href="/login">{h("login")}</Link>
               </Button>
-              <Button asChild size="sm" className="rounded-full px-4">
+              <Button asChild size="sm">
                 <Link href="/login">{h("start")}</Link>
               </Button>
             </>

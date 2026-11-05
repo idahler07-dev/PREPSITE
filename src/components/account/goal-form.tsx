@@ -65,7 +65,7 @@ export function GoalForm({
             variant="ghost"
             onClick={async () => {
               await skipOnboarding();
-              router.push("/dashboard");
+              router.push("/sat");
             }}
           >
             {t("skip")}

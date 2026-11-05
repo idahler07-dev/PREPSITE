@@ -1,29 +1,25 @@
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
 
-/** UI, headings and body. Latin + Latin Extended for names like Oʻgʻiloy. */
-export const geist = Geist({
+/** Body and UI. Latin + Latin Extended for names like Oʻgʻiloy. Tabular figures come from `tabular-nums`. */
+export const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-geist",
+  variable: "--font-inter",
 });
 
-/** Numbers, timers and code (tabular figures). */
-export const geistMono = Geist_Mono({
+/** Headings: heavy, rounded-geometric, friendly without being childish. */
+export const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
+  weight: ["600", "700", "800"],
   display: "swap",
-  variable: "--font-geist-mono",
-  // Not needed for the first paint; keeps the critical path to one family.
-  preload: false,
+  variable: "--font-jakarta",
 });
 
-/** Emphasis words in marketing headlines only (italic). */
-export const instrumentSerif = Instrument_Serif({
+/** Reading passages only, so long text reads like the printed test. */
+export const sourceSerif = Source_Serif_4({
   subsets: ["latin", "latin-ext"],
-  weight: "400",
-  style: "italic",
   display: "swap",
-  variable: "--font-instrument-serif",
+  variable: "--font-source-serif",
+  // Only practice and lesson screens use it.
   preload: false,
 });

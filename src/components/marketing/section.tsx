@@ -36,7 +36,7 @@ export function SectionHead({ pill, title, body, cta, align = "split" }: { pill:
     return (
       <div className="mx-auto mb-14 flex max-w-3xl flex-col items-center gap-5 text-center lg:mb-20">
         {pill}
-        <h2 className="text-h1 font-semibold lg:text-section">{title}</h2>
+        <h2 className="text-h1 font-extrabold lg:text-section">{title}</h2>
         <p className="max-w-[60ch] text-lead text-muted-foreground">{body}</p>
         {cta}
       </div>
@@ -45,7 +45,7 @@ export function SectionHead({ pill, title, body, cta, align = "split" }: { pill:
     <div className="mb-14 grid gap-6 lg:mb-20 lg:grid-cols-[1.15fr_1fr] lg:items-end lg:gap-16">
       <div className="space-y-5">
         {pill}
-        <h2 className="text-h1 font-semibold lg:text-section">{title}</h2>
+        <h2 className="text-h1 font-extrabold lg:text-section">{title}</h2>
       </div>
       <div className="space-y-6">
         <p className="max-w-[60ch] text-lead text-muted-foreground">{body}</p>

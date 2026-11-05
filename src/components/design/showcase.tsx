@@ -45,7 +45,7 @@ const PACE = [
   { difficulty: "MEDIUM" as const, seconds: 84, n: 35 },
   { difficulty: "HARD" as const, seconds: 121, n: 18 },
 ];
-const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", charts: "Charts", test: "Answer choices", mascot: "Pip poses", empty: "Empty state", emphasis: "Emphasis" };
+const H = { tokens: "Color tokens", type: "Type scale", buttons: "Buttons", forms: "Inputs, badges, tabs", data: "Data and motion", charts: "Charts", test: "Answer choices", mascot: "Owl poses", empty: "Empty state", emphasis: "Emphasis" };
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -83,8 +83,8 @@ export function Showcase() {
         </div>
       </Block>
       <Block title={H.emphasis}>
-        <p className="text-h2 font-semibold">{emphasis.i("Practice")} smarter</p>
-        <p className="text-h2 font-semibold">From 1200 to {emphasis.hl("1500")}</p>
+        <p className="text-h2 font-extrabold">{emphasis.i("Practice")} smarter</p>
+        <p className="text-h2 font-extrabold">From 1200 to {emphasis.hl("1500")}</p>
       </Block>
       <Block title={H.buttons}>
         <div className="flex flex-wrap gap-3">

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="250" viewBox="0 0 300 250" role="img" aria-label="Satify owl, oops" >
+<style>.blink{transform-box:view-box;transform-origin:150px 160px;animation:blink 5.2s infinite}@keyframes blink{0%,93%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.08)}}@media (prefers-reduced-motion:reduce){.blink{animation:none}}</style><defs>
+<radialGradient id="ohoops" cx="38%" cy="22%" r="90%"><stop offset="0" stop-color="#A9C6FF"></stop><stop offset=".55" stop-color="#4F86F7"></stop><stop offset="1" stop-color="#2347B8"></stop></radialGradient>
+<radialGradient id="odoops" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset=".75" stop-color="#F2F6FF"></stop><stop offset="1" stop-color="#C7D6F5"></stop></radialGradient>
+<radialGradient id="oioops" cx="42%" cy="35%" r="70%"><stop offset="0" stop-color="#FFF6C8"></stop><stop offset=".5" stop-color="#FCD34D"></stop><stop offset="1" stop-color="#F59E0B"></stop></radialGradient>
+<radialGradient id="opoops" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#2E3555"></stop><stop offset="1" stop-color="#05070F"></stop></radialGradient>
+<radialGradient id="oboops" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FF7EB3" stop-opacity=".85"></stop><stop offset="1" stop-color="#FF7EB3" stop-opacity="0"></stop></radialGradient>
+<filter id="ofoops"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
+<clipPath id="ocoops"><path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z"></path></clipPath>
+</defs>
+
+<path d="M78 112Q60 64 70 44Q100 66 118 92Z" fill="url(#ohoops)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M222 112Q240 64 230 44Q200 66 182 92Z" fill="url(#ohoops)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z" fill="url(#ohoops)"></path>
+<g clip-path="url(#ocoops)">
+<path d="M72 230Q80 200 150 198Q220 200 228 230Z" fill="#DCE7FB"></path>
+<path d="M150 124C136 106 108 104 90 114C64 128 58 160 66 182C76 206 104 214 126 206C138 202 146 194 150 186C154 194 162 202 174 206C196 214 224 206 234 182C242 160 236 128 210 114C192 104 164 106 150 124Z" transform="translate(0 7)" fill="#0B1A4A" opacity=".3" filter="url(#ofoops)"></path>
+<ellipse cx="104" cy="104" rx="38" ry="12" fill="#FFFFFF" opacity=".55" transform="rotate(-14 104 104)" filter="url(#ofoops)"></ellipse>
+</g>
+<path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z" fill="none" stroke="#16307F" stroke-width="4"></path>
+<path d="M150 124C136 106 108 104 90 114C64 128 58 160 66 182C76 206 104 214 126 206C138 202 146 194 150 186C154 194 162 202 174 206C196 214 224 206 234 182C242 160 236 128 210 114C192 104 164 106 150 124Z" fill="url(#odoops)" stroke="#16307F" stroke-width="3.5"></path>
+
+<g class="blink">
+<circle cx="112" cy="160" r="31" fill="url(#oioops)"></circle><circle cx="188" cy="160" r="31" fill="url(#oioops)"></circle>
+<circle cx="112" cy="162" r="13" fill="url(#opoops)"></circle><circle cx="188" cy="162" r="13" fill="url(#opoops)"></circle>
+<circle cx="112" cy="160" r="31" fill="none" stroke="#16307F" stroke-width="4"></circle><circle cx="188" cy="160" r="31" fill="none" stroke="#16307F" stroke-width="4"></circle>
+<circle cx="106" cy="154" r="8.5" fill="#FFFFFF"></circle><circle cx="182" cy="154" r="8.5" fill="#FFFFFF"></circle>
+<circle cx="117" cy="168" r="3.8" fill="#FFFFFF"></circle><circle cx="193" cy="168" r="3.8" fill="#FFFFFF"></circle>
+</g>
+
+
+<path d="M88 112q16-8 34-2M178 110q18-6 34 2" stroke="#16307F" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<circle cx="112" cy="160" r="38" fill="none" stroke="#16307F" stroke-width="5"></circle>
+<circle cx="188" cy="160" r="38" fill="none" stroke="#16307F" stroke-width="5"></circle>
+<path d="M146 154q4-5 8 0" stroke="#16307F" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<path d="M92 142l14-14M168 142l14-14" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".6"></path>
+<ellipse cx="80" cy="200" rx="15" ry="8" fill="url(#oboops)"></ellipse><ellipse cx="220" cy="200" rx="15" ry="8" fill="url(#oboops)"></ellipse>
+<path d="M144 194Q150 192 156 194L152 202Q150 204 148 202Z" fill="#FBBF24" stroke="#B45309" stroke-width="2.5" stroke-linejoin="round"></path>
+<path d="M44 186Q24 194 28 212Q32 224 58 220Q50 204 54 192Z" fill="url(#ohoops)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M256 186Q276 194 272 212Q268 224 242 220Q250 204 246 192Z" fill="url(#ohoops)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+
+
+<path d="M246 100q-9 13 0 18q9-5 0-18z" fill="#7DD3FC" stroke="#0EA5E9" stroke-width="2"></path>
+
+
+</svg>

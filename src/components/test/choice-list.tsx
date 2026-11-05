@@ -22,6 +22,8 @@ export function ChoiceList({
   correctAnswers,
   onSelect,
   onToggleEliminate,
+  variant = "bluebook",
+  showEliminate = true,
 }: {
   name: string;
   choices: { key: string; html: string }[];
@@ -32,7 +34,12 @@ export function ChoiceList({
   correctAnswers?: string[];
   onSelect: (key: string) => void;
   onToggleEliminate: (key: string) => void;
+  /** "lesson": chunky tiles with a pressed bottom edge (Path lessons). "bluebook": the test screen. */
+  variant?: "lesson" | "bluebook";
+  /** Bluebook's ABC tool: show the cross-out buttons. */
+  showEliminate?: boolean;
 }) {
+  const lesson = variant === "lesson";
   const t = useTranslations("test");
   // Where the pointer went down on each choice, so the selection fill grows from there.
   const [origin, setOrigin] = useState<Record<string, { x: number; y: number }>>({});
@@ -52,18 +59,30 @@ export function ChoiceList({
                 setOrigin((o) => ({ ...o, [c.key]: { x: e.clientX - r.left, y: e.clientY - r.top } }));
               }}
               className={cn(
-                "relative isolate flex min-h-14 flex-1 cursor-pointer items-center gap-3 overflow-hidden rounded-2xl border bg-surface px-3.5 py-3 transition-[border-color,background-color,box-shadow] duration-150",
+                "relative isolate flex min-h-14 flex-1 cursor-pointer items-center gap-3 overflow-hidden bg-surface px-3.5 py-3 transition-[border-color,background-color,box-shadow,transform] duration-150",
                 "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-                !checked && !selected && "border-border hover:border-primary/50 hover:bg-primary-soft/40 hover:shadow-sm",
-                !checked && selected && "border-primary shadow-[0_0_0_1px_var(--primary)]",
-                checked && isCorrect && "border-correct shadow-[0_0_0_1px_var(--correct)]",
-                wrongPick && "border-danger shadow-[0_0_0_1px_var(--danger)]",
+                lesson
+                  ? cn(
+                      "rounded-2xl border-2",
+                      !disabled && "active:translate-y-[2px]",
+                      !checked && !selected && "border-border shadow-[0_4px_0_var(--border)] hover:bg-surface-2/60 active:shadow-[0_2px_0_var(--border)]",
+                      !checked && selected && "border-primary bg-primary-soft shadow-[0_4px_0_var(--primary)] active:shadow-[0_2px_0_var(--primary)]",
+                      checked && isCorrect && "border-correct bg-correct-soft shadow-[0_4px_0_var(--correct)]",
+                      wrongPick && "border-danger bg-danger-soft shadow-[0_4px_0_var(--danger)]",
+                    )
+                  : cn(
+                      "rounded-2xl border",
+                      !checked && !selected && "border-border hover:border-primary/50 hover:bg-primary-soft/40 hover:shadow-sm",
+                      !checked && selected && "border-primary shadow-[0_0_0_1px_var(--primary)]",
+                      checked && isCorrect && "border-correct shadow-[0_0_0_1px_var(--correct)]",
+                      wrongPick && "border-danger shadow-[0_0_0_1px_var(--danger)]",
+                    ),
                 checked && !isCorrect && !wrongPick && "border-border opacity-70",
                 struck && !selected && !checked && "opacity-55",
                 disabled && "cursor-default",
               )}
             >
-              <AnimatePresence>{selected && !checked && <RadialFill origin={origin[c.key] ?? null} />}</AnimatePresence>
+              <AnimatePresence>{selected && !checked && !lesson && <RadialFill origin={origin[c.key] ?? null} />}</AnimatePresence>
               <input
                 type="radio"
                 name={name}
@@ -77,7 +96,8 @@ export function ChoiceList({
               <span
                 aria-hidden
                 className={cn(
-                  "relative flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
+                  "relative flex size-8 shrink-0 items-center justify-center border text-sm font-semibold transition-colors",
+                  lesson ? "rounded-lg border-2" : "rounded-full",
                   !checked && (selected ? "border-primary bg-primary text-primary-foreground" : "border-foreground/25 bg-background text-foreground"),
                   checked && isCorrect && "border-correct bg-correct text-on-fill",
                   wrongPick && "border-danger bg-danger text-on-fill",
@@ -99,7 +119,7 @@ export function ChoiceList({
                 </span>
               )}
             </label>
-            {!disabled && (
+            {!disabled && showEliminate && !lesson && (
               <button
                 type="button"
                 onClick={() => onToggleEliminate(c.key)}
