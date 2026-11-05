@@ -70,7 +70,7 @@ export default async function PathPage({ searchParams }: { searchParams: Promise
       <div className="mx-auto flex w-full max-w-[560px] flex-1 flex-col justify-center px-4 py-12">
         {pastCard}
         <div className="rounded-[32px] border border-border bg-surface p-8 text-center shadow-[0_24px_50px_-30px_rgb(15_23_42/0.3)] dark:shadow-none">
-          <Owl pose="happy" className="mx-auto w-32" />
+          <Owl pose="happy" className="mx-auto w-28" />
           <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight">{t("newUser.title")}</h1>
           <p className="mt-2 text-muted-foreground">{t("newUser.body")}</p>
           <div className="mt-6 flex flex-col gap-3">

@@ -76,7 +76,7 @@ export function HowItWorks() {
               ))}
             </ol>
             <div className="relative">
-              <div className="absolute -top-[66px] right-10 z-0 w-[104px]">
+              <div className="absolute -top-[74px] right-10 z-0 w-[92px]">
                 <Owl pose={active === 3 ? "correct" : active === 0 ? "thinking" : "happy"} className="w-full" />
               </div>
               <div className="relative z-10 grid h-[440px] overflow-hidden rounded-3xl border border-border bg-surface shadow-[0_30px_60px_-30px_rgb(15_23_42/0.25)] dark:shadow-none">

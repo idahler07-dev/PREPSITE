@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, m, useInView, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowDown, BookOpen, Check, Flame, Gift, Loader2, Lock, RotateCcw, Star, Trophy, Zap } from "lucide-react";
 import { Popover as PopoverPrimitive } from "radix-ui";
@@ -106,7 +106,8 @@ function UnitBlock({ unit, dueReviews, currentRef }: { unit: UnitVM; dueReviews:
   const height = unit.nodes.length * ROW;
 
   return (
-    <section id={`unit-${unit.index}`} aria-labelledby={`unit-${unit.index}-title`} className="scroll-mt-24 pb-10">
+    <section id={`unit-${unit.index}`} aria-labelledby={`unit-${unit.index}-title`} className="relative scroll-mt-24 pb-10">
+      <UnitBackdrop index={unit.index} rw={rw} height={height} />
       <div className="sticky top-[72px] z-20 mb-6">
         <div
           className={cn(
@@ -151,7 +152,7 @@ function UnitBlock({ unit, dueReviews, currentRef }: { unit: UnitVM; dueReviews:
           <div key={n.id} ref={n.state === "current" ? currentRef : undefined} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: pts[i]!.x, top: pts[i]!.y }}>
             <NodeButton node={n} unitSize={unit.total} rw={rw} dueReviews={dueReviews} />
             {n.state === "current" && (
-              <div className={cn("pointer-events-none absolute top-1/2 w-[92px] -translate-y-1/2", nodeOffset(i) > 0 ? "right-[calc(100%+18px)]" : "left-[calc(100%+18px)]")}>
+              <div className={cn("pointer-events-none absolute top-1/2 w-[78px] -translate-y-[60%]", nodeOffset(i) > 0 ? "right-[calc(100%+18px)]" : "left-[calc(100%+18px)]")}>
                 <Owl pose="happy" className="w-full" />
               </div>
             )}
@@ -159,6 +160,71 @@ function UnitBlock({ unit, dueReviews, currentRef }: { unit: UnitVM; dueReviews:
         ))}
       </div>
     </section>
+  );
+}
+
+/* ---------- Backdrop ---------- */
+
+const GLYPHS = {
+  RW: ["¶", "Aa", "“”", "?", "§", "&", "abc", ";", "—"],
+  MATH: ["π", "√x", "Σ", "x²", "∠", "%", "≈", "f(x)", "θ"],
+};
+
+/** Tiny deterministic random, so glyphs sit in the same places on every render. */
+function rand(seed: number) {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+}
+
+/**
+ * Behind each unit: a giant outlined unit number that drifts with scroll
+ * (parallax), and SAT glyphs (π, √x, ¶…) floating slowly on both sides of
+ * the road, tinted by section. Purely decorative.
+ */
+function UnitBackdrop({ index, rw, height }: { index: number; rw: boolean; height: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [70, -70]);
+  const left = index % 2 === 1;
+  const glyphs = GLYPHS[rw ? "RW" : "MATH"];
+  const tone = rw ? "text-review" : "text-primary";
+  return (
+    <div ref={ref} aria-hidden className="pointer-events-none absolute inset-x-0 top-24 -z-10 overflow-hidden" style={{ height: height + 40 }}>
+      <div className="dot-grid absolute inset-0 [mask-image:radial-gradient(60%_55%_at_50%_45%,#000,transparent)]" />
+      <m.span
+        className={cn("unit-numeral absolute top-[28%] text-[150px] opacity-[0.16] sm:text-[220px] dark:opacity-[0.2]", left ? "left-[-2%] sm:left-[2%]" : "right-[-2%] sm:right-[2%]")}
+        style={{ WebkitTextStrokeColor: rw ? "var(--review)" : "var(--primary)", ...(reduce ? {} : { y }) }}
+      >
+        {String(index).padStart(2, "0")}
+      </m.span>
+      {Array.from({ length: 8 }, (_, i) => {
+        const side = i % 2 === 0 ? "left" : "right";
+        const x = 3 + rand(index * 31 + i) * 22;
+        const top = 8 + ((i + rand(index * 7 + i)) / 8) * 84;
+        const size = 22 + rand(index * 13 + i) * 26;
+        return (
+          <span
+            key={i}
+            className={cn("path-glyph", tone)}
+            style={
+              {
+                [side]: `${x}%`,
+                top: `${top}%`,
+                fontSize: size,
+                opacity: 0.12 + rand(index * 5 + i) * 0.1,
+                "--r": `${Math.round(rand(index * 3 + i) * 40 - 20)}deg`,
+                "--dx": `${Math.round(rand(index + i * 11) * 16 - 8)}px`,
+                "--t": `${7 + rand(index * 17 + i) * 6}s`,
+                "--d": `${-rand(index * 19 + i) * 8}s`,
+              } as React.CSSProperties
+            }
+          >
+            {glyphs[(i + index) % glyphs.length]}
+          </span>
+        );
+      })}
+    </div>
   );
 }
 

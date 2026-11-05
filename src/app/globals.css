@@ -1364,3 +1364,34 @@ html.lenis body {
   outline: 3px solid color-mix(in oklab, var(--ring), transparent 50%);
   outline-offset: 2px;
 }
+
+/* Path backdrop: SAT glyphs drift slowly behind the road. */
+@keyframes glyph-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translate3d(var(--dx, 6px), -14px, 0) rotate(calc(var(--r, 0deg) + 8deg));
+  }
+}
+.path-glyph {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  animation: glyph-drift var(--t, 9s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.unit-numeral {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke-width: 2.5px;
+  pointer-events: none;
+  user-select: none;
+}

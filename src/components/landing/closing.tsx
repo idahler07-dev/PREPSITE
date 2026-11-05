@@ -44,7 +44,7 @@ export async function FinalCta({ startHref }: { startHref: string }) {
         <span aria-hidden className="absolute -top-24 -right-16 size-72 rounded-full bg-white/10" />
         <span aria-hidden className="absolute -bottom-28 left-1/3 size-64 rounded-full bg-white/[0.07]" />
         <div className="relative flex flex-col items-center gap-6 text-center md:flex-row md:text-start">
-          <Owl pose="correct" className="w-28 sm:w-32" />
+          <Owl pose="correct" className="w-24 sm:w-28" />
           <h2 className="flex-1 font-display text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{t("title")}</h2>
           <Link
             href={startHref}

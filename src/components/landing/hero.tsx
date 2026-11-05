@@ -91,7 +91,7 @@ function Showcase({ alt }: { alt: string }) {
     <div ref={ref} className="relative mx-auto mt-24 max-w-[1160px] px-4 pb-16 sm:mt-28 sm:px-6 lg:pb-24" style={{ perspective: 1400 }}>
       <m.div style={flat ? undefined : { rotateX, scale, y, transformOrigin: "50% 0%" }} className="relative">
         {/* Owl peeking over the top edge */}
-        <div className="absolute -top-[62px] left-1/2 z-0 w-[96px] -translate-x-1/2 sm:-top-[74px] sm:w-[118px]">
+        <div className="absolute -top-[66px] left-1/2 z-0 w-[84px] -translate-x-1/2 sm:-top-[80px] sm:w-[100px]">
           <Owl pose="happy" className="w-full" />
         </div>
 

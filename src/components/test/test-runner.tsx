@@ -435,13 +435,13 @@ export function TestRunner({
           <main ref={mainRef} id="main" className="min-h-0 min-w-0 flex-1 overflow-y-auto" style={{ fontSize: `${zoom}rem` }}>
             <m.div
               key={item.position}
-              className="mx-auto w-full max-w-[720px] space-y-6 px-4 pt-14 pb-8 sm:px-6"
+              className="mx-auto w-full max-w-[720px] space-y-6 px-4 pt-16 pb-8 sm:px-6"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 28 }}
               animate={{ opacity: 1, x: 0 }}
               transition={spring.soft}
             >
               <div className="relative rounded-3xl border-2 border-border bg-surface p-5 sm:p-6">
-                <div className="pointer-events-none absolute -top-[54px] right-5 w-[80px]">
+                <div className="absolute -top-[64px] right-4 w-[76px]">
                   <Owl pose={owlPose} className="w-full" />
                 </div>
                 {item.passageHtml && <RichText html={item.passageHtml} className="passage mb-4 border-b border-border pb-4" />}

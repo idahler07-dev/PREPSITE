@@ -43,7 +43,7 @@ export default async function ReviewPage() {
       <PageHeader title={t("title")} description={t("subtitle")} />
       {/* Hero: how many are due today, or all caught up. */}
       <div className={`flex flex-col items-center gap-5 overflow-hidden rounded-[32px] p-6 text-center sm:flex-row sm:p-8 sm:text-start ${counts.due > 0 ? "bg-review text-primary-foreground shadow-[0_6px_0_color-mix(in_oklab,var(--review),black_25%)]" : "border border-border bg-surface"}`}>
-        <Owl pose={counts.due > 0 ? "thinking" : "correct"} className="w-28 shrink-0" />
+        <Owl pose={counts.due > 0 ? "thinking" : "correct"} className="w-24 shrink-0" />
         <div className="flex-1">
           {counts.due > 0 ? (
             <>

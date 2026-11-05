@@ -133,7 +133,7 @@ export function ScoreCalculator({ ctaHref }: { ctaHref: string }) {
       {/* Result */}
       <div className="rounded-3xl border border-border bg-surface p-5 shadow-[0_24px_50px_-30px_rgb(15_23_42/0.3)] sm:p-6 lg:sticky lg:top-24 dark:shadow-none">
         <div className="relative">
-          <div className="absolute -top-3 -right-2 w-[68px] sm:w-[76px]">
+          <div className="absolute -top-4 -right-2 w-[64px] sm:w-[72px]">
             <Owl pose={pose} className="w-full" />
           </div>
           <Gauge value={shownTotal} />
