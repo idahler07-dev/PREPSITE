@@ -10,6 +10,14 @@
  * files with `pnpm tsx scripts/make-brand.ts`.
  */
 
+/** Your Telegram channel or group, from the environment so it can change without a code edit. */
+const TELEGRAM_URL = process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "";
+
+function telegramHandle(url: string): string {
+  const m = /t\.me\/([\w+]+)/.exec(url);
+  return m ? `@${m[1]}` : "";
+}
+
 export const siteConfig = {
   /** Brand name shown in the header, emails and page titles. */
   name: "Satify",
@@ -36,15 +44,16 @@ export const siteConfig = {
   contact: {
     email: "hello@example.com",
     phone: "+998 00 000 00 00",
-    telegram: "@your_centre",
-    telegramUrl: "https://t.me/your_centre",
+    /** Set NEXT_PUBLIC_TELEGRAM_URL (e.g. https://t.me/satify) to show Telegram links; empty hides them. */
+    telegram: telegramHandle(TELEGRAM_URL),
+    telegramUrl: TELEGRAM_URL,
     address: "Tashkent, Uzbekistan",
     /** Shown on the contact page. */
     hours: "Mon–Sat, 09:00–19:00 (UTC+5)",
   },
 
   social: {
-    telegram: "https://t.me/your_centre",
+    telegram: TELEGRAM_URL,
     instagram: "",
     youtube: "",
   },

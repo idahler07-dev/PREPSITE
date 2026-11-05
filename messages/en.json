@@ -2254,7 +2254,8 @@
       "correct": "Nice one! +10 XP",
       "wrong": "Not quite. Answer: A",
       "again": "Try again",
-      "elim": "Cross out choice {key}"
+      "elim": "Cross out choice {key}",
+      "resize": "Resize panes"
     },
     "testimonials": {
       "title": "Students say"
@@ -2265,7 +2266,7 @@
       "usd": "USD",
       "free": "Free",
       "freePrice": "0",
-      "freeNote": "20 questions a day",
+      "freeNote": "{count} questions a day",
       "start": "Start",
       "choose": "Choose",
       "best": "Best value",
