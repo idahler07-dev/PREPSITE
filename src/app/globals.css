@@ -1395,3 +1395,23 @@ html.lenis body {
   pointer-events: none;
   user-select: none;
 }
+
+/* Landing ribbons: endless text bands crossing like tape. */
+.ribbon {
+  --gap: 1.5rem;
+  gap: var(--gap);
+  overflow: hidden;
+}
+.ribbon__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--gap);
+  min-width: 100%;
+  justify-content: space-around;
+  animation: marquee-scroll 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ribbon__track {
+    animation: none;
+  }
+}

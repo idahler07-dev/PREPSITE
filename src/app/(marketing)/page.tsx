@@ -33,6 +33,7 @@ import { Bento } from "@/components/landing/bento";
 import { TestDay } from "@/components/landing/test-day";
 import { Pricing } from "@/components/landing/pricing";
 import { FinalCta, Testimonials } from "@/components/landing/closing";
+import { Ribbons } from "@/components/landing/ribbons";
 
 const FAQ_KEYS = ["official", "score", "device", "pay"] as const;
 
@@ -78,6 +79,7 @@ export default async function HomePage() {
       </section>
 
       <Stats skills={skillCount} />
+      <Ribbons />
       <HowItWorks />
       <Bento />
       <TestDay />

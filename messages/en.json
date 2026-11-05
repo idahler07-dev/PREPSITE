@@ -1897,10 +1897,10 @@
   },
   "vocab": {
     "title": "Vocabulary",
-    "subtitle": "Words in context, on a spaced schedule. Due now: {due} · learning: {learning} · new: {unseen}",
+    "subtitle": "Words in context, on a spaced schedule.",
     "doneSession": "Session done! Come back tomorrow for the next cards.",
     "nothingDue": "No cards are due right now.",
-    "back": "Back to dashboard",
+    "back": "Back to your path",
     "error": "Could not save. Please try again.",
     "progress": "Card {current} of {total}",
     "card": "Flashcard",
@@ -1912,7 +1912,16 @@
       "hard": "Hard",
       "good": "Good",
       "easy": "Easy"
-    }
+    },
+    "stats": {
+      "due": "Due",
+      "learning": "Learning",
+      "new": "New"
+    },
+    "flip": "Flip card",
+    "doneTitle": "Deck cleared!",
+    "reviewed": "{count, plural, one {# card} other {# cards}} reviewed",
+    "keys": "Keys 1 to 4"
   },
   "coach": {
     "title": "Study plan",
@@ -2327,6 +2336,24 @@
     "final": {
       "title": "Your first lesson takes 5 minutes.",
       "cta": "Start free"
+    },
+    "ribbon": {
+      "a": [
+        "Practise daily",
+        "Bluebook-ready",
+        "Five minutes a day",
+        "Mistakes come back",
+        "Streaks and XP",
+        "Built for the Digital SAT"
+      ],
+      "b": [
+        "Reading and Writing",
+        "Math",
+        "Desmos built in",
+        "Real test timing",
+        "Owl explanations",
+        "Score calculator"
+      ]
     }
   },
   "calc": {
