@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="250" viewBox="0 0 300 250" role="img" aria-label="Satify owl, correct" >
+<defs>
+<radialGradient id="ohcorrect" cx="38%" cy="22%" r="90%"><stop offset="0" stop-color="#A9C6FF"></stop><stop offset=".55" stop-color="#4F86F7"></stop><stop offset="1" stop-color="#2347B8"></stop></radialGradient>
+<radialGradient id="odcorrect" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset=".75" stop-color="#F2F6FF"></stop><stop offset="1" stop-color="#C7D6F5"></stop></radialGradient>
+<radialGradient id="oicorrect" cx="42%" cy="35%" r="70%"><stop offset="0" stop-color="#FFF6C8"></stop><stop offset=".5" stop-color="#FCD34D"></stop><stop offset="1" stop-color="#F59E0B"></stop></radialGradient>
+<radialGradient id="opcorrect" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#2E3555"></stop><stop offset="1" stop-color="#05070F"></stop></radialGradient>
+<radialGradient id="obcorrect" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FF7EB3" stop-opacity=".85"></stop><stop offset="1" stop-color="#FF7EB3" stop-opacity="0"></stop></radialGradient>
+<filter id="ofcorrect"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
+<clipPath id="occorrect"><path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z"></path></clipPath>
+</defs>
+
+<path d="M78 112Q60 64 70 44Q100 66 118 92Z" fill="url(#ohcorrect)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M222 112Q240 64 230 44Q200 66 182 92Z" fill="url(#ohcorrect)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z" fill="url(#ohcorrect)"></path>
+<g clip-path="url(#occorrect)">
+<path d="M72 230Q80 200 150 198Q220 200 228 230Z" fill="#DCE7FB"></path>
+<path d="M150 124C136 106 108 104 90 114C64 128 58 160 66 182C76 206 104 214 126 206C138 202 146 194 150 186C154 194 162 202 174 206C196 214 224 206 234 182C242 160 236 128 210 114C192 104 164 106 150 124Z" transform="translate(0 7)" fill="#0B1A4A" opacity=".3" filter="url(#ofcorrect)"></path>
+<ellipse cx="104" cy="104" rx="38" ry="12" fill="#FFFFFF" opacity=".55" transform="rotate(-14 104 104)" filter="url(#ofcorrect)"></ellipse>
+</g>
+<path d="M42 196C32 142 56 86 150 82C244 86 268 142 258 196C254 214 238 222 218 222H82C62 222 46 214 42 196Z" fill="none" stroke="#16307F" stroke-width="4"></path>
+<path d="M150 124C136 106 108 104 90 114C64 128 58 160 66 182C76 206 104 214 126 206C138 202 146 194 150 186C154 194 162 202 174 206C196 214 224 206 234 182C242 160 236 128 210 114C192 104 164 106 150 124Z" fill="url(#odcorrect)" stroke="#16307F" stroke-width="3.5"></path>
+
+
+<path d="M90 166q22-26 44 0M166 166q22-26 44 0" stroke="#16307F" stroke-width="7" stroke-linecap="round" fill="none"></path>
+
+<path d="M0 0" stroke="#16307F" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<circle cx="112" cy="160" r="38" fill="none" stroke="#16307F" stroke-width="5"></circle>
+<circle cx="188" cy="160" r="38" fill="none" stroke="#16307F" stroke-width="5"></circle>
+<path d="M146 154q4-5 8 0" stroke="#16307F" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<path d="M92 142l14-14M168 142l14-14" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".6"></path>
+<ellipse cx="80" cy="200" rx="15" ry="8" fill="url(#obcorrect)"></ellipse><ellipse cx="220" cy="200" rx="15" ry="8" fill="url(#obcorrect)"></ellipse>
+<path d="M140 190Q150 186 160 190L156 200Q150 210 144 200Z" fill="#FBBF24" stroke="#B45309" stroke-width="2.5" stroke-linejoin="round"></path>
+<path d="M46 180Q14 160 18 128Q34 128 46 140Q40 156 56 172Z" fill="url(#ohcorrect)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M254 180Q286 160 282 128Q266 128 254 140Q260 156 244 172Z" fill="url(#ohcorrect)" stroke="#16307F" stroke-width="4" stroke-linejoin="round"></path>
+
+<path d="M30 60l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#FBBF24"></path>
+<path style="animation-delay: .6s" d="M268 50l3.5 8 8 3.5-8 3.5-3.5 8-3.5-8-8-3.5 8-3.5z" fill="#FBBF24"></path>
+<path style="animation-delay: 1.1s" d="M276 140l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#60A5FA"></path>
+
+
+
+</svg>

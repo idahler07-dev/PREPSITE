@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-/** Cards: 24px radius, translucent glass with a bright top edge. `interactive` lifts on hover. */
+/** Cards: 24px radius, solid surface, hairline border and a soft layered shadow (none in dark). `interactive` lifts on hover. */
 function Card({ className, interactive = false, ...props }: React.ComponentProps<"div"> & { interactive?: boolean }) {
   return (
     <div

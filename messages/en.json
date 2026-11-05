@@ -181,8 +181,8 @@
     },
     "bank": {
       "label": "Question bank",
-      "title": "Stuck? <i>Ask</i> Pip.",
-      "body": "Every question is written and checked by teachers. When you get one wrong, Pip explains it step by step, and every explanation is checked against the answer key.",
+      "title": "Stuck? <i>Ask</i> the owl.",
+      "body": "Every question is written and checked by teachers. When you get one wrong, the owl explains it step by step, and every explanation is checked against the answer key.",
       "cta": "Try a drill"
     },
     "plan": {
@@ -261,6 +261,10 @@
       "mistake": {
         "q": "I think a question has a mistake. What do I do?",
         "a": "Use the “Report a problem” button after you answer. A teacher reviews every report."
+      },
+      "pay": {
+        "q": "How do I pay?",
+        "a": "With Payme or Click in so'm. Each plan is a one-time payment, so nothing renews on its own."
       }
     }
   },
@@ -408,7 +412,7 @@
       "score": "Enter a score between 400 and 1600 in steps of 10.",
       "date": "Choose a date in the future."
     },
-    "tip": "Tip from Pip: a test date helps me spread your practice across the weeks you have."
+    "tip": "Tip: a test date helps me spread your practice across the weeks you have."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -454,7 +458,7 @@
     "practiceNow": "Practice now",
     "weakestEmpty": "Answer a few more questions and your weakest skills will show up here.",
     "streakTitle": "Day streak",
-    "streakReminder": "Pip misses you. Ten questions keeps your streak alive.",
+    "streakReminder": "The owl misses you. Ten questions keeps your streak alive.",
     "daysToTest": "Days to test",
     "noTestDate": "Set your test date",
     "estimateEmpty": "Take a practice test to see your estimate.",
@@ -873,11 +877,11 @@
     }
   },
   "errors": {
-    "notFoundTitle": "Pip can't find that page",
+    "notFoundTitle": "We can’t find that page",
     "notFoundBody": "The link may be old, or the page has moved. Let's get you back on track.",
     "goHome": "Go to the home page",
     "errorTitle": "Something went wrong",
-    "errorBody": "Pip dropped a few things. Try again, and if it keeps happening, let us know.",
+    "errorBody": "Something slipped. Try again, and if it keeps happening, let us know.",
     "goDashboard": "Go to my dashboard",
     "tryAgain": "Try again"
   },
@@ -1632,7 +1636,7 @@
     }
   },
   "tutor": {
-    "title": "Ask Pip",
+    "title": "Ask the owl",
     "modes": {
       "hint": "Give me a hint",
       "explain": "Explain step by step",
@@ -1640,7 +1644,7 @@
       "another": "Another way to solve it",
       "simpler": "Explain more simply"
     },
-    "thinking": "Pip is thinking…",
+    "thinking": "Thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
     "followUp": "Ask a follow-up question",
     "followUpPlaceholder": "Ask about this question…",
@@ -1654,7 +1658,7 @@
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
     },
-    "askPip": "Ask Pip",
+    "askPip": "Ask the owl",
     "stepByStep": "Step by step"
   },
   "billing": {
@@ -2071,5 +2075,212 @@
     "next": "Next",
     "flagged": "Flagged",
     "spr": "Typed answer"
+  },
+  "landing": {
+    "nav": {
+      "how": "How it works",
+      "calc": "Score calculator",
+      "pricing": "Pricing",
+      "start": "Start free",
+      "login": "Log in",
+      "dashboard": "Open Satify"
+    },
+    "hero": {
+      "badge": "Built for the Digital SAT",
+      "title": "SAT prep that actually",
+      "words": [
+        "sticks.",
+        "works.",
+        "feels fun.",
+        "pays off."
+      ],
+      "sub": "Bite-size lessons, real test practice, and an owl that keeps you going.",
+      "start": "Start free",
+      "calc": "Calculate my score",
+      "alt": "The Satify learning path: finished lessons, today's lesson and what comes next"
+    },
+    "mock": {
+      "brand": "satify",
+      "nav": [
+        "Path",
+        "Practice",
+        "Tests",
+        "Progress",
+        "Mistakes",
+        "Profile"
+      ],
+      "unit": "Unit 3: Algebra",
+      "unitTitle": "Systems of equations",
+      "start": "Start",
+      "days": "31",
+      "streak": "12",
+      "xp": "340",
+      "score": "1340",
+      "scoreMax": "/ 1600",
+      "scoreDelta": "+50",
+      "week": "Week",
+      "weekDays": [
+        "M",
+        "T",
+        "W",
+        "T",
+        "F",
+        "S",
+        "S"
+      ],
+      "weekCount": "3/5",
+      "quests": "Daily quests",
+      "quest1": "20 questions",
+      "quest1n": "14/20",
+      "quest2": "90% on a drill",
+      "quest2n": "1/1",
+      "quest3": "Review mistakes",
+      "quest3n": "0/4",
+      "weak": "Weak spots",
+      "weak1": "Inferences",
+      "weak1n": "30%",
+      "weak2": "Trig",
+      "weak2n": "22%",
+      "chipStreak": "12",
+      "chipScore": "+50",
+      "chipCorrect": "Correct!"
+    },
+    "marquee": {
+      "label": "Every skill on the test, one at a time",
+      "features": [
+        "Bluebook-style tests",
+        "Desmos built in",
+        "Mistakes come back",
+        "Daily quests",
+        "Streaks and XP",
+        "Owl explanations",
+        "Vocabulary decks",
+        "Score calculator",
+        "Works on any phone",
+        "Dark mode"
+      ]
+    },
+    "stats": {
+      "skills": "SAT skills",
+      "practice": "practice on paid plans",
+      "free": "Free",
+      "freeLabel": "to start"
+    },
+    "how": {
+      "title": "How it works",
+      "steps": [
+        {
+          "title": "Find your score",
+          "body": "A short check shows where you stand."
+        },
+        {
+          "title": "Get your path",
+          "body": "Lessons ordered by what moves your score most."
+        },
+        {
+          "title": "Practise daily",
+          "body": "Five minutes a day. The owl keeps the streak alive."
+        },
+        {
+          "title": "Take real tests",
+          "body": "Full adaptive tests on a Bluebook-style screen."
+        }
+      ],
+      "q": "Most octopuses opened the jar, and many opened it faster on later attempts.",
+      "choices": [
+        "Faster on later tries",
+        "Refused other food",
+        "Only a few opened it"
+      ],
+      "estimate": "Your estimate",
+      "rw": "Reading and Writing",
+      "math": "Math"
+    },
+    "bento": {
+      "title": "Everything that moves your score",
+      "bluebook": {
+        "title": "Bluebook practice",
+        "body": "The same screen, tools and timer as test day."
+      },
+      "owl": {
+        "title": "Owl explanations",
+        "body": "Wrong answer? Three short steps, not an essay.",
+        "steps": [
+          "Find the claim",
+          "Match the evidence",
+          "Cross out the rest"
+        ]
+      },
+      "mistakes": {
+        "title": "Mistakes come back",
+        "due": "4",
+        "dueLabel": "due today"
+      },
+      "streaks": {
+        "title": "Streaks and quests"
+      },
+      "climb": {
+        "title": "Watch your score climb"
+      },
+      "calc": {
+        "title": "Score calculator",
+        "cta": "Try it"
+      }
+    },
+    "testday": {
+      "title": "Feels like test day.",
+      "section": "Section 1, Module 1: Reading and Writing",
+      "directions": "Directions",
+      "hide": "Hide",
+      "show": "Show",
+      "tools": [
+        "Highlights & Notes",
+        "Line Reader",
+        "Text Size",
+        "More"
+      ],
+      "passage": "Marine biologist Dilnoza Karimova studies how octopuses solve problems. In one experiment, she placed food inside a jar sealed with a screw-top lid. Most octopuses opened the jar within minutes, and <hl>many opened it faster on later attempts</hl>. Karimova argues that this improvement shows the animals were not simply trying random movements but were remembering what had worked before.",
+      "number": "4",
+      "mark": "Mark for Review",
+      "prompt": "Which choice best states the reason Karimova believes the octopuses were remembering their earlier attempts?",
+      "choices": [
+        "The octopuses opened the jar more quickly on later attempts.",
+        "The octopuses refused food that was not placed in a jar.",
+        "Only a few octopuses were able to open the jar at all.",
+        "The jar was sealed with a lid that was difficult to turn."
+      ],
+      "check": "Check answer",
+      "hint": "Press A to D to choose",
+      "correct": "Nice one! +10 XP",
+      "wrong": "Not quite. Answer: A",
+      "again": "Try again",
+      "elim": "Cross out choice {key}"
+    },
+    "testimonials": {
+      "title": "Students say"
+    },
+    "pricing": {
+      "title": "Start free. Go further when ready.",
+      "uzs": "UZS",
+      "usd": "USD",
+      "free": "Free",
+      "freePrice": "0",
+      "freeNote": "20 questions a day",
+      "start": "Start",
+      "choose": "Choose",
+      "best": "Best value",
+      "monthlyNote": "Unlimited practice",
+      "testdayNote": "Until your SAT",
+      "perDay": "≈ {amount} a day",
+      "pay": "Payme or Click. No automatic renewals.",
+      "soon": "Coming soon"
+    },
+    "faq": {
+      "title": "Questions"
+    },
+    "final": {
+      "title": "Your first lesson takes 5 minutes.",
+      "cta": "Start free"
+    }
   }
 }

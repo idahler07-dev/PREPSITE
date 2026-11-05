@@ -11,7 +11,7 @@ import { Highlight } from "./emphasis";
  *   <grad>word</grad>  cobalt → coral gradient text (hero headline only)
  */
 export const emphasis = {
-  i: (chunks: ReactNode) => <em className="pe-[0.06em] font-serif text-[1.12em] leading-[0.9] font-normal tracking-normal text-primary italic">{chunks}</em>,
+  i: (chunks: ReactNode) => <em className="text-primary not-italic">{chunks}</em>,
   hl: (chunks: ReactNode) => <Highlight>{chunks}</Highlight>,
   b: (chunks: ReactNode) => <strong className="font-bold">{chunks}</strong>,
   grad: (chunks: ReactNode) => <span className="text-gradient">{chunks}</span>,
