@@ -9,6 +9,7 @@ import { Container, PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RemoveFromNotebook, StartReviewButton } from "@/components/learning/review-actions";
+import { Owl } from "@/components/mascot/owl";
 
 export async function generateMetadata() {
   const t = await getTranslations("review");
@@ -40,26 +41,39 @@ export default async function ReviewPage() {
   return (
     <Container className="max-w-4xl space-y-6">
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("dueTitle", { count: counts.due })}</CardTitle>
-            <CardDescription>{t("dueHelp", { total: counts.total })}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <StartReviewButton source="due" disabled={counts.due === 0} label={t("start")} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("bookmarksTitle", { count: counts.bookmarks })}</CardTitle>
-            <CardDescription>{t("bookmarksHelp")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <StartReviewButton source="bookmarks" disabled={counts.bookmarks === 0} label={t("practiceBookmarks")} />
-          </CardContent>
-        </Card>
+      {/* Hero: how many are due today, or all caught up. */}
+      <div className={`flex flex-col items-center gap-5 overflow-hidden rounded-[32px] p-6 text-center sm:flex-row sm:p-8 sm:text-start ${counts.due > 0 ? "bg-review text-primary-foreground shadow-[0_6px_0_color-mix(in_oklab,var(--review),black_25%)]" : "border border-border bg-surface"}`}>
+        <Owl pose={counts.due > 0 ? "thinking" : "correct"} className="w-28 shrink-0" />
+        <div className="flex-1">
+          {counts.due > 0 ? (
+            <>
+              <p className="font-display text-5xl leading-none font-extrabold tabular-nums">
+                {counts.due} <span className="text-2xl">{t("hero.due")}</span>
+              </p>
+              <p className="mt-2 opacity-90">{t("hero.dueLabel", { count: counts.due })}</p>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-3xl font-extrabold">{t("hero.caught")}</p>
+              <p className="mt-1 text-muted-foreground">{t("hero.caughtBody")}</p>
+            </>
+          )}
+        </div>
+        {counts.due > 0 && (
+          <div className="shrink-0 [&_button]:bg-white [&_button]:text-[#6d28d9] [&_button]:shadow-[0_4px_0_rgb(15_23_42/0.25)]">
+            <StartReviewButton source="due" disabled={false} label={t("start")} />
+          </div>
+        )}
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{t("bookmarksTitle", { count: counts.bookmarks })}</CardTitle>
+          <CardDescription>{t("bookmarksHelp")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <StartReviewButton source="bookmarks" disabled={counts.bookmarks === 0} label={t("practiceBookmarks")} />
+        </CardContent>
+      </Card>
 
       <section>
         <h2 className="mb-3 text-lg font-semibold">{t("notebook")}</h2>

@@ -73,7 +73,7 @@ export function CountdownTimer({
             role="timer"
             aria-label={t("remaining")}
             aria-live={low ? "polite" : "off"}
-            className={cn("rounded-md px-2 py-1 font-mono text-lg font-semibold tabular-nums", low && "bg-danger-muted text-foreground")}
+            className={cn("rounded-md px-2 py-1 font-display text-xl font-extrabold tabular-nums transition-colors", low && "text-danger-ink")}
           >
             {fmt(remaining)}
           </span>

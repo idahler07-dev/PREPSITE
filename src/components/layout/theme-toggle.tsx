@@ -162,3 +162,41 @@ export function ThemeMeta() {
   }, [resolvedTheme]);
   return null;
 }
+
+/** Settings: Light / Dark / System as a segmented control with a liquid pill (brief §9). */
+export function ThemeSegmented({ signedIn }: { signedIn: boolean }) {
+  const t = useTranslations("theme");
+  const { theme } = useTheme();
+  const reduce = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const change = useAnimatedThemeChange(ref);
+  useEffect(() => setMounted(true), []);
+  const current = mounted ? (theme ?? "system") : "system";
+  const options = [
+    { value: "light", label: t("light"), icon: Sun },
+    { value: "dark", label: t("dark"), icon: Moon },
+    { value: "system", label: t("system"), icon: Monitor },
+  ];
+  return (
+    <div ref={ref} role="radiogroup" aria-label={t("label")} className="inline-flex rounded-2xl bg-surface-2 p-1">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          aria-checked={current === o.value}
+          onClick={() => {
+            change(o.value);
+            if (signedIn) void saveThemePreference(o.value);
+          }}
+          className={`relative flex h-9 items-center gap-1.5 rounded-xl px-3.5 text-sm font-bold transition-colors ${current === o.value ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+        >
+          {current === o.value && <m.span layoutId="theme-pill" className="absolute inset-0 rounded-xl bg-surface shadow-sm" transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 30 }} />}
+          <o.icon className="relative size-4" aria-hidden />
+          <span className="relative">{o.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}

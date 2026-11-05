@@ -544,7 +544,7 @@
     },
     "markForReview": "Mark for review",
     "marked": "Marked for review",
-    "eliminator": "Cross out answer choices",
+    "eliminator": "Answer eliminator",
     "eliminatorOn": "Cross-out mode on",
     "crossOut": "Cross out choice {choice}",
     "undoCrossOut": "Undo cross-out of choice {choice}",
@@ -621,7 +621,9 @@
       "lineReader": "Toggle the line reader (↑ ↓ to move it)",
       "calculator": "Open or close the calculator (Math)",
       "reference": "Open the reference sheet (Math)",
-      "fullscreen": "Full screen"
+      "fullscreen": "Full screen",
+      "check": "Check answer",
+      "eliminator": "Answer eliminator on or off"
     },
     "passage": "Passage",
     "question": "Question",
@@ -732,7 +734,27 @@
       "explainDifferently": "Explain differently",
       "askFollowUp": "Ask a follow-up"
     },
-    "backToBank": "Back to bank"
+    "backToBank": "Back to bank",
+    "lesson": {
+      "close": "Close lesson",
+      "progress": "{done} of {total} done",
+      "combo": "{count} in a row",
+      "pick": "Pick an answer first.",
+      "check": "Check",
+      "continue": "Continue",
+      "finish": "Finish",
+      "correct": "Nice one! +10 XP",
+      "wrong": "Not quite. Answer: {answer}",
+      "why": "Why?",
+      "hideWhy": "Hide",
+      "steps": "How to get there"
+    },
+    "directions": "Directions",
+    "directionsBody": {
+      "RW": "The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table or graph. Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).",
+      "MATH": "The questions in this section address a number of important math skills. Use of a calculator is permitted for all questions. Unless otherwise indicated, all variables and expressions represent real numbers, figures are drawn to scale, and all figures lie in a plane."
+    },
+    "resizePanes": "Resize panes"
   },
   "results": {
     "title": "Results",
@@ -1865,7 +1887,13 @@
     "myNote": "My note",
     "noteSaved": "Saved",
     "noteUnsaved": "Not saved yet — click outside the box to save",
-    "emptyCta": "Start a drill"
+    "emptyCta": "Start a drill",
+    "hero": {
+      "due": "due today",
+      "dueLabel": "{count, plural, one {question is} other {questions are}} ready for another try.",
+      "caught": "All caught up",
+      "caughtBody": "Nothing to review today. Wrong answers come back here on a schedule."
+    }
   },
   "vocab": {
     "title": "Vocabulary",
@@ -2027,7 +2055,14 @@
       "bar": "{difficulty}: {seconds}s average over {count} questions",
       "overTarget": "(slower than the target pace)"
     },
-    "skillsByAccuracy": "Accuracy by skill"
+    "skillsByAccuracy": "Accuracy by skill",
+    "stats": {
+      "best": "Best streak",
+      "current": "Current streak",
+      "answered": "Answered",
+      "accuracy": "Accuracy",
+      "days": "{count, plural, one {# day} other {# days}}"
+    }
   },
   "bank": {
     "title": "Question bank",
