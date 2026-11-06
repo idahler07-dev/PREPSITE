@@ -16,27 +16,52 @@
 /* .light lets a panel show the light theme inside dark mode (e.g. /admin/design). */
 :root,
 .light {
-  /* Radii: 12 inputs, 16 buttons, 24 cards, 32 hero. */
-  --radius: 16px;
-  --radius-large: 24px;
+  /* ---- Layer 1: primitives (raw values; components never use these directly) ---- */
+  --navy-950: #0B1D28;
+  --navy-900: #102D40;
+  --navy-850: #12293A;
+  --navy-800: #183447;
+  --navy-700: #1F4152;
+  --cyan-800: #044F60;
+  --cyan-750: #055E74;
+  --cyan-700: #06748D;
+  --cyan-600: #087F9B;
+  --cyan-500: #0E8BA3;
+  --cyan-400: #20B9D0;
+  --cyan-300: #4FCBDD;
+  --aqua-300: #75DCE7;
+  --ice-100: #E4F7FA;
+  --ice-50: #EEF6F9;
+  --cloud-50: #F5F9FC;
+  --white: #FFFFFF;
+  --slate-600: #4A6474;
+  --slate-500: #6E8795;
+  --slate-300: #9DB9C6;
+  --line-200: #D3E5EC;
+
+  /* ---- Layer 2: semantic tokens (what things mean) ---- */
+  /* Radii: 12 inputs, 14 buttons, 20 cards, 28 panels, 36 hero. */
+  --radius: 14px;
+  --radius-large: 20px;
   --radius-input: 12px;
-  --radius-hero: 32px;
+  --radius-panel: 28px;
+  --radius-hero: 36px;
 
-  --background: #F5F9FC;
+  --background: var(--cloud-50);
   --section-tint: #E9F4F8;
-  --foreground: #102D40;
-  --surface: #FFFFFF;
-  --surface-2: #EEF6F9;
+  --foreground: var(--navy-900);
+  --surface: var(--white);
+  --surface-2: var(--ice-50);
   --muted: var(--surface-2);
-  --muted-foreground: #4A6474;
-  --border: #D3E5EC;
-  --input: #6E8795;
+  --muted-foreground: var(--slate-600);
+  --border: var(--line-200);
+  --input: var(--slate-500);
 
-  --primary: #06748D;
-  --primary-hover: #055E74;
-  --primary-edge: #044F60;
-  --primary-foreground: #FFFFFF;
-  --primary-soft: #E4F7FA;
+  --primary: var(--cyan-700);
+  --primary-hover: var(--cyan-750);
+  --primary-edge: var(--cyan-800);
+  --primary-foreground: var(--white);
+  --primary-soft: var(--ice-100);
   --ring: var(--primary);
 
   /* Amber: streaks and XP only. */
@@ -90,12 +115,20 @@
   --hl-text: #0f172a;
 
   /* Soft layered shadows: a hairline plus a wide, faint one. */
-  --elev-sm: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 12px -6px rgb(15 23 42 / 0.06);
-  --elev-md: 0 1px 2px rgb(15 23 42 / 0.05), 0 12px 28px -12px rgb(15 23 42 / 0.12);
-  --elev-lg: 0 2px 4px rgb(15 23 42 / 0.05), 0 28px 60px -20px rgb(15 23 42 / 0.2);
-  --glass: rgb(247 248 250 / 0.78);
-  --overlay: rgb(15 23 42 / 0.36);
-  --dot-color: rgb(15 23 42 / 0.07);
+  --elev-sm: 0 1px 2px rgb(16 45 64 / 0.05), 0 8px 24px -14px rgb(16 45 64 / 0.12);
+  --elev-md: 0 1px 2px rgb(16 45 64 / 0.05), 0 12px 32px -16px rgb(16 45 64 / 0.16);
+  --elev-lg: 0 1px 2px rgb(16 45 64 / 0.05), 0 12px 32px -16px rgb(16 45 64 / 0.16), 0 24px 60px -24px rgb(16 45 64 / 0.25);
+  --glass: rgb(245 249 252 / 0.8);
+  --overlay: rgb(16 45 64 / 0.4);
+  --dot-color: rgb(16 45 64 / 0.06);
+
+  /* Brand: gradients and graphic colours (ribbon, charts, fox). Never body text. */
+  --brand-a: var(--cyan-600);
+  --brand-b: var(--cyan-400);
+  --brand-c: var(--aqua-300);
+  --grad-hero: linear-gradient(160deg, var(--navy-900) 0%, var(--cyan-600) 100%);
+  --grad-ribbon: linear-gradient(90deg, var(--cyan-600), var(--cyan-400) 55%, var(--aqua-300));
+  --grad-ice: linear-gradient(180deg, var(--ice-100), var(--white));
   --mesh-opacity: 0.5;
 
   /* Cards are solid now; the names stay so older components keep working. */
@@ -111,31 +144,31 @@
   --chart-correct: #16a34a;
   --chart-incorrect: #dc2626;
 
-  /* Legacy mascot vars (the owl is an SVG file now). */
-  --mascot-body: #2563eb;
-  --mascot-light: #eaf1fe;
-  --mascot-dark: #1d4ed8;
-  --mascot-cap: #2563eb;
-  --mascot-cap-light: #5b8cff;
-  --mascot-cap-dark: #1d4ed8;
+  /* Legacy mascot vars, kept for old components until the owl code is removed. */
+  --mascot-body: var(--cyan-600);
+  --mascot-light: var(--ice-100);
+  --mascot-dark: var(--cyan-700);
+  --mascot-cap: var(--cyan-600);
+  --mascot-cap-light: var(--cyan-400);
+  --mascot-cap-dark: var(--cyan-700);
   --mascot-accent: #f59e0b;
   --mascot-eye: #ffffff;
   --mascot-ink: #0f172a;
 }
 
 .dark {
-  --background: #0B1D28;
+  --background: var(--navy-950);
   --section-tint: #0F2532;
-  --foreground: #E4F7FA;
-  --surface: #12293A;
-  --surface-2: #183447;
-  --muted-foreground: #9DB9C6;
-  --border: #1F4152;
+  --foreground: var(--ice-100);
+  --surface: var(--navy-850);
+  --surface-2: var(--navy-800);
+  --muted-foreground: var(--slate-300);
+  --border: var(--navy-700);
   --input: #5F7F8E;
 
-  --primary: #20B9D0;
-  --primary-hover: #4FCBDD;
-  --primary-edge: #0E8BA3;
+  --primary: var(--cyan-400);
+  --primary-hover: var(--cyan-300);
+  --primary-edge: var(--cyan-500);
   --primary-foreground: #06222C;
   --primary-soft: #123B48;
 
@@ -173,8 +206,8 @@
   --elev-sm: inset 0 1px 0 rgb(255 255 255 / 0.04);
   --elev-md: inset 0 1px 0 rgb(255 255 255 / 0.05);
   --elev-lg: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 56px -20px rgb(0 0 0 / 0.55);
-  --glass: rgb(14 17 23 / 0.78);
-  --overlay: rgb(5 7 12 / 0.6);
+  --glass: rgb(11 29 40 / 0.8);
+  --overlay: rgb(4 12 18 / 0.62);
   --dot-color: rgb(232 236 242 / 0.06);
   --mesh-opacity: 0.35;
   --glass-top: var(--surface);
@@ -187,12 +220,12 @@
   --ambient-c: transparent;
   --chart-correct: #3fbf6f;
   --chart-incorrect: #ef6b6b;
-  --mascot-body: #5b8cff;
-  --mascot-light: #1a2540;
-  --mascot-dark: #3d6fe8;
-  --mascot-cap: #5b8cff;
-  --mascot-cap-light: #7aa2ff;
-  --mascot-cap-dark: #3d6fe8;
+  --mascot-body: var(--cyan-400);
+  --mascot-light: var(--navy-800);
+  --mascot-dark: var(--cyan-500);
+  --mascot-cap: var(--cyan-400);
+  --mascot-cap-light: var(--cyan-300);
+  --mascot-cap-dark: var(--cyan-500);
   --mascot-accent: #fbbf24;
 }
 
@@ -229,6 +262,11 @@
   --text-label--line-height: 1.4;
 
   --color-background: var(--background);
+  --color-brand-a: var(--brand-a);
+  --color-brand-b: var(--brand-b);
+  --color-brand-c: var(--brand-c);
+  --color-navy: var(--navy-900);
+  --color-ice: var(--ice-100);
   --color-section-tint: var(--section-tint);
   --color-flagged: var(--flagged);
   --color-wrong: var(--wrong);
@@ -285,12 +323,13 @@
   --color-overlay: var(--overlay);
   --color-glass: var(--glass);
 
-  --radius-sm: 8px;
+  --radius-sm: 10px;
   --radius-md: var(--radius-input);
   --radius-lg: var(--radius);
-  --radius-xl: 20px;
+  --radius-xl: 16px;
   --radius-2xl: var(--radius-large);
-  --radius-3xl: var(--radius-hero);
+  --radius-3xl: var(--radius-panel);
+  --radius-4xl: var(--radius-hero);
 
   --shadow-xs: var(--elev-sm);
   --shadow-sm: var(--elev-sm);

@@ -63,3 +63,16 @@ export function useLiteMotion(): boolean {
   }, []);
   return !!reduce || lite;
 }
+
+/**
+ * Like `useReducedMotion`, but false until after hydration, so the server's
+ * HTML and the browser's first render always match. Use it in components
+ * that render different elements (not just different animations) when
+ * motion is reduced.
+ */
+export function useReducedMotionSafe(): boolean {
+  const reduce = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted && !!reduce;
+}
