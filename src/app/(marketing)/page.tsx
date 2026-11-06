@@ -25,7 +25,7 @@ import { enabledProviders } from "@/server/payments";
 import { paidPlans } from "@/config/plans";
 import { DOMAINS } from "@/lib/taxonomy";
 import { FaqList } from "@/components/marketing/faq-list";
-import { Hero } from "@/components/landing/hero";
+import { HomeHero } from "@/components/home/hero";
 import { Marquee, UNIVERSITY_LOGOS, type MarqueeItem } from "@/components/landing/marquees";
 import { Stats } from "@/components/landing/stats";
 import { HowItWorks } from "@/components/landing/how-it-works";
@@ -69,7 +69,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero startHref={startHref} />
+      <HomeHero startHref={startHref} />
 
       <section aria-label={t("marquee.label")} className="space-y-3 py-4">
         <Marquee items={skills} seconds={110} />

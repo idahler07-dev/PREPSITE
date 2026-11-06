@@ -2435,5 +2435,62 @@
       "log": "Log my score",
       "newDate": "Set a new date"
     }
+  },
+  "home3": {
+    "hero": {
+      "title": "Your SAT,",
+      "titleAccent": "planned and proven.",
+      "sub": "A study plan that adapts, real test practice, and progress you can see.",
+      "start": "Start free",
+      "how": "See how it works",
+      "trust": [
+        "Free to start",
+        "Desmos built in",
+        "Bluebook-style timing"
+      ],
+      "alt": "Sample Satify dashboard: estimated score, a recommended next step, the score trend and topic accuracy"
+    },
+    "demo": {
+      "sample": "Sample",
+      "pause": "Pause demo",
+      "play": "Play demo"
+    },
+    "preview": {
+      "greeting": "Good evening, Aziza",
+      "days": "31 days to SAT",
+      "tabs": [
+        "Overview",
+        "Math",
+        "Reading & Writing"
+      ],
+      "estimated": "Estimated",
+      "target": "Target",
+      "week": "This week",
+      "weekValue": "6h 20m",
+      "weekGoal": "of 8h",
+      "gap": "{n} to go",
+      "next": "Recommended next",
+      "nextTitle": "Inferences",
+      "nextMeta": "12 questions, about 15 min",
+      "nextWhy": "Your weakest Reading & Writing skill",
+      "start": "Start",
+      "trend": "Score trend",
+      "estimate": "Estimate",
+      "domains": "Topic accuracy",
+      "math": [
+        "Algebra",
+        "Advanced Math",
+        "Problem Solving",
+        "Geometry & Trig"
+      ],
+      "rw": [
+        "Information & Ideas",
+        "Craft & Structure",
+        "Expression of Ideas",
+        "Conventions"
+      ],
+      "delta": "+{n}",
+      "pct": "{n}%"
+    }
   }
 }
