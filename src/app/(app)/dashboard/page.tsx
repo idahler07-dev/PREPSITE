@@ -6,7 +6,6 @@ import { topBarStats } from "@/server/stats/topbar";
 import { notebookCounts } from "@/server/review/service";
 import { currentPlan } from "@/server/coach/service";
 import { db } from "@/lib/db";
-import { daysUntil } from "@/lib/goals";
 import { DOMAINS } from "@/lib/taxonomy";
 import { forecastScore } from "@/lib/stats/forecast";
 import { addDays, dayInZone, startOfDayInZone } from "@/lib/stats/streak";
@@ -59,7 +58,6 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   ]);
 
   const plan = planRow.plan as unknown as WeeklyPlan;
-  const days = user.testDate ? daysUntil(user.testDate) : null;
   const todayUtc = new Date().toISOString().slice(0, 10);
   const isNew = s.answered === 0 && top.score == null && start !== "1";
 
