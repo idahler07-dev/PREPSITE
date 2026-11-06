@@ -2548,6 +2548,242 @@
           "cta": "Try a session"
         }
       ]
+    },
+    "demos": {
+      "practice": {
+        "path": "satify.app/practice",
+        "label": "Sample practice session: a student picks an answer, checks it, reads the explanation and moves on",
+        "crumb": "Algebra",
+        "diff": "Medium",
+        "count": "Question {n} of 12",
+        "qs": [
+          {
+            "q": "If 3x + 7 = 22, what is the value of 2x − 1?",
+            "choices": [
+              "5",
+              "9",
+              "10",
+              "13"
+            ],
+            "answer": 1,
+            "steps": [
+              "Subtract 7 from both sides: 3x = 15",
+              "Divide by 3: x = 5",
+              "So 2x − 1 = 2(5) − 1 = 9"
+            ]
+          },
+          {
+            "q": "A line passes through (0, 4) and (2, 10). What is its slope?",
+            "choices": [
+              "2",
+              "5/2",
+              "3",
+              "6"
+            ],
+            "answer": 2,
+            "steps": [
+              "Slope = (10 − 4) ÷ (2 − 0)",
+              "= 6 ÷ 2 = 3"
+            ]
+          }
+        ],
+        "check": "Check",
+        "checking": "Checking",
+        "correct": "Correct",
+        "time": "in {s}s",
+        "explain": "Explanation",
+        "next": "Next",
+        "similar": "Try a similar one"
+      },
+      "mock": {
+        "path": "satify.app/mocks/practice-test-3",
+        "label": "Sample timed practice test: a student opens the question navigator, jumps to a question, marks it for review and finishes the module",
+        "section": "Section 2, Module 1: Math",
+        "hide": "Hide",
+        "desmos": "Desmos",
+        "reference": "Reference",
+        "flag": "Mark for Review",
+        "nav": "Question {n} of 22",
+        "back": "Back",
+        "next": "Next",
+        "navTitle": "Section 2, Module 1: Math Questions",
+        "current": "Current",
+        "unanswered": "Unanswered",
+        "review": "For Review",
+        "goReview": "Go to Review Page",
+        "qs": {
+          "11": {
+            "q": "The function f is defined by f(x) = x² − 6x + 8. For what value of x does f(x) reach its minimum?",
+            "choices": [
+              "−3",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "14": {
+            "q": "A circle in the xy-plane has equation (x − 2)² + (y + 1)² = 25. What is the radius of the circle?",
+            "choices": [
+              "5",
+              "10",
+              "25",
+              "√5"
+            ]
+          }
+        },
+        "scoring": "Scoring module 1",
+        "done": "Module 1 complete",
+        "correctN": "{n} of 22 correct",
+        "nextModule": "Next: the harder module",
+        "estimate": "Estimated Math"
+      },
+      "plan": {
+        "path": "satify.app/plan",
+        "label": "Sample study plan: a student drags a session to another day, the plan rebalances and today's session is checked off",
+        "week": "Week 3 · Nov 3–9",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "today": "Today",
+        "progress": "This week",
+        "min": "{n} min",
+        "cards": {
+          "alg": "Linear equations",
+          "inf": "Inferences",
+          "geo": "Circles",
+          "trans": "Transitions",
+          "adv": "Quadratics",
+          "words": "Words in context",
+          "mock": "Practice test",
+          "bound": "Boundaries"
+        },
+        "toast": "Moved to Thursday · week rebalanced",
+        "done": "Done"
+      },
+      "focus": {
+        "path": "satify.app/focus",
+        "label": "Sample focus session: a student picks 25 minutes, starts the timer, pauses once and finishes with a summary",
+        "title": "Focus session",
+        "task": "Advanced Math · 14 questions",
+        "lengths": [
+          "15",
+          "25",
+          "50"
+        ],
+        "minutes": "min",
+        "start": "Start",
+        "pause": "Pause",
+        "resume": "Resume",
+        "timelapse": "Time-lapse",
+        "answered": "{n} of 14 answered",
+        "sound": "Rain",
+        "complete": "Session complete",
+        "stats": [
+          {
+            "k": "Focused",
+            "v": "25 min"
+          },
+          {
+            "k": "Questions",
+            "v": "14"
+          },
+          {
+            "k": "Accuracy",
+            "v": "86%"
+          }
+        ],
+        "streak": "6-day streak"
+      },
+      "notebook": {
+        "path": "satify.app/review",
+        "label": "Sample mistake notebook: a missed question is saved, tagged as a misread, filtered and scheduled for review",
+        "title": "Mistake notebook",
+        "filters": [
+          "All",
+          "Misread",
+          "Calculation",
+          "Concept"
+        ],
+        "saved": "Saved from practice",
+        "addTag": "Tag",
+        "due": "Review {d}",
+        "schedule": "Schedule review",
+        "scheduled": "Review set for Thursday",
+        "items": [
+          {
+            "id": "n1",
+            "skill": "Inferences",
+            "q": "Which choice most logically completes the text?",
+            "tag": ""
+          },
+          {
+            "id": "n2",
+            "skill": "Quadratics",
+            "q": "What is the sum of the solutions to x² − 5x + 6 = 0?",
+            "tag": "Calculation"
+          },
+          {
+            "id": "n3",
+            "skill": "Transitions",
+            "q": "Which transition best connects the two sentences?",
+            "tag": "Concept"
+          },
+          {
+            "id": "n4",
+            "skill": "Circles",
+            "q": "What is the area of the circle with diameter 10?",
+            "tag": "Misread"
+          }
+        ],
+        "thu": "Thu",
+        "wrong": "You chose B · Answer C"
+      },
+      "analytics": {
+        "path": "satify.app/analytics",
+        "label": "Sample progress analytics: a student switches to a three-month view, the score chart redraws, and topic accuracy and an insight appear",
+        "title": "Progress",
+        "ranges": [
+          "4W",
+          "3M",
+          "All"
+        ],
+        "kpis": [
+          "Estimated score",
+          "Accuracy",
+          "Time studied"
+        ],
+        "hours": "{n}h",
+        "trend": "Estimated score",
+        "topics": "Topic accuracy",
+        "topicNames": [
+          "Algebra",
+          "Advanced Math",
+          "Inferences",
+          "Transitions"
+        ],
+        "insightTitle": "Biggest gain",
+        "insight": "Algebra accuracy is up 12 points since September.",
+        "tip": "{label} · {n}",
+        "labels4": [
+          "Oct 13",
+          "Oct 20",
+          "Oct 27",
+          "Nov 3"
+        ],
+        "labels3": [
+          "Aug 10",
+          "Aug 24",
+          "Sep 7",
+          "Sep 21",
+          "Oct 5",
+          "Oct 19",
+          "Nov 2"
+        ]
+      }
     }
   }
 }

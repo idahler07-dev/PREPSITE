@@ -1475,3 +1475,26 @@ html.lenis body {
   --ill-ink: #e4f7fa;
   --ill-shadow: rgb(0 0 0 / 0.35);
 }
+
+/* Product demos (home): pressed feedback and loading shimmer. */
+.demo [data-demo] {
+  transition: scale 0.14s ease;
+}
+.demo [data-pressed="true"] {
+  scale: 0.96;
+}
+.demo-skel {
+  background: linear-gradient(90deg, var(--surface-2) 0%, color-mix(in oklab, var(--surface-2), var(--border) 60%) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: demo-skel 1.1s linear infinite;
+}
+@keyframes demo-skel {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-skel {
+    animation: none;
+  }
+}
