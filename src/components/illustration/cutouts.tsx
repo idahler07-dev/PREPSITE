@@ -19,7 +19,7 @@ export function Cutouts({ variant = 0, className }: { variant?: 0 | 1 | 2 | 3; c
     { q: "bottom-0 left-0", qr: "rotate-180", w: "top-8 right-0", a: "bottom-8 right-10" },
     { q: "top-0 left-0", qr: "-rotate-90", w: "bottom-10 right-0", a: "top-8 right-10" },
     { q: "bottom-0 right-0", qr: "rotate-90", w: "top-10 left-0", a: "bottom-8 left-10" },
-  ][variant];
+  ][variant]!;
   return (
     <div aria-hidden className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
       {/* Quarter circle in the corner */}
