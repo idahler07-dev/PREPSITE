@@ -26,6 +26,7 @@ import { paidPlans } from "@/config/plans";
 import { DOMAINS } from "@/lib/taxonomy";
 import { FaqList } from "@/components/marketing/faq-list";
 import { HomeHero } from "@/components/home/hero";
+import { FeatureTour } from "@/components/home/feature-tour";
 import { Marquee, UNIVERSITY_LOGOS, type MarqueeItem } from "@/components/landing/marquees";
 import { Stats } from "@/components/landing/stats";
 import { HowItWorks } from "@/components/landing/how-it-works";
@@ -70,6 +71,7 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero startHref={startHref} />
+      <FeatureTour />
 
       <section aria-label={t("marquee.label")} className="space-y-3 py-4">
         <Marquee items={skills} seconds={110} />

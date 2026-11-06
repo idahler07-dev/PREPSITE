@@ -1454,3 +1454,24 @@ html.lenis body {
     animation: none;
   }
 }
+
+/* ---------- Illustration tokens (paper-cut style) ----------
+ * Every illustration reads these, so a palette change carries through.
+ * One ink weight, one radius scale, one shadow, one grain. */
+:root,
+.light {
+  --ill-paper: var(--white);
+  --ill-paper-2: var(--ice-100);
+  --ill-a: var(--cyan-600);
+  --ill-b: var(--cyan-400);
+  --ill-c: var(--aqua-300);
+  --ill-ink: var(--navy-900);
+  --ill-warm: #f2b45a;
+  --ill-shadow: rgb(16 45 64 / 0.18);
+}
+.dark {
+  --ill-paper: #183447;
+  --ill-paper-2: #1f4152;
+  --ill-ink: #e4f7fa;
+  --ill-shadow: rgb(0 0 0 / 0.35);
+}

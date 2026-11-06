@@ -449,3 +449,29 @@ Each task ends with the quality gates in §9 and a commit.
 5. **Logo marquee:** coverage marks only, until real logos with
    permission exist.
 6. **Dark mode:** kept, and tuned to navy rather than black.
+
+## 12. Illustration style (added): modern 2D, subtle paper-cut
+
+- **Shapes:** flat vector, bold silhouettes, rounded geometry, clean ink
+  outlines. No 3D clay, no realistic rendering, no comic effects, no heavy
+  gradients.
+- **Fixed rules** (`components/illustration/kit.tsx`):
+  - One ink weight: 2.5 units in a 400×300 scene.
+  - Radii 6, 12, 20.
+  - One paper-cut lift: a crisp 3px drop shadow.
+  - One faint grain, applied only to the paper cutout.
+  - Colour only from the `--ill-*` tokens, so a palette change carries
+    through.
+- **Depth:** 2–3 layers per scene: back cutout, main object, front accent.
+  Layers slide in on view; one element per scene floats gently. Everything
+  is still under reduced motion.
+- **Scenes:** Study plan, Practice, Mock test, Focus
+  (`components/illustration/scenes.tsx`).
+- **Decoration:** quarter circles, wavy strips and dotted arcs
+  (`components/illustration/cutouts.tsx`), in four arrangements so
+  neighbouring panels differ. Used in panel corners and on section edges
+  only.
+- **Where:** landing feature sections, page headers and empty states. Never
+  inside dashboards, practice, tests or focus sessions.
+- **Mascot:** the spirit is redrawn in the same style (same ink, radii,
+  lift and grain). Parked until the rest is built.

@@ -2491,6 +2491,63 @@
       ],
       "delta": "+{n}",
       "pct": "{n}%"
+    },
+    "tour": {
+      "title": "Everything for the SAT, in one calm place",
+      "items": [
+        {
+          "key": "plan",
+          "title": "A plan that fits your week",
+          "body": "Set your test date and target. Satify spreads the work across the days you have.",
+          "points": [
+            "Adapts after every test",
+            "Move any session",
+            "Daily goals you can finish"
+          ],
+          "chip": "This week",
+          "chipValue": "5 of 7 sessions",
+          "cta": "Build my plan"
+        },
+        {
+          "key": "practice",
+          "title": "Practice that explains itself",
+          "body": "Every skill on the Digital SAT, with step-by-step explanations when you miss.",
+          "points": [
+            "Math and Reading & Writing",
+            "Filters by skill and difficulty",
+            "Similar questions on demand"
+          ],
+          "chip": "Correct",
+          "chipValue": "+10 XP",
+          "cta": "Start practising"
+        },
+        {
+          "key": "mock",
+          "title": "Mock tests that feel real",
+          "body": "Adaptive modules, the Bluebook layout, real timing and Desmos built in.",
+          "points": [
+            "Two modules per section",
+            "Mark for review and eliminate",
+            "Results by skill"
+          ],
+          "chip": "Module 2",
+          "chipValue": "18:42 left",
+          "cta": "See mock tests"
+        },
+        {
+          "key": "focus",
+          "title": "Focus sessions",
+          "body": "Pick a length, put your phone away and let the timer keep you honest.",
+          "points": [
+            "25, 50 or custom minutes",
+            "Optional ambient sound",
+            "A short summary after"
+          ],
+          "chip": "Focus",
+          "chipValue": "25 min",
+          "cta": "Try a session"
+        }
+      ]
     }
   }
 }
