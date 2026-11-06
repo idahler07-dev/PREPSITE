@@ -91,6 +91,7 @@ export async function logOfficialScore(raw: unknown) {
     revalidatePath("/resources", "page");
     revalidatePath("/dashboard", "page");
     revalidatePath("/sat", "page");
+    revalidatePath("/dashboard", "page");
     return null;
   });
 }

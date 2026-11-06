@@ -497,7 +497,7 @@ export function TestRunner({
               <AlertDialogAction
                 onClick={async () => {
                   await autosave.flush();
-                  router.push("/sat");
+                  router.push("/dashboard");
                 }}
               >
                 {t("exitConfirm.leave")}

@@ -19,7 +19,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const locale = await getLocale();
   const sp = await searchParams;
   const next = safeNextPath(sp.next) ?? undefined;
-  if (await getCurrentUser()) redirect({ href: next ?? "/sat", locale });
+  if (await getCurrentUser()) redirect({ href: next ?? "/dashboard", locale });
 
   const t = await getTranslations("auth");
   const e = env();

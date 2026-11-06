@@ -46,7 +46,7 @@ export function CommandPalette({ signedIn, openOnMount = false }: { signedIn: bo
 
   const pages = signedIn
     ? [
-        { href: "/sat", label: nav("dashboard"), icon: LayoutDashboard },
+        { href: "/dashboard", label: nav("dashboard"), icon: LayoutDashboard },
         { href: "/practice", label: nav("practice"), icon: Zap },
         { href: "/mocks", label: nav("mocks"), icon: ClipboardList },
         { href: "/plan", label: nav("plan"), icon: CalendarDays },

@@ -109,7 +109,7 @@ export function Flashcards({ cards }: { cards: Card[] }) {
         <p className="font-display text-2xl font-extrabold">{cards.length ? t("doneTitle") : t("nothingDue")}</p>
         {cards.length > 0 && <p className="text-muted-foreground">{t("reviewed", { count: cards.length })}</p>}
         <Button asChild variant="outline">
-          <Link href="/sat">{t("back")}</Link>
+          <Link href="/dashboard">{t("back")}</Link>
         </Button>
       </m.div>
     );

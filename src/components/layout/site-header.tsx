@@ -47,7 +47,7 @@ export async function SiteHeader() {
             <>
               <ThemeSync theme={user.theme} />
               <Button asChild size="sm" className="hidden sm:inline-flex">
-                <Link href="/sat">{h("dashboard")}</Link>
+                <Link href="/dashboard">{h("dashboard")}</Link>
               </Button>
               <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
             </>

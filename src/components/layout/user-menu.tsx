@@ -33,7 +33,7 @@ export function UserMenu({ name, email, isOwner }: { name: string | null; email:
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/sat">
+          <Link href="/dashboard">
             <LayoutDashboard aria-hidden /> {t("dashboard")}
           </Link>
         </DropdownMenuItem>

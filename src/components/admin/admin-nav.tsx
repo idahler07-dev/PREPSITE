@@ -79,7 +79,7 @@ export function AdminNav({
         </NavLink>
       ))}
       <NavLink
-        href="/sat"
+        href="/dashboard"
         className="flex shrink-0 items-center gap-2 md:mt-4"
       >
         <Home className="size-4" aria-hidden />

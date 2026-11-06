@@ -41,7 +41,7 @@ export function PaymentStatus({ orderId }: { orderId: string }) {
           <CheckCircle2 className="size-6 text-success" aria-hidden /> {t("paid")}
         </p>
         <Button asChild>
-          <Link href="/sat">{t("toDashboard")}</Link>
+          <Link href="/dashboard">{t("toDashboard")}</Link>
         </Button>
       </div>
     );

@@ -90,7 +90,14 @@
     "path": "Path",
     "progress": "Progress",
     "profile": "Profile",
-    "overview": "Overview"
+    "overview": "Overview",
+    "focus": "Focus sessions",
+    "mistakeNotebook": "Mistake notebook",
+    "topics": "Topic progress",
+    "studyHistory": "Study history",
+    "insights": "Insights",
+    "me": "Me",
+    "study": "Study"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -2011,6 +2018,7 @@
     "groups": {
       "study": "Study",
       "practice": "Practice",
+      "insights": "Insights",
       "account": "Account"
     },
     "more": "More",
@@ -2785,5 +2793,82 @@
         ]
       }
     }
+  },
+  "dash": {
+    "title": "Dashboard",
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "afternoon": "Good afternoon, {name}",
+      "evening": "Good evening, {name}",
+      "plain": "Welcome back"
+    },
+    "startSession": "Start session",
+    "estimated": "Estimated score",
+    "estimatedNone": "No estimate yet",
+    "estimatedHint": "Take a practice test or log an official score",
+    "delta": "{n, plural, =0 {No change} other {{sign}# since last}}",
+    "target": "Target",
+    "targetNone": "Set a target",
+    "gap": "{n} to go",
+    "reached": "Target reached",
+    "week": "This week",
+    "weekOf": "of {goal}",
+    "minutes": "{n, plural, one {# min} other {# min}}",
+    "hm": "{h}h {m}m",
+    "next": "Recommended next",
+    "nextWhy": {
+      "weak": "Your weakest skill right now",
+      "plan": "Next on today's plan",
+      "review": "Mistakes due for review today",
+      "mock": "Time for a full practice test",
+      "start": "A good first step"
+    },
+    "nextDrill": "{skill}",
+    "nextDrillMeta": "{count} questions · about {min} min",
+    "nextReview": "Mistake notebook",
+    "nextReviewMeta": "{count, plural, one {# card due} other {# cards due}}",
+    "nextMock": "Full practice test",
+    "nextMockMeta": "2 sections · about 2h 14m",
+    "start": "Start",
+    "progress": "Score progress",
+    "progressEstimate": "Forecast for test day (estimate)",
+    "progressFew": "Your trend appears after 4 scores",
+    "progressFewBody": "{n, plural, =0 {No scores yet.} one {# score so far.} other {# scores so far.}} Practice tests and official scores both count.",
+    "forecast": "Estimate",
+    "showTable": "Show as table",
+    "colDate": "Date",
+    "colScore": "Score",
+    "goal": "Weekly goal",
+    "goalBody": "{done} of {goal} minutes",
+    "goalDone": "Goal met. Nice work.",
+    "goalPlan": "Open plan",
+    "sections": "Math vs Reading & Writing",
+    "accuracy": "Accuracy",
+    "pace": "Pace",
+    "perQ": "{s}s per question",
+    "noData": "No answers yet",
+    "topics": "Topic performance",
+    "topicsDrill": "Drill",
+    "answered": "{n, plural, one {# answered} other {# answered}}",
+    "activity": "Recent activity",
+    "activityNone": "Your finished drills and tests will show here.",
+    "kinds": {
+      "DRILL": "Drill",
+      "MOCK": "Practice test",
+      "SECTION": "Section test",
+      "MODULE": "Module",
+      "DAILY": "Daily question",
+      "REVIEW": "Review"
+    },
+    "resume": "Resume your unfinished session",
+    "resumeCta": "Resume",
+    "newTitle": "Find your starting score",
+    "newBody": "Take a practice test for a full estimate, or log a score you already have. Then your plan, trend and topic breakdown fill in.",
+    "newTest": "Take a practice test",
+    "newHave": "I have a score",
+    "newSkip": "Just practise for now",
+    "sample": "Sample",
+    "score": "{correct} of {total}",
+    "daysLeft": "{n, plural, =0 {Test day} one {# day to SAT} other {# days to SAT}}"
   }
 }

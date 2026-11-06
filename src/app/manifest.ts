@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
     short_name: siteConfig.shortName,
-    start_url: "/sat",
+    start_url: "/dashboard",
     scope: "/",
     display: "standalone",
     background_color: THEME_COLORS.light,

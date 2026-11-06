@@ -89,5 +89,5 @@ export async function signInAsDemo() {
   if (!env().DEMO_MODE) return;
   const ip = await clientIp();
   if (!(await rateLimit(`demo-login:ip:${ip}`, 30, 3600)).ok) return;
-  await signIn("demo", { redirectTo: "/sat" });
+  await signIn("demo", { redirectTo: "/dashboard" });
 }

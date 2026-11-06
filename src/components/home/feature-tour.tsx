@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const SCENES = { plan: StudyPlanScene, practice: PracticeScene, mock: MockTestScene, focus: FocusScene } as const;
 const CHIP_ICON = { plan: CalendarCheck, practice: CheckCircle2, mock: ClipboardList, focus: Headphones } as const;
-const HREF = { plan: "/plan", practice: "/practice", mock: "/mocks", focus: "/sat" } as const;
+const HREF = { plan: "/plan", practice: "/practice", mock: "/mocks", focus: "/focus" } as const;
 
 type Item = { key: keyof typeof SCENES; title: string; body: string; points: string[]; chip: string; chipValue: string; cta: string };
 

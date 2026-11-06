@@ -58,7 +58,7 @@ export default async function HomePage() {
   const b = await getTranslations("billing");
   const user = await getCurrentUser();
   // Signed-in students go straight to their path (brief §5).
-  if (user) redirect("/sat");
+  if (user) redirect("/dashboard");
   const startHref = "/login";
 
   const skills: MarqueeItem[] = DOMAINS.flatMap((d) =>
