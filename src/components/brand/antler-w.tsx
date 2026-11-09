@@ -1,11 +1,12 @@
 import { cn } from "@/lib/utils";
 
-import { ANTLER } from "@/lib/brand/antler";
+import { useId } from "react";
+import { ANTLER, LEAF } from "@/lib/brand/antler";
 
-export { ANTLER, antlerPaths } from "@/lib/brand/antler";
+export { ANTLER, LEAF, antlerPaths, leafSvg } from "@/lib/brand/antler";
 
 /** The wordmark after the antler W: "illo" + "Prep" (brand name, not translated). */
-const WORD = ["illo", "Prep"] as const;
+const WORD = ["ı", "llo", "Prep"] as const;
 
 /** The antler W in `currentColor`. */
 export function AntlerW({ className, variant = "full", glyph = false, title }: { className?: string; variant?: "full" | "simple"; glyph?: boolean; title?: string }) {
@@ -39,16 +40,37 @@ export function AppMark({ className, simple = false }: { className?: string; sim
   );
 }
 
+/** The willow leaf (gold enamel). Purely decorative. */
+export function WillowLeaf({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  const id = `leaf-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  return (
+    <svg viewBox="0 0 100 40" overflow="visible" className={className} style={style} aria-hidden>
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor={LEAF.fillFrom} />
+          <stop offset="1" stopColor={LEAF.fillTo} />
+        </linearGradient>
+      </defs>
+      <path d={LEAF.outline} fill={`url(#${id})`} stroke={LEAF.rim} strokeWidth={3.5} strokeLinejoin="round" />
+      <path d={LEAF.vein} fill="none" stroke={LEAF.rim} strokeWidth={3} strokeLinecap="round" />
+    </svg>
+  );
+}
+
 /**
- * The wordmark: the antler W stands in for the W of "WilloPrep".
- * "Willo" in ink, "Prep" in the primary cyan. Inherits font size.
+ * The wordmark: the antler W (in the mascot's antler brown) stands in for the
+ * W of "WilloPrep", and a willow leaf dots the i. Inherits font size.
  */
 export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-end font-display font-extrabold tracking-[-0.035em] text-foreground", className)} aria-hidden>
-      <AntlerW glyph className="me-[-0.02em] h-[0.98em] w-auto translate-y-[0.02em]" />
-      <span>{WORD[0]}</span>
-      <span className="text-primary">{WORD[1]}</span>
+      <AntlerW glyph className="me-[0.05em] h-[0.98em] w-auto translate-y-[0.02em] text-[var(--antler)]" />
+      <span className="relative inline-block">
+        {WORD[0]}
+        <WillowLeaf className="absolute top-[0.06em] left-[calc(50%-0.19em)] w-[0.38em] -rotate-[48deg]" />
+      </span>
+      <span>{WORD[1]}</span>
+      <span className="text-primary">{WORD[2]}</span>
     </span>
   );
 }

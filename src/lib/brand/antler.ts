@@ -26,3 +26,26 @@ export function antlerPaths(color: string, variant: "full" | "simple" = "full", 
   return [`<path d="${ANTLER.stem}" stroke="${color}" stroke-width="${stem}"/>`, ...ANTLER.tines[variant].map((d) => `<path d="${d}" stroke="${color}" stroke-width="${tine}"/>`)].join("");
 }
 
+
+/**
+ * The willow leaf: the dot of the "i" in the wordmark and the pin on Willo's
+ * scarf. Drawn on a 100×40 grid; gold enamel with an amber-brown rim.
+ */
+export const LEAF = {
+  outline: "M4 24 C24 6 62 2 97 12 C70 28 30 36 4 24 Z",
+  vein: "M10 23 C38 16 66 13 91 12.5",
+  fillFrom: "#F9D166",
+  fillTo: "#E49A35",
+  rim: "#B26A22",
+} as const;
+
+/** Standalone leaf SVG markup (for scripts). `id` keeps gradient ids unique. */
+export function leafSvg(id: string, style = "") {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 40" overflow="visible" style="${style}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${LEAF.fillFrom}"/><stop offset="1" stop-color="${LEAF.fillTo}"/></linearGradient></defs><path d="${LEAF.outline}" fill="url(#${id})" stroke="${LEAF.rim}" stroke-width="3.5" stroke-linejoin="round"/><path d="${LEAF.vein}" fill="none" stroke="${LEAF.rim}" stroke-width="3" stroke-linecap="round"/></svg>`;
+}
+
+/** Wordmark colours: the antler W takes the mascot's antler brown. */
+export const WORD_COLORS = {
+  light: { antler: "#7A3E1F", ink: "#102D40", prep: "#087F9B" },
+  dark: { antler: "#C98A5A", ink: "#E4F7FA", prep: "#20B9D0" },
+} as const;

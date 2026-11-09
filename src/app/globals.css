@@ -65,6 +65,7 @@
   --ring: var(--primary);
 
   /* Amber: streaks and XP only. */
+  --antler: #7a3e1f;
   --accent: #df8a3e;
   --accent-foreground: #102d40;
   --accent-soft: #fcefe2;
@@ -172,6 +173,7 @@
   --primary-foreground: #06222C;
   --primary-soft: #123B48;
 
+  --antler: #c98a5a;
   --accent: #f0a462;
   --accent-foreground: #0b1d28;
   --accent-soft: #2e2218;

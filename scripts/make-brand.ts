@@ -16,7 +16,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { chromium } from "@playwright/test";
-import { ANTLER, antlerPaths } from "../src/lib/brand/antler";
+import { ANTLER, WORD_COLORS, antlerPaths, leafSvg } from "../src/lib/brand/antler";
 
 const OUT = "public/brand";
 const C = { cyanA: "#0A6E87", cyanB: "#1FB3CB", navy: "#102D40", ink: "#0B1D28", cyan: "#087F9B", cyanDark: "#20B9D0", ice: "#E4F7FA", cloud: "#F5F9FC" };
@@ -37,11 +37,11 @@ const plain = (variant: "full" | "simple", fg: string, bg: string) => `<svg xmln
 <rect width="64" height="64" rx="16" fill="${bg}"/><g transform="translate(6 6) scale(0.8125)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(fg, variant)}</g></svg>`;
 
 const wordmarkSvg = (dark: boolean) => {
-  const ink = dark ? C.ice : C.navy;
-  const cy = dark ? C.cyanDark : C.cyan;
+  const c = dark ? WORD_COLORS.dark : WORD_COLORS.light;
+  const leaf = leafSvg(dark ? "ld" : "ll").replace("<svg ", '<svg x="47" y="3" width="15" height="6" transform="rotate(-48 54.5 6)" ');
   return `<svg xmlns="http://www.w3.org/2000/svg" width="236" height="48" viewBox="0 0 236 48">
-<g transform="translate(0 4) scale(0.8)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(ink, "full", ANTLER.glyph)}</g>
-<text x="48" y="38" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif" font-weight="800" font-size="40" letter-spacing="-1.4" fill="${ink}">illo<tspan fill="${cy}">Prep</tspan></text></svg>`;
+<g transform="translate(0 4) scale(0.8)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(c.antler, "full", ANTLER.glyph)}</g>
+<text x="49" y="40" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif" font-weight="800" font-size="40" letter-spacing="-1.4" fill="${c.ink}">ıllo<tspan fill="${c.prep}">Prep</tspan></text>${leaf}</svg>`;
 };
 
 /** ICO container holding PNG images. */
@@ -115,11 +115,15 @@ async function main() {
   await png("icon-maskable-512.png", 512, "full", { radius: 0, pad: 0.24 });
   await png("mark-1024.png", 1024, "full");
 
-  const word = (dark: boolean, px: number) =>
-    `<span style="display:inline-flex;align-items:flex-end;font:800 ${px}px/1 'Plus Jakarta Sans';letter-spacing:-0.035em;color:${dark ? C.ice : C.navy}">
-<svg viewBox="2 6 60 50" style="height:0.98em;width:auto;margin-right:-0.02em" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(dark ? C.ice : C.navy, "full", ANTLER.glyph)}</svg><span>illo</span><span style="color:${dark ? C.cyanDark : C.cyan}">Prep</span></span>`;
+  let leafN = 0;
+  const word = (dark: boolean, px: number) => {
+    const c = dark ? WORD_COLORS.dark : WORD_COLORS.light;
+    const leaf = leafSvg(`w${leafN++}`, "position:absolute;top:0.06em;left:calc(50% - 0.19em);width:0.38em;transform:rotate(-48deg)");
+    return `<span style="display:inline-flex;align-items:flex-end;font:800 ${px}px/1 'Plus Jakarta Sans';letter-spacing:-0.035em;color:${c.ink}">
+<svg viewBox="2 6 60 50" style="height:0.98em;width:auto;margin-right:0.05em" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(c.antler, "full", ANTLER.glyph)}</svg><span style="position:relative;display:inline-block">ı${leaf}</span><span>llo</span><span style="color:${c.prep}">Prep</span></span>`;
+  };
 
-  writeFileSync(`${OUT}/logo-email.png`, await shot(`<div style="padding:4px 2px">${word(false, 52)}</div>`, 300, 64));
+  writeFileSync(`${OUT}/logo-email.png`, await shot(`<div style="padding:10px 4px 4px">${word(false, 50)}</div>`, 300, 70));
 
   const og = `<div style="width:1200px;height:630px;box-sizing:border-box;padding:84px 96px;display:flex;flex-direction:column;justify-content:space-between;
 background:radial-gradient(900px 500px at 85% 15%, rgba(32,185,208,.28), transparent 60%), linear-gradient(160deg, ${C.navy} 0%, ${C.ink} 100%);color:${C.ice};font-family:'Plus Jakarta Sans'">
