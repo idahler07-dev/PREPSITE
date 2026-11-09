@@ -44,12 +44,12 @@ describe("periods", () => {
 describe("prices", () => {
   const plan = getPaidPlan("monthly")!;
   it("quotes in minor units and applies the bigger discount", () => {
-    expect(quote(plan, "UZS")).toEqual({ list: 19_900_000, discount: 0, amount: 19_900_000, usedReferral: false });
-    expect(quote(plan, "USD", { promo: { percentOff: 20, amountOff: null } })).toMatchObject({ list: 1900, discount: 380, amount: 1520 });
+    expect(quote(plan, "UZS")).toEqual({ list: 12_900_000, discount: 0, amount: 12_900_000, usedReferral: false });
+    expect(quote(plan, "USD", { promo: { percentOff: 20, amountOff: null } })).toMatchObject({ list: 999, discount: 200, amount: 799 });
     expect(quote(plan, "UZS", { promo: { percentOff: null, amountOff: { UZS: 50_000 } } })).toMatchObject({ discount: 5_000_000 });
     expect(quote(plan, "USD", { promo: { percentOff: null, amountOff: { UZS: 50_000 } } })).toMatchObject({ discount: 0 });
-    expect(quote(plan, "USD", { promo: { percentOff: 5, amountOff: null }, referral: true })).toMatchObject({ discount: 190, usedReferral: true });
+    expect(quote(plan, "USD", { promo: { percentOff: 5, amountOff: null }, referral: true })).toMatchObject({ discount: 100, usedReferral: true });
     expect(quote(plan, "USD", { promo: { percentOff: 100, amountOff: null } })).toMatchObject({ amount: 0 });
-    expect(quote(plan, "USD", { promo: { percentOff: null, amountOff: { USD: 500 } } })).toMatchObject({ amount: 0, discount: 1900 });
+    expect(quote(plan, "USD", { promo: { percentOff: null, amountOff: { USD: 500 } } })).toMatchObject({ amount: 0, discount: 999 });
   });
 });

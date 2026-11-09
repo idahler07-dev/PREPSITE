@@ -101,6 +101,11 @@ export async function remainingToday(user: Pick<CurrentUser, "id" | "email" | "e
   return Math.max(0, limit - used);
 }
 
+/** The tutor is a Premium feature (owners included). Checked before cached answers too. */
+async function requirePremium(user: Pick<CurrentUser, "id" | "email" | "emailVerified">) {
+  if ((await tierOf(user)) === "free") throw new HttpError(402, "PREMIUM_REQUIRED");
+}
+
 async function requireQuota(user: Pick<CurrentUser, "id" | "email" | "emailVerified">) {
   if (!aiAvailable()) throw new HttpError(503, "AI_UNAVAILABLE");
   if ((await remainingToday(user)) <= 0) throw new HttpError(429, "QUOTA_EXCEEDED");
@@ -228,6 +233,7 @@ function cachedStream(events: TutorEvent[]): ReadableStream<Uint8Array> {
 /** Explanation, hint or another way of solving: cached per question version, language, mode and (why-wrong) choice. */
 export async function tutorStream(user: CurrentUser, raw: unknown): Promise<ReadableStream<Uint8Array>> {
   const input = tutorRequestSchema.parse(raw);
+  await requirePremium(user);
   const { response, question, answered } = await loadAccess(user.id, input.attemptId, input.questionId, input.mode);
   const choice = input.mode === "whyWrong" ? (response.answer ?? "").toUpperCase() : "";
   const key = { questionId: question.id, questionVersion: question.version, locale: input.locale, mode: input.mode, choice };
@@ -269,6 +275,7 @@ type ChatMessage = { role: "user" | "assistant"; content: string };
 /** Follow-up questions about one question, after an explanation (or hint) was shown. */
 export async function tutorChatStream(user: CurrentUser, raw: unknown): Promise<ReadableStream<Uint8Array>> {
   const input = chatRequestSchema.parse(raw);
+  await requirePremium(user);
   const { response, question, answered } = await loadAccess(user.id, input.attemptId, input.questionId, accessModeFor(input.mode));
   const opening = await db.aiExplanation.findUnique({
     where: {

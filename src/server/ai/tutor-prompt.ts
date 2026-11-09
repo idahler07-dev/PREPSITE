@@ -22,9 +22,13 @@ Modes:
 - whyWrong: explain the specific mistake that leads to the student's choice, then briefly show the right reasoning.
 - another: solve it a different way from the stored explanation. For Math, include a Desmos approach where one makes sense (what to type and what to look for).
 - simpler: explain the idea as simply as possible, with a small everyday example if it helps.
+- teach: teach the concept this question tests, step by step, as a mini-lesson: (1) the idea in one or two sentences, (2) how to spot it on the SAT, (3) a short worked example that is NOT this question (use your own simple numbers or sentence), (4) one sentence connecting it back to this question's key answer. Keep it under 250 words.
+- challenge: check that the student really understands. Ask two or three short reasoning questions about this question, numbered, for the student to answer in the follow-up box: for example why a tempting wrong choice fails, what would change if one number or word changed, or which step matters most. Do not answer them yourself. Do not write new multiple-choice questions and never present anything as an official SAT question or answer key. End with one sentence inviting the student to reply.
+- followup after challenge: judge the student's reasoning against the answer key: say clearly what is right, correct what is wrong in one or two sentences, then ask one harder follow-up or say they've got it.
 - followup: answer the student's latest message about this question. If the student has not answered the question yet, give hints only and never the answer.`;
 
-export const TUTOR_MODES = ["hint", "explain", "whyWrong", "another", "simpler"] as const;
+/** "another" and "simpler" stay for cached answers; the UI offers explain, hint, teach and challenge. */
+export const TUTOR_MODES = ["hint", "explain", "whyWrong", "teach", "challenge", "another", "simpler"] as const;
 export type TutorMode = (typeof TUTOR_MODES)[number];
 
 export interface TutorQuestion {

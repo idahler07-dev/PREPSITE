@@ -36,7 +36,7 @@ export function Pricing({ signedIn, startHref, canPay, planNames }: { signedIn: 
       return {
         id: p.id,
         name: planNames[p.id] ?? p.id,
-        price: money(amount, cur),
+        price: money(amount, cur, cur === "USD" && !Number.isInteger(amount) ? 2 : 0),
         note,
         href: canPay[cur] ? (signedIn ? checkout : `/login?next=${encodeURIComponent(checkout)}`) : undefined,
         cta: canPay[cur] ? t("choose") : t("soon"),

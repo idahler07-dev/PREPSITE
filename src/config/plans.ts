@@ -1,5 +1,6 @@
 /**
- * Plans and prices. PLACEHOLDER PRICES — set your real prices before launch.
+ * Plans and prices. Premium is $9.99 a month (strategy doc); longer plans are
+ * discounted. UZS prices are the local-card equivalents — review before launch.
  *
  * Prices are whole units (so'm for UZS, dollars for USD). UZS is charged
  * through local cards (Payme, Click); USD through international cards (Octo).
@@ -28,13 +29,14 @@ export interface PaidPlan {
   featured?: boolean;
 }
 
-export const freeLimits: PlanLimits = { questionsPerDay: 20, practiceTests: 1, aiAnswersPerDay: 10 };
+/** Free: practice, official explanations and one full test. The AI tutor is Premium only. */
+export const freeLimits: PlanLimits = { questionsPerDay: 20, practiceTests: 1, aiAnswersPerDay: 0 };
 export const premiumLimits: PlanLimits = { questionsPerDay: null, practiceTests: null, aiAnswersPerDay: 100 };
 
 export const paidPlans: PaidPlan[] = [
-  { id: "monthly", periodDays: 30, price: { UZS: 199_000, USD: 19 } },
-  { id: "quarter", periodDays: 90, price: { UZS: 499_000, USD: 45 }, featured: true },
-  { id: "testday", untilTestDate: { minDays: 14, maxDays: 365 }, price: { UZS: 899_000, USD: 79 } },
+  { id: "monthly", periodDays: 30, price: { UZS: 129_000, USD: 9.99 }, featured: true },
+  { id: "quarter", periodDays: 90, price: { UZS: 339_000, USD: 26.99 } },
+  { id: "testday", untilTestDate: { minDays: 14, maxDays: 365 }, price: { UZS: 749_000, USD: 59 } },
 ];
 
 export const billing = {

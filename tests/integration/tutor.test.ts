@@ -35,7 +35,7 @@ async function events(stream: ReadableStream<Uint8Array>) {
 }
 const textOf = (evs: { type: string; text?: string }[]) => evs.filter((e) => e.type === "delta").map((e) => e.text).join("");
 
-async function setup(feedback: "IMMEDIATE" | "END" = "IMMEDIATE") {
+async function setup(feedback: "IMMEDIATE" | "END" = "IMMEDIATE", premium = true) {
   await db.question.create({
     data: {
       code: "T-ALG-0001",
@@ -55,6 +55,8 @@ async function setup(feedback: "IMMEDIATE" | "END" = "IMMEDIATE") {
     },
   });
   const user = await makeUser();
+  // The tutor is Premium only.
+  if (premium) await db.subscription.create({ data: { userId: user.id, planId: "monthly", source: "GRANT", startsAt: new Date(Date.now() - 86_400_000), endsAt: new Date(Date.now() + 30 * 86_400_000) } });
   const attempt = await createDrill(user.id, { section: "MATH", count: 1, feedback });
   const state = await getRunnerState(attempt.id, user.id);
   if (!("items" in state)) throw new Error("no module");
@@ -73,6 +75,13 @@ describe("AI tutor", () => {
     await resetDb();
     model.calls = [];
     model.reply = "VERDICT: AGREE\nSubtract 3 from both sides, then divide by 2.";
+  });
+
+  it("is Premium only, cached answers included", async () => {
+    const s = await setup("END", false);
+    await s.answer("A");
+    await expect(tutorStream(s.user as never, s.req("explain"))).rejects.toMatchObject({ status: 402, code: "PREMIUM_REQUIRED" });
+    await expect(tutorChatStream(s.user as never, { ...s.req("explain"), message: "why?" })).rejects.toMatchObject({ code: "PREMIUM_REQUIRED" });
   });
 
   it("never explains before the answer is graded; hints only in drills that check as you go", async () => {
@@ -96,7 +105,7 @@ describe("AI tutor", () => {
     const first = await events(await tutorStream(s.user as never, s.req("explain")));
     expect(first[0]).toEqual({ type: "start", cached: false });
     expect(textOf(first)).toBe("Subtract 3 from both sides, then divide by 2.");
-    expect(first.at(-1)).toEqual({ type: "done", remaining: aiLimits.tutorPerDay.free - 1 });
+    expect(first.at(-1)).toEqual({ type: "done", remaining: aiLimits.tutorPerDay.premium - 1 });
 
     const again = await events(await tutorStream(s.user as never, s.req("explain")));
     expect(again[0]).toEqual({ type: "start", cached: true });
@@ -135,7 +144,7 @@ describe("AI tutor", () => {
     const s = await setup();
     await s.answer("A");
     await db.aiUsage.createMany({
-      data: Array.from({ length: aiLimits.tutorPerDay.free }, () => ({ userId: s.user.id, feature: "tutor", model: "m", inputTokens: 1, outputTokens: 1, costMicroUsd: 1 })),
+      data: Array.from({ length: aiLimits.tutorPerDay.premium }, () => ({ userId: s.user.id, feature: "tutor", model: "m", inputTokens: 1, outputTokens: 1, costMicroUsd: 1 })),
     });
     await expect(tutorStream(s.user as never, s.req("explain"))).rejects.toMatchObject({ status: 429, code: "QUOTA_EXCEEDED" });
   });

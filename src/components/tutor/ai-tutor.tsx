@@ -3,13 +3,16 @@
 import "katex/dist/katex.min.css"; // math styles only where math is shown
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Lightbulb, Send } from "lucide-react";
+import { BookOpen, Lightbulb, MessageSquareText, Send, Sparkles, Target } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/mascot/mascot";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-export type Mode = "hint" | "explain" | "whyWrong" | "another" | "simpler";
+export type Mode = "hint" | "explain" | "whyWrong" | "teach" | "challenge" | "another" | "simpler";
+
+const MODE_ICON = { hint: Lightbulb, explain: MessageSquareText, whyWrong: MessageSquareText, teach: BookOpen, challenge: Target, another: MessageSquareText, simpler: MessageSquareText } as const;
 type Event = { type: "start"; cached: boolean } | { type: "delta"; text: string } | { type: "flagged" } | { type: "done"; remaining: number | null } | { type: "error"; code: string };
 
 const MAX_CHARS = 600;
@@ -146,7 +149,26 @@ export function AiTutor({
     if (focusFollowUp && text && !busy && !flagged) followUp.current?.focus();
   }, [focusFollowUp, text, busy, flagged]);
 
-  const modes: Mode[] = answered ? ["explain", ...(wrongChoice ? (["whyWrong"] as const) : []), "another", "simpler"] : ["hint"];
+  // The four tutor modes: Hint before answering; Explain (or "explain my mistake"), Teach and Challenge after.
+  const modes: Mode[] = answered ? [wrongChoice ? "whyWrong" : "explain", "teach", "challenge"] : ["hint"];
+  if (error === "PREMIUM_REQUIRED") {
+    return (
+      <section className="flex flex-col gap-3 rounded-[14px] border border-primary/25 bg-primary-soft/60 p-4 sm:flex-row sm:items-center" aria-label={t("title")}>
+        <Mascot pose="point" className="w-14 shrink-0" />
+        <div className="flex-1">
+          <p className="flex items-center gap-1.5 font-semibold">
+            <Sparkles className="size-4 text-primary" aria-hidden />
+            {t("premium.title")}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("premium.body")}</p>
+        </div>
+        <Button asChild size="sm">
+          <Link href="/pricing">{t("premium.cta")}</Link>
+        </Button>
+      </section>
+    );
+  }
+
   const errorText =
     error === "QUOTA_EXCEEDED"
       ? t("errors.quota")
@@ -166,12 +188,15 @@ export function AiTutor({
         <span className="flex items-center gap-1 text-sm font-semibold">
           <Mascot pose={busy ? "think" : "wave"} className="w-9" /> {t("title")}
         </span>
-        {modes.map((m) => (
-          <Button key={m} size="sm" variant={mode === m ? "default" : "outline"} disabled={busy} onClick={() => void ask(m)}>
-            {m === "hint" && <Lightbulb aria-hidden />}
-            {t(`modes.${m}`)}
-          </Button>
-        ))}
+        {modes.map((m) => {
+          const Icon = MODE_ICON[m];
+          return (
+            <Button key={m} size="sm" variant={mode === m ? "default" : "outline"} disabled={busy} onClick={() => void ask(m)} title={t(`modeHelp.${m as "hint"}`)}>
+              <Icon aria-hidden />
+              {t(`modes.${m}`)}
+            </Button>
+          );
+        })}
       </div>
 
       {mode && (

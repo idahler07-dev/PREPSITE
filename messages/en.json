@@ -1669,13 +1669,15 @@
     }
   },
   "tutor": {
-    "title": "Ask the owl",
+    "title": "Ask Willo",
     "modes": {
-      "hint": "Give me a hint",
-      "explain": "Explain step by step",
-      "whyWrong": "Why is my answer wrong?",
-      "another": "Another way to solve it",
-      "simpler": "Explain more simply"
+      "hint": "Hint",
+      "explain": "Explain",
+      "whyWrong": "Explain my mistake",
+      "teach": "Teach me",
+      "challenge": "Challenge me",
+      "another": "Another way",
+      "simpler": "Simpler"
     },
     "thinking": "Thinking…",
     "flagged": "Our teachers will double-check this question. For now, please use the explanation above.",
@@ -1691,8 +1693,20 @@
       "unavailable": "The AI tutor is not available right now.",
       "other": "The AI tutor couldn't answer. Please try again."
     },
-    "askPip": "Ask the owl",
-    "stepByStep": "Step by step"
+    "askPip": "Ask Willo",
+    "stepByStep": "Step by step",
+    "modeHelp": {
+      "hint": "A nudge toward the next step, without the answer",
+      "explain": "A step-by-step solution to the key's answer",
+      "whyWrong": "What led to your choice, then the right reasoning",
+      "teach": "A mini-lesson on the idea this question tests",
+      "challenge": "Questions that check you really understand it"
+    },
+    "premium": {
+      "title": "Willo, your AI tutor, is part of Premium",
+      "body": "Hints, step-by-step explanations, mini-lessons and challenge questions on every practice question. The official explanation above stays free.",
+      "cta": "See Premium"
+    }
   },
   "billing": {
     "plans": {
@@ -1718,7 +1732,7 @@
       "questionsUnlimited": "Unlimited practice questions",
       "tests": "{count, plural, one {# practice test} other {# practice tests}}",
       "testsUnlimited": "Unlimited full practice tests",
-      "ai": "{count} AI tutor answers a day",
+      "ai": "Willo AI tutor: hint, explain, teach and challenge ({count} answers a day)",
       "tools": "Exam-like test screen, calculator, highlighter",
       "progress": "Progress tracking and estimated scores"
     },
@@ -1766,7 +1780,7 @@
     },
     "pricing": {
       "title": "Simple <i>pricing</i>",
-      "subtitle": "Start free. Upgrade when you want unlimited practice, full practice tests and more help from the AI tutor. No automatic charges: you pay for a period and renew when you choose.",
+      "subtitle": "Start free with real practice and official explanations. Premium adds Willo, the AI tutor, plus unlimited practice and full tests. No automatic charges: you pay for a period and renew when you choose.",
       "currency": "Currency",
       "uzsHint": "Uzcard and Humo through Payme or Click",
       "usdHint": "International Visa and Mastercard",
@@ -1782,21 +1796,22 @@
       "titlePlain": "Plans and prices",
       "recommended": "Recommended",
       "freeTitle": "Not ready to pay? Start free.",
-      "freeBody": "{questions} practice questions a day, {tests, plural, one {# practice test} other {# practice tests}} and {ai} AI tutor answers a day. No card needed.",
+      "freeBody": "{questions} practice questions a day, {tests, plural, one {# full practice test} other {# full practice tests}}, every official explanation, your study plan and mistake notebook. No card needed.",
       "compare": {
         "title": "Compare plans",
         "feature": "Feature",
         "free": "Free",
         "questions": "Practice questions",
         "tests": "Full practice tests",
-        "ai": "AI tutor answers a day",
+        "ai": "Willo AI tutor",
         "tools": "Exam-like test screen and tools",
         "progress": "Progress tracking and score estimates",
         "review": "Mistake notebook and study plan",
         "unlimited": "Unlimited",
         "included": "Included",
         "perDayCount": "{count} a day",
-        "total": "{count} in total"
+        "total": "{count} in total",
+        "premiumOnly": "Premium"
       }
     },
     "checkout": {

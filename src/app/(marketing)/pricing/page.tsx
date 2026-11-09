@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Check, Minus } from "lucide-react";
-import { freeLimits, paidPlans, premiumLimits, type Currency } from "@/config/plans";
+import { Check } from "lucide-react";
+import { freeLimits, paidPlans, type Currency } from "@/config/plans";
 import { Link } from "@/i18n/navigation";
 import { getCurrentUser } from "@/server/auth/session";
 import { getEntitlement } from "@/server/billing/entitlement";
@@ -26,14 +26,13 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
   const c = (k: string, v?: Record<string, number>) => t(`pricing.compare.${k}` as "pricing.compare.title", v);
 
   const yes = <Check className="mx-auto size-5 text-correct-ink" aria-label={c("included")} />;
-  const no = <Minus className="mx-auto size-5 text-muted-foreground" aria-label="—" />;
   const rows: { label: string; free: React.ReactNode; paid: React.ReactNode }[] = [
     { label: c("questions"), free: c("perDayCount", { count: freeLimits.questionsPerDay ?? 0 }), paid: c("unlimited") },
     { label: c("tests"), free: c("total", { count: freeLimits.practiceTests ?? 0 }), paid: c("unlimited") },
-    { label: c("ai"), free: String(freeLimits.aiAnswersPerDay), paid: String(premiumLimits.aiAnswersPerDay) },
+    { label: c("ai"), free: freeLimits.aiAnswersPerDay ? String(freeLimits.aiAnswersPerDay) : "—", paid: c("premiumOnly") },
     { label: c("tools"), free: yes, paid: yes },
     { label: c("progress"), free: yes, paid: yes },
-    { label: c("review"), free: no, paid: yes },
+    { label: c("review"), free: yes, paid: yes },
   ];
 
   return (

@@ -35,7 +35,7 @@ describe("orders and subscriptions (mock provider)", () => {
     const user = await makeUser();
     expect((await getEntitlement(user.id)).premium).toBe(false);
     const o = await order(user.id);
-    expect(o).toMatchObject({ status: "CREATED", amount: 19_900_000, currency: "UZS" });
+    expect(o).toMatchObject({ status: "CREATED", amount: 12_900_000, currency: "UZS" });
 
     const cb = mockCallback({ orderId: o.id, status: "paid", amount: o.amount, currency: "UZS" });
     expect((await processMockEvent(cb.body, "0".repeat(64))).status).toBe(401);
@@ -76,7 +76,7 @@ describe("orders and subscriptions (mock provider)", () => {
     await db.promoCode.create({ data: { code: "SPRING20", percentOff: 20, maxRedemptions: 1 } });
     await db.promoCode.create({ data: { code: "FREEMONTH", percentOff: 100, planIds: ["monthly"] } });
     const o = await order(user.id, { promoCode: "spring20" });
-    expect(o).toMatchObject({ listAmount: 19_900_000, discountAmount: 3_980_000, amount: 15_920_000 });
+    expect(o).toMatchObject({ listAmount: 12_900_000, discountAmount: 2_580_000, amount: 10_320_000 });
     await payMock(o);
     await expect(order(user.id, { promoCode: "SPRING20" })).rejects.toMatchObject({ code: "PROMO_USED_UP" });
     await expect(order(user.id, { promoCode: "FREEMONTH", planId: "quarter" })).rejects.toMatchObject({ code: "PROMO_NOT_FOR_PLAN" });
@@ -93,7 +93,7 @@ describe("orders and subscriptions (mock provider)", () => {
     await applyReferral(friend.id, code);
     await applyReferral(referrer.id, code); // can't refer yourself
     const o = await order(friend.id, { currency: "USD" });
-    expect(o).toMatchObject({ listAmount: 1900, discountAmount: 190, referral: true });
+    expect(o).toMatchObject({ listAmount: 999, discountAmount: 100, referral: true });
     await payMock(o);
     const bonus = await db.subscription.findFirstOrThrow({ where: { userId: referrer.id } });
     expect(bonus.source).toBe("REFERRAL");
@@ -178,7 +178,7 @@ describe("Click SHOP API", () => {
       service_id: "777",
       click_paydoc_id: "123",
       merchant_trans_id: String(o.number),
-      amount: "199000.00",
+      amount: "129000.00",
       action,
       error: "0",
       error_note: "Success",
@@ -219,7 +219,7 @@ describe("Octo", () => {
     const o = await order(user.id, { provider: "mock", currency: "USD" });
     await applyOctoStatus(o, { status: "paid", uuid: "u1", totalSum: 1 });
     expect((await db.order.findUniqueOrThrow({ where: { id: o.id } })).status).toBe("CREATED");
-    await applyOctoStatus(o, { status: "paid", uuid: "u1", totalSum: 19 });
+    await applyOctoStatus(o, { status: "paid", uuid: "u1", totalSum: 9.99 });
     expect((await db.order.findUniqueOrThrow({ where: { id: o.id } })).status).toBe("PAID");
   });
 });

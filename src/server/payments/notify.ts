@@ -12,11 +12,15 @@ import { notify } from "@/server/notify";
 import { sendTelegram } from "@/server/telegram-bot";
 
 export function formatMoney(minor: number, currency: Currency, locale: string): string {
+  const amount = fromMinor(minor, currency);
+  // Whole amounts without decimals ($59, not $59.00); cents only when there are cents ($9.99).
+  const digits = currency === "UZS" || Number.isInteger(amount) ? 0 : 2;
   return new Intl.NumberFormat(locale === "uz" ? "uz-UZ" : locale, {
     style: "currency",
     currency,
-    maximumFractionDigits: currency === "UZS" ? 0 : 2,
-  }).format(fromMinor(minor, currency));
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(amount);
 }
 
 async function t(locale: string) {
