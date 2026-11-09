@@ -2919,5 +2919,32 @@
     "untitled": "Focus session",
     "emptyTitle": "No sessions yet",
     "emptyBody": "Finished and ended sessions of a minute or more show here and count toward your study time."
+  },
+  "willo": {
+    "title": "Meet Willo",
+    "sub": "WilloPrep's study buddy. Calm when you focus, glad when you improve.",
+    "storyLabel": "Willo reacts",
+    "story": {
+      "think": "Hmm, let's work it out…",
+      "idea": "Got an idea!",
+      "cheer": "Correct!",
+      "trophy": "Target reached!",
+      "stand": "Ready for the next one."
+    },
+    "storyBody": "Willo's mood follows your session: thinking while you solve, cheering when you get it, celebrating milestones.",
+    "poses": {
+      "stand": "Ready",
+      "wink": "Nice work",
+      "cheer": "Correct!",
+      "jump": "Streak",
+      "trophy": "Milestone",
+      "heart": "Thanks",
+      "idea": "Hint",
+      "think": "Thinking",
+      "read": "Reading",
+      "laptop": "Studying",
+      "sleep": "Resting",
+      "sad": "Missed you"
+    }
   }
 }
