@@ -29,11 +29,13 @@ export function antlerPaths(color: string, variant: "full" | "simple" = "full", 
 
 /**
  * The willow leaf: the dot of the "i" in the wordmark and the pin on Willo's
- * scarf. Drawn on a 100×40 grid; gold enamel with an amber-brown rim.
+ * scarf. Drawn on a 100×42 grid; gold enamel with an amber-brown rim.
+ * In the wordmark it sits exactly where the font's i-dot would be
+ * (centre 0.119em across, 0.238em below the top of a line-height-1 box).
  */
 export const LEAF = {
-  outline: "M4 24 C24 6 62 2 97 12 C70 28 30 36 4 24 Z",
-  vein: "M10 23 C38 16 66 13 91 12.5",
+  outline: "M4 22 C24 0 74 0 96 20 C74 40 24 44 4 22 Z",
+  vein: "M12 22 C40 20 70 20 90 20",
   fillFrom: "#F9D166",
   fillTo: "#E49A35",
   rim: "#B26A22",
@@ -41,8 +43,12 @@ export const LEAF = {
 
 /** Standalone leaf SVG markup (for scripts). `id` keeps gradient ids unique. */
 export function leafSvg(id: string, style = "") {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 40" overflow="visible" style="${style}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${LEAF.fillFrom}"/><stop offset="1" stop-color="${LEAF.fillTo}"/></linearGradient></defs><path d="${LEAF.outline}" fill="url(#${id})" stroke="${LEAF.rim}" stroke-width="3.5" stroke-linejoin="round"/><path d="${LEAF.vein}" fill="none" stroke="${LEAF.rim}" stroke-width="3" stroke-linecap="round"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 42" overflow="visible" style="${style}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${LEAF.fillFrom}"/><stop offset="1" stop-color="${LEAF.fillTo}"/></linearGradient></defs><path d="${LEAF.outline}" fill="url(#${id})" stroke="${LEAF.rim}" stroke-width="3.4" stroke-linejoin="round"/><path d="${LEAF.vein}" fill="none" stroke="${LEAF.rim}" stroke-width="3.6" stroke-linecap="round"/></svg>`;
 }
+
+/** Where the leaf sits on the dotless i (em units), shared by the app and the brand script. */
+export const LEAF_DOT = { width: 0.26, height: 0.1092, left: -0.011, top: 0.1834, rotate: -45 } as const;
+export const leafDotStyle = `position:absolute;left:${LEAF_DOT.left}em;top:${LEAF_DOT.top}em;width:${LEAF_DOT.width}em;height:${LEAF_DOT.height}em;transform:rotate(${LEAF_DOT.rotate}deg)`;
 
 /** Wordmark colours: the antler W takes the mascot's antler brown. */
 export const WORD_COLORS = {

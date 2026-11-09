@@ -16,7 +16,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { chromium } from "@playwright/test";
-import { ANTLER, WORD_COLORS, antlerPaths, leafSvg } from "../src/lib/brand/antler";
+import { ANTLER, WORD_COLORS, antlerPaths, leafDotStyle, leafSvg } from "../src/lib/brand/antler";
 
 const OUT = "public/brand";
 const C = { cyanA: "#0A6E87", cyanB: "#1FB3CB", navy: "#102D40", ink: "#0B1D28", cyan: "#087F9B", cyanDark: "#20B9D0", ice: "#E4F7FA", cloud: "#F5F9FC" };
@@ -38,7 +38,11 @@ const plain = (variant: "full" | "simple", fg: string, bg: string) => `<svg xmln
 
 const wordmarkSvg = (dark: boolean) => {
   const c = dark ? WORD_COLORS.dark : WORD_COLORS.light;
-  const leaf = leafSvg(dark ? "ld" : "ll").replace("<svg ", '<svg x="47" y="3" width="15" height="6" transform="rotate(-48 54.5 6)" ');
+  const cx = 49 + 0.119 * 40;
+  const cy = 40 - 0.672 * 40;
+  const w = 0.26 * 40;
+  const h = 0.1092 * 40;
+  const leaf = `<g transform="rotate(-45 ${cx} ${cy})">${leafSvg(dark ? "ld" : "ll").replace("<svg ", `<svg x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" `)}</g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="236" height="48" viewBox="0 0 236 48">
 <g transform="translate(0 4) scale(0.8)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(c.antler, "full", ANTLER.glyph)}</g>
 <text x="49" y="40" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif" font-weight="800" font-size="40" letter-spacing="-1.4" fill="${c.ink}">ıllo<tspan fill="${c.prep}">Prep</tspan></text>${leaf}</svg>`;
@@ -118,7 +122,7 @@ async function main() {
   let leafN = 0;
   const word = (dark: boolean, px: number) => {
     const c = dark ? WORD_COLORS.dark : WORD_COLORS.light;
-    const leaf = leafSvg(`w${leafN++}`, "position:absolute;top:0.06em;left:calc(50% - 0.19em);width:0.38em;transform:rotate(-48deg)");
+    const leaf = leafSvg(`w${leafN++}`, leafDotStyle);
     return `<span style="display:inline-flex;align-items:flex-end;font:800 ${px}px/1 'Plus Jakarta Sans';letter-spacing:-0.035em;color:${c.ink}">
 <svg viewBox="2 6 60 50" style="height:0.98em;width:auto;margin-right:0.05em" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(c.antler, "full", ANTLER.glyph)}</svg><span style="position:relative;display:inline-block">ı${leaf}</span><span>llo</span><span style="color:${c.prep}">Prep</span></span>`;
   };
