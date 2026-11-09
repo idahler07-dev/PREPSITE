@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design tokens: the Satify palette (see DESIGN.md).
+ * Design tokens: the WilloPrep palette (see DESIGN.md).
  * Every component uses these variables; no hardcoded colors.
  * `pnpm check:contrast` verifies every text/control pair is WCAG AA in both themes.
  * Coral, mint, amber and red are too light for text on light surfaces, so
@@ -65,10 +65,10 @@
   --ring: var(--primary);
 
   /* Amber: streaks and XP only. */
-  --accent: #f59e0b;
-  --accent-foreground: #0f172a;
-  --accent-soft: #fef3c7;
-  --accent-ink: #a34a06;
+  --accent: #df8a3e;
+  --accent-foreground: #102d40;
+  --accent-soft: #fcefe2;
+  --accent-ink: #94481a;
 
   /* Marked for review. */
   --review: #7c3aed;
@@ -151,7 +151,7 @@
   --mascot-cap: var(--cyan-600);
   --mascot-cap-light: var(--cyan-400);
   --mascot-cap-dark: var(--cyan-700);
-  --mascot-accent: #f59e0b;
+  --mascot-accent: #c87a3c;
   --mascot-eye: #ffffff;
   --mascot-ink: #0f172a;
 }
@@ -172,10 +172,10 @@
   --primary-foreground: #06222C;
   --primary-soft: #123B48;
 
-  --accent: #fbbf24;
-  --accent-foreground: #0b1020;
-  --accent-soft: #2e2512;
-  --accent-ink: #fbbf24;
+  --accent: #f0a462;
+  --accent-foreground: #0b1d28;
+  --accent-soft: #2e2218;
+  --accent-ink: #f3b47c;
 
   --review: #a78bfa;
   --review-soft: #241d3d;
@@ -226,7 +226,7 @@
   --mascot-cap: var(--cyan-400);
   --mascot-cap-light: var(--cyan-300);
   --mascot-cap-dark: var(--cyan-500);
-  --mascot-accent: #fbbf24;
+  --mascot-accent: #e09a5c;
 }
 
 @theme inline {
@@ -1466,7 +1466,7 @@ html.lenis body {
   --ill-b: var(--cyan-400);
   --ill-c: var(--aqua-300);
   --ill-ink: var(--navy-900);
-  --ill-warm: #f2b45a;
+  --ill-warm: #e6a06a;
   --ill-shadow: rgb(16 45 64 / 0.18);
 }
 .dark {
@@ -1496,5 +1496,21 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .demo-skel {
     animation: none;
+  }
+}
+
+/* Willo the deer: a slow idle float, still under reduced motion. */
+@keyframes deer-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -4px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .deer-float {
+    animation: deer-float 4.2s ease-in-out infinite;
   }
 }

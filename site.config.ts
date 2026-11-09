@@ -20,11 +20,11 @@ function telegramHandle(url: string): string {
 
 export const siteConfig = {
   /** Brand name shown in the header, emails and page titles. */
-  name: "Satify",
+  name: "WilloPrep",
   /** Short name used by the installable app (PWA) and small screens. */
-  shortName: "Satify",
+  shortName: "WilloPrep",
   /** Legal name of the learning centre, used on legal pages and receipts. */
-  legalName: "Satify Learning Centre LLC",
+  legalName: "WilloPrep Learning Centre LLC",
 
   logo: {
     /**

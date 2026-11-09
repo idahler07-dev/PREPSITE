@@ -358,7 +358,7 @@ export function CalculatorPanel({
     if (open) setMounted(true);
   }, [open]);
   useEffect(() => {
-    if (demoKey) console.warn("[Satify] Using the Desmos demo API key (development only). Set NEXT_PUBLIC_DESMOS_API_KEY for production.");
+    if (demoKey) console.warn("[WilloPrep] Using the Desmos demo API key (development only). Set NEXT_PUBLIC_DESMOS_API_KEY for production.");
   }, [demoKey]);
   useEffect(() => {
     try {

@@ -199,7 +199,7 @@
     "plan": {
       "label": "Study plan",
       "title": "A plan that <hl>fits</hl> your week",
-      "body": "Set your target score and test date. Satify spreads the work across the days you have and adjusts after every test.",
+      "body": "Set your target score and test date. WilloPrep spreads the work across the days you have and adjusts after every test.",
       "cta": "Build my plan",
       "bubble": "Tuesday: 20 minutes of algebra. You've got this!",
       "week": "This week",
@@ -239,7 +239,7 @@
         "every mistake"
       ],
       "sub": "Your plan, your score and your next drill on one calm screen. Scroll to see it.",
-      "alt": "The Satify dashboard: today's plan, the estimated score and the skill map"
+      "alt": "The WilloPrep dashboard: today's plan, the estimated score and the skill map"
     }
   },
   "about": {
@@ -263,7 +263,7 @@
       },
       "language": {
         "q": "Is everything in English?",
-        "a": "Yes. The real SAT is in English, and so is Satify: questions, explanations, study plans and messages."
+        "a": "Yes. The real SAT is in English, and so is WilloPrep: questions, explanations, study plans and messages."
       },
       "device": {
         "q": "Can I practise on my phone?",
@@ -2145,7 +2145,7 @@
       "pricing": "Pricing",
       "start": "Start free",
       "login": "Log in",
-      "dashboard": "Open Satify"
+      "dashboard": "Open WilloPrep"
     },
     "hero": {
       "badge": "Built for the Digital SAT",
@@ -2159,10 +2159,10 @@
       "sub": "Bite-size lessons, real test practice, and an owl that keeps you going.",
       "start": "Start free",
       "calc": "Calculate my score",
-      "alt": "The Satify learning path: finished lessons, today's lesson and what comes next"
+      "alt": "The WilloPrep learning path: finished lessons, today's lesson and what comes next"
     },
     "mock": {
-      "brand": "satify",
+      "brand": "WilloPrep",
       "nav": [
         "Path",
         "Practice",
@@ -2394,7 +2394,7 @@
     "reached": "Target reached!",
     "away": "{points} points to go",
     "shareTitle": "My estimated SAT score",
-    "shareFooter": "Estimated with satify. Not an official score.",
+    "shareFooter": "Estimated with WilloPrep. Not an official score.",
     "easierCap": "The easier Module 2 caps this section at about 600.",
     "rwShort": "R&W"
   },
@@ -2456,7 +2456,7 @@
         "Desmos built in",
         "Bluebook-style timing"
       ],
-      "alt": "Sample Satify dashboard: estimated score, a recommended next step, the score trend and topic accuracy"
+      "alt": "Sample WilloPrep dashboard: estimated score, a recommended next step, the score trend and topic accuracy"
     },
     "demo": {
       "sample": "Sample",
@@ -2506,7 +2506,7 @@
         {
           "key": "plan",
           "title": "A plan that fits your week",
-          "body": "Set your test date and target. Satify spreads the work across the days you have.",
+          "body": "Set your test date and target. WilloPrep spreads the work across the days you have.",
           "points": [
             "Adapts after every test",
             "Move any session",
@@ -2559,7 +2559,7 @@
     },
     "demos": {
       "practice": {
-        "path": "satify.app/practice",
+        "path": "willoprep.com/practice",
         "label": "Sample practice session: a student picks an answer, checks it, reads the explanation and moves on",
         "crumb": "Algebra",
         "diff": "Medium",
@@ -2604,7 +2604,7 @@
         "similar": "Try a similar one"
       },
       "mock": {
-        "path": "satify.app/mocks/practice-test-3",
+        "path": "willoprep.com/mocks/practice-test-3",
         "label": "Sample timed practice test: a student opens the question navigator, jumps to a question, marks it for review and finishes the module",
         "section": "Section 2, Module 1: Math",
         "hide": "Hide",
@@ -2646,7 +2646,7 @@
         "estimate": "Estimated Math"
       },
       "plan": {
-        "path": "satify.app/plan",
+        "path": "willoprep.com/plan",
         "label": "Sample study plan: a student drags a session to another day, the plan rebalances and today's session is checked off",
         "week": "Week 3 · Nov 3–9",
         "days": [
@@ -2673,7 +2673,7 @@
         "done": "Done"
       },
       "focus": {
-        "path": "satify.app/focus",
+        "path": "willoprep.com/focus",
         "label": "Sample focus session: a student picks 25 minutes, starts the timer, pauses once and finishes with a summary",
         "title": "Focus session",
         "task": "Advanced Math · 14 questions",
@@ -2707,7 +2707,7 @@
         "streak": "6-day streak"
       },
       "notebook": {
-        "path": "satify.app/review",
+        "path": "willoprep.com/review",
         "label": "Sample mistake notebook: a missed question is saved, tagged as a misread, filtered and scheduled for review",
         "title": "Mistake notebook",
         "filters": [
@@ -2751,7 +2751,7 @@
         "wrong": "You chose B · Answer C"
       },
       "analytics": {
-        "path": "satify.app/analytics",
+        "path": "willoprep.com/analytics",
         "label": "Sample progress analytics: a student switches to a three-month view, the score chart redraws, and topic accuracy and an insight appear",
         "title": "Progress",
         "ranges": [

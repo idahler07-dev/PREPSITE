@@ -1,227 +1,138 @@
 /**
- * Generate the Satify brand assets in public/brand/ from src/lib/brand-mark.ts:
- *   mark.svg                    flat mark, follows the system theme (also the SVG favicon)
- *   mark-small.svg / -dark      flat mark for 16–48px, light and dark
- *   mark-gloss.svg / -dark      glossy 3D mark for 64px and up, light and dark
- *   logo.svg / logo-dark.svg    gloss mark + "Satify" (Geist Bold, -0.035em, mark = cap height × 1.3, gap 0.35em; text as paths)
- *   logo-flat.svg / -dark       the same with the flat mark (small sizes)
- *   logo-email.png              flat logo for email headers (mail apps don't show SVG)
- *   favicon.ico (16/32/48), favicon-16/32/48.png, apple-touch-icon.png (180), icon-192/512.png,
- *   icon-maskable-512.png, mark-1024.png
- *   og.png                      1200×630 OpenGraph image
+ * Generate the WilloPrep brand files in public/brand/ from the antler W
+ * (src/components/brand/antler-w.tsx):
+ *
+ *   mark.svg                   app tile, follows the system theme (SVG favicon)
+ *   mark-small.svg / -dark     simple mark tile for 16–48px, light and dark
+ *   logo.svg / logo-dark.svg   tile + wordmark (text drawn by the browser fonts in-app; files are for embeds)
+ *   favicon.ico, favicon-16/32/48.png, apple-touch-icon.png, icon-192/512.png (the deer icon when
+ *   deer-icon-1024.png exists),
+ *   icon-maskable-512.png, mark-1024.png, logo-email.png, og.png (1200×630)
  *
  *   pnpm brand
  *
- * Fonts are downloaded from Google Fonts at run time (static TTF instances).
+ * PNGs are rendered with the pre-installed Chromium (Playwright), so the
+ * wordmark uses the real Plus Jakarta Sans from Google Fonts.
  */
-import { writeFileSync } from "node:fs";
-import { createCanvas, GlobalFonts, loadImage, type SKRSContext2D } from "@napi-rs/canvas";
-import opentype from "opentype.js";
-import { createElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { CHOSEN_CONCEPT, FLAT_COLORS, GEIST_CAP_HEIGHT, WORDMARK, flatMarkInner, glossMarkInner, svgDoc } from "../src/lib/brand-mark";
-import { Mascot } from "../src/components/mascot/mascot";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { chromium } from "@playwright/test";
+import { ANTLER, antlerPaths } from "../src/lib/brand/antler";
 
 const OUT = "public/brand";
-const C = {
-  light: { primary: "#2747F5", text: "#0E1222", muted: "#5A6178", bg: "#F5F6FA", border: "#E3E6EF", lilac: "#B7A6FF", coral: "#FF6B4A" },
-  dark: { primary: "#6F86FF", text: "#EEF0FA", bg: "#090C16" },
+const C = { cyanA: "#0A6E87", cyanB: "#1FB3CB", navy: "#102D40", ink: "#0B1D28", cyan: "#087F9B", cyanDark: "#20B9D0", ice: "#E4F7FA", cloud: "#F5F9FC" };
+
+const tile = (size: number, variant: "full" | "simple", opts: { radius?: number; pad?: number; id?: string } = {}) => {
+  const r = opts.radius ?? 0.28;
+  const id = opts.id ?? "g";
+  const pad = opts.pad ?? 0.13;
+  const s = 64 * (1 - 2 * pad);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">
+<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${C.cyanA}"/><stop offset="1" stop-color="${C.cyanB}"/></linearGradient></defs>
+<rect width="64" height="64" rx="${64 * r}" fill="url(#${id})"/>
+<g transform="translate(${64 * pad} ${64 * pad}) scale(${s / 64})" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths("#fff", variant)}</g>
+</svg>`;
 };
 
-/** First TTF URL in a Google Fonts CSS response (no browser user agent → TTF). */
-async function googleTtf(query: string): Promise<ArrayBuffer> {
-  const css = await (await fetch(`https://fonts.googleapis.com/css2?${query}`)).text();
-  const url = /url\((https:[^)]+\.ttf)\)/.exec(css)?.[1];
-  if (!url) throw new Error(`No TTF for ${query}`);
-  return (await fetch(url)).arrayBuffer();
-}
+const plain = (variant: "full" | "simple", fg: string, bg: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="16" fill="${bg}"/><g transform="translate(6 6) scale(0.8125)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(fg, variant)}</g></svg>`;
 
-const K = CHOSEN_CONCEPT;
-const flat = (theme: "light" | "dark") => flatMarkInner(K, FLAT_COLORS[theme]);
-const gloss = (theme: "light" | "dark", opts?: Parameters<typeof glossMarkInner>[3]) => glossMarkInner(K, theme, `m${theme}`, opts);
+const wordmarkSvg = (dark: boolean) => {
+  const ink = dark ? C.ice : C.navy;
+  const cy = dark ? C.cyanDark : C.cyan;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="236" height="48" viewBox="0 0 236 48">
+<g transform="translate(0 4) scale(0.8)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(ink, "full", ANTLER.glyph)}</g>
+<text x="48" y="38" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif" font-weight="800" font-size="40" letter-spacing="-1.4" fill="${ink}">illo<tspan fill="${cy}">Prep</tspan></text></svg>`;
+};
 
-/** Flat mark that follows the system theme (for the SVG favicon). */
-function autoMarkSvg() {
-  const inner = flatMarkInner(K, { bgClass: "b", fgClass: "f", strokeClass: "s" });
-  const { light, dark } = FLAT_COLORS;
-  const style = `.b{fill:${light.bg}}.f{fill:${light.fg}}.s{stroke:${light.fg}}@media (prefers-color-scheme:dark){.b{fill:${dark.bg}}.f{fill:${dark.fg}}.s{stroke:${dark.fg}}}`;
-  return svgDoc(`<style>${style}</style>${inner}`, 32);
-}
-
-/** Full logo: mark + "Satify" in Geist Bold, sized from the cap height. */
-function wordmarkSvg(font: opentype.Font, text: string, markInner: string) {
-  const size = 64;
-  const tracking = WORDMARK.tracking * size;
-  const upm = font.unitsPerEm;
-  let x = 0;
-  const parts: string[] = [];
-  for (const g of font.stringToGlyphs("Satify")) {
-    parts.push(g.getPath(x, 0, size).toPathData(2));
-    x += ((g.advanceWidth ?? 0) / upm) * size + tracking;
-  }
-  const textW = x - tracking;
-  const cap = GEIST_CAP_HEIGHT * size;
-  const mark = cap * WORDMARK.markScale;
-  const gap = WORDMARK.gap * size;
-  const descent = ((-font.descender * 0.9) / upm) * size;
-  const pad = 2;
-  // Mark centered on the cap height; the baseline sits below it.
-  const top = pad;
-  const baseline = top + (mark + cap) / 2;
-  const h = Math.ceil(Math.max(top + mark, baseline + descent * 0.3) + pad);
-  const w = Math.ceil(mark + gap + textW + pad);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Satify">
-  <g transform="translate(0 ${top}) scale(${(mark / 64).toFixed(4)})">${markInner}</g>
-  <path fill="${text}" transform="translate(${(mark + gap).toFixed(2)} ${baseline.toFixed(2)})" d="${parts.join("")}"/>
-</svg>
-`;
-}
-
-/** ICO file holding PNG images (supported by every current browser). */
+/** ICO container holding PNG images. */
 function ico(pngs: { size: number; data: Buffer }[]) {
-  const header = Buffer.alloc(6 + 16 * pngs.length);
+  const header = Buffer.alloc(6);
   header.writeUInt16LE(0, 0);
   header.writeUInt16LE(1, 2);
   header.writeUInt16LE(pngs.length, 4);
-  let offset = header.length;
+  const dir = Buffer.alloc(16 * pngs.length);
+  let offset = 6 + dir.length;
   pngs.forEach((p, i) => {
-    const e = 6 + i * 16;
-    header.writeUInt8(p.size >= 256 ? 0 : p.size, e);
-    header.writeUInt8(p.size >= 256 ? 0 : p.size, e + 1);
-    header.writeUInt16LE(1, e + 4);
-    header.writeUInt16LE(32, e + 6);
-    header.writeUInt32LE(p.data.length, e + 8);
-    header.writeUInt32LE(offset, e + 12);
+    const o = i * 16;
+    dir.writeUInt8(p.size >= 256 ? 0 : p.size, o);
+    dir.writeUInt8(p.size >= 256 ? 0 : p.size, o + 1);
+    dir.writeUInt16LE(1, o + 4);
+    dir.writeUInt16LE(32, o + 6);
+    dir.writeUInt32LE(p.data.length, o + 8);
+    dir.writeUInt32LE(offset, o + 12);
     offset += p.data.length;
   });
-  return Buffer.concat([header, ...pngs.map((p) => p.data)]);
+  return Buffer.concat([header, dir, ...pngs.map((p) => p.data)]);
 }
-
-async function png(svgInner: string, size: number) {
-  const img = await loadImage(Buffer.from(svgDoc(svgInner, size)));
-  const c = createCanvas(size, size);
-  c.getContext("2d").drawImage(img, 0, 0, size, size);
-  return c.toBuffer("image/png");
-}
-
-/** Pip as a standalone SVG (CSS variables resolved to the light theme colors). */
-function mascotSvg(pose: "wave" | "cheer" | "juggle") {
-  const vars: Record<string, string> = {
-    "--mascot-body": "#A897FF",
-    "--mascot-light": "#D3C9FF",
-    "--mascot-dark": "#7A66F2",
-    "--mascot-cap": "#2747F5",
-    "--mascot-cap-light": "#5C76FF",
-    "--mascot-cap-dark": "#1C32C4",
-    "--mascot-accent": "#FF6B4A",
-    "--mascot-eye": "#FFFFFF",
-    "--mascot-ink": "#0E1222",
-    "--flagged": "#F2A20C",
-    "--highlight": "#B7A6FF",
-    "--correct": "#12B886",
-    "--font-sans": "Geist, sans-serif",
-  };
-  let svg = renderToStaticMarkup(createElement(Mascot, { pose }));
-  for (const [k, v] of Object.entries(vars)) svg = svg.replaceAll(`var(${k})`, v);
-  return svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"');
-}
-
-/** Soft mesh gradient: cobalt, lilac and coral blobs at low opacity, as behind the hero. */
-function mesh(ctx: SKRSContext2D, w: number, h: number) {
-  const blob = (x: number, y: number, r: number, color: string, a: number) => {
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, `${color}${Math.round(a * 255).toString(16).padStart(2, "0")}`);
-    g.addColorStop(1, `${color}00`);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-  };
-  blob(w * 0.85, h * 0.15, w * 0.5, C.light.primary, 0.26);
-  blob(w * 0.62, h * 1.0, w * 0.45, C.light.lilac, 0.4);
-  blob(w * 1.02, h * 0.72, w * 0.36, C.light.coral, 0.24);
-}
-
 
 async function main() {
-  const [geistBold, geist, geistSemi, serifItalic] = await Promise.all([
-    googleTtf("family=Geist:wght@700"),
-    googleTtf("family=Geist:wght@400"),
-    googleTtf("family=Geist:wght@600"),
-    googleTtf("family=Instrument+Serif:ital@1"),
-  ]);
-  const font = opentype.parse(geistBold);
+  // SVG files
+  const auto = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64">
+<style>.b{fill:${C.cyan}}@media (prefers-color-scheme:dark){.b{fill:${C.cyanDark}}}</style>
+<rect class="b" width="64" height="64" rx="16"/><g transform="translate(6 6) scale(0.8125)" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths("#fff", "simple")}</g></svg>`;
+  writeFileSync(`${OUT}/mark.svg`, auto);
+  writeFileSync(`${OUT}/mark-small.svg`, plain("simple", "#fff", C.cyan));
+  writeFileSync(`${OUT}/mark-small-dark.svg`, plain("simple", C.ink, C.cyanDark));
+  writeFileSync(`${OUT}/mark-gloss.svg`, tile(64, "full"));
+  writeFileSync(`${OUT}/mark-gloss-dark.svg`, tile(64, "full"));
+  writeFileSync(`${OUT}/logo.svg`, wordmarkSvg(false));
+  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(true));
+  writeFileSync(`${OUT}/logo-flat.svg`, wordmarkSvg(false));
+  writeFileSync(`${OUT}/logo-flat-dark.svg`, wordmarkSvg(true));
 
-  writeFileSync(`${OUT}/mark.svg`, autoMarkSvg());
-  writeFileSync(`${OUT}/mark-small.svg`, svgDoc(flat("light"), 32));
-  writeFileSync(`${OUT}/mark-small-dark.svg`, svgDoc(flat("dark"), 32));
-  writeFileSync(`${OUT}/mark-gloss.svg`, svgDoc(gloss("light"), 256));
-  writeFileSync(`${OUT}/mark-gloss-dark.svg`, svgDoc(gloss("dark"), 256));
-  const logo = wordmarkSvg(font, C.light.text, gloss("light"));
-  writeFileSync(`${OUT}/logo.svg`, logo);
-  writeFileSync(`${OUT}/logo-dark.svg`, wordmarkSvg(font, C.dark.text, gloss("dark")));
-  const logoFlat = wordmarkSvg(font, C.light.text, flat("light"));
-  writeFileSync(`${OUT}/logo-flat.svg`, logoFlat);
-  writeFileSync(`${OUT}/logo-flat-dark.svg`, wordmarkSvg(font, C.dark.text, flat("dark")));
-
-  const emailLogo = await loadImage(Buffer.from(logoFlat));
-  const eh = 64;
-  const el = createCanvas(Math.round((emailLogo.width / emailLogo.height) * eh), eh);
-  el.getContext("2d").drawImage(emailLogo, 0, 0, el.width, eh);
-  writeFileSync(`${OUT}/logo-email.png`, el.toBuffer("image/png"));
-
-  // Favicons use the flat mark; larger icons the gloss one (full-bleed where the OS masks the corners).
-  const fav = await Promise.all([16, 32, 48].map(async (size) => ({ size, data: await png(flat("light"), size) })));
-  for (const f of fav) writeFileSync(`${OUT}/favicon-${f.size}.png`, f.data);
-  writeFileSync("public/favicon.ico", ico(fav));
-  writeFileSync(`${OUT}/apple-touch-icon.png`, await png(gloss("light", { fullBleed: true }), 180));
-  writeFileSync(`${OUT}/icon-192.png`, await png(gloss("light"), 192));
-  writeFileSync(`${OUT}/icon-512.png`, await png(gloss("light"), 512));
-  writeFileSync(`${OUT}/icon-maskable-512.png`, await png(gloss("light", { fullBleed: true, symbolScale: 0.82 }), 512));
-  writeFileSync(`${OUT}/mark-1024.png`, await png(gloss("light"), 1024));
-
-  const wordmark = await loadImage(Buffer.from(logo));
-  // OpenGraph image.
-  GlobalFonts.register(Buffer.from(geist), "Geist");
-  GlobalFonts.register(Buffer.from(geistSemi), "Geist SemiBold");
-  GlobalFonts.register(Buffer.from(geistBold), "Geist Bold");
-  GlobalFonts.register(Buffer.from(serifItalic), "Instrument Serif");
-  const W = 1200;
-  const H = 630;
-  const og = createCanvas(W, H);
-  const ctx = og.getContext("2d");
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fillRect(0, 0, W, H);
-  mesh(ctx, W, H);
-  ctx.drawImage(wordmark, 88, 80, (wordmark.width / wordmark.height) * 64, 64);
-  const mascot = await loadImage(Buffer.from(mascotSvg("wave")));
-  ctx.drawImage(mascot, 780, 150, 340, 340);
-
-  const draw = (text: string, x: number, y: number, f: string, color: string) => {
-    ctx.font = f;
-    ctx.fillStyle = color;
-    ctx.fillText(text, x, y);
-    return x + ctx.measureText(text).width;
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  const shot = async (html: string, w: number, h: number) => {
+    await page.setViewportSize({ width: w, height: h });
+    await page.setContent(
+      `<html><head><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;800&display=block" rel="stylesheet"><style>html,body{margin:0;background:transparent}</style></head><body>${html}</body></html>`,
+      { waitUntil: "networkidle" },
+    );
+    await page.evaluate(() => document.fonts.ready);
+    return page.screenshot({ omitBackground: true, clip: { x: 0, y: 0, width: w, height: h } });
   };
-  ctx.textBaseline = "alphabetic";
-  const size = 76;
-  draw("Your SAT score,", 88, 318, `${size}px 'Geist SemiBold'`, C.light.text);
-  let x = draw("planned", 88, 412, `italic ${size + 10}px 'Instrument Serif'`, C.light.primary);
-  x = draw(" and ", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
-  ctx.font = `${size}px 'Geist Bold'`;
-  const pw = ctx.measureText("proven").width;
-  // Lilac highlighter behind the lower half of the bold word.
-  ctx.fillStyle = `${C.light.lilac}73`;
-  ctx.beginPath();
-  ctx.roundRect(x - 4, 412 - size * 0.34, pw + 8, size * 0.42, 10);
-  ctx.fill();
-  x = draw("proven", x, 412, `${size}px 'Geist Bold'`, C.light.text);
-  draw(".", x, 412, `${size}px 'Geist SemiBold'`, C.light.text);
-  draw("SAT practice with a plan you can see working.", 88, 494, "30px Geist", C.light.muted);
-  ctx.fillStyle = C.light.border;
-  ctx.fillRect(88, 540, W - 176, 2);
-  draw("SAT® is a trademark of the College Board, which does not endorse this site.", 88, 580, "21px Geist", C.light.muted);
-  writeFileSync(`${OUT}/og.png`, og.toBuffer("image/png"));
 
-  console.log(`Brand assets written to ${OUT}/`);
+  const png = async (name: string, size: number, variant: "full" | "simple", opts?: Parameters<typeof tile>[2]) => {
+    const data = await shot(tile(size, variant, opts), size, size);
+    writeFileSync(`${OUT}/${name}`, data);
+    return data;
+  };
+  const f16 = await png("favicon-16.png", 16, "simple", { radius: 0.22, pad: 0.08 });
+  const f32 = await png("favicon-32.png", 32, "simple", { radius: 0.22, pad: 0.08 });
+  const f48 = await png("favicon-48.png", 48, "simple", { radius: 0.24, pad: 0.1 });
+  writeFileSync("public/favicon.ico", ico([16, 32, 48].map((size, i) => ({ size, data: [f16, f32, f48][i]! }))));
+  // Large app icons use the deer illustration (public/brand/deer-icon-1024.png) when it exists.
+  const deer = `${OUT}/deer-icon-1024.png`;
+  if (existsSync(deer)) {
+    const src = `data:image/png;base64,${readFileSync(deer).toString("base64")}`;
+    for (const [name, size] of [["apple-touch-icon.png", 180], ["icon-192.png", 192], ["icon-512.png", 512]] as const)
+      writeFileSync(`${OUT}/${name}`, await shot(`<img src="${src}" width="${size}" height="${size}" style="display:block">`, size, size));
+  } else {
+    await png("apple-touch-icon.png", 180, "full", { radius: 0, pad: 0.16 });
+    await png("icon-192.png", 192, "full");
+    await png("icon-512.png", 512, "full");
+  }
+  await png("icon-maskable-512.png", 512, "full", { radius: 0, pad: 0.24 });
+  await png("mark-1024.png", 1024, "full");
+
+  const word = (dark: boolean, px: number) =>
+    `<span style="display:inline-flex;align-items:flex-end;font:800 ${px}px/1 'Plus Jakarta Sans';letter-spacing:-0.035em;color:${dark ? C.ice : C.navy}">
+<svg viewBox="2 6 60 50" style="height:0.98em;width:auto;margin-right:-0.02em" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths(dark ? C.ice : C.navy, "full", ANTLER.glyph)}</svg><span>illo</span><span style="color:${dark ? C.cyanDark : C.cyan}">Prep</span></span>`;
+
+  writeFileSync(`${OUT}/logo-email.png`, await shot(`<div style="padding:4px 2px">${word(false, 52)}</div>`, 300, 64));
+
+  const og = `<div style="width:1200px;height:630px;box-sizing:border-box;padding:84px 96px;display:flex;flex-direction:column;justify-content:space-between;
+background:radial-gradient(900px 500px at 85% 15%, rgba(32,185,208,.28), transparent 60%), linear-gradient(160deg, ${C.navy} 0%, ${C.ink} 100%);color:${C.ice};font-family:'Plus Jakarta Sans'">
+${word(true, 64)}
+<div><div style="font-weight:800;font-size:76px;line-height:1.04;letter-spacing:-0.035em;max-width:900px">Your SAT, planned<br><span style="color:${C.cyanDark}">and proven.</span></div>
+<div style="margin-top:28px;font-weight:500;font-size:30px;color:rgba(228,247,250,.75)">Adaptive practice, real test timing and a plan that fits your week.</div></div>
+<svg viewBox="0 0 64 64" style="position:absolute;right:-60px;bottom:-90px;width:520px;opacity:.07" fill="none" stroke-linecap="round" stroke-linejoin="round">${antlerPaths("#fff", "full")}</svg></div>`;
+  writeFileSync(`${OUT}/og.png`, await shot(`<div style="position:relative;overflow:hidden;width:1200px;height:630px">${og}</div>`, 1200, 630));
+  await browser.close();
+  console.log("brand files written to", OUT, readFileSync(`${OUT}/mark.svg`, "utf8").length, "bytes mark.svg");
 }
 
-void main();
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
