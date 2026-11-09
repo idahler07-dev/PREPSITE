@@ -1958,8 +1958,8 @@
     "error": "The plan could not be updated.",
     "nothing": "Nothing planned.",
     "tasks": {
-      "drill": "{count} questions: {skill}",
-      "review": "Review {count} questions from your notebook",
+      "drill": "{count, plural, one {# question} other {# questions}}: {skill}",
+      "review": "Review {count, plural, one {# question} other {# questions}} from your notebook",
       "mock": "Full practice test",
       "vocab": "Vocabulary cards",
       "rest": "Rest day"
@@ -2885,5 +2885,39 @@
     "sample": "Sample",
     "score": "{correct} of {total}",
     "daysLeft": "{n, plural, =0 {Test day} one {# day to SAT} other {# days to SAT}}"
+  },
+  "focus": {
+    "title": "Focus sessions",
+    "todayMeta": "Today: {count, plural, =0 {no sessions yet} one {# session, {minutes} min} other {# sessions, {minutes} min}}",
+    "weekMeta": "This week: {minutes} min",
+    "tabs": {
+      "timer": "Timer",
+      "history": "History"
+    },
+    "focus": "Focus",
+    "break": "Break",
+    "doneShort": "Done",
+    "length": "Session length",
+    "minutes": "{n} min",
+    "of": "of {n} min",
+    "workingOn": "Working on",
+    "workingOnPlaceholder": "Or type what you'll work on",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "stop": "End session",
+    "skipBreak": "Skip break",
+    "spaceHint": "Space to start or pause",
+    "done": "{minutes} minutes of focus. Nice work.",
+    "doneBody": "Saved to your study time. A short break helps the next session stick.",
+    "takeBreak": "Take a {minutes}-minute break",
+    "another": "Start another",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "completed": "Completed",
+    "stopped": "Ended early",
+    "untitled": "Focus session",
+    "emptyTitle": "No sessions yet",
+    "emptyBody": "Finished and ended sessions of a minute or more show here and count toward your study time."
   }
 }

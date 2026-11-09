@@ -66,6 +66,7 @@ model User {
   vocabProgress     VocabProgress[]
   officialScores    OfficialScore[]
   studyPlans        StudyPlan[]
+  focusSessions     FocusSession[]
   notifications     NotificationLog[]
 
   /// { email: { study, streak, newTests, renewals }, telegram: { ... } } — missing keys use defaults (src/config/notifications.ts)
@@ -981,4 +982,22 @@ model NotificationLog {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, kind, key])
+}
+
+/// A timed focus session from the Focus page. Minutes count toward study time.
+model FocusSession {
+  id             String   @id @default(cuid())
+  userId         String
+  startedAt      DateTime
+  endedAt        DateTime
+  plannedMinutes Int
+  focusedSeconds Int
+  completed      Boolean  @default(false)
+  /// What the student worked on (a plan task label or their own words).
+  label          String?
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startedAt])
 }
