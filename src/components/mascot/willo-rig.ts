@@ -281,10 +281,15 @@ export interface SimOut {
   hop: number;
 }
 
-/** Idle life for one Willo: breathing, head drift, curiosity, ear flicks, blinks, gaze, waves. */
+/**
+ * Idle life for one Willo (masterplan §7): small amplitudes, slow timing, long
+ * pauses. Breathing, a slow head drift with a rare glance, calm eyes that follow
+ * the pointer, an occasional ear flick, a low scarf wave, one hop on arrival
+ * for celebration poses.
+ */
 export class Sim {
   t = Math.random() * 10;
-  head = 4 * RAD * (Math.random() < 0.5 ? -1 : 1); // arrival wobble
+  head = 2 * RAD * (Math.random() < 0.5 ? -1 : 1); // a small settle on arrival
   headV = 0;
   ant: V2 = [0, 0];
   antV: V2 = [0, 0];
@@ -293,19 +298,20 @@ export class Sim {
   gaze: V2 = [0, 0];
   gazeV: V2 = [0, 0];
   gTarget: V2 = [0, 0];
-  nextLook = rnd(0.8, 2);
+  nextLook = rnd(2, 4);
   cur = -1;
-  nextCur = rnd(3.5, 7);
+  nextCur = rnd(6, 11);
   curDir = 1;
-  nextEar = rnd(1.5, 4);
+  nextEar = rnd(4, 9);
   wave = -1;
-  nextWave = rnd(2, 4.5);
+  nextWave = rnd(5, 9);
   blinkNext = rnd(1.2, 3);
   blink = -1;
   hop = -1;
-  nextHop = rnd(1.2, 2.5);
+  nextHop = 0.45;
+  hopped = false;
   scarfPhase = Math.random() * 6;
-  scarfAmp = 2.4;
+  scarfAmp = 1.6;
 
   constructor(
     private meta: RigMeta,
@@ -324,23 +330,22 @@ export class Sim {
     if (this.nextCur <= 0 && this.cur < 0) {
       this.cur = 0;
       this.curDir = Math.random() < 0.5 ? -1 : 1;
-      this.nextCur = rnd(6, 11);
+      this.nextCur = rnd(8, 14);
     }
     if (this.cur >= 0) {
       this.cur += dt;
-      if (this.cur > 1.8) this.cur = -1;
+      if (this.cur > 2.6) this.cur = -1;
     }
     this.nextEar -= dt;
     if (this.nextEar <= 0) {
       const a = Math.random() < 0.5 ? 0 : 1;
-      this.earV[a] = (this.earV[a] ?? 0) + rnd(2.2, 3.4);
-      if (Math.random() < 0.3) this.earV[1 - a] = (this.earV[1 - a] ?? 0) + rnd(1.6, 2.6);
-      this.nextEar = rnd(2.5, 7);
+      this.earV[a] = (this.earV[a] ?? 0) + rnd(1.3, 1.9);
+      this.nextEar = rnd(6, 12);
     }
     this.nextWave -= dt;
     if (this.nextWave <= 0 && this.wave < 0) {
       this.wave = 0;
-      this.nextWave = rnd(4, 7);
+      this.nextWave = rnd(8, 13);
     }
     if (this.wave >= 0) {
       this.wave += dt;
@@ -349,8 +354,8 @@ export class Sim {
     this.blinkNext -= dt;
     if (this.blinkNext <= 0 && this.blink < 0) {
       this.blink = 0;
-      this.blinkNext = rnd(2.4, 5.5);
-      if (Math.random() < 0.22) this.blinkNext = 0.34;
+      this.blinkNext = rnd(3, 6);
+      if (Math.random() < 0.12) this.blinkNext = 0.36;
     }
     let blink = 0;
     if (this.blink >= 0) {
@@ -363,40 +368,41 @@ export class Sim {
     let hopU = 0;
     if (hopper) {
       this.nextHop -= dt;
-      if (this.nextHop <= 0 && this.hop < 0) {
+      // One small hop when the celebration pose arrives; no looping bounce.
+      if (this.nextHop <= 0 && this.hop < 0 && !this.hopped) {
         this.hop = 0;
-        this.nextHop = this.pose === "jump" ? rnd(2, 3.2) : rnd(3.2, 5);
+        this.hopped = true;
       }
       if (this.hop >= 0) {
         this.hop += dt;
         const dur = 0.62;
         hopU = clamp(this.hop / dur, 0, 1);
-        hopY = -(this.pose === "jump" ? 16 : 11) * 4 * hopU * (1 - hopU);
+        hopY = -(this.pose === "jump" ? 12 : 9) * 4 * hopU * (1 - hopU);
         if (this.hop > dur) this.hop = -1;
       }
     }
 
-    const breathe = 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 4.4);
+    const breathe = 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 5);
     const sleepy = m.still;
-    const headT: V2 = [0.9 * Math.sin(t * 0.7), -1.4 * breathe + (this.cur >= 0 ? -1.2 * Math.sin(Math.PI * clamp(this.cur / 1.8, 0, 1)) : 0)];
+    const headT: V2 = [0.5 * Math.sin(t * 0.5), -1.1 * breathe + (this.cur >= 0 ? -0.8 * Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1)) : 0)];
 
     // arm
     let armRot = 0;
     if (m.arm) {
-      armRot = 1.4 * RAD * Math.sin(t * 0.8);
-      if (this.wave >= 0) armRot += 9 * RAD * Math.exp(-this.wave / 0.95) * Math.sin(2 * Math.PI * 2.3 * this.wave);
+      armRot = 0.9 * RAD * Math.sin(t * 0.6);
+      if (this.wave >= 0) armRot += 5.5 * RAD * Math.exp(-this.wave / 0.9) * Math.sin(2 * Math.PI * 1.7 * this.wave);
     }
     // item
     let itemV = 0;
     if (m.item?.mode === "pulse") {
       const c = (t % 1.7) / 1.7;
-      itemV = 0.034 * (Math.exp(-(((c - 0.1) / 0.06) ** 2)) + 0.7 * Math.exp(-(((c - 0.3) / 0.07) ** 2)));
-    } else if (m.item?.mode === "sway") itemV = 2.6 * RAD * Math.sin(t * 1.2);
-    else if (m.item?.mode === "bob") itemV = 3.5 * Math.sin(t * 1.6);
-    const tick = 5 * Math.pow(0.5 + 0.5 * Math.sin((2 * Math.PI * t) / 3.8), 8);
+      itemV = 0.024 * (Math.exp(-(((c - 0.1) / 0.06) ** 2)) + 0.7 * Math.exp(-(((c - 0.3) / 0.07) ** 2)));
+    } else if (m.item?.mode === "sway") itemV = 1.6 * RAD * Math.sin(t * 0.9);
+    else if (m.item?.mode === "bob") itemV = 2.4 * Math.sin(t * 1.1);
+    const tick = 3 * Math.pow(0.5 + 0.5 * Math.sin((2 * Math.PI * t) / 6.5), 10);
 
-    this.scarfPhase += dt * (2.1 + this.scarfAmp * 0.12);
-    const target = 2.4 + Math.min(8, Math.abs(this.headV) * 38) + (hopper ? 2.5 : 0);
+    this.scarfPhase += dt * (1.4 + this.scarfAmp * 0.1);
+    const target = 1.6 + Math.min(5, Math.abs(this.headV) * 30);
     this.scarfAmp += (target - this.scarfAmp) * Math.min(1, dt * 4);
 
     const N = m.n ?? [0, 0];
@@ -415,7 +421,7 @@ export class Sim {
       headT: sleepy ? [0, 0] : headT,
       ant: [clamp(this.ant[0] - this.head, -0.14, 0.14), clamp(this.ant[1] - this.head, -0.14, 0.14)],
       ear: [clamp(this.ear[0], -0.35, 0.35), clamp(this.ear[1], -0.35, 0.35)],
-      gaze: [this.gaze[0] * 4.2, this.gaze[1] * 3.4],
+      gaze: [this.gaze[0] * 3.2, this.gaze[1] * 2.6],
       scarfAmp: this.scarfAmp,
       scarfPhase: this.scarfPhase,
       armRot,
@@ -430,26 +436,26 @@ export class Sim {
   private sub(dt: number, ptr: Pointer | null) {
     const t = this.t;
     // head target: slow drift + curiosity + pointer
-    let target = (1.25 * Math.sin(t * 0.55) + 0.5 * Math.sin(t * 1.31 + 1.7)) * RAD;
-    if (this.cur >= 0) target += this.curDir * 3.4 * RAD * Math.pow(Math.sin(Math.PI * clamp(this.cur / 1.8, 0, 1)), 2);
-    if (ptr) target += ptr.dx * 4.8 * RAD;
-    [this.head, this.headV] = spring(this.head, this.headV, target, 38, 9.5, dt);
+    let target = (0.8 * Math.sin(t * 0.4) + 0.3 * Math.sin(t * 0.93 + 1.7)) * RAD;
+    if (this.cur >= 0) target += this.curDir * 2.2 * RAD * Math.pow(Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1)), 2);
+    if (ptr) target += ptr.dx * 2.6 * RAD;
+    [this.head, this.headV] = spring(this.head, this.headV, target, 26, 9, dt);
     // antlers lag the head
-    [this.ant[0], this.antV[0]] = spring(this.ant[0], this.antV[0], this.head, 46, 4.2, dt);
-    [this.ant[1], this.antV[1]] = spring(this.ant[1], this.antV[1], this.head, 56, 4.6, dt);
+    [this.ant[0], this.antV[0]] = spring(this.ant[0], this.antV[0], this.head, 40, 6, dt);
+    [this.ant[1], this.antV[1]] = spring(this.ant[1], this.antV[1], this.head, 46, 6.4, dt);
     // ears settle after flicks
     [this.ear[0], this.earV[0]] = spring(this.ear[0], this.earV[0], 0.012 * Math.sin(t * 1.1), 130, 8, dt);
     [this.ear[1], this.earV[1]] = spring(this.ear[1], this.earV[1], 0.012 * Math.sin(t * 1.3 + 1), 130, 8, dt);
     // gaze: saccades, looks with the head, follows the pointer
     this.nextLook -= dt;
     if (this.nextLook <= 0) {
-      this.nextLook = rnd(1.4, 3.6);
-      this.gTarget = Math.random() < 0.5 ? [rnd(-0.08, 0.08), rnd(-0.08, 0.08)] : [rnd(-1, 1), rnd(-0.6, 0.8)];
+      this.nextLook = rnd(3, 6.5);
+      this.gTarget = Math.random() < 0.65 ? [0, 0] : [rnd(-0.7, 0.7), rnd(-0.3, 0.5)];
     }
     let gt: V2 = this.gTarget;
     if (this.cur >= 0) gt = [this.curDir * 0.9, -0.2];
-    if (ptr) gt = [clamp(ptr.dx * 1.4, -1, 1), clamp(ptr.dy * 1.1, -1, 1)];
-    [this.gaze[0], this.gazeV[0]] = spring(this.gaze[0], this.gazeV[0], gt[0], 380, 30, dt);
-    [this.gaze[1], this.gazeV[1]] = spring(this.gaze[1], this.gazeV[1], gt[1], 380, 30, dt);
+    if (ptr) gt = [clamp(ptr.dx * 1.1, -1, 1), clamp(ptr.dy * 0.9, -1, 1)];
+    [this.gaze[0], this.gazeV[0]] = spring(this.gaze[0], this.gazeV[0], gt[0], 160, 22, dt);
+    [this.gaze[1], this.gazeV[1]] = spring(this.gaze[1], this.gazeV[1], gt[1], 160, 22, dt);
   }
 }

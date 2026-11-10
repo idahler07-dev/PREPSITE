@@ -38,23 +38,32 @@
   --slate-500: #6E8795;
   --slate-300: #9DB9C6;
   --line-200: #D3E5EC;
+  --cream-50: #FBF8F4;
+  --cream-100: #F6F0E8;
+  --cream-200: #EDE6DD;
+  --orange-500: #EE7A2F;
+  --orange-600: #E8662A;
+  --orange-700: #C44D17;
+  --orange-750: #B04410;
+  --orange-800: #A34615;
+  --slate-650: #5C6B77;
 
   /* ---- Layer 2: semantic tokens (what things mean) ---- */
   /* Radii: 12 inputs, 14 buttons, 20 cards, 28 panels, 36 hero. */
   --radius: 14px;
   --radius-large: 20px;
-  --radius-input: 12px;
+  --radius-input: 14px;
   --radius-panel: 28px;
   --radius-hero: 36px;
 
-  --background: var(--cloud-50);
-  --section-tint: #E9F4F8;
+  --background: var(--cream-50);
+  --section-tint: #F4EEE6;
   --foreground: var(--navy-900);
   --surface: var(--white);
-  --surface-2: var(--ice-50);
+  --surface-2: var(--cream-100);
   --muted: var(--surface-2);
-  --muted-foreground: var(--slate-600);
-  --border: var(--line-200);
+  --muted-foreground: var(--slate-650);
+  --border: var(--cream-200);
   --input: var(--slate-500);
 
   --primary: var(--cyan-700);
@@ -70,6 +79,26 @@
   --accent-foreground: #102d40;
   --accent-soft: #fcefe2;
   --accent-ink: #94481a;
+
+  /* Energy (orange): the one primary action per view, active nav, progress. */
+  --energy: var(--orange-600);
+  --energy-2: var(--orange-500);
+  --energy-ink: var(--orange-800);
+  --energy-soft: #ffe9d6;
+  /* Fills without text (rings, bars, icon discs). */
+  --grad-energy: linear-gradient(135deg, #f59a4b 0%, #e8662a 100%);
+  /* Buttons with white labels: deeper, so the label passes AA. */
+  --energy-cta: var(--orange-700);
+  --energy-cta-2: var(--orange-750);
+  --grad-cta: linear-gradient(135deg, #c44d17 0%, #b04410 100%);
+  --glow-energy: 0 8px 18px -8px rgb(232 102 42 / 0.7);
+  /* Card tints: one per card. */
+  --tint-peach: #ffe9d6;
+  --tint-mint: #ddf4ec;
+  --tint-sky: #e0eefb;
+  --tint-aqua: #e0f4f8;
+  --gold: #f6c453;
+  --shadow-card: 0 1px 2px rgb(16 45 64 / 0.04), 0 18px 40px -20px rgb(120 70 30 / 0.22);
 
   /* Marked for review. */
   --review: #7c3aed;
@@ -116,8 +145,8 @@
   --hl-text: #0f172a;
 
   /* Soft layered shadows: a hairline plus a wide, faint one. */
-  --elev-sm: 0 1px 2px rgb(16 45 64 / 0.05), 0 8px 24px -14px rgb(16 45 64 / 0.12);
-  --elev-md: 0 1px 2px rgb(16 45 64 / 0.05), 0 12px 32px -16px rgb(16 45 64 / 0.16);
+  --elev-sm: 0 1px 2px rgb(16 45 64 / 0.04), 0 14px 30px -18px rgb(120 70 30 / 0.2);
+  --elev-md: 0 1px 2px rgb(16 45 64 / 0.04), 0 18px 40px -20px rgb(120 70 30 / 0.24);
   --elev-lg: 0 1px 2px rgb(16 45 64 / 0.05), 0 12px 32px -16px rgb(16 45 64 / 0.16), 0 24px 60px -24px rgb(16 45 64 / 0.25);
   --glass: rgb(245 249 252 / 0.8);
   --overlay: rgb(16 45 64 / 0.4);
@@ -174,6 +203,19 @@
   --primary-soft: #123B48;
 
   --antler: #c98a5a;
+  --energy: #f59a4b;
+  --energy-2: #ee7a2f;
+  --energy-ink: #f7b27a;
+  --energy-soft: #3a2616;
+  --energy-cta: #f59a4b;
+  --energy-cta-2: #ee7a2f;
+  --grad-cta: linear-gradient(135deg, #f7a65d 0%, #ee7a2f 100%);
+  --grad-energy: linear-gradient(135deg, #f7a65d 0%, #ee7a2f 100%);
+  --tint-peach: #2b2018;
+  --tint-mint: #14302b;
+  --tint-sky: #17293b;
+  --tint-aqua: #143039;
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.05);
   --accent: #f0a462;
   --accent-foreground: #0b1d28;
   --accent-soft: #2e2218;
@@ -293,6 +335,15 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
   --color-accent-ink: var(--accent-ink);
+  --color-energy: var(--energy);
+  --color-energy-2: var(--energy-2);
+  --color-energy-ink: var(--energy-ink);
+  --color-energy-soft: var(--energy-soft);
+  --color-tint-peach: var(--tint-peach);
+  --color-tint-mint: var(--tint-mint);
+  --color-tint-sky: var(--tint-sky);
+  --color-tint-aqua: var(--tint-aqua);
+  --color-gold: var(--gold);
   --color-highlight: var(--highlight);
   --color-review: var(--review);
   --color-review-soft: var(--review-soft);
@@ -443,9 +494,9 @@
 
 /* Glass cards and chips: translucent with a bright top edge. No blur (it's invisible on smooth colour and costs frames). */
 .glass-card {
-  background-image: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
-  border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1.5px 0 var(--glass-hi), var(--glass-shadow);
+  background-color: var(--surface);
+  border: 1px solid color-mix(in oklab, var(--border), transparent 35%);
+  box-shadow: var(--shadow-card);
 }
 
 /* Soft colour behind the app so the glass has something to show: three static radial washes. */
@@ -454,10 +505,10 @@
   position: fixed;
   inset: 0;
   z-index: -1;
+  /* Two soft washes: aqua top right, peach bottom left (masterplan §4). */
   background:
-    radial-gradient(62% 46% at 6% 0%, var(--ambient-a), transparent 72%),
-    radial-gradient(52% 42% at 100% 36%, var(--ambient-b), transparent 72%),
-    radial-gradient(58% 44% at 0% 100%, var(--ambient-c), transparent 72%),
+    radial-gradient(48% 40% at 100% 0%, color-mix(in oklab, var(--tint-aqua), transparent 20%), transparent 72%),
+    radial-gradient(46% 40% at 0% 100%, color-mix(in oklab, var(--tint-peach), transparent 30%), transparent 72%),
     var(--background);
 }
 

@@ -9,8 +9,8 @@ function Card({ className, interactive = false, ...props }: React.ComponentProps
       data-interactive={interactive || undefined}
       className={cn(
         interactive &&
-          "transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/40 hover:shadow-lg motion-safe:hover:-translate-y-1",
-        "glass-card flex flex-col gap-5 rounded-2xl py-5 text-card-foreground lg:gap-6 lg:py-8",
+          "transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--elev-md)] motion-safe:hover:-translate-y-0.5",
+        "glass-card flex flex-col gap-5 rounded-[28px] py-5 text-card-foreground lg:gap-6 lg:py-8",
         className
       )}
       {...props}
