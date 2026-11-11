@@ -91,6 +91,7 @@
   --energy-cta: var(--orange-700);
   --energy-cta-2: var(--orange-750);
   --grad-cta: linear-gradient(135deg, #c44d17 0%, #b04410 100%);
+  --grad-nav: linear-gradient(135deg, #ffe7d3 0%, #fff3e8 100%);
   --glow-energy: 0 8px 18px -8px rgb(232 102 42 / 0.7);
   /* Card tints: one per card. */
   --tint-peach: #ffe9d6;
@@ -207,6 +208,7 @@
   --energy-2: #ee7a2f;
   --energy-ink: #f7b27a;
   --energy-soft: #3a2616;
+  --grad-nav: linear-gradient(135deg, #3a2616 0%, #2b1f15 100%);
   --energy-cta: #f59a4b;
   --energy-cta-2: #ee7a2f;
   --grad-cta: linear-gradient(135deg, #f7a65d 0%, #ee7a2f 100%);

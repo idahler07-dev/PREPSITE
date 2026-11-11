@@ -97,7 +97,9 @@
     "studyHistory": "Study history",
     "insights": "Insights",
     "me": "Me",
-    "study": "Study"
+    "study": "Study",
+    "studyPlan": "Study plan",
+    "focusShort": "Focus"
   },
   "footer": {
     "disclaimer": "SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this website.",
@@ -2034,14 +2036,20 @@
       "study": "Study",
       "practice": "Practice",
       "insights": "Insights",
-      "account": "Account"
+      "account": "Account",
+      "more": "More"
     },
     "more": "More",
     "streak": "{count, plural, one {# day streak} other {# day streak}}",
     "xp": "{count} XP",
     "score": "Estimated score {score}",
     "noScore": "No estimate yet",
-    "daysLeft": "{days, plural, =0 {Test day} one {# day to your SAT} other {# days to your SAT}}"
+    "daysLeft": "{days, plural, =0 {Test day} one {# day to your SAT} other {# days to your SAT}}",
+    "upgrade": {
+      "title": "Go Premium",
+      "body": "Unlock Willo, your AI tutor, and unlimited practice.",
+      "cta": "Upgrade"
+    }
   },
   "analytics": {
     "title": "Analytics",
@@ -2884,7 +2892,53 @@
     "newSkip": "Just practise for now",
     "sample": "Sample",
     "score": "{correct} of {total}",
-    "daysLeft": "{n, plural, =0 {Test day} one {# day to SAT} other {# days to SAT}}"
+    "daysLeft": "{n, plural, =0 {Test day} one {# day to SAT} other {# days to SAT}}",
+    "hello": {
+      "morning": "Good morning,",
+      "afternoon": "Good afternoon,",
+      "evening": "Good evening,"
+    },
+    "helloName": "{name}!",
+    "context": {
+      "days": "{n, plural, =0 {Test day is here. You've got this.} one {# day to test day. Make it count.} other {# days to test day. One step closer today.}}",
+      "streak": "{n} days in a row. Keep it going.",
+      "plain": "You're one step closer to your goal."
+    },
+    "toGo": "<b>{n} points</b> to go",
+    "change": "{dir, select, up {↑} other {↓}} {n}",
+    "sinceLast": "since your last test",
+    "daysLabel": "Days to test day",
+    "daysValue": "{n, plural, one {# day} other {# days}}",
+    "testOn": "SAT · {date}",
+    "setDate": "Set your test date",
+    "streakLabel": "Study streak",
+    "streakOn": "Keep it going",
+    "streakStart": "Start one today",
+    "todayPlan": "Today's plan",
+    "viewPlan": "View full plan",
+    "taskDrill": "{count} questions · {min} min",
+    "done": "done",
+    "upNext": "up next",
+    "ringLabel": "{done}/{total}",
+    "ringCaption": "done today",
+    "minLeft": "{n} min left",
+    "allDone": "All done today",
+    "restTitle": "Rest day",
+    "restBody": "Nothing planned today. Rest counts too.",
+    "restCta": "Practise anyway",
+    "studied": "Studied",
+    "planned": "Planned",
+    "calAlt": "Study calendar: {studied} days studied this month",
+    "journey": "Score journey",
+    "journeyTarget": "<b>Target {target}</b> · {n} to go",
+    "focusAreas": "Focus areas",
+    "focusNone": "Answer a few more questions and your weakest skills will show here.",
+    "focusNote": "Weakest first. Your plan adds extra time here.",
+    "notebook": "Mistake notebook",
+    "dueToday": "due for review today",
+    "savedTotal": "{n, plural, =0 {Missed questions are saved here.} one {# question saved} other {# questions saved}}",
+    "reviewNow": "Review now",
+    "openNotebook": "Open notebook"
   },
   "focus": {
     "title": "Focus sessions",

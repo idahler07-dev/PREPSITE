@@ -121,12 +121,12 @@ function NavRow({ item, active, onClick, size = "md" }: { item: ShellItem; activ
       data-liquid-key={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none",
-        size === "lg" ? "h-11 text-[15px]" : "h-10",
-        active ? "font-semibold text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
+        "group relative flex items-center gap-3.5 rounded-[18px] px-4 text-[15px] font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        size === "lg" ? "h-12" : "h-[46px]",
+        active ? "font-bold text-energy-ink" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
       )}
     >
-      <Icon className={cn("relative size-[18px] shrink-0", active ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} strokeWidth={active ? 2.25 : 2} aria-hidden />
+      <Icon className={cn("relative size-5 shrink-0", active ? "text-energy" : "text-muted-foreground/80 group-hover:text-foreground")} strokeWidth={active ? 2.3 : 2} aria-hidden />
       <span className="relative truncate">{item.label}</span>
     </Link>
   );
@@ -141,6 +141,7 @@ function NavRow({ item, active, onClick, size = "md" }: { item: ShellItem; activ
 export function AppShell({
   groups,
   footer,
+  sidebarSlot,
   mobile,
   tabs,
   topBar,
@@ -149,6 +150,8 @@ export function AppShell({
 }: {
   groups: ShellGroup[];
   footer: ShellItem[];
+  /** Shown at the bottom of the desktop sidebar (e.g. the Premium card). */
+  sidebarSlot?: ReactNode;
   mobile: ShellItem[];
   tabs: ShellGroup[];
   topBar: ReactNode;
@@ -170,29 +173,31 @@ export function AppShell({
   return (
     <MenuContext.Provider value={{ open: menuOpen, setOpen: setMenuOpen }}>
       <div className="relative isolate flex min-h-dvh flex-col">
+        <div className="app-ambient" aria-hidden />
         <div className="flex flex-1">
           {/* Desktop sidebar */}
-          <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-e border-border bg-surface lg:flex" aria-label={t("appNavigation")}>
-            <div className="flex h-16 items-center px-5">
-              <Logo href="/dashboard" />
-            </div>
-            <LiquidGroup as="nav" activeKey={active?.href ?? null} className="flex-1 space-y-5 overflow-y-auto px-3 pt-2 pb-4" indicatorClassName="rounded-xl bg-primary-soft">
-              {groups.map((g, gi) => (
-                <div key={g.label ?? gi}>
-                  {g.label && <p className="px-3 pb-1.5 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/80 uppercase">{g.label}</p>}
-                  <div className="space-y-0.5">
+          <aside className="sticky top-0 hidden h-dvh w-[264px] shrink-0 p-4 pe-0 lg:block" aria-label={t("appNavigation")}>
+            <div className="flex h-full flex-col overflow-hidden rounded-[30px] border border-white/80 bg-surface/90 shadow-[var(--shadow-card)] dark:border-white/5">
+              <div className="flex h-[76px] items-center px-6">
+                <Logo href="/dashboard" />
+              </div>
+              <LiquidGroup as="nav" activeKey={active?.href ?? null} className="flex-1 space-y-4 overflow-y-auto px-3 pb-3" indicatorClassName="rounded-[18px] bg-(image:--grad-nav)">
+                {groups.map((g, gi) => (
+                  <div key={g.label ?? gi} className="space-y-1">
+                    {g.label && <p className="px-4 pt-1 pb-1 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/70 uppercase">{g.label}</p>}
                     {g.items.map((i) => (
                       <NavRow key={i.href} item={i} active={active?.href === i.href} />
                     ))}
                   </div>
+                ))}
+                <div className="space-y-1 border-t border-border pt-3">
+                  {footer.map((i) => (
+                    <NavRow key={i.href} item={i} active={active?.href === i.href} />
+                  ))}
                 </div>
-              ))}
-            </LiquidGroup>
-            <LiquidGroup activeKey={footer.some((i) => i.href === active?.href) ? active!.href : null} className="space-y-0.5 border-t border-border px-3 py-3" indicatorClassName="rounded-xl bg-primary-soft">
-              {footer.map((i) => (
-                <NavRow key={i.href} item={i} active={active?.href === i.href} />
-              ))}
-            </LiquidGroup>
+              </LiquidGroup>
+              {sidebarSlot && <div className="p-3 pt-0">{sidebarSlot}</div>}
+            </div>
           </aside>
 
           <div className="flex min-w-0 flex-1 flex-col">
@@ -207,7 +212,7 @@ export function AppShell({
 
         {/* Phones and tablets: bottom tabs */}
         <nav aria-label={t("appNavigation")} className="glass fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] lg:hidden">
-          <LiquidGroup as="ul" activeKey={mobileActive?.href ?? null} className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2" indicatorClassName="rounded-full bg-primary-soft">
+          <LiquidGroup as="ul" activeKey={mobileActive?.href ?? null} className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2" indicatorClassName="rounded-full bg-energy-soft">
             {mobile.map((i) => {
               const Icon = ICONS[i.key] ?? Route;
               const on = mobileActive?.href === i.href;
@@ -216,10 +221,10 @@ export function AppShell({
                   <Link href={i.href} aria-current={on ? "page" : undefined} className="relative flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none">
                     <span data-liquid-key={i.href} className="relative grid h-8 w-14 place-items-center">
                       <m.span className="relative" animate={on && !reduce ? { y: [0, -2, 0] } : { y: 0 }} transition={{ duration: 0.3 }}>
-                        <Icon className={cn("size-[22px]", on ? "text-primary" : "text-muted-foreground")} strokeWidth={on ? 2.4 : 2} aria-hidden />
+                        <Icon className={cn("size-[22px]", on ? "text-energy" : "text-muted-foreground")} strokeWidth={on ? 2.4 : 2} aria-hidden />
                       </m.span>
                     </span>
-                    <span className={cn("text-[11px] font-semibold", on ? "text-primary" : "text-muted-foreground")}>{i.label}</span>
+                    <span className={cn("text-[11px] font-semibold", on ? "text-energy-ink" : "text-muted-foreground")}>{i.label}</span>
                   </Link>
                 </li>
               );
@@ -270,7 +275,7 @@ export function AppShell({
                           {g.label && <p className="px-3 pb-1 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/80 uppercase">{g.label}</p>}
                           {g.items.map((i) => (
                             <m.div key={i.href} variants={reduce ? undefined : itemVariants}>
-                              <div className={cn("rounded-xl", active?.href === i.href && "bg-primary-soft")}>
+                              <div className={cn("rounded-[18px]", active?.href === i.href && "bg-energy-soft")}>
                                 <NavRow item={i} active={active?.href === i.href} size="lg" onClick={() => setMenuOpen(false)} />
                               </div>
                             </m.div>
@@ -294,7 +299,7 @@ function SectionTabs({ items, pathname }: { items: ShellItem[]; pathname: string
   const on = activeIn(pathname, items);
   return (
     <div className="border-b border-border bg-background/80 lg:hidden">
-      <LiquidGroup as="nav" activeKey={on?.href ?? null} className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6" indicatorClassName="rounded-full bg-primary-soft">
+      <LiquidGroup as="nav" activeKey={on?.href ?? null} className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6" indicatorClassName="rounded-full bg-energy-soft">
         {items.map((i) => {
           const Icon = ICONS[i.key] ?? Route;
           const active = on?.href === i.href;
@@ -304,7 +309,7 @@ function SectionTabs({ items, pathname }: { items: ShellItem[]; pathname: string
               href={i.href}
               data-liquid-key={i.href}
               aria-current={active ? "page" : undefined}
-              className={cn("relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold transition-colors", active ? "text-primary" : "text-muted-foreground hover:text-foreground")}
+              className={cn("relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold transition-colors", active ? "text-energy-ink" : "text-muted-foreground hover:text-foreground")}
             >
               <Icon className="relative size-4" aria-hidden />
               <span className="relative">{i.label}</span>

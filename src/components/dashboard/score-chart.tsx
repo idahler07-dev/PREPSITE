@@ -7,8 +7,8 @@ import { useReducedMotionSafe } from "@/lib/motion";
 export type ScorePoint = { label: string; score: number };
 
 const W = 640;
-const H = 220;
-const PX = 36;
+const H = 300;
+const PX = 52;
 const PY = 18;
 
 /**
@@ -19,17 +19,20 @@ const PY = 18;
 export function ScoreChart({
   points,
   forecast,
+  target,
   labels,
 }: {
   points: ScorePoint[];
   forecast: { label: string; score: number; band: number } | null;
+  /** The student's target score, drawn as a dashed orange line. */
+  target?: number;
   labels: { estimate: string; table: string; date: string; score: string };
 }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
   const reduce = useReducedMotionSafe();
   const [hover, setHover] = useState<number | null>(null);
 
-  const all = [...points.map((p) => p.score), ...(forecast ? [forecast.score + forecast.band, forecast.score - forecast.band] : [])];
+  const all = [...points.map((p) => p.score), ...(forecast ? [forecast.score + forecast.band, forecast.score - forecast.band] : []), ...(target ? [target] : [])];
   const lo = Math.max(400, Math.floor((Math.min(...all) - 40) / 50) * 50);
   const hi = Math.min(1600, Math.ceil((Math.max(...all) + 40) / 50) * 50);
   const n = points.length + (forecast ? 1 : 0);
@@ -56,11 +59,12 @@ export function ScoreChart({
           {ticks.map((v) => (
             <g key={v}>
               <line x1={PX} x2={W - PX} y1={y(v)} y2={y(v)} stroke="var(--border)" strokeDasharray="2 6" />
-              <text x={PX - 8} y={y(v) + 4} textAnchor="end" className="fill-muted-foreground text-[11px] tabular-nums">
+              <text x={PX - 8} y={y(v) + 4} textAnchor="end" className="fill-muted-foreground text-[17px] tabular-nums">
                 {v}
               </text>
             </g>
           ))}
+          {target && <line x1={PX} x2={W - PX} y1={y(target)} y2={y(target)} stroke="var(--energy)" strokeWidth={1.6} strokeDasharray="5 6" />}
           <path d={area} fill={`url(#${id}-a)`} />
           {forecast && (
             <>
@@ -71,7 +75,7 @@ export function ScoreChart({
               />
               <line x1={x(last)} y1={y(points[last]!.score)} x2={x(n - 1)} y2={y(forecast.score)} stroke="var(--primary)" strokeWidth={2} strokeDasharray="5 6" strokeLinecap="round" />
               <circle cx={x(n - 1)} cy={y(forecast.score)} r={4.5} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} strokeDasharray="2 2" />
-              <text x={x(n - 1)} y={y(forecast.score + forecast.band) - 8} textAnchor="end" className="fill-muted-foreground text-[11px] font-semibold">
+              <text x={x(n - 1)} y={y(forecast.score + forecast.band) - 8} textAnchor="end" className="fill-muted-foreground text-[17px] font-semibold">
                 {labels.estimate}
               </text>
             </>
