@@ -20,8 +20,12 @@ export function WilloGallery() {
     <>
       <section className="mt-12 grid items-center gap-8 rounded-[32px] bg-gradient-to-br from-ice to-surface p-8 sm:grid-cols-[1fr_1.1fr] sm:p-12">
         <div>
-          <p className="text-sm font-semibold text-primary">{t("storyLabel")}</p>
-          <p className="mt-2 font-display text-3xl font-extrabold tracking-tight">{t(`story.${STORY[i] as "think"}`)}</p>
+          <p className="text-sm font-semibold text-primary">
+            {t("storyLabel")}
+          </p>
+          <p className="mt-2 font-display text-3xl font-extrabold tracking-tight">
+            {t(`story.${STORY[i] as "think"}`)}
+          </p>
           <p className="mt-3 text-muted-foreground">{t("storyBody")}</p>
         </div>
         <div className="flex justify-center">
@@ -30,9 +34,14 @@ export function WilloGallery() {
       </section>
       <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
         {POSES.map((p) => (
-          <li key={p} className="flex flex-col items-center gap-3 rounded-[24px] border border-border bg-surface px-4 pt-6 pb-5">
+          <li
+            key={p}
+            className="flex flex-col items-center gap-3 rounded-[24px] border border-border bg-surface px-4 pt-6 pb-5"
+          >
             <Willo pose={p} className="w-36" />
-            <span className="text-sm font-semibold text-muted-foreground">{t(`poses.${p}`)}</span>
+            <span className="text-sm font-semibold text-muted-foreground">
+              {t(`poses.${p}`)}
+            </span>
           </li>
         ))}
       </ul>

@@ -110,7 +110,13 @@ function Body({
   useEffect(() => {
     if (still) return;
     let alive = true;
-    void loadPose(pose).then((a) => alive && setAsset(a));
+    // Shown large or on a dense screen: use the 1080px art so it stays crisp.
+    const px =
+      (wrap.current?.getBoundingClientRect().width ?? 0) *
+      Math.min(2, window.devicePixelRatio || 1);
+    void loadPose(pose, px > DEER_POSES[pose][0] * 0.9).then(
+      (a) => alive && setAsset(a),
+    );
     return () => {
       alive = false;
     };
@@ -145,18 +151,18 @@ function Body({
             }
           : null;
         const { frame, blink, hop } = sim.step(dt, ptr);
-        const out = renderPose(asset, frame);
         const cw = Math.min(
-          asset.meta.w,
+          Math.round(asset.meta.w * 1.5),
           Math.round(rect.width * Math.min(2, window.devicePixelRatio || 1)),
         );
         const ch = Math.round((cw * asset.meta.h) / asset.meta.w);
+        const out = renderPose(asset, frame, cw, ch);
         if (cv.width !== cw || cv.height !== ch) {
           cv.width = cw;
           cv.height = ch;
         }
         ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(out, 0, 0, asset.meta.w, asset.meta.h, 0, 0, cw, ch);
+        ctx.drawImage(out, 0, 0, cw, ch, 0, 0, cw, ch);
         // lids ride along with the head
         const k = rect.width / asset.meta.w;
         const svg = lids.current;
@@ -192,7 +198,7 @@ function Body({
       {/* eslint-disable-next-line @next/next/no-img-element -- static WebP with srcset */}
       <img
         src={`/mascot/deer-${pose}.webp`}
-        srcSet={`/mascot/deer-${pose}-sm.webp 360w, /mascot/deer-${pose}.webp 720w`}
+        srcSet={`/mascot/deer-${pose}-sm.webp 360w, /mascot/deer-${pose}.webp 720w, /mascot/deer-${pose}-hd.webp 1080w`}
         sizes="(max-width: 640px) 50vw, 320px"
         width={w}
         height={h}

@@ -114,13 +114,18 @@ function ensureGL(): boolean {
   if (failed || typeof document === "undefined") return false;
   try {
     glCanvas = document.createElement("canvas");
-    const ctx = glCanvas.getContext("webgl", { premultipliedAlpha: true, alpha: true, antialias: false });
+    const ctx = glCanvas.getContext("webgl", {
+      premultipliedAlpha: true,
+      alpha: true,
+      antialias: false,
+    });
     if (!ctx) throw new Error("no webgl");
     const mk = (type: number, src: string) => {
       const s = ctx.createShader(type)!;
       ctx.shaderSource(s, src);
       ctx.compileShader(s);
-      if (!ctx.getShaderParameter(s, ctx.COMPILE_STATUS)) throw new Error(ctx.getShaderInfoLog(s) ?? "shader");
+      if (!ctx.getShaderParameter(s, ctx.COMPILE_STATUS))
+        throw new Error(ctx.getShaderInfoLog(s) ?? "shader");
       return s;
     };
     const p = ctx.createProgram()!;
@@ -131,7 +136,11 @@ function ensureGL(): boolean {
     ctx.useProgram(p);
     const buf = ctx.createBuffer();
     ctx.bindBuffer(ctx.ARRAY_BUFFER, buf);
-    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), ctx.STATIC_DRAW);
+    ctx.bufferData(
+      ctx.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      ctx.STATIC_DRAW,
+    );
     const a = ctx.getAttribLocation(p, "aPos");
     ctx.enableVertexAttribArray(a);
     ctx.vertexAttribPointer(a, 2, ctx.FLOAT, false, 0, 0);
@@ -139,7 +148,17 @@ function ensureGL(): boolean {
     prog = p;
     zeroTex = ctx.createTexture();
     ctx.bindTexture(ctx.TEXTURE_2D, zeroTex);
-    ctx.texImage2D(ctx.TEXTURE_2D, 0, ctx.RGBA, 1, 1, 0, ctx.RGBA, ctx.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+    ctx.texImage2D(
+      ctx.TEXTURE_2D,
+      0,
+      ctx.RGBA,
+      1,
+      1,
+      0,
+      ctx.RGBA,
+      ctx.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 0, 255]),
+    );
     ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MIN_FILTER, ctx.LINEAR);
     ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MAG_FILTER, ctx.LINEAR);
     return true;
@@ -173,23 +192,30 @@ function image(src: string): Promise<HTMLImageElement> {
 }
 
 const assets = new Map<string, Promise<Asset | null>>();
-export function loadPose(pose: string): Promise<Asset | null> {
-  let p = assets.get(pose);
+/** `hd` loads the 1080px art, for Willo shown large or on a high-density screen. */
+export function loadPose(pose: string, hd = false): Promise<Asset | null> {
+  const key = hd ? `${pose}-hd` : pose;
+  let p = assets.get(key);
   if (!p) {
     p = (async () => {
       if (!ensureGL()) return null;
       try {
-        const meta = (await (await fetch(`/mascot/rig/${pose}.json`)).json()) as RigMeta;
-        const main = await image(`/mascot/deer-${pose}.webp`);
+        const meta = (await (
+          await fetch(`/mascot/rig/${pose}.json`)
+        ).json()) as RigMeta;
+        const main = await image(`/mascot/deer-${key}.webp`);
         const tex = texture(main, true);
         if (meta.still) return { meta, tex, m1: zeroTex!, m2: zeroTex! };
-        const [a, b] = await Promise.all([image(`/mascot/rig/${pose}-m1.png`), image(`/mascot/rig/${pose}-m2.png`)]);
+        const [a, b] = await Promise.all([
+          image(`/mascot/rig/${pose}-m1.png`),
+          image(`/mascot/rig/${pose}-m2.png`),
+        ]);
         return { meta, tex, m1: texture(a, false), m2: texture(b, false) };
       } catch {
         return null;
       }
     })();
-    assets.set(pose, p);
+    assets.set(key, p);
   }
   return p;
 }
@@ -201,15 +227,24 @@ const bind = (unit: number, t: WebGLTexture, name: string) => {
   gl!.uniform1i(U(name), unit);
 };
 
-/** Render one frame; returns the shared canvas (valid until the next call). */
-export function renderPose(a: Asset, f: Frame): HTMLCanvasElement {
+/**
+ * Render one frame at ow x oh device pixels (the size it is shown at, so it stays sharp).
+ * The shared canvas only grows; the frame is its top-left ow x oh (valid until the next call).
+ */
+export function renderPose(
+  a: Asset,
+  f: Frame,
+  ow = a.meta.w,
+  oh = a.meta.h,
+): HTMLCanvasElement {
   const g = gl!;
   const m = a.meta;
-  if (glCanvas!.width !== m.w || glCanvas!.height !== m.h) {
-    glCanvas!.width = m.w;
-    glCanvas!.height = m.h;
+  if (glCanvas!.width < ow || glCanvas!.height < oh) {
+    glCanvas!.width = Math.max(glCanvas!.width, ow);
+    glCanvas!.height = Math.max(glCanvas!.height, oh);
   }
-  g.viewport(0, 0, m.w, m.h);
+  // GL draws from the bottom left, so put the frame at the canvas's top left.
+  g.viewport(0, glCanvas!.height - oh, ow, oh);
   g.clearColor(0, 0, 0, 0);
   g.clear(g.COLOR_BUFFER_BIT);
   bind(0, a.tex, "uTex");
@@ -236,23 +271,51 @@ export function renderPose(a: Asset, f: Frame): HTMLCanvasElement {
   const eL = ears[0];
   const eR = ears[1] ?? ears[0];
   f1("uHasEars", ears.length ? 1 : 0);
-  g.uniform4f(U("uEars"), eL?.c[0] ?? 0, eL?.c[1] ?? 0, eR?.c[0] ?? 0, eR?.c[1] ?? 0);
-  g.uniform4f(U("uEarP"), eL?.p[0] ?? 0, eL?.p[1] ?? 0, eR?.p[0] ?? 0, eR?.p[1] ?? 0);
+  g.uniform4f(
+    U("uEars"),
+    eL?.c[0] ?? 0,
+    eL?.c[1] ?? 0,
+    eR?.c[0] ?? 0,
+    eR?.c[1] ?? 0,
+  );
+  g.uniform4f(
+    U("uEarP"),
+    eL?.p[0] ?? 0,
+    eL?.p[1] ?? 0,
+    eR?.p[0] ?? 0,
+    eR?.p[1] ?? 0,
+  );
   f1("uScarfAmp", m.scarf ? f.scarfAmp : 0);
   f1("uScarfPhase", f.scarfPhase);
   f1("uTick", m.ticks ? f.tick : 0);
   const arm = m.arm;
-  g.uniform4f(U("uArm"), arm?.s[0] ?? 0, arm?.s[1] ?? 0, arm?.p[0] ?? 0, arm?.p[1] ?? 0);
+  g.uniform4f(
+    U("uArm"),
+    arm?.s[0] ?? 0,
+    arm?.s[1] ?? 0,
+    arm?.p[0] ?? 0,
+    arm?.p[1] ?? 0,
+  );
   f1("uArmW", arm?.w ?? 0);
   f1("uArmRot", f.armRot);
   const item = m.item;
-  f1("uItemMode", item ? (item.mode === "pulse" ? 1 : item.mode === "sway" ? 2 : 3) : 0);
+  f1(
+    "uItemMode",
+    item ? (item.mode === "pulse" ? 1 : item.mode === "sway" ? 2 : 3) : 0,
+  );
   v2("uItemC", item?.c[0] ?? 0, item?.c[1] ?? 0);
-  v2("uItemP", item?.pivot?.[0] ?? item?.c[0] ?? 0, item?.pivot?.[1] ?? item?.c[1] ?? 0);
+  v2(
+    "uItemP",
+    item?.pivot?.[0] ?? item?.c[0] ?? 0,
+    item?.pivot?.[1] ?? item?.c[1] ?? 0,
+  );
   f1("uItemV", f.itemV);
   v2("uGaze", f.gaze[0], f.gaze[1]);
   const eo = m.eyes ?? [];
-  const eye = (i: number) => (eo[i]?.open && f.eyes[i] ? ([f.eyes[i]![0], f.eyes[i]![1], eo[i]!.r, 1] as const) : ([0, 0, 1, 0] as const));
+  const eye = (i: number) =>
+    eo[i]?.open && f.eyes[i]
+      ? ([f.eyes[i]![0], f.eyes[i]![1], eo[i]!.r, 1] as const)
+      : ([0, 0, 1, 0] as const);
   const A = eye(0);
   const B = eye(1);
   g.uniform4f(U("uEyeA"), A[0], A[1], A[2], A[3]);
@@ -266,7 +329,14 @@ export function renderPose(a: Asset, f: Frame): HTMLCanvasElement {
 const RAD = Math.PI / 180;
 const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 const clamp = (x: number, a: number, b: number) => Math.min(b, Math.max(a, x));
-function spring(x: number, v: number, target: number, k: number, c: number, dt: number): [number, number] {
+function spring(
+  x: number,
+  v: number,
+  target: number,
+  k: number,
+  c: number,
+  dt: number,
+): [number, number] {
   v += (k * (target - x) - c * v) * dt;
   return [x + v * dt, v];
 }
@@ -363,7 +433,8 @@ export class Sim {
       blink = Math.sin(Math.PI * clamp(this.blink / 0.15, 0, 1));
       if (this.blink > 0.15) this.blink = -1;
     }
-    const hopper = this.pose === "cheer" || this.pose === "jump" || this.pose === "trophy";
+    const hopper =
+      this.pose === "cheer" || this.pose === "jump" || this.pose === "trophy";
     let hopY = 0;
     let hopU = 0;
     if (hopper) {
@@ -384,22 +455,37 @@ export class Sim {
 
     const breathe = 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 5);
     const sleepy = m.still;
-    const headT: V2 = [0.5 * Math.sin(t * 0.5), -1.1 * breathe + (this.cur >= 0 ? -0.8 * Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1)) : 0)];
+    const headT: V2 = [
+      0.5 * Math.sin(t * 0.5),
+      -1.1 * breathe +
+        (this.cur >= 0
+          ? -0.8 * Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1))
+          : 0),
+    ];
 
     // arm
     let armRot = 0;
     if (m.arm) {
       armRot = 0.9 * RAD * Math.sin(t * 0.6);
-      if (this.wave >= 0) armRot += 5.5 * RAD * Math.exp(-this.wave / 0.9) * Math.sin(2 * Math.PI * 1.7 * this.wave);
+      if (this.wave >= 0)
+        armRot +=
+          5.5 *
+          RAD *
+          Math.exp(-this.wave / 0.9) *
+          Math.sin(2 * Math.PI * 1.7 * this.wave);
     }
     // item
     let itemV = 0;
     if (m.item?.mode === "pulse") {
       const c = (t % 1.7) / 1.7;
-      itemV = 0.024 * (Math.exp(-(((c - 0.1) / 0.06) ** 2)) + 0.7 * Math.exp(-(((c - 0.3) / 0.07) ** 2)));
+      itemV =
+        0.024 *
+        (Math.exp(-(((c - 0.1) / 0.06) ** 2)) +
+          0.7 * Math.exp(-(((c - 0.3) / 0.07) ** 2)));
     } else if (m.item?.mode === "sway") itemV = 1.6 * RAD * Math.sin(t * 0.9);
     else if (m.item?.mode === "bob") itemV = 2.4 * Math.sin(t * 1.1);
-    const tick = 3 * Math.pow(0.5 + 0.5 * Math.sin((2 * Math.PI * t) / 6.5), 10);
+    const tick =
+      3 * Math.pow(0.5 + 0.5 * Math.sin((2 * Math.PI * t) / 6.5), 10);
 
     this.scarfPhase += dt * (1.4 + this.scarfAmp * 0.1);
     const target = 1.6 + Math.min(5, Math.abs(this.headV) * 30);
@@ -411,7 +497,10 @@ export class Sim {
       const dy = p[1] - N[1];
       const c = Math.cos(this.head);
       const s = Math.sin(this.head);
-      return [N[0] + c * dx - s * dy + headT[0], N[1] + s * dx + c * dy + headT[1]];
+      return [
+        N[0] + c * dx - s * dy + headT[0],
+        N[1] + s * dx + c * dy + headT[1],
+      ];
     };
     const eyes = (m.eyes ?? []).map((e) => rotPt(e.c));
 
@@ -419,7 +508,10 @@ export class Sim {
       breath: sleepy ? 0.011 * breathe : 0.0055 * breathe,
       head: sleepy ? 0 : this.head,
       headT: sleepy ? [0, 0] : headT,
-      ant: [clamp(this.ant[0] - this.head, -0.14, 0.14), clamp(this.ant[1] - this.head, -0.14, 0.14)],
+      ant: [
+        clamp(this.ant[0] - this.head, -0.14, 0.14),
+        clamp(this.ant[1] - this.head, -0.14, 0.14),
+      ],
       ear: [clamp(this.ear[0], -0.35, 0.35), clamp(this.ear[1], -0.35, 0.35)],
       gaze: [this.gaze[0] * 3.2, this.gaze[1] * 2.6],
       scarfAmp: this.scarfAmp,
@@ -436,26 +528,75 @@ export class Sim {
   private sub(dt: number, ptr: Pointer | null) {
     const t = this.t;
     // head target: slow drift + curiosity + pointer
-    let target = (0.8 * Math.sin(t * 0.4) + 0.3 * Math.sin(t * 0.93 + 1.7)) * RAD;
-    if (this.cur >= 0) target += this.curDir * 2.2 * RAD * Math.pow(Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1)), 2);
+    let target =
+      (0.8 * Math.sin(t * 0.4) + 0.3 * Math.sin(t * 0.93 + 1.7)) * RAD;
+    if (this.cur >= 0)
+      target +=
+        this.curDir *
+        2.2 *
+        RAD *
+        Math.pow(Math.sin(Math.PI * clamp(this.cur / 2.6, 0, 1)), 2);
     if (ptr) target += ptr.dx * 2.6 * RAD;
     [this.head, this.headV] = spring(this.head, this.headV, target, 26, 9, dt);
     // antlers lag the head
-    [this.ant[0], this.antV[0]] = spring(this.ant[0], this.antV[0], this.head, 40, 6, dt);
-    [this.ant[1], this.antV[1]] = spring(this.ant[1], this.antV[1], this.head, 46, 6.4, dt);
+    [this.ant[0], this.antV[0]] = spring(
+      this.ant[0],
+      this.antV[0],
+      this.head,
+      40,
+      6,
+      dt,
+    );
+    [this.ant[1], this.antV[1]] = spring(
+      this.ant[1],
+      this.antV[1],
+      this.head,
+      46,
+      6.4,
+      dt,
+    );
     // ears settle after flicks
-    [this.ear[0], this.earV[0]] = spring(this.ear[0], this.earV[0], 0.012 * Math.sin(t * 1.1), 130, 8, dt);
-    [this.ear[1], this.earV[1]] = spring(this.ear[1], this.earV[1], 0.012 * Math.sin(t * 1.3 + 1), 130, 8, dt);
+    [this.ear[0], this.earV[0]] = spring(
+      this.ear[0],
+      this.earV[0],
+      0.012 * Math.sin(t * 1.1),
+      130,
+      8,
+      dt,
+    );
+    [this.ear[1], this.earV[1]] = spring(
+      this.ear[1],
+      this.earV[1],
+      0.012 * Math.sin(t * 1.3 + 1),
+      130,
+      8,
+      dt,
+    );
     // gaze: saccades, looks with the head, follows the pointer
     this.nextLook -= dt;
     if (this.nextLook <= 0) {
       this.nextLook = rnd(3, 6.5);
-      this.gTarget = Math.random() < 0.65 ? [0, 0] : [rnd(-0.7, 0.7), rnd(-0.3, 0.5)];
+      this.gTarget =
+        Math.random() < 0.65 ? [0, 0] : [rnd(-0.7, 0.7), rnd(-0.3, 0.5)];
     }
     let gt: V2 = this.gTarget;
     if (this.cur >= 0) gt = [this.curDir * 0.9, -0.2];
     if (ptr) gt = [clamp(ptr.dx * 1.1, -1, 1), clamp(ptr.dy * 0.9, -1, 1)];
-    [this.gaze[0], this.gazeV[0]] = spring(this.gaze[0], this.gazeV[0], gt[0], 160, 22, dt);
-    [this.gaze[1], this.gazeV[1]] = spring(this.gaze[1], this.gazeV[1], gt[1], 160, 22, dt);
+    [this.gaze[0], this.gazeV[0]] = spring(
+      this.gaze[0],
+      this.gazeV[0],
+      gt[0],
+      160,
+      22,
+      dt,
+    );
+    [this.gaze[1], this.gazeV[1]] = spring(
+      this.gaze[1],
+      this.gazeV[1],
+      gt[1],
+      160,
+      22,
+      dt,
+    );
   }
 }

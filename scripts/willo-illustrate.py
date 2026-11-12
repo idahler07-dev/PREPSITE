@@ -76,11 +76,12 @@ def sample(img, qx, qy):
 
 
 def illustrate(pose):
-    K = 2  # supersample
+    K = 3  # work at 3x the 720 frame, from the hi-res source art
     base = Image.open(f"{SRC}/deer-{pose}.webp").convert("RGBA")
     W0, H0 = base.size
     meta = json.load(open(f"{RIG}/{pose}.json"))
-    big = base.resize((W0 * K, H0 * K), Image.BICUBIC)
+    # The hi-res cut-out (about 1.5x) is the same drawing as the 720 frame, so it maps straight onto it.
+    big = Image.open(f"{SRC}/src/{pose}.webp").convert("RGBA").resize((W0 * K, H0 * K), Image.LANCZOS)
     a = np.asarray(big).astype(np.float32) / 255
     # premultiply for clean warping
     pm = a.copy()
@@ -161,7 +162,7 @@ def illustrate(pose):
     weight = 0.7 + 0.9 * g(shade, 6 * K)
     ink_img = Image.fromarray((np.clip(ink, 0, 1) * 255).astype(np.uint8), "L").filter(ImageFilter.MaxFilter(3))
     ink = np.asarray(ink_img).astype(np.float32) / 255
-    ink = g(ink * np.clip(weight, 0, 1.4), 0.7 * K)
+    ink = g(ink * np.clip(weight, 0, 1.4), 0.45 * K)
     ink = np.clip(ink, 0, 1)
     ink_col = np.array([0.24, 0.13, 0.09], np.float32)
     # the silhouette line sits just inside/outside the edge, so grow alpha a hair
@@ -184,10 +185,18 @@ def illustrate(pose):
         geo["boxes"].append([round(float(xs[0])), round(float(ys[2])), round(float(xs[1])), round(float(ys[3]))])
 
     out = np.dstack([np.clip(rgb, 0, 1), np.clip(al_out, 0, 1)])
-    img = Image.fromarray((out * 255).astype(np.uint8), "RGBA").resize((W0, H0), Image.LANCZOS)
-    img.save(f"{OUT}/deer-{pose}.webp", quality=88, method=6)
-    sm = img.resize((W0 // 2, H0 // 2), Image.LANCZOS)
-    sm.save(f"{OUT}/deer-{pose}-sm.webp", quality=88, method=6)
+    full = Image.fromarray((out * 255).astype(np.uint8), "RGBA")
+
+    def export(scale, suffix, sharpen):
+        im = full.resize((round(W0 * scale), round(H0 * scale)), Image.LANCZOS)
+        rgb_, a_ = im.convert("RGB"), im.getchannel("A")
+        rgb_ = rgb_.filter(ImageFilter.UnsharpMask(radius=sharpen[0], percent=sharpen[1], threshold=1))
+        rgb_.putalpha(a_)
+        rgb_.save(f"{OUT}/deer-{pose}{suffix}.webp", quality=92, method=6)
+
+    export(1.5, "-hd", (1.4, 70))  # 1080px, for large and high-density displays
+    export(1.0, "", (1.0, 60))  # 720px
+    export(0.5, "-sm", (0.7, 50))  # 360px
     return geo
 
 

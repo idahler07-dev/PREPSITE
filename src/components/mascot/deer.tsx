@@ -25,13 +25,25 @@ export const DEER_POSES = {
 
 export type DeerPose = keyof typeof DEER_POSES;
 
-export function Deer({ pose = "stand", className, label, float = false, priority = false }: { pose?: DeerPose; className?: string; label?: string; float?: boolean; priority?: boolean }) {
+export function Deer({
+  pose = "stand",
+  className,
+  label,
+  float = false,
+  priority = false,
+}: {
+  pose?: DeerPose;
+  className?: string;
+  label?: string;
+  float?: boolean;
+  priority?: boolean;
+}) {
   const [w, h] = DEER_POSES[pose];
   return (
     // eslint-disable-next-line @next/next/no-img-element -- small static WebP with srcset; next/image adds nothing here
     <img
       src={`/mascot/deer-${pose}.webp`}
-      srcSet={`/mascot/deer-${pose}-sm.webp 360w, /mascot/deer-${pose}.webp 720w`}
+      srcSet={`/mascot/deer-${pose}-sm.webp 360w, /mascot/deer-${pose}.webp 720w, /mascot/deer-${pose}-hd.webp 1080w`}
       sizes="(max-width: 640px) 50vw, 240px"
       width={w}
       height={h}
@@ -40,7 +52,11 @@ export function Deer({ pose = "stand", className, label, float = false, priority
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       draggable={false}
-      className={cn("inline-block h-auto w-24 shrink-0 select-none", float && "deer-float", className)}
+      className={cn(
+        "inline-block h-auto w-24 shrink-0 select-none",
+        float && "deer-float",
+        className,
+      )}
     />
   );
 }
