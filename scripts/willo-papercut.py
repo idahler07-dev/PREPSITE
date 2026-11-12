@@ -62,7 +62,7 @@ def papercut(pose, out_dir, height=1080, k=18):
     # merge near-identical clusters (soft gradients) so each colour is one sheet of paper
     keep = []
     for c in cents:
-        if all(((c - q) ** 2).sum() > 0.075 ** 2 for q in keep):
+        if all(((c - q) ** 2).sum() > 0.09 ** 2 for q in keep):
             keep.append(c)
     cents = np.array(keep)
     k = len(cents)
@@ -87,6 +87,10 @@ def papercut(pose, out_dir, height=1080, k=18):
         solid = (~crumb) & inside
         _, (iy, ix) = ndimage.distance_transform_edt(~solid, return_indices=True)
         lab = np.where(crumb, lab[iy, ix], lab)
+    # smooth every cut: soft one-hot per piece, blurred, then the strongest piece wins
+    soft = np.stack([blur((lab == i).astype(np.float32), 3.2 * s) for i in range(k)], -1)
+    lab = soft.argmax(-1).astype(np.uint8)
+    lab[~inside] = 255
     # colour of each piece: the median of its pixels in the original
     cols = np.zeros((k, 3), np.float32)
     for i in range(k):
@@ -109,14 +113,14 @@ def papercut(pose, out_dir, height=1080, k=18):
     off = max(2, round(5 * s))
     for rank in range(1, k):
         above = (depth >= rank).astype(np.float32)
-        cast = blur(shift(above, off, round(off * 1.3)), 4.5 * s)
+        cast = blur(shift(above, round(off * 0.6), off), 6 * s)
         shadow = np.maximum(shadow, cast * (depth < rank) * (depth >= 0))
     for rank in range(0, k):
         piece = (depth == rank).astype(np.float32)
         edge = np.clip(piece - shift(piece, round(2 * s), round(2 * s)), 0, 1)  # top-left cut edge
         rim = np.maximum(rim, blur(edge, 0.8 * s))
-    rgb2 = flat * (1 - 0.34 * shadow[..., None]) + np.array([0.24, 0.12, 0.08]) * 0.34 * shadow[..., None] * 0.5
-    rgb2 = rgb2 + (1 - rgb2) * 0.35 * rim[..., None] * inside[..., None]
+    rgb2 = flat * (1 - 0.24 * shadow[..., None]) + np.array([0.24, 0.12, 0.08]) * 0.24 * shadow[..., None] * 0.5
+    rgb2 = rgb2 + (1 - rgb2) * 0.22 * rim[..., None] * inside[..., None]
 
     # 4. paper fibre: low-frequency mottling + fine fibres, varied per piece
     rng = np.random.default_rng(5)
@@ -124,7 +128,7 @@ def papercut(pose, out_dir, height=1080, k=18):
     fib = blur(rng.random(lab.shape).astype(np.float32), 0.6 * s) - 0.5
     mott = blur(rng.random(lab.shape).astype(np.float32), 9 * s) - 0.5
     streak = np.asarray(Image.fromarray((rng.random((H // 6, W)) * 255).astype(np.uint8)).resize((W, H), Image.BILINEAR)).astype(np.float32) / 255 - 0.5
-    tex = 1 + 0.07 * fib + 0.22 * mott + 0.025 * streak
+    tex = 1 + 0.06 * fib + 0.09 * mott + 0.02 * streak
     rgb2 = rgb2 * tex[..., None]
 
     # clean silhouette with a slightly crisp edge, plus the figure's own drop shadow

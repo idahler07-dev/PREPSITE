@@ -67,3 +67,30 @@ no stock photos.
 - CTAs: "Start free" · "Try a sample question"
 - Line under CTAs: "Free plan forever · Premium $9.99/mo · no card to start"
 - How it works: "Diagnose. Plan. Practice." — 01 Take a short diagnostic · 02 Get a plan for your test date · 03 Practice and never stay stuck
+
+## 6. Measured (computed styles, Nov 2026)
+
+| | Stripe | Linear | Linus |
+|---|---|---|---|
+| Display type | Söhne, **weight 300**, h1 48/55 ls −0.02em, h2 32, card titles 26 | Inter Variable **510**, h1 64/64 ls −0.022em, h2 48/48 | Gibson Medium 64/68 |
+| Body | 14–16, weight 300–400 | 15/24, grey `#8A8F98` | 17 |
+| Headline device | Two-tone: first clause ink, rest muted or coloured | Grey lead-in + white emphasis | Single colour |
+| Buttons | 4px radius, 48px tall, 16px label, solid indigo | Pill, 44px tall (32 in nav), 16px/510 | Pill, lime on green |
+| Cards | 6px radius, no border, shadow `0 16px 32px rgba(50,50,93,.12)` | 8–12px radius, 1px `rgba(255,255,255,.08)` hairline, no shadow | Rounded, product screenshots |
+| Rhythm | Bento grid, product UI as the art | 128px top/bottom per section, 1344px container | Dark full-bleed bands |
+
+What this means for WilloPrep: medium weights (500–600), not 800; one-colour icons; hairlines before shadows;
+128px between sections; product UI as the main picture; two-tone headlines; pill buttons 44px.
+
+## 7. Paper-cut, done well
+
+References: the Mocha Studio cut-paper canvas (UX Pilot), Laura K Sayers' portfolio (layered hand-cut paper),
+the Designmodo scrapbook round-up, and the cartoonperson.net style notes.
+
+- One colour family per scene, stepped light to dark across 5–7 sheets (WilloPrep: a teal ramp `#E6EFEA → #3F7176`).
+- One accent only (a small sun). Orange is saved for Willo and the call to action.
+- Shadows are soft and short, cast up onto the sheet behind (light from the front), never black outlines.
+- Mottled fibre, very low contrast (about 2–3%), generated as one large image so no tile seams show.
+- Clean blade-cut edges: the paper-cut Willo now smooths every cut and keeps fewer, flatter pieces.
+- Willo stands inside the scene, between sheets, so the front sheet overlaps his feet.
+- UI stays modern (Inter, Geist Mono, hairlines). Paper is for the scene, cards and small vignettes, not for text.
