@@ -114,9 +114,9 @@ def avatar(pose, out, n=512, ground=((255, 236, 220), (247, 204, 168))):
     b, (cx, cy, R, nx, ny) = bust(im, g, depth=0.75, pose=pose)
     pad = int(n * 0.30)  # room above the circle for antlers breaking out
     N = n + pad
-    s = (n * 0.80) / b.width
+    s = (n * 0.76) / b.width
     b = b.resize((round(b.width * s), round(b.height * s)), Image.LANCZOS)
-    cx, cy = cx * s, cy * s
+    cx, cy, R, ny = cx * s, cy * s, R * s, ny * s
     canvas = Image.new("RGBA", (n, N), (0, 0, 0, 0))
     disc = radial(n, ground[0], ground[1], center=(0.5, 0.35), spread=0.8).convert("RGBA")
     cm = Image.new("L", (n * 4, n * 4), 0)
@@ -127,11 +127,11 @@ def avatar(pose, out, n=512, ground=((255, 236, 220), (247, 204, 168))):
     layer = Image.new("RGBA", (n, N), (0, 0, 0, 0))
     ox, oy = round(n / 2 - b.width / 2), pad + n - b.height + round(n * 0.04)
     layer.alpha_composite(b, (max(ox, 0), max(oy, 0)), (max(-ox, 0), max(-oy, 0)))
-    # clip: inside the circle, or anywhere above the circle's centre line (antlers and ears break the frame)
+    # clip: the scarf and below stay inside the circle; the whole head (ears, antlers) may break the frame
     clip = Image.new("L", (n, N), 0)
     clip.paste(cm, (0, pad))
     up = Image.new("L", (n, N), 0)
-    ImageDraw.Draw(up).rectangle((0, 0, n, pad + n // 2), fill=255)
+    ImageDraw.Draw(up).rectangle((0, 0, n, int(oy + ny - 0.32 * R)), fill=255)
     clip = Image.fromarray(np.maximum(np.asarray(clip), np.asarray(up.filter(ImageFilter.GaussianBlur(2)))))
     la = np.asarray(layer.getchannel("A")).astype(np.float32) * np.asarray(clip).astype(np.float32) / 255
     layer.putalpha(Image.fromarray(la.astype(np.uint8)))
