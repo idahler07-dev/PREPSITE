@@ -94,3 +94,17 @@ the Designmodo scrapbook round-up, and the cartoonperson.net style notes.
 - Clean blade-cut edges: the paper-cut Willo now smooths every cut and keeps fewer, flatter pieces.
 - Willo stands inside the scene, between sheets, so the front sheet overlaps his feet.
 - UI stays modern (Inter, Geist Mono, hairlines). Paper is for the scene, cards and small vignettes, not for text.
+
+## 8. How the best sites show a mascot, and Willo's formats
+
+- Brilliant: Koji is never large. He appears as a small glyph inside the product UI next to his messages, and once
+  perched on the "Meet Koji" heading. Mailchimp: Freddie is a head in the mark. Duolingo: full-body Duo is the brand
+  itself on marketing pages, but the app icon is his head. Apple and Brilliant: centred hero, two pill buttons,
+  then alternating rows of text beside a product panel.
+- WilloPrep therefore uses four custom formats (`scripts/willo-formats.py` → `public/mascot/formats/`):
+  1. **App icon**: squircle, lit deep-teal ground, head and scarf with the scarf running off the bottom edge.
+  2. **Avatar**: warm circle, head and scarf clipped by the circle below, antlers free above. Used next to Willo's messages.
+  3. **Sticker**: die-cut with a white cut line and a lift shadow. Celebrations, empty states, emails.
+  4. **Peek**: head and scarf with two hooves hooked over a card's top edge. One per screen at most.
+- Only head, ears, antlers and scarf are kept (rig head mask plus the scarf colour, connected to the face), so hands,
+  props and sparkles never appear cut off. Full body is kept for celebrations only.
