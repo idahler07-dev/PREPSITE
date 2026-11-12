@@ -19,32 +19,32 @@ import { Sim, loadPose, renderPose, type Asset } from "./willo-rig";
  * Reduced motion, or no WebGL: the still illustration.
  */
 
-/** Open-eye boxes (x0, y0, x1, y1) measured from the art, for the blink lids. */
+/** Open-eye boxes (x0, y0, x1, y1) in the illustrated art, for the blink lids (art/mascot/illustrated-geometry.json). */
 const EYES: Partial<Record<DeerPose, [number, number, number, number][]>> = {
   stand: [
-    [206, 275, 284, 366],
-    [376, 246, 448, 331],
+    [219, 290, 285, 369],
+    [378, 262, 440, 336],
   ],
-  wink: [[361, 235, 428, 318]],
+  wink: [[363, 252, 420, 324]],
   idea: [
-    [202, 261, 276, 346],
-    [370, 220, 436, 296],
+    [215, 275, 278, 349],
+    [373, 236, 429, 302],
   ],
   think: [
-    [284, 287, 363, 384],
-    [463, 230, 544, 328],
+    [299, 302, 366, 387],
+    [467, 249, 536, 334],
   ],
   read: [
-    [280, 338, 359, 426],
-    [459, 307, 530, 394],
+    [293, 353, 361, 430],
+    [461, 324, 521, 400],
   ],
   laptop: [
-    [317, 320, 396, 403],
-    [490, 287, 555, 369],
+    [329, 334, 398, 406],
+    [492, 303, 547, 374],
   ],
   sad: [
-    [238, 354, 331, 451],
-    [429, 308, 516, 405],
+    [253, 370, 333, 454],
+    [432, 327, 507, 411],
   ],
 };
 
@@ -90,7 +90,15 @@ function addInst(i: Inst) {
 
 // ─── component ──────────────────────────────────────────────────────────────
 
-function Body({ pose, still, shadowRef }: { pose: DeerPose; still: boolean; shadowRef: RefObject<HTMLSpanElement | null> }) {
+function Body({
+  pose,
+  still,
+  shadowRef,
+}: {
+  pose: DeerPose;
+  still: boolean;
+  shadowRef: RefObject<HTMLSpanElement | null>;
+}) {
   const [w, h] = DEER_POSES[pose];
   const wrap = useRef<HTMLSpanElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -122,11 +130,26 @@ function Body({ pose, still, shadowRef }: { pose: DeerPose; still: boolean; shad
         if (!rect.width) return;
         const active = performance.now() - pointer.t < 2600;
         const ptr = active
-          ? { dx: Math.max(-1, Math.min(1, (pointer.x - (rect.left + rect.width / 2)) / 420)), dy: Math.max(-1, Math.min(1, (pointer.y - (rect.top + rect.height * 0.38)) / 420)) }
+          ? {
+              dx: Math.max(
+                -1,
+                Math.min(1, (pointer.x - (rect.left + rect.width / 2)) / 420),
+              ),
+              dy: Math.max(
+                -1,
+                Math.min(
+                  1,
+                  (pointer.y - (rect.top + rect.height * 0.38)) / 420,
+                ),
+              ),
+            }
           : null;
         const { frame, blink, hop } = sim.step(dt, ptr);
         const out = renderPose(asset, frame);
-        const cw = Math.min(asset.meta.w, Math.round(rect.width * Math.min(2, window.devicePixelRatio || 1)));
+        const cw = Math.min(
+          asset.meta.w,
+          Math.round(rect.width * Math.min(2, window.devicePixelRatio || 1)),
+        );
         const ch = Math.round((cw * asset.meta.h) / asset.meta.w);
         if (cv.width !== cw || cv.height !== ch) {
           cv.width = cw;
@@ -148,10 +171,14 @@ function Body({ pose, still, shadowRef }: { pose: DeerPose; still: boolean; shad
           g.style.opacity = blink > 0.02 ? "1" : "0";
         }
         const sh = shadowRef.current;
-        if (sh) sh.style.transform = `translateX(-50%) scale(${1 - 0.28 * Math.sin(Math.PI * hop)}, 1)`;
+        if (sh)
+          sh.style.transform = `translateX(-50%) scale(${1 - 0.28 * Math.sin(Math.PI * hop)}, 1)`;
       },
     };
-    const io = new IntersectionObserver(([e]) => (inst.visible = !!e?.isIntersecting), { rootMargin: "80px" });
+    const io = new IntersectionObserver(
+      ([e]) => (inst.visible = !!e?.isIntersecting),
+      { rootMargin: "80px" },
+    );
     io.observe(el);
     const off = addInst(inst);
     return () => {
@@ -173,18 +200,44 @@ function Body({ pose, still, shadowRef }: { pose: DeerPose; still: boolean; shad
         draggable={false}
         className={cn("block h-auto w-full", asset && "opacity-0")}
       />
-      {asset && <canvas ref={canvas} className="absolute inset-0 size-full" aria-hidden />}
+      {asset && (
+        <canvas
+          ref={canvas}
+          className="absolute inset-0 size-full"
+          aria-hidden
+        />
+      )}
       {asset && eyes.length > 0 && (
-        <svg ref={lids} viewBox={`0 0 ${w} ${h}`} className="pointer-events-none absolute inset-0 size-full" aria-hidden>
+        <svg
+          ref={lids}
+          viewBox={`0 0 ${w} ${h}`}
+          className="pointer-events-none absolute inset-0 size-full"
+          aria-hidden
+        >
           {eyes.map(([x0, y0, x1, y1], i) => {
             const cx = (x0 + x1) / 2;
             const cy = (y0 + y1) / 2;
             const rx = ((x1 - x0) / 2) * 1.16;
             const ry = ((y1 - y0) / 2) * 1.14;
             return (
-              <g key={x0} ref={(g) => void (lidEls.current[i] = g)} style={{ transformBox: "fill-box", transformOrigin: "50% 0%", transform: "scaleY(0)", opacity: 0 }}>
+              <g
+                key={x0}
+                ref={(g) => void (lidEls.current[i] = g)}
+                style={{
+                  transformBox: "fill-box",
+                  transformOrigin: "50% 0%",
+                  transform: "scaleY(0)",
+                  opacity: 0,
+                }}
+              >
                 <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="#FCE9D4" />
-                <path d={`M${cx - rx * 0.8} ${cy + ry * 0.05} Q${cx} ${cy + ry * 0.7} ${cx + rx * 0.8} ${cy + ry * 0.05}`} stroke="#0B3C50" strokeWidth={rx * 0.17} strokeLinecap="round" fill="none" />
+                <path
+                  d={`M${cx - rx * 0.8} ${cy + ry * 0.05} Q${cx} ${cy + ry * 0.7} ${cx + rx * 0.8} ${cy + ry * 0.05}`}
+                  stroke="#0B3C50"
+                  strokeWidth={rx * 0.17}
+                  strokeLinecap="round"
+                  fill="none"
+                />
               </g>
             );
           })}
@@ -194,19 +247,47 @@ function Body({ pose, still, shadowRef }: { pose: DeerPose; still: boolean; shad
   );
 }
 
-export function Willo({ pose = "stand", className, label, shadow = true }: { pose?: DeerPose; className?: string; label?: string; shadow?: boolean }) {
+export function Willo({
+  pose = "stand",
+  className,
+  label,
+  shadow = true,
+}: {
+  pose?: DeerPose;
+  className?: string;
+  label?: string;
+  shadow?: boolean;
+}) {
   const reduce = useReducedMotionSafe();
   const shadowRef = useRef<HTMLSpanElement>(null);
   return (
-    <span className={cn("relative inline-block w-40 shrink-0 select-none", className)} role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
-      {shadow && <span ref={shadowRef} aria-hidden className="absolute bottom-[1%] left-1/2 h-[5%] w-[62%] -translate-x-1/2 rounded-[50%] bg-[#0B3C50]/12 blur-[2px]" />}
+    <span
+      className={cn(
+        "relative inline-block w-40 shrink-0 select-none",
+        className,
+      )}
+      role={label ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+    >
+      {shadow && (
+        <span
+          ref={shadowRef}
+          aria-hidden
+          className="absolute bottom-[1%] left-1/2 h-[5%] w-[62%] -translate-x-1/2 rounded-[50%] bg-[#0B3C50]/12 blur-[2px]"
+        />
+      )}
       <AnimatePresence mode="wait" initial={false}>
         <m.span
           key={pose}
           className="relative block"
           initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4, transition: { duration: 0.14 } }}
+          exit={
+            reduce
+              ? { opacity: 0 }
+              : { opacity: 0, y: -4, transition: { duration: 0.14 } }
+          }
           transition={{ type: "spring", stiffness: 380, damping: 26 }}
         >
           <Body pose={pose} still={reduce} shadowRef={shadowRef} />
