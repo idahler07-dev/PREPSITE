@@ -210,7 +210,9 @@ export const RIGS: Record<string, Rig> = {
 /** The rig key for an image URL or path. */
 export function rigKey(src: string): string {
   const path = src.startsWith("http") ? new URL(src).pathname : src;
-  return path.replace(/(-sm|-hd)?\.(png|webp)$/, "");
+  return path
+    .replace(/^.*?\/mascot\//, "/mascot/")
+    .replace(/(-sm|-hd)?\.(png|webp)$/, "");
 }
 
 /** The image for a mood: happy cheers, sad cries (its own drawn pose, not an overlay). */
