@@ -2173,12 +2173,7 @@
     "hero": {
       "badge": "Built for the Digital SAT",
       "title": "SAT prep that actually",
-      "words": [
-        "sticks.",
-        "works.",
-        "feels fun.",
-        "pays off."
-      ],
+      "words": ["sticks.", "works.", "feels fun.", "pays off."],
       "sub": "Bite-size lessons, real test practice, and an owl that keeps you going.",
       "start": "Start free",
       "calc": "Calculate my score",
@@ -2186,14 +2181,7 @@
     },
     "mock": {
       "brand": "WilloPrep",
-      "nav": [
-        "Path",
-        "Practice",
-        "Tests",
-        "Progress",
-        "Mistakes",
-        "Profile"
-      ],
+      "nav": ["Path", "Practice", "Tests", "Progress", "Mistakes", "Profile"],
       "unit": "Unit 3: Algebra",
       "unitTitle": "Systems of equations",
       "start": "Start",
@@ -2204,15 +2192,7 @@
       "scoreMax": "/ 1600",
       "scoreDelta": "+50",
       "week": "Week",
-      "weekDays": [
-        "M",
-        "T",
-        "W",
-        "T",
-        "F",
-        "S",
-        "S"
-      ],
+      "weekDays": ["M", "T", "W", "T", "F", "S", "S"],
       "weekCount": "3/5",
       "quests": "Daily quests",
       "quest1": "20 questions",
@@ -2290,11 +2270,7 @@
       "owl": {
         "title": "Owl explanations",
         "body": "Wrong answer? Three short steps, not an essay.",
-        "steps": [
-          "Find the claim",
-          "Match the evidence",
-          "Cross out the rest"
-        ]
+        "steps": ["Find the claim", "Match the evidence", "Cross out the rest"]
       },
       "mistakes": {
         "title": "Mistakes come back",
@@ -2318,12 +2294,7 @@
       "directions": "Directions",
       "hide": "Hide",
       "show": "Show",
-      "tools": [
-        "Highlights & Notes",
-        "Line Reader",
-        "Text Size",
-        "More"
-      ],
+      "tools": ["Highlights & Notes", "Line Reader", "Text Size", "More"],
       "passage": "Marine biologist Dilnoza Karimova studies how octopuses solve problems. In one experiment, she placed food inside a jar sealed with a screw-top lid. Most octopuses opened the jar within minutes, and <hl>many opened it faster on later attempts</hl>. Karimova argues that this improvement shows the animals were not simply trying random movements but were remembering what had worked before.",
       "number": "4",
       "mark": "Mark for Review",
@@ -2474,11 +2445,7 @@
       "sub": "A study plan that adapts, real test practice, and progress you can see.",
       "start": "Start free",
       "how": "See how it works",
-      "trust": [
-        "Free to start",
-        "Desmos built in",
-        "Bluebook-style timing"
-      ],
+      "trust": ["Free to start", "Desmos built in", "Bluebook-style timing"],
       "alt": "Sample WilloPrep dashboard: estimated score, a recommended next step, the score trend and topic accuracy"
     },
     "demo": {
@@ -2489,11 +2456,7 @@
     "preview": {
       "greeting": "Good evening, Aziza",
       "days": "31 days to SAT",
-      "tabs": [
-        "Overview",
-        "Math",
-        "Reading & Writing"
-      ],
+      "tabs": ["Overview", "Math", "Reading & Writing"],
       "estimated": "Estimated",
       "target": "Target",
       "week": "This week",
@@ -2590,12 +2553,7 @@
         "qs": [
           {
             "q": "If 3x + 7 = 22, what is the value of 2x − 1?",
-            "choices": [
-              "5",
-              "9",
-              "10",
-              "13"
-            ],
+            "choices": ["5", "9", "10", "13"],
             "answer": 1,
             "steps": [
               "Subtract 7 from both sides: 3x = 15",
@@ -2605,17 +2563,9 @@
           },
           {
             "q": "A line passes through (0, 4) and (2, 10). What is its slope?",
-            "choices": [
-              "2",
-              "5/2",
-              "3",
-              "6"
-            ],
+            "choices": ["2", "5/2", "3", "6"],
             "answer": 2,
-            "steps": [
-              "Slope = (10 − 4) ÷ (2 − 0)",
-              "= 6 ÷ 2 = 3"
-            ]
+            "steps": ["Slope = (10 − 4) ÷ (2 − 0)", "= 6 ÷ 2 = 3"]
           }
         ],
         "check": "Check",
@@ -2645,21 +2595,11 @@
         "qs": {
           "11": {
             "q": "The function f is defined by f(x) = x² − 6x + 8. For what value of x does f(x) reach its minimum?",
-            "choices": [
-              "−3",
-              "2",
-              "3",
-              "4"
-            ]
+            "choices": ["−3", "2", "3", "4"]
           },
           "14": {
             "q": "A circle in the xy-plane has equation (x − 2)² + (y + 1)² = 25. What is the radius of the circle?",
-            "choices": [
-              "5",
-              "10",
-              "25",
-              "√5"
-            ]
+            "choices": ["5", "10", "25", "√5"]
           }
         },
         "scoring": "Scoring module 1",
@@ -2672,13 +2612,7 @@
         "path": "willoprep.com/plan",
         "label": "Sample study plan: a student drags a session to another day, the plan rebalances and today's session is checked off",
         "week": "Week 3 · Nov 3–9",
-        "days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ],
+        "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
         "today": "Today",
         "progress": "This week",
         "min": "{n} min",
@@ -2700,11 +2634,7 @@
         "label": "Sample focus session: a student picks 25 minutes, starts the timer, pauses once and finishes with a summary",
         "title": "Focus session",
         "task": "Advanced Math · 14 questions",
-        "lengths": [
-          "15",
-          "25",
-          "50"
-        ],
+        "lengths": ["15", "25", "50"],
         "minutes": "min",
         "start": "Start",
         "pause": "Pause",
@@ -2733,12 +2663,7 @@
         "path": "willoprep.com/review",
         "label": "Sample mistake notebook: a missed question is saved, tagged as a misread, filtered and scheduled for review",
         "title": "Mistake notebook",
-        "filters": [
-          "All",
-          "Misread",
-          "Calculation",
-          "Concept"
-        ],
+        "filters": ["All", "Misread", "Calculation", "Concept"],
         "saved": "Saved from practice",
         "addTag": "Tag",
         "due": "Review {d}",
@@ -2777,34 +2702,16 @@
         "path": "willoprep.com/analytics",
         "label": "Sample progress analytics: a student switches to a three-month view, the score chart redraws, and topic accuracy and an insight appear",
         "title": "Progress",
-        "ranges": [
-          "4W",
-          "3M",
-          "All"
-        ],
-        "kpis": [
-          "Estimated score",
-          "Accuracy",
-          "Time studied"
-        ],
+        "ranges": ["4W", "3M", "All"],
+        "kpis": ["Estimated score", "Accuracy", "Time studied"],
         "hours": "{n}h",
         "trend": "Estimated score",
         "topics": "Topic accuracy",
-        "topicNames": [
-          "Algebra",
-          "Advanced Math",
-          "Inferences",
-          "Transitions"
-        ],
+        "topicNames": ["Algebra", "Advanced Math", "Inferences", "Transitions"],
         "insightTitle": "Biggest gain",
         "insight": "Algebra accuracy is up 12 points since September.",
         "tip": "{label} · {n}",
-        "labels4": [
-          "Oct 13",
-          "Oct 20",
-          "Oct 27",
-          "Nov 3"
-        ],
+        "labels4": ["Oct 13", "Oct 20", "Oct 27", "Nov 3"],
         "labels3": [
           "Aug 10",
           "Aug 24",
@@ -2999,6 +2906,246 @@
       "laptop": "Studying",
       "sleep": "Resting",
       "sad": "Missed you"
+    }
+  },
+  "lp": {
+    "hero": {
+      "chipTag": "New",
+      "chipText": "Adaptive mock tests with a full score report",
+      "lead": "Hit your target SAT score",
+      "words": [
+        "on your first try",
+        "without a tutor",
+        "from your mistakes",
+        "one day at a time"
+      ],
+      "sub": "A daily plan from your mistakes, real adaptive mock tests, and Willo, your AI tutor. All in one place.",
+      "cta": "Start preparing",
+      "try": "Try a question",
+      "checks": [
+        "No card needed",
+        "Free plan forever",
+        "Premium {price}/month"
+      ],
+      "predicted": "Predicted score",
+      "chat": "You picked “Therefore”, but the two facts clash. Try a contrast word.",
+      "streak": "12-day streak",
+      "module": "Module 2",
+      "hard": "Hard path unlocked",
+      "willo": "Willo",
+      "laurelLabel": "1600"
+    },
+    "facts": [
+      {
+        "t": "Digital SAT",
+        "d": "format, timer and tools"
+      },
+      {
+        "t": "2 modules",
+        "d": "adaptive, like test day"
+      },
+      {
+        "t": "Desmos",
+        "d": "calculator built in"
+      },
+      {
+        "t": "8 skill areas",
+        "d": "tracked question by question"
+      }
+    ],
+    "ribbon": {
+      "label": "WilloPrep tools",
+      "items": [
+        "Diagnostic",
+        "Score prediction",
+        "Mistake notebook",
+        "Daily plan",
+        "Willo AI tutor",
+        "Desmos built in",
+        "Mock tests",
+        "Vocabulary decks",
+        "Test-day countdown"
+      ]
+    },
+    "tour": {
+      "eyebrow": "The platform",
+      "title": "Take a look inside the platform",
+      "cta": "Start preparing",
+      "caption": "Sample data shown."
+    },
+    "preview": {
+      "nav": [
+        "Dashboard",
+        "Study plan",
+        "Practice",
+        "Mock tests",
+        "Willo AI",
+        "Mistakes",
+        "Vocabulary",
+        "Score report"
+      ],
+      "day": "Thursday · Test day in 38 days",
+      "hello": "Good evening, Aziz",
+      "continue": "Continue today’s plan",
+      "predicted": "Predicted score",
+      "target": "Target 1550",
+      "since": "+60 since last mock",
+      "sections": "Reading & Writing 700 · Math 730",
+      "streak": "Streak",
+      "days": "12 days",
+      "plan": "Today’s plan",
+      "p1": "Linear equations · 10 Qs",
+      "p2": "Review 6 mistakes",
+      "p3": "Transitions · 8 Qs",
+      "p4": "15 vocab cards",
+      "skills": "Skill areas",
+      "willo": "Willo",
+      "note": "You keep picking “however” where the sentences agree. Want a 5-minute drill on contrast words?",
+      "drill": "Start drill"
+    },
+    "try": {
+      "eyebrow": "Try it now · no sign-up",
+      "title1": "Get one wrong.",
+      "title2": "That’s the point.",
+      "body": "Every mistake goes into your notebook, and Willo tells you exactly why your answer felt right. Pick any option and see.",
+      "steps": [
+        "You answer, like on test day",
+        "Willo explains your exact choice",
+        "Tomorrow’s plan brings it back"
+      ],
+      "module": "Reading and Writing · Module 1",
+      "timer": "31:42",
+      "num": "7",
+      "skill": "Transitions",
+      "passage": "Octopuses can change the color of their skin in a fraction of a second to match their surroundings. ______, most researchers believe they are colorblind, since their eyes contain only one type of light receptor.",
+      "ask": "Which choice completes the text with the most logical transition?",
+      "correct": "Correct",
+      "yours": "Your answer",
+      "willo": "Willo",
+      "options": [
+        {
+          "t": "For instance,",
+          "e": "“For instance” brings in an example of the first idea. Being colorblind isn’t an example of changing color fast. It’s a surprise next to it. The two facts pull against each other, so you need a contrast word: However."
+        },
+        {
+          "t": "However,",
+          "e": "Right. Changing color to match a background sounds like it needs color vision, yet they probably can’t see color. Two ideas that pull against each other need a contrast word, and “However” is the one here."
+        },
+        {
+          "t": "Therefore,",
+          "e": "“Therefore” says the second fact is caused by the first. Changing skin color doesn’t make an animal colorblind. The facts clash instead, so you need a contrast word: However."
+        },
+        {
+          "t": "Likewise,",
+          "e": "“Likewise” says the second idea is similar to the first. Fast color change and colorblindness are opposites in spirit, not a matching pair. You need a contrast word: However."
+        }
+      ]
+    },
+    "how": {
+      "eyebrow": "Three steps",
+      "title": "How it works",
+      "blurb": "No 400-page book. You do a little every day, and the plan rewrites itself around what you get wrong.",
+      "steps": [
+        {
+          "t": "Take a short diagnostic",
+          "d": "A quick adaptive check across Reading and Writing and Math shows where your points are hiding."
+        },
+        {
+          "t": "Follow your daily plan",
+          "d": "Every morning you get a short list built from yesterday’s mistakes. Stuck? Ask Willo why."
+        },
+        {
+          "t": "Check yourself with mocks",
+          "d": "Full two-module adaptive tests with the real timer and Desmos, then a score report by skill."
+        }
+      ]
+    },
+    "features": {
+      "eyebrow": "What’s inside",
+      "title": "Six tools in one place. No tabs open to five other sites.",
+      "link": "See every feature",
+      "items": [
+        {
+          "t": "Score prediction",
+          "d": "See where you’d land today, section by section, and how far your target is."
+        },
+        {
+          "t": "Mistake notebook",
+          "d": "Every wrong answer is saved and comes back until you get it right twice."
+        },
+        {
+          "t": "Willo, your AI tutor",
+          "d": "Ask why, ask again, ask at 2 a.m. Willo gives hints before answers."
+        },
+        {
+          "t": "Desmos, built in",
+          "d": "The same calculator as test day, with Willo showing the Desmos shortcut for each question."
+        },
+        {
+          "t": "Vocabulary decks",
+          "d": "Short daily cards with words in real SAT-style sentences, spaced so they stick."
+        },
+        {
+          "t": "Test-day countdown",
+          "d": "Pick your SAT date. The plan paces itself so your last mock lands a week before."
+        }
+      ]
+    },
+    "report": {
+      "eyebrow": "Your score report",
+      "title": "Know exactly where the points are",
+      "blurb": "After your first mock test you get this, section by section. Sample data shown.",
+      "predicted": "Predicted score",
+      "since": "+60 since last mock",
+      "rw": "Reading and Writing",
+      "math": "Math",
+      "skills": "Skill areas",
+      "lowest": "Lowest first on your plan.",
+      "next": "Willo’s next step",
+      "nextBody": "You keep picking “however” where the sentences agree. A 5-minute drill on contrast words closes most of this gap.",
+      "drill": "Start drill",
+      "skillNames": [
+        "Algebra",
+        "Craft and Structure",
+        "Geometry",
+        "Standard English"
+      ]
+    },
+    "compare": {
+      "title": "Why not just a prep book, or a tutor?",
+      "cols": ["Prep book", "Private tutor", "WilloPrep"],
+      "rows": [
+        [
+          "Adaptive, digital mock tests",
+          "No, paper only",
+          "Depends on the tutor",
+          "Yes, 2 modules"
+        ],
+        [
+          "Plan built from your mistakes",
+          "No",
+          "Weekly, if they track it",
+          "Every day, automatically"
+        ],
+        [
+          "Help at 11 p.m. before a quiz",
+          "Answer key only",
+          "Next session",
+          "Willo, right away"
+        ],
+        [
+          "Cost per month",
+          "One-time book price",
+          "Paid by the hour",
+          "$0 or {price}"
+        ]
+      ]
+    },
+    "final": {
+      "title": "Your plan for today is two minutes away.",
+      "body": "Take the diagnostic tonight. Wake up to a plan that knows what you missed.",
+      "cta": "Start preparing",
+      "note": "Free plan forever · No card needed"
     }
   }
 }

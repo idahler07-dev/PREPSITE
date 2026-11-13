@@ -1569,3 +1569,27 @@ html.lenis body {
     animation: deer-float 4.2s ease-in-out infinite;
   }
 }
+
+/* ---- Landing (components/lp): headline word rotator, tool ribbon, floating chips ---- */
+.lp-dots {
+  background-image: radial-gradient(color-mix(in oklab, var(--border) 85%, #c8c0b0) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 40%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 70% at 50% 40%, #000 30%, transparent 75%);
+}
+@keyframes lp-rot {
+  0%, 18% { transform: translateY(0); }
+  25%, 43% { transform: translateY(-1.08em); }
+  50%, 68% { transform: translateY(-2.16em); }
+  75%, 93% { transform: translateY(-3.24em); }
+  100% { transform: translateY(-4.32em); }
+}
+@keyframes lp-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes lp-marquee { to { transform: translateX(calc(-50% - 20px)); } }
+@media (prefers-reduced-motion: no-preference) {
+  .lp-rot { animation: lp-rot 11s cubic-bezier(0.76, 0, 0.24, 1) infinite; }
+  .lp-bob { animation: lp-bob 5s ease-in-out infinite; }
+  .lp-bob2 { animation: lp-bob 6s ease-in-out -2s infinite; }
+  .lp-marquee-track { animation: lp-marquee 80s linear infinite; }
+  .lp-marquee:hover .lp-marquee-track { animation-play-state: paused; }
+}
