@@ -17,7 +17,14 @@ import { openTest } from "@/lib/open-test";
 
 type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
-export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; domains?: string[]; skills?: string[] } }) {
+export function DrillBuilder({
+  initial,
+  weakSkills = [],
+}: {
+  initial?: { section?: SectionKey; domains?: string[]; skills?: string[] };
+  /** The student's weakest skills, weakest first: offered as a one-click mix. */
+  weakSkills?: string[];
+}) {
   const t = useTranslations("practice");
   const tb = useTranslations("billing");
   const tx = useTranslations("taxonomy");
@@ -26,7 +33,9 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
   const router = useRouter();
   const [pending, start] = useTransition();
 
-  const [section, setSection] = useState<SectionKey | null>(initial?.section ?? null);
+  const [section, setSection] = useState<SectionKey | null>(
+    initial?.section ?? null,
+  );
   const [domains, setDomains] = useState<string[]>(initial?.domains ?? []);
   const [skills, setSkills] = useState<string[]>(initial?.skills ?? []);
   const [difficulties, setDifficulties] = useState<Difficulty[]>([]);
@@ -39,8 +48,30 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
   const [matching, setMatching] = useState<number | null>(null);
 
   const config = useMemo(
-    () => ({ section, domains, skills, difficulties, count, codeFrom, codeTo, timed, feedback, unseenFirst }),
-    [section, domains, skills, difficulties, count, codeFrom, codeTo, timed, feedback, unseenFirst],
+    () => ({
+      section,
+      domains,
+      skills,
+      difficulties,
+      count,
+      codeFrom,
+      codeTo,
+      timed,
+      feedback,
+      unseenFirst,
+    }),
+    [
+      section,
+      domains,
+      skills,
+      difficulties,
+      count,
+      codeFrom,
+      codeTo,
+      timed,
+      feedback,
+      unseenFirst,
+    ],
   );
 
   useEffect(() => {
@@ -55,21 +86,54 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
     };
   }, [config]);
 
-  const visibleDomains = DOMAINS.filter((d) => !section || d.section === section);
-  const visibleSkills = (domains.length ? DOMAINS.filter((d) => domains.includes(d.key)) : visibleDomains).flatMap((d) => [...d.skills]);
-  const toggle = <T,>(list: T[], v: T, set: (x: T[]) => void) => set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
+  const visibleDomains = DOMAINS.filter(
+    (d) => !section || d.section === section,
+  );
+  const visibleSkills = (
+    domains.length
+      ? DOMAINS.filter((d) => domains.includes(d.key))
+      : visibleDomains
+  ).flatMap((d) => [...d.skills]);
+  const toggle = <T,>(list: T[], v: T, set: (x: T[]) => void) =>
+    set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 
   function launch(cfg: Record<string, unknown>) {
     start(async () => {
       const res = await startDrill(cfg);
       if (res.ok) openTest(res.id);
       else if (res.error === "DAILY_LIMIT")
-        toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
-      else toast.error(res.error === "NO_QUESTIONS" ? t("noQuestions") : c("unknownError"));
+        toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), {
+          action: {
+            label: tb("limits.upgrade"),
+            onClick: () => router.push("/pricing"),
+          },
+        });
+      else
+        toast.error(
+          res.error === "NO_QUESTIONS" ? t("noQuestions") : c("unknownError"),
+        );
     });
   }
 
-  const quick = [
+  const quick: {
+    label: string;
+    hint?: string;
+    cfg: Record<string, unknown>;
+  }[] = [
+    ...(weakSkills.length
+      ? [
+          {
+            label: t("quickWeak"),
+            hint: t("quickWeakHint", {
+              skills: weakSkills
+                .slice(0, 3)
+                .map((s) => tx(`skills.${s as "INFERENCES"}`))
+                .join(", "),
+            }),
+            cfg: { skills: weakSkills, count: 10 },
+          },
+        ]
+      : []),
     { label: t("quickMixed"), cfg: { count: 10 } },
     { label: t("quickMath"), cfg: { section: "MATH", count: 10 } },
     { label: t("quickRw"), cfg: { section: "RW", count: 10 } },
@@ -78,14 +142,34 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
   return (
     <div className="space-y-6">
       <section aria-labelledby="quick-start">
-        <h2 id="quick-start" className="mb-3 flex items-center gap-2 text-base font-semibold">
+        <h2
+          id="quick-start"
+          className="mb-3 flex items-center gap-2 text-base font-semibold"
+        >
           <Zap className="size-4 text-primary" aria-hidden /> {t("quickStart")}
         </h2>
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div
+          className={`grid gap-2 ${quick.length > 3 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
+        >
           {quick.map((q) => (
-            <Button key={q.label} variant="secondary" className="h-12 justify-between px-4" disabled={pending} onClick={() => launch({ ...q.cfg, feedback: "IMMEDIATE", unseenFirst: true })}>
-              {q.label}
-              <ChevronRight className="text-muted-foreground" aria-hidden />
+            <Button
+              key={q.label}
+              variant={q.hint ? "default" : "secondary"}
+              className="h-auto min-h-12 justify-between px-4 py-2 text-left"
+              disabled={pending}
+              onClick={() =>
+                launch({ ...q.cfg, feedback: "IMMEDIATE", unseenFirst: true })
+              }
+            >
+              <span className="flex min-w-0 flex-col">
+                <span>{q.label}</span>
+                {q.hint && (
+                  <span className="truncate text-xs font-normal opacity-85">
+                    {q.hint}
+                  </span>
+                )}
+              </span>
+              <ChevronRight className="shrink-0 opacity-70" aria-hidden />
             </Button>
           ))}
         </div>
@@ -121,7 +205,11 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
                   active={domains.includes(d.key)}
                   onClick={() => {
                     toggle(domains, d.key, setDomains);
-                    setSkills((s) => s.filter((sk) => !(d.skills as readonly string[]).includes(sk)));
+                    setSkills((s) =>
+                      s.filter(
+                        (sk) => !(d.skills as readonly string[]).includes(sk),
+                      ),
+                    );
                   }}
                 >
                   {tx(`domains.${d.key}`)}
@@ -133,11 +221,20 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
           <details className="group" open={!!initial?.skills?.length}>
             <summary className="cursor-pointer text-sm font-medium">
               {t("skills")}
-              <span className="ms-2 text-muted-foreground">{skills.length ? c("selected", { count: skills.length }) : t("allSkills")}</span>
+              <span className="ms-2 text-muted-foreground">
+                {skills.length
+                  ? c("selected", { count: skills.length })
+                  : t("allSkills")}
+              </span>
             </summary>
             <div className="mt-2 flex flex-wrap gap-2">
               {visibleSkills.map((s) => (
-                <Chip key={s} active={skills.includes(s)} onClick={() => toggle(skills, s, setSkills)} small>
+                <Chip
+                  key={s}
+                  active={skills.includes(s)}
+                  onClick={() => toggle(skills, s, setSkills)}
+                  small
+                >
                   {tx(`skills.${s as "INFERENCES"}`)}
                 </Chip>
               ))}
@@ -145,10 +242,16 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
           </details>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-medium">{t("difficulty")}</legend>
+            <legend className="mb-2 text-sm font-medium">
+              {t("difficulty")}
+            </legend>
             <div className="flex flex-wrap gap-2">
               {(["EASY", "MEDIUM", "HARD"] as const).map((d) => (
-                <Chip key={d} active={difficulties.includes(d)} onClick={() => toggle(difficulties, d, setDifficulties)}>
+                <Chip
+                  key={d}
+                  active={difficulties.includes(d)}
+                  onClick={() => toggle(difficulties, d, setDifficulties)}
+                >
                   {te(`difficulty.${d}`)}
                 </Chip>
               ))}
@@ -168,11 +271,15 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
                   onChange={(e) => setCount(Number(e.target.value))}
                   className="w-full accent-[var(--primary)]"
                 />
-                <span className="w-8 text-end font-semibold tabular-nums">{count}</span>
+                <span className="w-8 text-end font-semibold tabular-nums">
+                  {count}
+                </span>
               </div>
             </div>
             <fieldset>
-              <legend className="mb-2 text-sm font-medium">{t("timing")}</legend>
+              <legend className="mb-2 text-sm font-medium">
+                {t("timing")}
+              </legend>
               <div className="flex flex-wrap gap-2">
                 <Chip active={!timed} onClick={() => setTimed(false)}>
                   {t("untimed")}
@@ -183,44 +290,84 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
               </div>
             </fieldset>
             <fieldset>
-              <legend className="mb-2 text-sm font-medium">{t("feedback")}</legend>
+              <legend className="mb-2 text-sm font-medium">
+                {t("feedback")}
+              </legend>
               <div className="flex flex-wrap gap-2">
-                <Chip active={feedback === "IMMEDIATE"} onClick={() => setFeedback("IMMEDIATE")}>
+                <Chip
+                  active={feedback === "IMMEDIATE"}
+                  onClick={() => setFeedback("IMMEDIATE")}
+                >
                   {t("feedbackImmediate")}
                 </Chip>
-                <Chip active={feedback === "END"} onClick={() => setFeedback("END")}>
+                <Chip
+                  active={feedback === "END"}
+                  onClick={() => setFeedback("END")}
+                >
                   {t("feedbackEnd")}
                 </Chip>
               </div>
             </fieldset>
             <label className="flex items-center gap-2 self-end text-sm">
-              <input type="checkbox" checked={unseenFirst} onChange={(e) => setUnseenFirst(e.target.checked)} className="size-4" />
+              <input
+                type="checkbox"
+                checked={unseenFirst}
+                onChange={(e) => setUnseenFirst(e.target.checked)}
+                className="size-4"
+              />
               {t("unseenFirst")}
             </label>
           </div>
 
           <details>
-            <summary className="cursor-pointer text-sm font-medium">{t("codeRange")}</summary>
+            <summary className="cursor-pointer text-sm font-medium">
+              {t("codeRange")}
+            </summary>
             <div className="mt-2 grid gap-3 sm:grid-cols-2">
               <div className="space-y-1">
                 <Label htmlFor="codeFrom">{t("codeFrom")}</Label>
-                <Input id="codeFrom" value={codeFrom} onChange={(e) => setCodeFrom(e.target.value.toUpperCase())} className="font-mono" />
+                <Input
+                  id="codeFrom"
+                  value={codeFrom}
+                  onChange={(e) => setCodeFrom(e.target.value.toUpperCase())}
+                  className="font-mono"
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="codeTo">{t("codeTo")}</Label>
-                <Input id="codeTo" value={codeTo} onChange={(e) => setCodeTo(e.target.value.toUpperCase())} className="font-mono" />
+                <Input
+                  id="codeTo"
+                  value={codeTo}
+                  onChange={(e) => setCodeTo(e.target.value.toUpperCase())}
+                  className="font-mono"
+                />
               </div>
             </div>
           </details>
 
           <div className="flex flex-wrap items-center gap-4 border-t pt-4">
-            <Button size="lg" disabled={pending || matching === 0} onClick={() => launch(config)}>
-              {pending ? <Loader2 className="animate-spin" aria-hidden /> : <Play aria-hidden />}
+            <Button
+              size="lg"
+              disabled={pending || matching === 0}
+              onClick={() => launch(config)}
+            >
+              {pending ? (
+                <Loader2 className="animate-spin" aria-hidden />
+              ) : (
+                <Play aria-hidden />
+              )}
               {pending ? t("starting") : t("start")}
             </Button>
             <p className="text-sm text-muted-foreground" aria-live="polite">
-              {matching === null ? c("loading") : matching === 0 ? t("noQuestions") : t("matching", { count: matching })}
-              {matching !== null && matching > 0 && matching < count && ` ${t("lessThanRequested", { count: matching })}`}
+              {matching === null
+                ? c("loading")
+                : matching === 0
+                  ? t("noQuestions")
+                  : t("matching", { count: matching })}
+              {matching !== null &&
+                matching > 0 &&
+                matching < count &&
+                ` ${t("lessThanRequested", { count: matching })}`}
             </p>
           </div>
         </CardContent>
@@ -229,7 +376,17 @@ export function DrillBuilder({ initial }: { initial?: { section?: SectionKey; do
   );
 }
 
-function Chip({ active, onClick, children, small }: { active: boolean; onClick: () => void; children: React.ReactNode; small?: boolean }) {
+function Chip({
+  active,
+  onClick,
+  children,
+  small,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  small?: boolean;
+}) {
   return (
     <button
       type="button"
@@ -238,7 +395,9 @@ function Chip({ active, onClick, children, small }: { active: boolean; onClick: 
       className={cn(
         "rounded-lg border px-3 py-2 text-start text-sm transition-colors",
         small && "px-2.5 py-1.5 text-xs",
-        active ? "border-primary bg-primary text-primary-foreground" : "border-transparent bg-surface-2 hover:border-border hover:text-foreground",
+        active
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-transparent bg-surface-2 hover:border-border hover:text-foreground",
       )}
     >
       {children}

@@ -5,6 +5,7 @@ import { Container, PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { DrillBuilder } from "@/components/practice/drill-builder";
 import { domainOfSkill } from "@/lib/taxonomy";
+import { weakSkills } from "@/server/coach/service";
 
 export async function generateMetadata() {
   const t = await getTranslations("practice");
@@ -22,6 +23,7 @@ export default async function PracticePage({
   const t = await getTranslations("practice");
   const th = await getTranslations("history");
   const format = await getFormatter();
+  const weak = await weakSkills(user.id);
   const open = await db.attempt.findMany({
     where: { userId: user.id, status: "IN_PROGRESS" },
     orderBy: { startedAt: "desc" },
@@ -87,6 +89,7 @@ export default async function PracticePage({
         </section>
       )}
       <DrillBuilder
+        weakSkills={weak}
         initial={
           skillDomain
             ? {

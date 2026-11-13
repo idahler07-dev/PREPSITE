@@ -538,7 +538,9 @@
     "inProgress": "In progress",
     "resume": "Resume",
     "drillStarted": "Drill started. Good luck!",
-    "moreInProgress": "{count, plural, one {# more in progress} other {# more in progress}}"
+    "moreInProgress": "{count, plural, one {# more in progress} other {# more in progress}}",
+    "quickWeak": "Weak-spot mix",
+    "quickWeakHint": "10 questions on {skills}"
   },
   "test": {
     "drillTitle": "Practice drill",
