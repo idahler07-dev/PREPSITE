@@ -423,20 +423,23 @@ class Motion {
         this.gestureAt[i] = t + rnd(2.5, 5.5);
       const ev = t - (this.gestureAt[i] ?? 0);
       // arms also follow through after a hop
-      const follow = -squash * 50 * D * side;
+      const follow = -squash * 30 * D * side;
       if (kind === "sway") {
         const lift = ev < 0 ? 0 : back(ev / 0.4) * (1 - ease((ev - 1.1) / 0.6));
         return (
-          side * 3.5 * D * Math.sin((TAU * ph) / bp) +
-          side * 11 * D * lift +
+          side * 2.5 * D * Math.sin((TAU * ph) / bp) +
+          side * 5 * D * lift +
           follow
         );
       }
       if (kind === "wave") {
         const env = Math.max(bump(ev, 0, 1.8), happyBurst);
+        // a hand raised beside the head turns with it, so the two never pull apart
+        const withHead = rig.n && l[3] < rig.n[1] ? head * 0.7 : 0;
         return (
-          side * 4 * D * Math.sin((TAU * ph) / 1.9) +
-          side * 9 * D * env * Math.sin(TAU * 2.1 * Math.max(0, ev)) +
+          withHead +
+          side * 2 * D * Math.sin((TAU * ph) / 1.9) +
+          side * 4.5 * D * env * Math.sin(TAU * 2.1 * Math.max(0, ev)) +
           follow
         );
       }

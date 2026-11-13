@@ -236,7 +236,7 @@ for (const k of [
   RIGS[k] = { ...RIGS[k], hop: true };
 RIGS["/mascot/deer-trophy"] = {
   ...RIGS["/mascot/deer-trophy"],
-  props: [[0.82, 0.3, 0.17, 0]],
+  props: [[0.82, 0.28, 0.115, 0]],
 };
 RIGS["/mascot/deer-heart"] = {
   ...RIGS["/mascot/deer-heart"],
