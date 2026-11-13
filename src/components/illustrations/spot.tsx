@@ -189,6 +189,12 @@ function Pencil({
   );
 }
 
+/** Microsoft Fluent Emoji "bullseye" (MIT), the target only: its face and its red rings. */
+const TARGET_FACE =
+  "M14 28.292c5.684 0 10.292-4.608 10.292-10.292S19.684 7.708 14 7.708S3.708 12.316 3.708 18S8.316 28.292 14 28.292";
+const TARGET_RINGS =
+  "M26 18c0-6.627-5.373-12-12-12S2 11.373 2 18s5.373 12 12 12s12-5.373 12-12m-3 0a9 9 0 1 1-18 0a9 9 0 0 1 18 0m-9 6a6 6 0 1 1 0-12a6 6 0 0 1 0 12m3-6a3 3 0 1 0-6 0a3 3 0 0 0 6 0";
+
 const SPOTS: Record<SpotName, ReactNode> = {
   /* Question bank: a stack of question sheets, the top one answered, a pencil beside it */
   bank: (
@@ -893,39 +899,24 @@ const SPOTS: Record<SpotName, ReactNode> = {
     </>
   ),
 
-  /* Goal: a target, turned slightly, on a small stand */
+  /* Goal: a red target (Fluent Emoji), turned slightly, on a small stand */
   target: (
     <>
       <Ground rx={42} />
-      {/* a simple stand behind the board */}
       <path
         d="M80 92 L70 106 M80 92 L90 106"
         stroke="#A86A3D"
         strokeWidth={5}
         strokeLinecap="round"
       />
-      {/* the board, turned a little: an edge shows on the right */}
-      <g transform="rotate(-6 80 58)">
-        <ellipse cx={83} cy={58} rx={36} ry={38} fill="#E2CDB3" />
-        <ellipse cx={80} cy={58} rx={35} ry={38} fill={P.paper} />
-        <ellipse cx={80} cy={58} rx={27} ry={29} fill={P.orange} />
-        <ellipse cx={80} cy={58} rx={18.5} ry={20} fill={P.paper} />
-        <ellipse cx={80} cy={58} rx={10} ry={10.8} fill={P.teal} />
-        <ellipse
-          className="sp-pop"
-          cx={80}
-          cy={58}
-          rx={3.6}
-          ry={3.9}
-          fill={P.ink}
-        />
-        <path
-          d="M53 42 A30 33 0 0 1 72 24"
-          fill="none"
-          stroke={P.orangeHi}
-          strokeWidth={3}
-          strokeLinecap="round"
-        />
+      {/* Target from Microsoft Fluent Emoji, "bullseye" (MIT, see docs/third-party-licenses.md),
+          dart removed, turned slightly sideways with its rim showing on the right */}
+      <g transform="translate(80 57) rotate(-6) scale(2.85 3.3) translate(-14 -18)">
+        <path transform="translate(1.6 0)" fill="#C1201E" d={TARGET_RINGS} />
+        <path transform="translate(1.6 0)" fill="#D9D2CA" d={TARGET_FACE} />
+        <path fill="#F4F4F4" d={TARGET_FACE} />
+        <path fill="#F8312F" d={TARGET_RINGS} />
+        <circle className="sp-pop" cx={14} cy={18} r={1.9} fill="#F8312F" />
       </g>
       <Spark x={30} y={24} s={0.75} c={P.teal} d={0.7} />
     </>
