@@ -5,7 +5,14 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Bookmark, CalendarCheck, Loader2, X } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
-import { openDailyQuestion, removeNotebookItem, startReviewSession, updateQuestionNote } from "@/server/actions/learning";
+import {
+  openDailyQuestion,
+  removeNotebookItem,
+  startReviewSession,
+  tagMistake,
+  updateQuestionNote,
+} from "@/server/actions/learning";
+import { MISTAKE_CAUSES } from "@/lib/srs/patterns";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -17,12 +24,25 @@ function useLimitToast() {
   const router = useRouter();
   return (res: { error: string; message?: string }) => {
     if (res.error === "DAILY_LIMIT")
-      toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), { action: { label: tb("limits.upgrade"), onClick: () => router.push("/pricing") } });
+      toast.error(tb("limits.daily", { left: Number(res.message) || 0 }), {
+        action: {
+          label: tb("limits.upgrade"),
+          onClick: () => router.push("/pricing"),
+        },
+      });
     else toast.error(c("unknownError"));
   };
 }
 
-export function StartReviewButton({ source, disabled, label }: { source: "due" | "bookmarks"; disabled: boolean; label: string }) {
+export function StartReviewButton({
+  source,
+  disabled,
+  label,
+}: {
+  source: "due" | "bookmarks";
+  disabled: boolean;
+  label: string;
+}) {
   const [pending, start] = useTransition();
   const fail = useLimitToast();
   return (
@@ -56,7 +76,12 @@ export function DailyQuestionButton({ label }: { label: string }) {
         })
       }
     >
-      {pending ? <Loader2 className="animate-spin" aria-hidden /> : <CalendarCheck aria-hidden />} {label}
+      {pending ? (
+        <Loader2 className="animate-spin" aria-hidden />
+      ) : (
+        <CalendarCheck aria-hidden />
+      )}{" "}
+      {label}
     </Button>
   );
 }
@@ -86,7 +111,13 @@ export function RemoveFromNotebook({ questionId }: { questionId: string }) {
 }
 
 /** Bookmark toggle and a private note on one question (results pages). */
-export function QuestionNoteControls({ questionId, initial }: { questionId: string; initial: { bookmarked: boolean; note: string | null } }) {
+export function QuestionNoteControls({
+  questionId,
+  initial,
+}: {
+  questionId: string;
+  initial: { bookmarked: boolean; note: string | null };
+}) {
   const t = useTranslations("review");
   const [bookmarked, setBookmarked] = useState(initial.bookmarked);
   const [note, setNote] = useState(initial.note ?? "");
@@ -101,13 +132,22 @@ export function QuestionNoteControls({ questionId, initial }: { questionId: stri
           aria-pressed={bookmarked}
           onClick={async () => {
             setBookmarked(!bookmarked);
-            const res = await updateQuestionNote({ questionId, bookmarked: !bookmarked });
+            const res = await updateQuestionNote({
+              questionId,
+              bookmarked: !bookmarked,
+            });
             if (!res.ok) setBookmarked(bookmarked);
           }}
         >
-          <Bookmark className={cn(bookmarked && "fill-current")} aria-hidden /> {bookmarked ? t("bookmarked") : t("bookmark")}
+          <Bookmark className={cn(bookmarked && "fill-current")} aria-hidden />{" "}
+          {bookmarked ? t("bookmarked") : t("bookmark")}
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+        >
           {t("myNote")}
         </Button>
       </div>
@@ -137,5 +177,48 @@ export function QuestionNoteControls({ questionId, initial }: { questionId: stri
         </div>
       )}
     </div>
+  );
+}
+
+/** Tag why a notebook mistake happened; saves on change. */
+export function MistakeCauseSelect({
+  questionId,
+  value,
+}: {
+  questionId: string;
+  value: string | null;
+}) {
+  const t = useTranslations("review");
+  const c = useTranslations("common");
+  const [pending, start] = useTransition();
+  const [cause, setCause] = useState(value ?? "");
+  return (
+    <select
+      aria-label={t("causeLabel")}
+      value={cause}
+      disabled={pending}
+      onChange={(e) => {
+        const next = e.target.value;
+        setCause(next);
+        start(async () => {
+          const res = await tagMistake({ questionId, cause: next || null });
+          if (!res.ok) {
+            setCause(value ?? "");
+            toast.error(c("unknownError"));
+          }
+        });
+      }}
+      className={cn(
+        "h-8 rounded-md border bg-surface px-2 text-xs",
+        !cause && "text-muted-foreground",
+      )}
+    >
+      <option value="">{t("causeNone")}</option>
+      {MISTAKE_CAUSES.map((k) => (
+        <option key={k} value={k}>
+          {t(`causes.${k}`)}
+        </option>
+      ))}
+    </select>
   );
 }

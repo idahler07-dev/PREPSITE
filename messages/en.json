@@ -1919,6 +1919,23 @@
       "dueLabel": "{count, plural, one {question is} other {questions are}} ready for another try.",
       "caught": "All caught up",
       "caughtBody": "Nothing to review today. Wrong answers come back here on a schedule."
+    },
+    "causeLabel": "Why did you miss it?",
+    "causeNone": "Not tagged",
+    "causes": {
+      "CONCEPT": "Didn't know it",
+      "CARELESS": "Careless slip",
+      "MISREAD": "Misread the question",
+      "TIME": "Ran out of time",
+      "GUESS": "Guessed"
+    },
+    "patterns": {
+      "title": "Patterns in your mistakes",
+      "body": "Skills you keep missing. A short drill on one of them pays off most.",
+      "count": "{count, plural, one {# mistake} other {# mistakes}}",
+      "mostly": "mostly: {cause}",
+      "drill": "Drill this skill",
+      "tagHint": "Tag why you missed each question below to see what trips you up."
     }
   },
   "vocab": {

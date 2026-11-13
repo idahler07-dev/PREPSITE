@@ -15,10 +15,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
+  MistakeCauseSelect,
   RemoveFromNotebook,
   StartReviewButton,
 } from "@/components/learning/review-actions";
 import { Owl } from "@/components/mascot/owl";
+import { recurringMistakes } from "@/lib/srs/patterns";
+import { Spot } from "@/components/illustrations/spot";
 
 export async function generateMetadata() {
   const t = await getTranslations("review");
@@ -31,7 +34,7 @@ export default async function ReviewPage() {
   const tx = await getTranslations("taxonomy");
   const format = await getFormatter();
   const now = new Date();
-  const [counts, items, bookmarks] = await Promise.all([
+  const [counts, items, bookmarks, history] = await Promise.all([
     notebookCounts(user.id, now),
     db.reviewItem.findMany({
       where: {
@@ -53,7 +56,26 @@ export default async function ReviewPage() {
       take: 100,
       include: { question: { select: { skill: true } } },
     }),
+    db.reviewItem.findMany({
+      where: { userId: user.id, archivedAt: null },
+      select: {
+        reason: true,
+        cause: true,
+        lapses: true,
+        question: { select: { skill: true } },
+      },
+      take: 1000,
+    }),
   ]);
+  const patterns = recurringMistakes(
+    history.map((h) => ({
+      skill: h.question.skill,
+      reason: h.reason,
+      cause: h.cause,
+      lapses: h.lapses,
+    })),
+  );
+  const anyTagged = history.some((h) => h.cause);
 
   return (
     <Container className="max-w-4xl space-y-6">
@@ -113,6 +135,62 @@ export default async function ReviewPage() {
         </CardContent>
       </Card>
 
+      {patterns.length > 0 && (
+        <section
+          aria-labelledby="patterns-title"
+          className="group rounded-2xl border bg-surface p-5 sm:p-6"
+        >
+          <div className="flex items-start gap-4">
+            <div className="min-w-0 flex-1">
+              <h2 id="patterns-title" className="text-lg font-semibold">
+                {t("patterns.title")}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("patterns.body")}
+              </p>
+            </div>
+            <Spot name="target" className="hidden w-24 shrink-0 sm:block" />
+          </div>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+            {patterns.map((p) => (
+              <li
+                key={p.skill}
+                className="flex flex-col gap-2 rounded-xl border bg-background p-4"
+              >
+                <span className="font-medium">
+                  {tx(`skills.${p.skill as "INFERENCES"}`)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {t("patterns.count", { count: p.count })}
+                  {p.cause && (
+                    <>
+                      {" "}
+                      ·{" "}
+                      {t("patterns.mostly", { cause: t(`causes.${p.cause}`) })}
+                    </>
+                  )}
+                </span>
+                <Button
+                  asChild
+                  size="sm"
+                  variant="secondary"
+                  className="mt-auto self-start"
+                >
+                  <Link href={`/practice?skill=${encodeURIComponent(p.skill)}`}>
+                    {t("patterns.drill")}
+                  </Link>
+                </Button>
+              </li>
+            ))}
+          </ul>
+          {!anyTagged && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              {t("patterns.tagHint")}
+            </p>
+          )}
+        </section>
+      )}
+
       <section>
         <h2 className="mb-3 text-lg font-semibold">{t("notebook")}</h2>
         {items.length === 0 ? (
@@ -138,6 +216,12 @@ export default async function ReviewPage() {
                 <Badge variant="secondary">
                   {t(`reasons.${i.reason as "WRONG"}`)}
                 </Badge>
+                {i.reason !== "BOOKMARK" && (
+                  <MistakeCauseSelect
+                    questionId={i.question.id}
+                    value={i.cause}
+                  />
+                )}
                 <span className="ms-auto text-muted-foreground">
                   {i.dueAt <= now
                     ? t("dueNow")

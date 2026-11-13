@@ -876,6 +876,8 @@ model ReviewItem {
   lastReviewedAt DateTime?
   /// Set when the student removes it or it is learned (interval over the limit).
   archivedAt     DateTime?
+  /// Why the student missed it, in their own words: CONCEPT | CARELESS | MISREAD | TIME | GUESS (optional).
+  cause          String?
   createdAt      DateTime  @default(now())
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
