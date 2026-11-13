@@ -113,11 +113,14 @@ void main(){
     float fy = clamp((1.0 - bv.y)*0.5, 0.0, 1.0); // 0 at the base, 1 at the top
     float lit = smoothstep(uBulb.w + 0.08, uBulb.w - 0.08, fy)*step(0.001, uBulb.w);
     float lum = dot(col.rgb, vec3(0.3, 0.55, 0.15));
-    vec3 off = mix(col.rgb, vec3(lum*0.95, lum*0.88, lum*0.62)*0.86, 0.6);
+    vec3 off = mix(col.rgb, vec3(0.97, 0.95, 0.9)*(0.78 + 0.25*lum), 0.62); // clear, unlit glass
     vec3 on = mix(col.rgb, vec3(1.0, 0.97, 0.8), 0.42 + 0.18*smoothstep(0.7, 0.0, d));
     col.rgb = mix(col.rgb, mix(off, on, lit), glass);
     // rays: the drawn yellow marks around the bulb only show while it is lit
-    float ray = yel*smoothstep(1.15, 1.3, d)*smoothstep(2.6, 2.2, d);
+    // everything in the ring around the glass is the rays and their outline (the
+    // ear is kept by its fur colour)
+    float fur = smoothstep(0.7, 0.85, col.r)*smoothstep(0.75, 0.6, col.g)*smoothstep(0.45, 0.3, col.b);
+    float ray = (1.0 - fur)*smoothstep(1.15, 1.3, d)*smoothstep(2.6, 2.2, d)*step(-1.4, bv.x)*step(bv.y, 0.55);
     col *= 1.0 - ray*(1.0 - uRays);
     col.rgb = mix(col.rgb, vec3(1.0, 0.9, 0.5), ray*uRays*0.35);
     glow = uGlow*exp(-pow(max(d - 0.55, 0.0)/0.85, 2.0));
