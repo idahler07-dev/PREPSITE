@@ -2170,3 +2170,20 @@ html.lenis body {
     opacity: 0;
   }
 }
+
+/* ---- Spot illustrations (components/illustrations/spot.tsx) ---- */
+.spot .sp-lift, .spot .sp-pop, .spot .sp-twinkle { transform-box: fill-box; transform-origin: 50% 50%; }
+@media (prefers-reduced-motion: no-preference) {
+  .spot .sp-lift { transition: translate 260ms cubic-bezier(.3,.7,.3,1.2); }
+  .spot .sp-pop { transition: scale 260ms cubic-bezier(.3,.7,.3,1.4); }
+  :is(a, button, .group):hover .spot .sp-lift { translate: 0 -4px; }
+  :is(a, button, .group):hover .spot .sp-pop { scale: 1.12; }
+  .spot .sp-twinkle { animation: sp-twinkle 2.8s ease-in-out infinite; }
+}
+@keyframes sp-twinkle { 0%, 100% { scale: 1; opacity: 1; } 50% { scale: 0.55; opacity: 0.55; } }
+.willo-box .wb-tap-l, .willo-box .wb-tap-r { transform-box: fill-box; transform-origin: 50% 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .willo-box .wb-tap-l { animation: wb-tap 1.6s ease-in-out infinite; }
+  .willo-box .wb-tap-r { animation: wb-tap 1.6s ease-in-out 0.4s infinite; }
+}
+@keyframes wb-tap { 0%, 60%, 100% { transform: translateY(0); } 70% { transform: translateY(-4px); } 80% { transform: translateY(0); } 88% { transform: translateY(-3px); } }

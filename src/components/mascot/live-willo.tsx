@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
-import { WilloBox, type WilloBoxMood } from "./willo-box";
+import { WilloBox, type WilloBoxMood, type WilloBoxProp } from "./willo-box";
 
 /**
  * Willo wherever the site shows him: the compact vector Willo (willo-box.tsx).
@@ -26,6 +26,16 @@ export function moodFor(
   if (mood === "cry") return "sad";
   const name = (src ?? "").split("/").pop() ?? "";
   return BY_POSE.find(([re]) => re.test(name))?.[1] ?? "idle";
+}
+
+/** Reading and studying poses hold a book or a laptop. */
+export function propFor(src: string | undefined): WilloBoxProp | undefined {
+  const name = (src ?? "").split("/").pop() ?? "";
+  return /read/.test(name)
+    ? "book"
+    : /laptop/.test(name)
+      ? "laptop"
+      : undefined;
 }
 
 export function LiveWillo({
@@ -56,6 +66,7 @@ export function LiveWillo({
     >
       <WilloBox
         mood={moodFor(src, mood)}
+        prop={mood === "idle" ? propFor(src) : undefined}
         label={alt || undefined}
         className="w-full"
       />

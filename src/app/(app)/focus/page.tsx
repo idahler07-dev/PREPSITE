@@ -25,19 +25,38 @@ export default async function FocusPage() {
   const tz = user.timeZone;
   const today = dayInZone(new Date(), tz);
   const dayStart = startOfDayInZone(new Date(), tz);
-  const weekStart = startOfDayInZone(new Date(`${mondayOf(today)}T12:00:00Z`), tz);
+  const weekStart = startOfDayInZone(
+    new Date(`${mondayOf(today)}T12:00:00Z`),
+    tz,
+  );
 
   const [planRow, week, recent] = await Promise.all([
     currentPlan(user.id),
-    db.focusSession.findMany({ where: { userId: user.id, startedAt: { gte: weekStart } }, select: { startedAt: true, focusedSeconds: true } }),
-    db.focusSession.findMany({ where: { userId: user.id }, orderBy: { startedAt: "desc" }, take: 20 }),
+    db.focusSession.findMany({
+      where: { userId: user.id, startedAt: { gte: weekStart } },
+      select: { startedAt: true, focusedSeconds: true },
+    }),
+    db.focusSession.findMany({
+      where: { userId: user.id },
+      orderBy: { startedAt: "desc" },
+      take: 20,
+    }),
   ]);
 
   // Today's plan tasks become one-tap labels for the session.
   const plan = planRow.plan as unknown as WeeklyPlan;
   const tasks = (plan.days.find((d) => d.date === today)?.tasks ?? [])
     .filter((k) => k.kind !== "rest")
-    .map((k) => (k.kind === "drill" ? tc("tasks.drill", { count: k.count ?? 10, skill: k.skill ? tx(`skills.${k.skill as "INFERENCES"}`) : "" }) : k.kind === "review" ? tc("tasks.review", { count: k.count ?? 0 }) : tc(`tasks.${k.kind}`)));
+    .map((k) =>
+      k.kind === "drill"
+        ? tc("tasks.drill", {
+            count: k.count ?? 10,
+            skill: k.skill ? tx(`skills.${k.skill as "INFERENCES"}`) : "",
+          })
+        : k.kind === "review"
+          ? tc("tasks.review", { count: k.count ?? 0 })
+          : tc(`tasks.${k.kind}`),
+    );
 
   const todays = week.filter((w) => w.startedAt >= dayStart);
   const min = (secs: number) => Math.round(secs / 60);
@@ -45,16 +64,28 @@ export default async function FocusPage() {
   const weekMin = min(week.reduce((n, w) => n + w.focusedSeconds, 0));
   const dayLabel = (d: Date) => {
     const k = dayInZone(d, tz);
-    return k === today ? t("today") : k === addDays(today, -1) ? t("yesterday") : format.dateTime(d, { weekday: "short", month: "short", day: "numeric", timeZone: tz });
+    return k === today
+      ? t("today")
+      : k === addDays(today, -1)
+        ? t("yesterday")
+        : format.dateTime(d, {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+            timeZone: tz,
+          });
   };
 
   return (
     <Container className="max-w-[1080px]">
       <PageHeader
+        art="focus"
         title={t("title")}
         description={
           <span className="flex flex-wrap gap-x-4 gap-y-1 text-base">
-            <span>{t("todayMeta", { count: todays.length, minutes: todayMin })}</span>
+            <span>
+              {t("todayMeta", { count: todays.length, minutes: todayMin })}
+            </span>
             <span aria-hidden className="text-border">
               {"|"}
             </span>
@@ -75,23 +106,48 @@ export default async function FocusPage() {
             <div className="flex flex-col items-center gap-3 rounded-[var(--radius-panel)] border border-border bg-surface px-6 py-12 text-center">
               <Deer pose="sleep" className="w-32" />
               <p className="font-semibold">{t("emptyTitle")}</p>
-              <p className="max-w-sm text-sm text-muted-foreground">{t("emptyBody")}</p>
+              <p className="max-w-sm text-sm text-muted-foreground">
+                {t("emptyBody")}
+              </p>
             </div>
           ) : (
             <ul className="divide-y divide-border overflow-hidden rounded-[var(--radius-panel)] border border-border bg-surface">
               {recent.map((r) => (
-                <li key={r.id} className="flex items-center gap-3 px-4 py-3 sm:px-5">
-                  {r.completed ? <CheckCircle2 className="size-5 shrink-0 text-correct-ink" aria-label={t("completed")} /> : <CircleDashed className="size-5 shrink-0 text-muted-foreground" aria-label={t("stopped")} />}
+                <li
+                  key={r.id}
+                  className="flex items-center gap-3 px-4 py-3 sm:px-5"
+                >
+                  {r.completed ? (
+                    <CheckCircle2
+                      className="size-5 shrink-0 text-correct-ink"
+                      aria-label={t("completed")}
+                    />
+                  ) : (
+                    <CircleDashed
+                      className="size-5 shrink-0 text-muted-foreground"
+                      aria-label={t("stopped")}
+                    />
+                  )}
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">{r.label ?? t("untitled")}</span>
+                    <span className="block truncate text-sm font-semibold">
+                      {r.label ?? t("untitled")}
+                    </span>
                     <span className="block text-xs text-muted-foreground">
                       {dayLabel(r.startedAt)}
                       {" · "}
-                      {format.dateTime(r.startedAt, { hour: "numeric", minute: "2-digit", timeZone: tz })}
+                      {format.dateTime(r.startedAt, {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        timeZone: tz,
+                      })}
                     </span>
                   </span>
-                  <span className="text-sm font-semibold tabular-nums">{t("minutes", { n: min(r.focusedSeconds) })}</span>
-                  <span className="hidden w-20 text-end text-xs text-muted-foreground sm:block">{t("of", { n: r.plannedMinutes })}</span>
+                  <span className="text-sm font-semibold tabular-nums">
+                    {t("minutes", { n: min(r.focusedSeconds) })}
+                  </span>
+                  <span className="hidden w-20 text-end text-xs text-muted-foreground sm:block">
+                    {t("of", { n: r.plannedMinutes })}
+                  </span>
                 </li>
               ))}
             </ul>

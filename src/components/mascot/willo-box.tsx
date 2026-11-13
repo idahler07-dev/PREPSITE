@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
  * wink, sad (droopy ears and brows, a tear), think (looks up, a question mark),
  * sleep (closed eyes, breathing, rising Zs), wow (round eyes and mouth, pop).
  */
+/** Something Willo holds in front of him. */
+export type WilloBoxProp = "book" | "laptop";
+
 export type WilloBoxMood =
   | "idle"
   | "happy"
@@ -41,10 +44,12 @@ function Eye({
   x,
   mood,
   side,
+  down,
 }: {
   x: number;
   mood: WilloBoxMood;
   side: -1 | 1;
+  down?: boolean;
 }) {
   const y = 116;
   const closedSmile = mood === "happy" || (mood === "wink" && side === -1);
@@ -70,7 +75,12 @@ function Eye({
       />
     );
   const big = mood === "wow" ? 1.12 : 1;
-  const look = mood === "think" ? { dx: 3, dy: -4 } : { dx: 0, dy: 0 };
+  const look =
+    mood === "think"
+      ? { dx: 3, dy: -4 }
+      : down
+        ? { dx: 0, dy: 5 }
+        : { dx: 0, dy: 0 };
   return (
     <g className="wb-eye">
       <ellipse cx={x} cy={y} rx={13 * big} ry={15.5 * big} fill={C.ink} />
@@ -222,10 +232,13 @@ function Ear({ side, mood }: { side: -1 | 1; mood: WilloBoxMood }) {
 
 export function WilloBox({
   mood = "idle",
+  prop,
   className,
   label,
 }: {
   mood?: WilloBoxMood;
+  /** A book or a laptop held in front; his eyes look down at it. */
+  prop?: WilloBoxProp;
   className?: string;
   /** Accessible name; omit when decorative. */
   label?: string;
@@ -292,8 +305,8 @@ export function WilloBox({
           />
           <Brows mood={mood} />
           <g className="wb-eyes">
-            <Eye x={76} mood={mood} side={-1} />
-            <Eye x={124} mood={mood} side={1} />
+            <Eye x={76} mood={mood} side={-1} down={!!prop} />
+            <Eye x={124} mood={mood} side={1} down={!!prop} />
           </g>
           <path
             d="M93 132 Q100 128 107 132 Q104 139 100 139 Q96 139 93 132 Z"
@@ -336,6 +349,76 @@ export function WilloBox({
               d="M64 132 C60 140 59 145 64 147 C69 145 68 140 64 132 Z"
               fill={C.tear}
             />
+          )}
+          {prop === "book" && (
+            <g className="wb-prop">
+              <path
+                d="M100 168 L52 160 L52 200 L100 208 Z"
+                fill={C.scarfDark}
+              />
+              <path
+                d="M100 168 L148 160 L148 200 L100 208 Z"
+                fill={C.scarfDark}
+              />
+              <path d="M100 164 L56 156 L56 196 L100 204 Z" fill={C.scarf} />
+              <path d="M100 164 L144 156 L144 196 L100 204 Z" fill={C.scarf} />
+              <path d="M100 164 V204" stroke={C.scarfDark} strokeWidth={2.5} />
+              <path
+                d="M112 178 l4 10 l4 -7 l4 7 l4 -10"
+                fill="none"
+                stroke="#fff"
+                strokeWidth={3.2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <ellipse cx={52} cy={182} rx={10} ry={12} fill={C.nose} />
+              <ellipse cx={148} cy={182} rx={10} ry={12} fill={C.nose} />
+            </g>
+          )}
+          {prop === "laptop" && (
+            <g className="wb-prop">
+              <rect
+                x={52}
+                y={160}
+                width={96}
+                height={46}
+                rx={7}
+                fill={C.scarfDark}
+                transform="translate(0 4)"
+              />
+              <rect
+                x={52}
+                y={160}
+                width={96}
+                height={46}
+                rx={7}
+                fill={C.scarf}
+              />
+              <path
+                d="M88 176 l5 13 l5 -9 l5 9 l5 -13"
+                fill="none"
+                stroke="#fff"
+                strokeWidth={3.4}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <ellipse
+                className="wb-tap-l"
+                cx={60}
+                cy={160}
+                rx={10}
+                ry={8}
+                fill={C.nose}
+              />
+              <ellipse
+                className="wb-tap-r"
+                cx={140}
+                cy={160}
+                rx={10}
+                ry={8}
+                fill={C.nose}
+              />
+            </g>
           )}
         </g>
         {mood === "think" && (

@@ -25,8 +25,16 @@ export default async function PlanPage() {
   return (
     <Container className="max-w-6xl space-y-6">
       <PageHeader
+        art="plan"
         title={t("title")}
-        description={plan.daysToTest !== null ? t("subtitleDays", { days: plan.daysToTest, minutes: plan.minutesPerDay }) : t("subtitle", { minutes: plan.minutesPerDay })}
+        description={
+          plan.daysToTest !== null
+            ? t("subtitleDays", {
+                days: plan.daysToTest,
+                minutes: plan.minutesPerDay,
+              })
+            : t("subtitle", { minutes: plan.minutesPerDay })
+        }
         actions={<RefreshPlanButton />}
       />
       {row.message && (
@@ -36,7 +44,12 @@ export default async function PlanPage() {
       )}
       {plan.focusSkills.length > 0 && (
         <p className="text-sm">
-          {t("focus")}: <strong>{plan.focusSkills.map((s) => tx(`skills.${s as "INFERENCES"}`)).join(", ")}</strong>
+          {t("focus")}:{" "}
+          <strong>
+            {plan.focusSkills
+              .map((s) => tx(`skills.${s as "INFERENCES"}`))
+              .join(", ")}
+          </strong>
         </p>
       )}
       {plan.daysToTest === null && (
