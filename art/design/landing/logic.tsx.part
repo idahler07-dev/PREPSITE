@@ -1,0 +1,58 @@
+const CORRECT = "B";
+const RAW = [
+  { letter: "A", text: "For instance,", explain: "“For instance” brings in an example of the first idea. Being colorblind isn’t an example of changing color fast. It’s a surprise next to it. The two facts pull against each other, so you need a contrast word: However." },
+  { letter: "B", text: "However,", explain: "Right. Changing color to match a background sounds like it needs color vision, yet they probably can’t see color. Two ideas that pull against each other need a contrast word, and “However” is the one here." },
+  { letter: "C", text: "Therefore,", explain: "“Therefore” says the second fact is caused by the first. Changing skin color doesn’t make an animal colorblind. The facts clash instead, so you need a contrast word: However." },
+  { letter: "D", text: "Likewise,", explain: "“Likewise” says the second idea is similar to the first. Fast color change and colorblindness are opposites in spirit, not a matching pair. You need a contrast word: However." },
+];
+const FAQ = [
+  ["Is it the same as the real Digital SAT?", "Mock tests follow the Digital SAT format: two sections, two adaptive modules each, the on-screen timer and the built-in Desmos calculator. Our questions are written to match official difficulty, but only the College Board writes the real test."],
+  ["Should I still use Bluebook and Khan Academy?", "Yes. Take the official practice tests in Bluebook, they are the closest thing to test day. Use WilloPrep for what happens between those tests: a daily plan, your mistakes coming back, and explanations when you are stuck."],
+  ["What does Willo, the AI tutor, actually do?", "Willo explains why the answer you picked is wrong, gives hints before full solutions, shows Desmos shortcuts for math, and notices patterns across your mistakes so your plan can target them."],
+  ["What’s the difference between Free and Premium?", "Free gives you daily practice, Desmos, the score calculator and vocabulary decks, forever. Premium adds full adaptive mock tests, Willo on every question, your daily plan and the full score report."],
+  ["How is my predicted score calculated?", "It is your most recent full practice test or the official score you logged. Once you have four scores, Willo also projects a range for test day from your trend, always marked as an estimate."],
+  ["Can I cancel Premium anytime?", "Yes. Cancel in one click from settings. You keep Premium until the end of the period you paid for, then drop back to Free with your history saved."],
+] as const;
+
+/** The WilloPrep landing page, ported 1:1 from the approved design file. */
+export function ReferenceLanding({ nextLabel, daysLeft, regBy }: { nextLabel: string; daysLeft: number; regBy: string }) {
+  const [picked, setPicked] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState(0);
+
+  const base = "width: 100%; font-family: inherit; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; font-size: 15px; font-weight: 600; color: #0B0B0C; ";
+  const letterBase = "flex: none; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; ";
+  let explain = "";
+  const choices = RAW.map((c) => {
+    const isPicked = picked === c.letter;
+    const isCorrect = c.letter === CORRECT;
+    let boxStyle = base + "background: #FFFFFF; border: 1.5px solid #E8E4DC;";
+    let letterStyle = letterBase + "border: 1.5px solid #D6D1C7; color: #3A3A3C;";
+    let tag = "";
+    let tagColor = "#0F6B78";
+    if (picked) {
+      if (isCorrect) {
+        boxStyle = base + "background: #E7F1F2; border: 1.5px solid #0F6B78;";
+        letterStyle = letterBase + "background: #0F6B78; border: 1.5px solid #0F6B78; color: #FFFFFF;";
+        tag = "Correct";
+      } else if (isPicked) {
+        boxStyle = base + "background: #FFF1E8; border: 1.5px solid #FF6A1A;";
+        letterStyle = letterBase + "background: #FF6A1A; border: 1.5px solid #FF6A1A; color: #FFFFFF;";
+        tag = "Your answer";
+        tagColor = "#C2410C";
+      } else {
+        boxStyle = base + "background: #FFFFFF; border: 1.5px solid #ECE9E3; color: #8A8A86;";
+      }
+    }
+    if (isPicked) explain = c.explain;
+    return { letter: c.letter, text: c.text, boxStyle, letterStyle, tag, tagColor, pressed: isPicked, pick: () => setPicked(c.letter) };
+  });
+  const hasPick = !!picked;
+  const reset = () => setPicked(null);
+  const faqs = FAQ.map(([q, a], idx) => {
+    const open = openFaq === idx;
+    return { q, a, open, sign: open ? "−" : "+", rowStyle: idx < FAQ.length - 1 ? "border-bottom: 1px solid #ECE9E3" : "", toggle: () => setOpenFaq(open ? -1 : idx) };
+  });
+  const price = "$9.99";
+  const per = "/ month";
+  const priceNote = "Cancel anytime";
+  void reset;
