@@ -21,7 +21,6 @@ FILES = [
     "public/mascot/formats/sticker-wink.png",
     "public/mascot/formats/avatar-wink.png",
     "public/mascot/formats/behind-wink.png",
-    "public/mascot/formats/icon-wink.png",
 ]
 
 

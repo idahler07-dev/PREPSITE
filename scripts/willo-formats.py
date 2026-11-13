@@ -111,10 +111,10 @@ def icon(pose, out, n=1024):
 
 def avatar(pose, out, n=512, ground=((255, 236, 220), (247, 204, 168))):
     im, g = load(pose)
-    b, (cx, cy, R, nx, ny) = bust(im, g, depth=0.75, pose=pose)
+    b, (cx, cy, R, nx, ny) = bust(im, g, depth=0.75, side=1.15)
     pad = int(n * 0.30)  # room above the circle for antlers breaking out
     N = n + pad
-    s = (n * 0.76) / b.width
+    s = (n * 0.255) / R  # size by the head, not the bust (scarf ends and sparkle marks vary by pose)
     b = b.resize((round(b.width * s), round(b.height * s)), Image.LANCZOS)
     cx, cy, R, ny = cx * s, cy * s, R * s, ny * s
     canvas = Image.new("RGBA", (n, N), (0, 0, 0, 0))
@@ -125,7 +125,7 @@ def avatar(pose, out, n=512, ground=((255, 236, 220), (247, 204, 168))):
     disc.putalpha(cm)
     canvas.alpha_composite(disc, (0, pad))
     layer = Image.new("RGBA", (n, N), (0, 0, 0, 0))
-    ox, oy = round(n / 2 - b.width / 2), pad + n - b.height + round(n * 0.04)
+    ox, oy = round(n / 2 - cx), pad + n - b.height + round(n * 0.04)
     layer.alpha_composite(b, (max(ox, 0), max(oy, 0)), (max(-ox, 0), max(-oy, 0)))
     # clip: the scarf and below stay inside the circle; the whole head (ears, antlers) may break the frame
     clip = Image.new("L", (n, N), 0)
@@ -167,7 +167,7 @@ def sticker(pose, out, h=640, line=0.035, tilt=-4):
 def peek(pose, out, h=520):
     """Head and scarf above an edge, two hooves hooked over it."""
     im, g = load(pose)
-    b, (cx, cy, R, nx, ny) = bust(im, g, depth=0.30, soft=1.0, pose=pose)  # cut just under the chin, inside the scarf
+    b, (cx, cy, R, nx, ny) = bust(im, g, depth=0.30, soft=1.0, side=1.3)  # cut just under the chin, inside the scarf
     s = h / b.height
     b = b.resize((round(b.width * s), h), Image.LANCZOS)
     cx, cy, R, nx, ny = cx * s, cy * s, R * s, nx * s, ny * s
@@ -202,16 +202,24 @@ def peek(pose, out, h=520):
     json.dump({"edge": edge / (h + over), "height": h + over, "width": W}, open(f"{out}/peek-{pose}.json", "w"))
 
 
+def behind(pose, out, h=700):
+    """Head and scarf, cut on a soft curve below the scarf: for Willo looking over a card from behind."""
+    im, g = load(pose)
+    b, _ = bust(im, g, depth=0.75, soft=1.2, side=1.1)
+    b.resize((round(b.width * h / b.height), h), Image.LANCZOS).save(f"{out}/behind-{pose}.png", optimize=True)
+
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     out = args[args.index("--out") + 1] if "--out" in args else "public/mascot/formats"
     os.makedirs(out, exist_ok=True)
-    for p in ("stand", "wink"):
-        icon(p, out)  # wink keeps its thumb out of frame
+    # icon-stand.png is the hand-drawn app icon (scripts/willo-import.py)
     for p in ("stand", "wink", "think"):
         avatar(p, out)
     for p in ("wink", "cheer", "stand", "sad"):
         sticker(p, out)
     for p in ("stand", "idea"):
         peek(p, out)
+    for p in ("stand", "wink"):
+        behind(p, out)
     print("ok", out)

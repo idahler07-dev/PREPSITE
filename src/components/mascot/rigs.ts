@@ -49,207 +49,177 @@ const bust = (c: [number, number], n: [number, number], R: number): Rig => ({
 export const RIGS: Record<string, Rig> = {
   // die-cut stickers
   "/mascot/formats/sticker-stand": {
-    n: [0.5, 0.6],
+    n: [0.5, 0.66],
     band: 0.04,
     foot: 0.93,
-    limbs: [
-      [0.3, 0.66, 0.33, 0.82, 0.07, "sway"],
-      [0.66, 0.68, 0.68, 0.84, 0.07, "sway"],
-    ],
-    tail: [0.3, 0.66, 0.12, 0.68, 0.1],
+    tail: [0.25, 0.72, 0.08, 0.76, 0.1],
   },
   "/mascot/formats/sticker-cheer": {
-    n: [0.48, 0.6],
+    n: [0.48, 0.65],
     band: 0.04,
     foot: 0.94,
-    limbs: [
-      [0.68, 0.63, 0.8, 0.46, 0.08, "wave"],
-      [0.42, 0.73, 0.36, 0.68, 0.06, "sway"],
-    ],
-    tail: [0.32, 0.64, 0.12, 0.7, 0.1],
+    limbs: [[0.7, 0.68, 0.8, 0.47, 0.08, "wave"]],
+    tail: [0.25, 0.72, 0.08, 0.75, 0.1],
+    hop: true,
   },
-  "/mascot/formats/sticker-wink": {
-    n: [0.47, 0.62],
+  "/mascot/formats/sticker-wink-open": {
+    n: [0.47, 0.66],
     band: 0.04,
     foot: 0.94,
-    limbs: [
-      [0.66, 0.71, 0.8, 0.66, 0.08, "wave"],
-      [0.33, 0.7, 0.34, 0.82, 0.06, "sway"],
-    ],
-    tail: [0.32, 0.65, 0.12, 0.68, 0.1],
+    limbs: [[0.66, 0.75, 0.78, 0.7, 0.08, "wave"]],
+    tail: [0.25, 0.72, 0.08, 0.75, 0.1],
+    wink: [0.382, 0.548, 0.0625, 0.0846],
   },
   "/mascot/formats/sticker-sad": {
-    n: [0.5, 0.61],
+    n: [0.5, 0.68],
     band: 0.04,
-    foot: 0.92,
-    tail: [0.3, 0.64, 0.12, 0.66, 0.1],
+    foot: 0.95,
+    tail: [0.22, 0.73, 0.08, 0.75, 0.09],
     tears: [
-      [0.405, 0.585],
-      [0.785, 0.54],
+      [0.39, 0.635],
+      [0.73, 0.585],
     ],
   },
   // circle avatars and busts
-  "/mascot/formats/avatar-wink": bust([0.62, 0.76], [0.63, 0.9], 0.31),
-  "/mascot/formats/avatar-stand": bust([0.6, 0.76], [0.6, 0.9], 0.32),
-  "/mascot/formats/avatar-think": bust([0.62, 0.76], [0.62, 0.9], 0.32),
-  "/mascot/formats/behind-wink": {
-    n: [0.52, 0.8],
+  "/mascot/formats/avatar-stand": bust([0.42, 0.78], [0.42, 0.9], 0.28),
+  "/mascot/formats/avatar-wink-open": {
+    ...bust([0.4, 0.78], [0.42, 0.9], 0.28),
+    wink: [0.388, 0.788, 0.0667, 0.0611],
+  },
+  "/mascot/formats/avatar-think": bust([0.45, 0.8], [0.45, 0.92], 0.26),
+  "/mascot/formats/behind-stand": { n: [0.5, 0.78], band: 0.04, foot: 1 },
+  "/mascot/formats/behind-wink-open": {
+    n: [0.5, 0.78],
     band: 0.04,
     foot: 1,
-    tail: [0.8, 0.85, 0.83, 0.99, 0.05],
+    wink: [0.359, 0.611, 0.072, 0.0994],
   },
-  "/mascot/formats/behind-stand": {
-    n: [0.5, 0.8],
-    band: 0.04,
-    foot: 1,
-    tail: [0.82, 0.88, 0.84, 0.99, 0.04],
-  },
-  "/mascot/formats/peek-stand": { n: [0.5, 0.78], band: 0.035, foot: 1 },
-  "/mascot/formats/peek-idea": { n: [0.5, 0.76], band: 0.035, foot: 1 },
+  "/mascot/formats/peek-stand": { n: [0.5, 0.78], band: 0.03, foot: 1 },
+  "/mascot/formats/peek-idea": { n: [0.48, 0.76], band: 0.03, foot: 1 },
   "/mascot/formats/icon-stand": { still: true },
   "/mascot/formats/icon-wink": { still: true },
   // full poses
   "/mascot/deer-stand": {
-    n: [0.52, 0.57],
+    n: [0.5, 0.55],
     band: 0.04,
     foot: 0.98,
     limbs: [
-      [0.35, 0.66, 0.36, 0.78, 0.07, "sway"],
-      [0.68, 0.66, 0.74, 0.78, 0.07, "sway"],
-    ],
-    tail: [0.33, 0.6, 0.06, 0.64, 0.1],
-  },
-  "/mascot/deer-wink": {
-    n: [0.5, 0.56],
-    band: 0.04,
-    foot: 0.98,
-    limbs: [
-      [0.75, 0.66, 0.86, 0.58, 0.08, "wave"],
-      [0.33, 0.68, 0.33, 0.78, 0.07, "sway"],
+      [0.33, 0.66, 0.34, 0.77, 0.07, "sway"],
+      [0.7, 0.66, 0.74, 0.77, 0.07, "sway"],
     ],
     tail: [0.3, 0.6, 0.05, 0.66, 0.1],
+  },
+  "/mascot/deer-wink-open": {
+    n: [0.5, 0.53],
+    band: 0.04,
+    foot: 0.98,
+    limbs: [
+      [0.72, 0.62, 0.84, 0.56, 0.08, "wave"],
+      [0.34, 0.66, 0.35, 0.76, 0.07, "sway"],
+    ],
+    tail: [0.28, 0.6, 0.04, 0.64, 0.1],
+    wink: [0.361, 0.4415, 0.0708, 0.0705],
   },
   "/mascot/deer-cheer": {
-    n: [0.5, 0.56],
+    n: [0.5, 0.55],
     band: 0.04,
     foot: 0.98,
     limbs: [
-      [0.8, 0.56, 0.86, 0.4, 0.08, "wave"],
-      [0.42, 0.68, 0.38, 0.64, 0.06, "sway"],
+      [0.72, 0.58, 0.84, 0.38, 0.08, "wave"],
+      [0.44, 0.7, 0.4, 0.66, 0.06, "sway"],
     ],
-    tail: [0.3, 0.6, 0.05, 0.66, 0.1],
+    tail: [0.3, 0.62, 0.05, 0.68, 0.1],
+    hop: true,
   },
   "/mascot/deer-jump": {
-    n: [0.5, 0.58],
+    n: [0.5, 0.55],
     band: 0.04,
     foot: 0.98,
     limbs: [
-      [0.28, 0.58, 0.12, 0.5, 0.08, "wave"],
-      [0.7, 0.56, 0.8, 0.44, 0.08, "wave"],
+      [0.27, 0.57, 0.1, 0.5, 0.08, "wave"],
+      [0.72, 0.56, 0.85, 0.44, 0.08, "wave"],
     ],
-    tail: [0.3, 0.64, 0.05, 0.7, 0.1],
+    tail: [0.3, 0.66, 0.05, 0.74, 0.1],
+    hop: true,
   },
   "/mascot/deer-idea": {
-    n: [0.5, 0.56],
+    n: [0.5, 0.54],
     band: 0.04,
     foot: 0.98,
     limbs: [
-      [0.7, 0.6, 0.8, 0.46, 0.07, "wave"],
-      [0.42, 0.62, 0.4, 0.68, 0.06, "sway"],
+      [0.72, 0.6, 0.82, 0.46, 0.07, "wave"],
+      [0.44, 0.72, 0.4, 0.65, 0.06, "sway"],
     ],
     tail: [0.3, 0.6, 0.05, 0.64, 0.1],
+    bulb: [0.835, 0.19, 0.075],
   },
   "/mascot/deer-trophy": {
-    n: [0.5, 0.56],
+    n: [0.53, 0.55],
     band: 0.04,
     foot: 0.98,
     limbs: [
-      [0.7, 0.62, 0.8, 0.3, 0.1, "wave"],
-      [0.4, 0.68, 0.36, 0.64, 0.06, "sway"],
+      [0.75, 0.58, 0.84, 0.44, 0.09, "wave"],
+      [0.4, 0.66, 0.36, 0.6, 0.06, "sway"],
     ],
-    tail: [0.3, 0.62, 0.08, 0.66, 0.1],
+    tail: [0.28, 0.62, 0.05, 0.68, 0.1],
+    props: [[0.865, 0.3, 0.14, 0, 0.13]],
+    hop: true,
   },
   "/mascot/deer-heart": {
-    n: [0.5, 0.56],
+    n: [0.5, 0.54],
     band: 0.04,
     foot: 0.98,
-    limbs: [[0.6, 0.7, 0.82, 0.64, 0.15, "hold"]],
-    tail: [0.3, 0.62, 0.05, 0.66, 0.1],
+    limbs: [[0.58, 0.7, 0.85, 0.66, 0.16, "hold"]],
+    tail: [0.25, 0.62, 0.03, 0.66, 0.1],
+    props: [[0.68, 0.68, 0.17, 0, 0.15]],
   },
   "/mascot/deer-think": {
-    n: [0.55, 0.64],
-    band: 0.04,
-    foot: 0.98,
-    limbs: [[0.72, 0.76, 0.67, 0.63, 0.06, "sway"]],
-    tail: [0.32, 0.72, 0.12, 0.76, 0.1],
-  },
-  "/mascot/deer-read": {
     n: [0.55, 0.6],
     band: 0.04,
     foot: 0.98,
-    limbs: [[0.45, 0.76, 0.8, 0.7, 0.12, "hold"]],
+    limbs: [[0.72, 0.7, 0.68, 0.56, 0.06, "sway"]],
+    tail: [0.32, 0.7, 0.12, 0.76, 0.1],
+  },
+  "/mascot/deer-read": {
+    n: [0.55, 0.58],
+    band: 0.04,
+    foot: 0.98,
+    limbs: [[0.42, 0.74, 0.85, 0.68, 0.12, "hold"]],
     tail: [0.25, 0.65, 0.1, 0.68, 0.08],
   },
   "/mascot/deer-laptop": {
-    n: [0.52, 0.63],
+    n: [0.55, 0.6],
     band: 0.04,
     foot: 0.98,
-    limbs: [[0.44, 0.74, 0.5, 0.8, 0.06, "tap"]],
-    tail: [0.3, 0.66, 0.15, 0.7, 0.08],
+    limbs: [[0.42, 0.7, 0.48, 0.76, 0.06, "tap"]],
+    tail: [0.3, 0.64, 0.15, 0.68, 0.08],
   },
   "/mascot/deer-sad": {
-    n: [0.52, 0.64],
+    n: [0.5, 0.67],
     band: 0.04,
     foot: 0.98,
-    tail: [0.3, 0.7, 0.06, 0.72, 0.1],
+    tail: [0.28, 0.75, 0.05, 0.78, 0.1],
     tears: [
-      [0.43, 0.645],
-      [0.86, 0.555],
+      [0.42, 0.59],
+      [0.86, 0.51],
     ],
   },
   "/mascot/deer-sleep": {
-    n: [0.42, 0.86],
+    n: [0.45, 0.88],
     band: 0.05,
-    c: [0.42, 0.62],
-    R: 0.3,
+    c: [0.45, 0.62],
+    R: 0.26,
     foot: 0.98,
   },
-};
-
-// Wink poses: the base art is the open-eyed copy (scripts/willo-open-eyes.py); it
-// winks into the drawn wink. Celebratory poses hop; the idea bulb lights up.
-const WINKS: Record<string, [number, number, number, number]> = {
-  "/mascot/deer-wink": [0.371, 0.452, 0.066, 0.067],
-  "/mascot/formats/sticker-wink": [0.385, 0.487, 0.061, 0.074],
-  "/mascot/formats/avatar-wink": [0.454, 0.786, 0.067, 0.061],
-  "/mascot/formats/behind-wink": [0.439, 0.606, 0.089, 0.099],
-  "/mascot/formats/icon-wink": [0.45, 0.697, 0.071, 0.083],
-};
-for (const [k, w] of Object.entries(WINKS))
-  RIGS[k + "-open"] = { ...RIGS[k], wink: w };
-for (const k of [
-  "/mascot/deer-cheer",
-  "/mascot/deer-jump",
-  "/mascot/deer-trophy",
-  "/mascot/formats/sticker-cheer",
-])
-  RIGS[k] = { ...RIGS[k], hop: true };
-RIGS["/mascot/deer-trophy"] = {
-  ...RIGS["/mascot/deer-trophy"],
-  props: [[0.835, 0.285, 0.18, 0, 0.14]],
-};
-RIGS["/mascot/deer-heart"] = {
-  ...RIGS["/mascot/deer-heart"],
-  props: [[0.72, 0.66, 0.17, 0]],
-};
-RIGS["/mascot/deer-idea"] = {
-  ...RIGS["/mascot/deer-idea"],
-  bulb: [0.83, 0.165, 0.08],
 };
 
 /** The open-eyed base for a wink image (wink poses animate from open eyes). */
 export function openSrc(src: string): string {
-  return src.replace(/-wink(-sm|-hd)?\.(png|webp)/g, "-wink-open$1.$2");
+  // the app icon is a single drawn image (no open-eyed copy)
+  return src.replace(
+    /(deer|sticker|avatar|behind)-wink(-sm|-hd)?\.(png|webp)/g,
+    "$1-wink-open$2.$3",
+  );
 }
 
 /** The rig key for an image URL or path. */

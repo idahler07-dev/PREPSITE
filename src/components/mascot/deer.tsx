@@ -10,18 +10,18 @@ import { LiveWillo, type WilloMood } from "./live-willo";
  * Never inside a timed test.
  */
 export const DEER_POSES = {
-  stand: [615, 720],
+  stand: [617, 720],
   wink: [604, 720],
-  cheer: [618, 720],
-  jump: [629, 720],
-  trophy: [720, 713],
-  heart: [623, 720],
-  idea: [659, 720],
-  think: [720, 706],
-  read: [720, 713],
-  laptop: [720, 668],
-  sleep: [720, 546],
-  sad: [598, 720],
+  cheer: [620, 720],
+  jump: [630, 720],
+  trophy: [726, 720],
+  heart: [624, 720],
+  idea: [660, 720],
+  think: [734, 720],
+  read: [728, 720],
+  laptop: [774, 720],
+  sleep: [945, 720],
+  sad: [599, 720],
 } as const;
 
 export type DeerPose = keyof typeof DEER_POSES;
