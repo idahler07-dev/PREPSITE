@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-no-literals, @next/next/no-img-element -- generated from the approved design file (scripts/port-reference-landing.py); copy and values are kept exactly as designed */
 import { Fragment, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { ScrollScene } from "./scroll-scene";
 import { LiveWillo } from "@/components/mascot/live-willo";
 
 const CSS =
@@ -170,7 +171,7 @@ export function ReferenceLanding({
           fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
           color: "#0B0B0C",
           WebkitFontSmoothing: "antialiased",
-          overflowX: "hidden",
+          overflowX: "clip",
         }}
       >
         {/* shared illustration parts */}
@@ -2444,557 +2445,568 @@ export function ReferenceLanding({
           </div>
         </header>
         {/* ============ HERO ============ */}
-        <section
-          style={{
-            position: "relative",
-            padding: "64px 32px 80px",
-            textAlign: "center",
-          }}
-        >
-          <div
-            className="dots"
-            aria-hidden="true"
-            style={{ position: "absolute", inset: "0", pointerEvents: "none" }}
-          ></div>
-          {/* floating product chips */}
-          <div
-            aria-hidden="true"
+        <ScrollScene name="hero" length={90} mobileLength={50}>
+          <section
             style={{
-              position: "absolute",
-              inset: "0",
-              maxWidth: "1240px",
-              margin: "0 auto",
-              pointerEvents: "none",
+              position: "relative",
+              padding: "64px 32px 80px",
+              textAlign: "center",
             }}
           >
             <div
-              className="floaty bob"
+              className="dots"
+              aria-hidden="true"
               style={{
                 position: "absolute",
-                left: "40px",
-                top: "150px",
-                width: "210px",
-                background: "#0C3A43",
-                color: "#FFFFFF",
-                borderRadius: "18px",
-                padding: "16px 18px",
-                textAlign: "left",
-                transform: "rotate(-5deg)",
-                boxShadow: "0 24px 48px -20px rgba(12,58,67,0.55)",
+                inset: "0",
+                pointerEvents: "none",
+              }}
+            ></div>
+            {/* floating product chips */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: "0",
+                maxWidth: "1240px",
+                margin: "0 auto",
+                pointerEvents: "none",
               }}
             >
               <div
+                className="floaty bob"
                 style={{
-                  fontSize: "11px",
-                  fontWeight: "800",
-                  letterSpacing: "0.08em",
-                  color: "#A7C9CE",
-                }}
-              >
-                PREDICTED SCORE
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: "8px",
-                  marginTop: "4px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "36px",
-                    fontWeight: "900",
-                    letterSpacing: "-0.06em",
-                  }}
-                >
-                  1430
-                </span>
-                <span
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: "800",
-                    color: "#F2C14E",
-                  }}
-                >
-                  +60
-                </span>
-              </div>
-              <div
-                style={{
-                  marginTop: "10px",
-                  height: "6px",
-                  borderRadius: "9px",
-                  background: "rgba(255,255,255,0.15)",
+                  position: "absolute",
+                  left: "40px",
+                  top: "150px",
+                  width: "210px",
+                  background: "#0C3A43",
+                  color: "#FFFFFF",
+                  borderRadius: "18px",
+                  padding: "16px 18px",
+                  textAlign: "left",
+                  transform: "rotate(-5deg)",
+                  boxShadow: "0 24px 48px -20px rgba(12,58,67,0.55)",
                 }}
               >
                 <div
                   style={{
-                    width: "74%",
-                    height: "100%",
-                    borderRadius: "9px",
-                    background: "#FF6A1A",
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    letterSpacing: "0.08em",
+                    color: "#A7C9CE",
                   }}
-                ></div>
-              </div>
-            </div>
-            <div
-              className="floaty bob2"
-              style={{
-                position: "absolute",
-                left: "90px",
-                top: "340px",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                background: "#FFFFFF",
-                border: "1px solid #ECE9E3",
-                borderRadius: "999px",
-                padding: "8px 16px 8px 8px",
-                transform: "rotate(3deg)",
-                boxShadow: "0 16px 36px -18px rgba(58,36,20,0.30)",
-              }}
-            >
-              <span
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
-                  background: "#FFF1E8",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF6A1A">
-                  <path d="M12 2c1 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-7 0 2 1 3 2 3 0-3-1-5 1-7z"></path>
-                </svg>
-              </span>
-              <span style={{ fontSize: "13px", fontWeight: "800" }}>
-                12-day streak
-              </span>
-            </div>
-            <div
-              className="floaty bob2"
-              style={{
-                position: "absolute",
-                right: "30px",
-                top: "140px",
-                width: "250px",
-                display: "flex",
-                gap: "10px",
-                alignItems: "flex-start",
-                background: "#FFFFFF",
-                border: "1px solid #ECE9E3",
-                borderRadius: "18px",
-                padding: "14px",
-                textAlign: "left",
-                transform: "rotate(4deg)",
-                boxShadow: "0 24px 48px -22px rgba(58,36,20,0.35)",
-              }}
-            >
-              <span
-                style={{
-                  flex: "none",
-                  width: "42px",
-                  height: "42px",
-                  position: "relative",
-                  display: "inline-block",
-                }}
-              >
-                <LiveWillo
-                  src="/mascot/formats/avatar-wink.png"
-                  alt=""
-                  mood="idle"
+                >
+                  PREDICTED SCORE
+                </div>
+                <div
                   style={{
-                    position: "absolute",
-                    left: "0",
-                    bottom: "0",
-                    width: "42px",
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "8px",
+                    marginTop: "4px",
                   }}
-                />
-              </span>
-              <span
+                >
+                  <span
+                    style={{
+                      fontSize: "36px",
+                      fontWeight: "900",
+                      letterSpacing: "-0.06em",
+                    }}
+                  >
+                    1430
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: "800",
+                      color: "#F2C14E",
+                    }}
+                  >
+                    +60
+                  </span>
+                </div>
+                <div
+                  style={{
+                    marginTop: "10px",
+                    height: "6px",
+                    borderRadius: "9px",
+                    background: "rgba(255,255,255,0.15)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "74%",
+                      height: "100%",
+                      borderRadius: "9px",
+                      background: "#FF6A1A",
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div
+                className="floaty bob2"
                 style={{
-                  fontSize: "13px",
-                  lineHeight: "1.45",
-                  fontWeight: "600",
-                  color: "#2A2A2A",
-                }}
-              >
-                <b style={{ fontWeight: "900" }}>Willo:</b> You picked
-                “Therefore”, but the two facts clash. Try a contrast word.
-              </span>
-            </div>
-            <div
-              className="floaty bob"
-              style={{
-                position: "absolute",
-                right: "70px",
-                top: "330px",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                background: "#FFFFFF",
-                border: "1px solid #ECE9E3",
-                borderRadius: "14px",
-                padding: "10px 14px",
-                transform: "rotate(-3deg)",
-                boxShadow: "0 16px 36px -18px rgba(58,36,20,0.30)",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: "800",
-                  letterSpacing: "0.06em",
-                  color: "#FFFFFF",
-                  background: "#0F6B78",
-                  borderRadius: "6px",
-                  padding: "4px 8px",
-                }}
-              >
-                MODULE 2
-              </span>
-              <span style={{ fontSize: "13px", fontWeight: "800" }}>
-                Hard path unlocked
-              </span>
-            </div>
-          </div>
-          <div style={{ position: "relative" }}>
-            <Link
-              href="/login"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                height: "36px",
-                padding: "0 14px 0 6px",
-                border: "1px solid #ECE9E3",
-                borderRadius: "999px",
-                fontSize: "13px",
-                fontWeight: "600",
-                color: "#3A3A3C",
-                background: "#FFFFFF",
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
+                  position: "absolute",
+                  left: "90px",
+                  top: "340px",
+                  display: "flex",
                   alignItems: "center",
-                  gap: "6px",
-                  background: "#0C3A43",
-                  color: "#FFFFFF",
-                  fontSize: "11px",
-                  fontWeight: "800",
-                  letterSpacing: "0.06em",
-                  padding: "5px 10px",
+                  gap: "10px",
+                  background: "#FFFFFF",
+                  border: "1px solid #ECE9E3",
                   borderRadius: "999px",
+                  padding: "8px 16px 8px 8px",
+                  transform: "rotate(3deg)",
+                  boxShadow: "0 16px 36px -18px rgba(58,36,20,0.30)",
                 }}
               >
                 <span
                   style={{
-                    width: "6px",
-                    height: "6px",
+                    width: "30px",
+                    height: "30px",
                     borderRadius: "50%",
-                    background: "#F2C14E",
+                    background: "#FFF1E8",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                ></span>
-                {nextLabel}
-              </span>
-              <span>
-                <b style={{ fontWeight: "800", color: "#0B0B0C" }}>
-                  {daysLeft} days left.
-                </b>{" "}
-                Register by {regBy}.
-              </span>
-              <span aria-hidden="true" style={{ color: "#8A8A86" }}>
-                →
-              </span>
-            </Link>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "4px",
-                marginTop: "36px",
-              }}
-            >
-              <svg
-                width="104"
-                height="218"
-                viewBox="0 0 110 230"
-                aria-hidden="true"
-              >
-                <use href="#laurel"></use>
-              </svg>
-              <div
-                style={{
-                  fontSize: "168px",
-                  lineHeight: "0.9",
-                  fontWeight: "900",
-                  letterSpacing: "-0.075em",
-                  color: "#0B0B0C",
-                  padding: "0 12px 0 0",
-                }}
-              >
-                1600
-              </div>
-              <svg
-                width="104"
-                height="218"
-                viewBox="0 0 110 230"
-                aria-hidden="true"
-                style={{ transform: "scaleX(-1)" }}
-              >
-                <use href="#laurel"></use>
-              </svg>
-            </div>
-            <h1
-              aria-label="Hit your target SAT score on your first try"
-              style={{
-                margin: "28px auto 0",
-                maxWidth: "960px",
-                fontSize: "58px",
-                lineHeight: "1.04",
-                fontWeight: "900",
-                letterSpacing: "-0.05em",
-                color: "#0B0B0C",
-              }}
-            >
-              <span aria-hidden="true" style={{ display: "block" }}>
-                Hit your target SAT score
-              </span>
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "relative",
-                  display: "block",
-                  height: "1.08em",
-                  overflow: "hidden",
-                  color: "#0F6B78",
-                }}
-              >
-                <span className="rot-track" style={{ display: "block" }}>
-                  <span
-                    style={{
-                      display: "block",
-                      height: "1.08em",
-                      lineHeight: "1.08em",
-                      whiteSpace: "nowrap",
-                    }}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="#FF6A1A"
                   >
-                    on your first try
-                  </span>
-                  <span
-                    style={{
-                      display: "block",
-                      height: "1.08em",
-                      lineHeight: "1.08em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    without a tutor
-                  </span>
-                  <span
-                    style={{
-                      display: "block",
-                      height: "1.08em",
-                      lineHeight: "1.08em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    from your mistakes
-                  </span>
-                  <span
-                    style={{
-                      display: "block",
-                      height: "1.08em",
-                      lineHeight: "1.08em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    one day at a time
-                  </span>
-                  <span
-                    style={{
-                      display: "block",
-                      height: "1.08em",
-                      lineHeight: "1.08em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    on your first try
-                  </span>
+                    <path d="M12 2c1 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-7 0 2 1 3 2 3 0-3-1-5 1-7z"></path>
+                  </svg>
                 </span>
-              </span>
-              <svg
-                aria-hidden="true"
-                width="300"
-                height="16"
-                viewBox="0 0 300 16"
-                style={{ display: "block", margin: "2px auto 0" }}
+                <span style={{ fontSize: "13px", fontWeight: "800" }}>
+                  12-day streak
+                </span>
+              </div>
+              <div
+                className="floaty bob2"
+                style={{
+                  position: "absolute",
+                  right: "30px",
+                  top: "140px",
+                  width: "250px",
+                  display: "flex",
+                  gap: "10px",
+                  alignItems: "flex-start",
+                  background: "#FFFFFF",
+                  border: "1px solid #ECE9E3",
+                  borderRadius: "18px",
+                  padding: "14px",
+                  textAlign: "left",
+                  transform: "rotate(4deg)",
+                  boxShadow: "0 24px 48px -22px rgba(58,36,20,0.35)",
+                }}
               >
-                <path
-                  d="M6 11 C70 3 150 2 294 8"
-                  fill="none"
-                  stroke="#F2C14E"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                ></path>
-              </svg>
-            </h1>
-            <p
-              style={{
-                margin: "22px auto 0",
-                maxWidth: "600px",
-                fontSize: "19px",
-                lineHeight: "1.5",
-                fontWeight: "500",
-                letterSpacing: "-0.01em",
-                color: "#5E5E5B",
-              }}
-            >
-              A daily plan from your mistakes, real adaptive mock tests, and
-              Willo, your AI tutor. All in one place.
-            </p>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "14px",
-                marginTop: "36px",
-                flexWrap: "wrap",
-              }}
-            >
+                <span
+                  style={{
+                    flex: "none",
+                    width: "42px",
+                    height: "42px",
+                    position: "relative",
+                    display: "inline-block",
+                  }}
+                >
+                  <LiveWillo
+                    src="/mascot/formats/avatar-wink.png"
+                    alt=""
+                    mood="idle"
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      bottom: "0",
+                      width: "42px",
+                    }}
+                  />
+                </span>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    lineHeight: "1.45",
+                    fontWeight: "600",
+                    color: "#2A2A2A",
+                  }}
+                >
+                  <b style={{ fontWeight: "900" }}>Willo:</b> You picked
+                  “Therefore”, but the two facts clash. Try a contrast word.
+                </span>
+              </div>
+              <div
+                className="floaty bob"
+                style={{
+                  position: "absolute",
+                  right: "70px",
+                  top: "330px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  background: "#FFFFFF",
+                  border: "1px solid #ECE9E3",
+                  borderRadius: "14px",
+                  padding: "10px 14px",
+                  transform: "rotate(-3deg)",
+                  boxShadow: "0 16px 36px -18px rgba(58,36,20,0.30)",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    letterSpacing: "0.06em",
+                    color: "#FFFFFF",
+                    background: "#0F6B78",
+                    borderRadius: "6px",
+                    padding: "4px 8px",
+                  }}
+                >
+                  MODULE 2
+                </span>
+                <span style={{ fontSize: "13px", fontWeight: "800" }}>
+                  Hard path unlocked
+                </span>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
               <Link
                 href="/login"
-                className="btn-o"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "10px",
-                  height: "56px",
-                  padding: "0 32px",
+                  height: "36px",
+                  padding: "0 14px 0 6px",
+                  border: "1px solid #ECE9E3",
                   borderRadius: "999px",
-                  background: "#FF6A1A",
-                  color: "#FFFFFF",
-                  fontSize: "15px",
-                  fontWeight: "800",
-                  letterSpacing: "0.04em",
-                  boxShadow:
-                    "0 12px 32px -6px rgba(255,106,26,0.55), 0 0 0 6px rgba(255,106,26,0.10)",
-                }}
-              >
-                START PREPARING <span aria-hidden="true">→</span>
-              </Link>
-              <a
-                href="#try"
-                className="btn-w"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  height: "56px",
-                  padding: "0 30px",
-                  borderRadius: "999px",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  color: "#3A3A3C",
                   background: "#FFFFFF",
-                  border: "1px solid #DCD7CD",
-                  color: "#0B0B0C",
-                  fontSize: "15px",
-                  fontWeight: "800",
-                  letterSpacing: "0.04em",
-                  boxSizing: "border-box",
                 }}
               >
-                TRY A QUESTION{" "}
-                <span aria-hidden="true" style={{ color: "#8A8A86" }}>
-                  ↓
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "#0C3A43",
+                    color: "#FFFFFF",
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    letterSpacing: "0.06em",
+                    padding: "5px 10px",
+                    borderRadius: "999px",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "6px",
+                      height: "6px",
+                      borderRadius: "50%",
+                      background: "#F2C14E",
+                    }}
+                  ></span>
+                  {nextLabel}
                 </span>
-              </a>
+                <span>
+                  <b style={{ fontWeight: "800", color: "#0B0B0C" }}>
+                    {daysLeft} days left.
+                  </b>{" "}
+                  Register by {regBy}.
+                </span>
+                <span aria-hidden="true" style={{ color: "#8A8A86" }}>
+                  →
+                </span>
+              </Link>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "4px",
+                  marginTop: "36px",
+                }}
+              >
+                <svg
+                  width="104"
+                  height="218"
+                  viewBox="0 0 110 230"
+                  aria-hidden="true"
+                >
+                  <use href="#laurel"></use>
+                </svg>
+                <div
+                  style={{
+                    fontSize: "168px",
+                    lineHeight: "0.9",
+                    fontWeight: "900",
+                    letterSpacing: "-0.075em",
+                    color: "#0B0B0C",
+                    padding: "0 12px 0 0",
+                  }}
+                >
+                  1600
+                </div>
+                <svg
+                  width="104"
+                  height="218"
+                  viewBox="0 0 110 230"
+                  aria-hidden="true"
+                  style={{ transform: "scaleX(-1)" }}
+                >
+                  <use href="#laurel"></use>
+                </svg>
+              </div>
+              <h1
+                aria-label="Hit your target SAT score on your first try"
+                style={{
+                  margin: "28px auto 0",
+                  maxWidth: "960px",
+                  fontSize: "58px",
+                  lineHeight: "1.04",
+                  fontWeight: "900",
+                  letterSpacing: "-0.05em",
+                  color: "#0B0B0C",
+                }}
+              >
+                <span aria-hidden="true" style={{ display: "block" }}>
+                  Hit your target SAT score
+                </span>
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "relative",
+                    display: "block",
+                    height: "1.08em",
+                    overflow: "hidden",
+                    color: "#0F6B78",
+                  }}
+                >
+                  <span className="rot-track" style={{ display: "block" }}>
+                    <span
+                      style={{
+                        display: "block",
+                        height: "1.08em",
+                        lineHeight: "1.08em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      on your first try
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        height: "1.08em",
+                        lineHeight: "1.08em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      without a tutor
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        height: "1.08em",
+                        lineHeight: "1.08em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      from your mistakes
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        height: "1.08em",
+                        lineHeight: "1.08em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      one day at a time
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        height: "1.08em",
+                        lineHeight: "1.08em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      on your first try
+                    </span>
+                  </span>
+                </span>
+                <svg
+                  aria-hidden="true"
+                  width="300"
+                  height="16"
+                  viewBox="0 0 300 16"
+                  style={{ display: "block", margin: "2px auto 0" }}
+                >
+                  <path
+                    d="M6 11 C70 3 150 2 294 8"
+                    fill="none"
+                    stroke="#F2C14E"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+              </h1>
+              <p
+                style={{
+                  margin: "22px auto 0",
+                  maxWidth: "600px",
+                  fontSize: "19px",
+                  lineHeight: "1.5",
+                  fontWeight: "500",
+                  letterSpacing: "-0.01em",
+                  color: "#5E5E5B",
+                }}
+              >
+                A daily plan from your mistakes, real adaptive mock tests, and
+                Willo, your AI tutor. All in one place.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "14px",
+                  marginTop: "36px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Link
+                  href="/login"
+                  className="btn-o"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    height: "56px",
+                    padding: "0 32px",
+                    borderRadius: "999px",
+                    background: "#FF6A1A",
+                    color: "#FFFFFF",
+                    fontSize: "15px",
+                    fontWeight: "800",
+                    letterSpacing: "0.04em",
+                    boxShadow:
+                      "0 12px 32px -6px rgba(255,106,26,0.55), 0 0 0 6px rgba(255,106,26,0.10)",
+                  }}
+                >
+                  START PREPARING <span aria-hidden="true">→</span>
+                </Link>
+                <a
+                  href="#try"
+                  className="btn-w"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    height: "56px",
+                    padding: "0 30px",
+                    borderRadius: "999px",
+                    background: "#FFFFFF",
+                    border: "1px solid #DCD7CD",
+                    color: "#0B0B0C",
+                    fontSize: "15px",
+                    fontWeight: "800",
+                    letterSpacing: "0.04em",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  TRY A QUESTION{" "}
+                  <span aria-hidden="true" style={{ color: "#8A8A86" }}>
+                    ↓
+                  </span>
+                </a>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "18px",
+                  flexWrap: "wrap",
+                  marginTop: "18px",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  color: "#6E6E6A",
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0F6B78"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12l5 5 9-10"></path>
+                  </svg>
+                  No card needed
+                </span>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0F6B78"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12l5 5 9-10"></path>
+                  </svg>
+                  Free plan forever
+                </span>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0F6B78"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12l5 5 9-10"></path>
+                  </svg>
+                  Premium $9.99/month
+                </span>
+              </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "18px",
-                flexWrap: "wrap",
-                marginTop: "18px",
-                fontSize: "13px",
-                fontWeight: "600",
-                color: "#6E6E6A",
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#0F6B78"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12l5 5 9-10"></path>
-                </svg>
-                No card needed
-              </span>
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#0F6B78"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12l5 5 9-10"></path>
-                </svg>
-                Free plan forever
-              </span>
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#0F6B78"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12l5 5 9-10"></path>
-                </svg>
-                Premium $9.99/month
-              </span>
-            </div>
-          </div>
-        </section>
+          </section>
+        </ScrollScene>
         {/* ============ FACTS STRIP ============ */}
         <section
           style={{
@@ -4098,1047 +4110,1049 @@ export function ReferenceLanding({
           </div>
         </section>
         {/* ============ PRODUCT TOUR ============ */}
-        <section
-          id="tour"
-          style={{ padding: "112px 32px 0", textAlign: "center" }}
-        >
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: "800",
-              letterSpacing: "0.14em",
-              color: "#A9730E",
-            }}
+        <ScrollScene name="tour" length={280} mobileLength={160}>
+          <section
+            id="tour"
+            style={{ padding: "112px 32px 0", textAlign: "center" }}
           >
-            THE PLATFORM
-          </div>
-          <h2
-            style={{
-              margin: "12px 0 0",
-              fontSize: "44px",
-              lineHeight: "1.05",
-              fontWeight: "900",
-              letterSpacing: "-0.05em",
-            }}
-          >
-            Take a look inside the platform
-          </h2>
-          <div
-            role="tablist"
-            aria-label="Platform sections"
-            style={{
-              display: "inline-flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "2px",
-              marginTop: "32px",
-              padding: "5px",
-              background: "#F3F1EC",
-              borderRadius: "999px",
-            }}
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected="true"
+            <div
               style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "#FFFFFF",
-                boxShadow:
-                  "0 1px 2px rgba(58,36,20,0.06), 0 4px 12px rgba(58,36,20,0.08)",
-                fontSize: "14px",
+                fontSize: "12px",
                 fontWeight: "800",
-                color: "#0B0B0C",
+                letterSpacing: "0.14em",
+                color: "#A9730E",
               }}
             >
-              Dashboard
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
+              THE PLATFORM
+            </div>
+            <h2
               style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
+                margin: "12px 0 0",
+                fontSize: "44px",
+                lineHeight: "1.05",
+                fontWeight: "900",
+                letterSpacing: "-0.05em",
+              }}
+            >
+              Take a look inside the platform
+            </h2>
+            <div
+              role="tablist"
+              aria-label="Platform sections"
+              style={{
+                display: "inline-flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: "2px",
+                marginTop: "32px",
+                padding: "5px",
+                background: "#F3F1EC",
                 borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
               }}
             >
-              Study plan
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
-              }}
-            >
-              Mock tests
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
-              }}
-            >
-              Willo AI
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
-              }}
-            >
-              Mistakes
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
-              }}
-            >
-              Vocabulary
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              style={{
-                fontFamily: "inherit",
-                border: "0",
-                cursor: "pointer",
-                height: "38px",
-                padding: "0 18px",
-                borderRadius: "999px",
-                background: "transparent",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "#6E6E6A",
-              }}
-            >
-              Score report
-            </button>
-          </div>
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "1120px",
-              margin: "120px auto 0",
-            }}
-          >
-            <LiveWillo
-              src="/mascot/formats/behind-wink.png"
-              alt="Willo"
-              mood="idle"
-              style={{
-                position: "absolute",
-                right: "96px",
-                top: "-128px",
-                width: "150px",
-                zIndex: "0",
-              }}
-            />
-            {/* Browser window */}
+              <button
+                type="button"
+                role="tab"
+                aria-selected="true"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "#FFFFFF",
+                  boxShadow:
+                    "0 1px 2px rgba(58,36,20,0.06), 0 4px 12px rgba(58,36,20,0.08)",
+                  fontSize: "14px",
+                  fontWeight: "800",
+                  color: "#0B0B0C",
+                }}
+              >
+                Dashboard
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Study plan
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Mock tests
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Willo AI
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Mistakes
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Vocabulary
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                style={{
+                  fontFamily: "inherit",
+                  border: "0",
+                  cursor: "pointer",
+                  height: "38px",
+                  padding: "0 18px",
+                  borderRadius: "999px",
+                  background: "transparent",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  color: "#6E6E6A",
+                }}
+              >
+                Score report
+              </button>
+            </div>
             <div
               style={{
                 position: "relative",
-                zIndex: "2",
-                margin: "0",
-                borderRadius: "18px",
-                border: "1px solid #E8E4DC",
-                background: "#FFFFFF",
-                overflow: "hidden",
-                boxShadow:
-                  "0 50px 120px -30px rgba(12,58,67,0.38), 0 18px 40px -20px rgba(12,58,67,0.20)",
-                textAlign: "left",
+                maxWidth: "1120px",
+                margin: "120px auto 0",
               }}
             >
+              <LiveWillo
+                src="/mascot/formats/behind-wink.png"
+                alt="Willo"
+                mood="idle"
+                style={{
+                  position: "absolute",
+                  right: "96px",
+                  top: "-128px",
+                  width: "150px",
+                  zIndex: "0",
+                }}
+              />
+              {/* Browser window */}
               <div
                 style={{
-                  height: "46px",
-                  background: "#F7F7F4",
-                  borderBottom: "1px solid #ECE9E3",
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0 18px",
-                  gap: "8px",
+                  position: "relative",
+                  zIndex: "2",
+                  margin: "0",
+                  borderRadius: "18px",
+                  border: "1px solid #E8E4DC",
+                  background: "#FFFFFF",
+                  overflow: "hidden",
+                  boxShadow:
+                    "0 50px 120px -30px rgba(12,58,67,0.38), 0 18px 40px -20px rgba(12,58,67,0.20)",
+                  textAlign: "left",
                 }}
               >
-                <span
-                  style={{
-                    width: "12px",
-                    height: "12px",
-                    borderRadius: "50%",
-                    background: "#FF5F57",
-                  }}
-                ></span>
-                <span
-                  style={{
-                    width: "12px",
-                    height: "12px",
-                    borderRadius: "50%",
-                    background: "#FEBC2E",
-                  }}
-                ></span>
-                <span
-                  style={{
-                    width: "12px",
-                    height: "12px",
-                    borderRadius: "50%",
-                    background: "#28C840",
-                  }}
-                ></span>
                 <div
                   style={{
-                    flex: "1",
+                    height: "46px",
+                    background: "#F7F7F4",
+                    borderBottom: "1px solid #ECE9E3",
                     display: "flex",
-                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "0 18px",
+                    gap: "8px",
                   }}
                 >
+                  <span
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: "#FF5F57",
+                    }}
+                  ></span>
+                  <span
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: "#FEBC2E",
+                    }}
+                  ></span>
+                  <span
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: "#28C840",
+                    }}
+                  ></span>
                   <div
                     style={{
-                      width: "360px",
-                      maxWidth: "100%",
-                      height: "28px",
-                      borderRadius: "8px",
-                      background: "#FFFFFF",
-                      border: "1px solid #E8E4DC",
+                      flex: "1",
                       display: "flex",
-                      alignItems: "center",
                       justifyContent: "center",
-                      gap: "6px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
                     }}
                   >
-                    <svg
-                      width="11"
-                      height="11"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#8A8A86"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      aria-hidden="true"
-                    >
-                      <rect x="5" y="11" width="14" height="10" rx="2"></rect>
-                      <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
-                    </svg>
-                    willoprep.com
-                  </div>
-                </div>
-                <span style={{ width: "52px" }}></span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  minHeight: "560px",
-                }}
-              >
-                {/* app sidebar */}
-                <div
-                  style={{
-                    flex: "0 0 210px",
-                    borderRight: "1px solid #ECE9E3",
-                    padding: "20px 14px",
-                    boxSizing: "border-box",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "2px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      padding: "0 8px 18px",
-                    }}
-                  >
-                    <svg
-                      width="22"
-                      height="22"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                      style={{ flex: "none" }}
-                    >
-                      <use href="#tile"></use>
-                    </svg>
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: "800",
-                        letterSpacing: "-0.045em",
-                        color: "#0B0B0C",
-                      }}
-                    >
-                      Willo<span style={{ color: "#0F6B78" }}>Prep</span>
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      borderRadius: "9px",
-                      background: "#FFF1E8",
-                      color: "#C2410C",
-                      fontSize: "13px",
-                      fontWeight: "800",
-                    }}
-                  >
-                    Dashboard
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Study plan
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Practice
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Mock tests
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Willo AI
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Mistakes
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Vocabulary
-                  </div>
-                  <div
-                    style={{
-                      padding: "9px 10px",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#5E5E5B",
-                    }}
-                  >
-                    Score report
-                  </div>
-                </div>
-                {/* app main */}
-                <div
-                  style={{
-                    flex: "999 1 560px",
-                    minWidth: "0",
-                    padding: "26px 28px",
-                    boxSizing: "border-box",
-                    background: "#FCFBF8",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                      gap: "16px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: "700",
-                          color: "#6E6E6A",
-                        }}
-                      >
-                        Thursday · Test day in 38 days
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "4px",
-                          fontSize: "26px",
-                          fontWeight: "900",
-                          letterSpacing: "-0.045em",
-                        }}
-                      >
-                        Good evening, Aziz
-                      </div>
-                    </div>
                     <div
                       style={{
-                        display: "inline-flex",
+                        width: "360px",
+                        maxWidth: "100%",
+                        height: "28px",
+                        borderRadius: "8px",
+                        background: "#FFFFFF",
+                        border: "1px solid #E8E4DC",
+                        display: "flex",
                         alignItems: "center",
-                        height: "34px",
-                        padding: "0 14px",
-                        borderRadius: "999px",
-                        background: "#FF6A1A",
-                        color: "#FFFFFF",
+                        justifyContent: "center",
+                        gap: "6px",
                         fontSize: "12px",
-                        fontWeight: "800",
-                        letterSpacing: "0.04em",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
                       }}
                     >
-                      CONTINUE TODAY&apos;S PLAN →
+                      <svg
+                        width="11"
+                        height="11"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#8A8A86"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                      </svg>
+                      willoprep.com
                     </div>
                   </div>
+                  <span style={{ width: "52px" }}></span>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    minHeight: "560px",
+                  }}
+                >
+                  {/* app sidebar */}
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                      gap: "14px",
-                      marginTop: "22px",
+                      flex: "0 0 210px",
+                      borderRight: "1px solid #ECE9E3",
+                      padding: "20px 14px",
+                      boxSizing: "border-box",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
                     }}
                   >
-                    {/* predicted score */}
                     <div
                       style={{
-                        gridColumn: "span 2",
-                        background: "#0C3A43",
-                        color: "#FFFFFF",
-                        borderRadius: "16px",
-                        padding: "20px 22px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        padding: "0 8px 18px",
                       }}
                     >
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                        style={{ flex: "none" }}
+                      >
+                        <use href="#tile"></use>
+                      </svg>
+                      <span
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "800",
+                          letterSpacing: "-0.045em",
+                          color: "#0B0B0C",
+                        }}
+                      >
+                        Willo<span style={{ color: "#0F6B78" }}>Prep</span>
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        borderRadius: "9px",
+                        background: "#FFF1E8",
+                        color: "#C2410C",
+                        fontSize: "13px",
+                        fontWeight: "800",
+                      }}
+                    >
+                      Dashboard
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Study plan
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Practice
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Mock tests
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Willo AI
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Mistakes
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Vocabulary
+                    </div>
+                    <div
+                      style={{
+                        padding: "9px 10px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#5E5E5B",
+                      }}
+                    >
+                      Score report
+                    </div>
+                  </div>
+                  {/* app main */}
+                  <div
+                    style={{
+                      flex: "999 1 560px",
+                      minWidth: "0",
+                      padding: "26px 28px",
+                      boxSizing: "border-box",
+                      background: "#FCFBF8",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                        gap: "16px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "700",
+                            color: "#6E6E6A",
+                          }}
+                        >
+                          Thursday · Test day in 38 days
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "4px",
+                            fontSize: "26px",
+                            fontWeight: "900",
+                            letterSpacing: "-0.045em",
+                          }}
+                        >
+                          Good evening, Aziz
+                        </div>
+                      </div>
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "flex-start",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          height: "34px",
+                          padding: "0 14px",
+                          borderRadius: "999px",
+                          background: "#FF6A1A",
+                          color: "#FFFFFF",
+                          fontSize: "12px",
+                          fontWeight: "800",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        CONTINUE TODAY&apos;S PLAN →
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                        gap: "14px",
+                        marginTop: "22px",
+                      }}
+                    >
+                      {/* predicted score */}
+                      <div
+                        style={{
+                          gridColumn: "span 2",
+                          background: "#0C3A43",
+                          color: "#FFFFFF",
+                          borderRadius: "16px",
+                          padding: "20px 22px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: "700",
+                              color: "#A7C9CE",
+                              letterSpacing: "0.06em",
+                            }}
+                          >
+                            PREDICTED SCORE
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: "700",
+                              color: "#F2C14E",
+                            }}
+                          >
+                            Target 1550
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "baseline",
+                            gap: "10px",
+                            marginTop: "6px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "54px",
+                              fontWeight: "900",
+                              letterSpacing: "-0.06em",
+                              lineHeight: "1",
+                            }}
+                          >
+                            1430
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: "800",
+                              color: "#F2C14E",
+                            }}
+                          >
+                            +60 since last mock
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "18px",
+                            height: "8px",
+                            borderRadius: "999px",
+                            background: "rgba(255,255,255,0.14)",
+                            position: "relative",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "74%",
+                              height: "100%",
+                              borderRadius: "999px",
+                              background: "#FF6A1A",
+                            }}
+                          ></div>
+                          <div
+                            style={{
+                              position: "absolute",
+                              left: "86%",
+                              top: "-4px",
+                              width: "3px",
+                              height: "16px",
+                              borderRadius: "2px",
+                              background: "#F2C14E",
+                            }}
+                          ></div>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginTop: "8px",
+                            fontSize: "11px",
+                            fontWeight: "600",
+                            color: "#A7C9CE",
+                          }}
+                        >
+                          <span>400</span>
+                          <span>Reading & Writing 700 · Math 730</span>
+                          <span>1600</span>
+                        </div>
+                      </div>
+                      {/* streak */}
+                      <div
+                        style={{
+                          background: "#FFFFFF",
+                          border: "1px solid #ECE9E3",
+                          borderRadius: "16px",
+                          padding: "20px 22px",
                         }}
                       >
                         <div
                           style={{
                             fontSize: "12px",
                             fontWeight: "700",
-                            color: "#A7C9CE",
+                            color: "#6E6E6A",
                             letterSpacing: "0.06em",
                           }}
                         >
-                          PREDICTED SCORE
+                          STREAK
                         </div>
                         <div
                           style={{
-                            fontSize: "12px",
-                            fontWeight: "700",
-                            color: "#F2C14E",
-                          }}
-                        >
-                          Target 1550
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "baseline",
-                          gap: "10px",
-                          marginTop: "6px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: "54px",
+                            marginTop: "6px",
+                            fontSize: "40px",
                             fontWeight: "900",
-                            letterSpacing: "-0.06em",
-                            lineHeight: "1",
+                            letterSpacing: "-0.05em",
                           }}
                         >
-                          1430
+                          12 days
                         </div>
                         <div
                           style={{
-                            fontSize: "13px",
-                            fontWeight: "800",
-                            color: "#F2C14E",
-                          }}
-                        >
-                          +60 since last mock
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "18px",
-                          height: "8px",
-                          borderRadius: "999px",
-                          background: "rgba(255,255,255,0.14)",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "74%",
-                            height: "100%",
-                            borderRadius: "999px",
-                            background: "#FF6A1A",
-                          }}
-                        ></div>
-                        <div
-                          style={{
-                            position: "absolute",
-                            left: "86%",
-                            top: "-4px",
-                            width: "3px",
-                            height: "16px",
-                            borderRadius: "2px",
-                            background: "#F2C14E",
-                          }}
-                        ></div>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          marginTop: "8px",
-                          fontSize: "11px",
-                          fontWeight: "600",
-                          color: "#A7C9CE",
-                        }}
-                      >
-                        <span>400</span>
-                        <span>Reading & Writing 700 · Math 730</span>
-                        <span>1600</span>
-                      </div>
-                    </div>
-                    {/* streak */}
-                    <div
-                      style={{
-                        background: "#FFFFFF",
-                        border: "1px solid #ECE9E3",
-                        borderRadius: "16px",
-                        padding: "20px 22px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: "700",
-                          color: "#6E6E6A",
-                          letterSpacing: "0.06em",
-                        }}
-                      >
-                        STREAK
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "6px",
-                          fontSize: "40px",
-                          fontWeight: "900",
-                          letterSpacing: "-0.05em",
-                        }}
-                      >
-                        12 days
-                      </div>
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
-                          gap: "5px",
-                          marginTop: "14px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FF6A1A",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FF6A1A",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FF6A1A",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FF6A1A",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FF6A1A",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#FFD3B8",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            height: "22px",
-                            borderRadius: "6px",
-                            background: "#F3F1EC",
-                          }}
-                        ></span>
-                      </div>
-                    </div>
-                    {/* today's plan */}
-                    <div
-                      style={{
-                        background: "#FFFFFF",
-                        border: "1px solid #ECE9E3",
-                        borderRadius: "16px",
-                        padding: "20px 22px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "15px",
-                          fontWeight: "900",
-                          letterSpacing: "-0.03em",
-                        }}
-                      >
-                        Today&apos;s plan
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "12px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            fontSize: "13px",
-                            fontWeight: "600",
-                            color: "#8A8A86",
-                            textDecoration: "line-through",
+                            display: "grid",
+                            gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+                            gap: "5px",
+                            marginTop: "14px",
                           }}
                         >
                           <span
                             style={{
-                              width: "18px",
-                              height: "18px",
-                              borderRadius: "50%",
-                              background: "#0F6B78",
-                              flex: "none",
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FF6A1A",
                             }}
                           ></span>
-                          Linear equations · 10 Qs
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            fontSize: "13px",
-                            fontWeight: "600",
-                            color: "#8A8A86",
-                            textDecoration: "line-through",
-                          }}
-                        >
                           <span
                             style={{
-                              width: "18px",
-                              height: "18px",
-                              borderRadius: "50%",
-                              background: "#0F6B78",
-                              flex: "none",
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FF6A1A",
                             }}
                           ></span>
-                          Review 6 mistakes
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            fontSize: "13px",
-                            fontWeight: "700",
-                          }}
-                        >
                           <span
                             style={{
-                              width: "18px",
-                              height: "18px",
-                              borderRadius: "50%",
-                              border: "2px solid #FF6A1A",
-                              boxSizing: "border-box",
-                              flex: "none",
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FF6A1A",
                             }}
                           ></span>
-                          Transitions · 8 Qs
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            fontSize: "13px",
-                            fontWeight: "700",
-                          }}
-                        >
                           <span
                             style={{
-                              width: "18px",
-                              height: "18px",
-                              borderRadius: "50%",
-                              border: "2px solid #DCD7CD",
-                              boxSizing: "border-box",
-                              flex: "none",
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FF6A1A",
                             }}
                           ></span>
-                          15 vocab cards
+                          <span
+                            style={{
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FF6A1A",
+                            }}
+                          ></span>
+                          <span
+                            style={{
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#FFD3B8",
+                            }}
+                          ></span>
+                          <span
+                            style={{
+                              height: "22px",
+                              borderRadius: "6px",
+                              background: "#F3F1EC",
+                            }}
+                          ></span>
                         </div>
                       </div>
-                    </div>
-                    {/* skills */}
-                    <div
-                      style={{
-                        background: "#FFFFFF",
-                        border: "1px solid #ECE9E3",
-                        borderRadius: "16px",
-                        padding: "20px 22px",
-                      }}
-                    >
+                      {/* today's plan */}
                       <div
                         style={{
-                          fontSize: "15px",
-                          fontWeight: "900",
-                          letterSpacing: "-0.03em",
+                          background: "#FFFFFF",
+                          border: "1px solid #ECE9E3",
+                          borderRadius: "16px",
+                          padding: "20px 22px",
                         }}
                       >
-                        Skill areas
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "14px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "11px",
-                        }}
-                      >
-                        <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              fontSize: "12px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            <span>Algebra</span>
-                            <span style={{ color: "#6E6E6A" }}>88%</span>
-                          </div>
-                          <div
-                            style={{
-                              marginTop: "5px",
-                              height: "6px",
-                              borderRadius: "9px",
-                              background: "#F3F1EC",
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: "88%",
-                                height: "100%",
-                                borderRadius: "9px",
-                                background: "#0F6B78",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              fontSize: "12px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            <span>Craft & Structure</span>
-                            <span style={{ color: "#6E6E6A" }}>71%</span>
-                          </div>
-                          <div
-                            style={{
-                              marginTop: "5px",
-                              height: "6px",
-                              borderRadius: "9px",
-                              background: "#F3F1EC",
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: "71%",
-                                height: "100%",
-                                borderRadius: "9px",
-                                background: "#0F6B78",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              fontSize: "12px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            <span>Geometry</span>
-                            <span style={{ color: "#6E6E6A" }}>64%</span>
-                          </div>
-                          <div
-                            style={{
-                              marginTop: "5px",
-                              height: "6px",
-                              borderRadius: "9px",
-                              background: "#F3F1EC",
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: "64%",
-                                height: "100%",
-                                borderRadius: "9px",
-                                background: "#E2AA2E",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              fontSize: "12px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            <span>Standard English</span>
-                            <span style={{ color: "#6E6E6A" }}>52%</span>
-                          </div>
-                          <div
-                            style={{
-                              marginTop: "5px",
-                              height: "6px",
-                              borderRadius: "9px",
-                              background: "#F3F1EC",
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: "52%",
-                                height: "100%",
-                                borderRadius: "9px",
-                                background: "#FF6A1A",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* willo */}
-                    <div
-                      style={{
-                        background: "#FFF1E8",
-                        borderRadius: "16px",
-                        padding: "20px 22px",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            flex: "none",
-                            width: "36px",
-                            height: "36px",
-                            position: "relative",
-                            display: "inline-block",
-                          }}
-                        >
-                          <LiveWillo
-                            src="/mascot/formats/avatar-wink.png"
-                            alt=""
-                            mood="idle"
-                            style={{
-                              position: "absolute",
-                              left: "0",
-                              bottom: "0",
-                              width: "36px",
-                            }}
-                          />
-                        </span>
-                        <span
+                        <div
                           style={{
                             fontSize: "15px",
                             fontWeight: "900",
                             letterSpacing: "-0.03em",
                           }}
                         >
-                          Willo
-                        </span>
+                          Today&apos;s plan
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "12px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              fontSize: "13px",
+                              fontWeight: "600",
+                              color: "#8A8A86",
+                              textDecoration: "line-through",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                borderRadius: "50%",
+                                background: "#0F6B78",
+                                flex: "none",
+                              }}
+                            ></span>
+                            Linear equations · 10 Qs
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              fontSize: "13px",
+                              fontWeight: "600",
+                              color: "#8A8A86",
+                              textDecoration: "line-through",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                borderRadius: "50%",
+                                background: "#0F6B78",
+                                flex: "none",
+                              }}
+                            ></span>
+                            Review 6 mistakes
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              fontSize: "13px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                borderRadius: "50%",
+                                border: "2px solid #FF6A1A",
+                                boxSizing: "border-box",
+                                flex: "none",
+                              }}
+                            ></span>
+                            Transitions · 8 Qs
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              fontSize: "13px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                borderRadius: "50%",
+                                border: "2px solid #DCD7CD",
+                                boxSizing: "border-box",
+                                flex: "none",
+                              }}
+                            ></span>
+                            15 vocab cards
+                          </div>
+                        </div>
                       </div>
+                      {/* skills */}
                       <div
                         style={{
                           background: "#FFFFFF",
-                          borderRadius: "12px 12px 12px 4px",
-                          padding: "11px 13px",
-                          fontSize: "13px",
-                          lineHeight: "1.45",
-                          fontWeight: "500",
-                          color: "#2A2A2A",
+                          border: "1px solid #ECE9E3",
+                          borderRadius: "16px",
+                          padding: "20px 22px",
                         }}
                       >
-                        You keep picking “however” where the sentences agree.
-                        Want a 5-minute drill on contrast words?
+                        <div
+                          style={{
+                            fontSize: "15px",
+                            fontWeight: "900",
+                            letterSpacing: "-0.03em",
+                          }}
+                        >
+                          Skill areas
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "14px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "11px",
+                          }}
+                        >
+                          <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "12px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <span>Algebra</span>
+                              <span style={{ color: "#6E6E6A" }}>88%</span>
+                            </div>
+                            <div
+                              style={{
+                                marginTop: "5px",
+                                height: "6px",
+                                borderRadius: "9px",
+                                background: "#F3F1EC",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "88%",
+                                  height: "100%",
+                                  borderRadius: "9px",
+                                  background: "#0F6B78",
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                          <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "12px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <span>Craft & Structure</span>
+                              <span style={{ color: "#6E6E6A" }}>71%</span>
+                            </div>
+                            <div
+                              style={{
+                                marginTop: "5px",
+                                height: "6px",
+                                borderRadius: "9px",
+                                background: "#F3F1EC",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "71%",
+                                  height: "100%",
+                                  borderRadius: "9px",
+                                  background: "#0F6B78",
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                          <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "12px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <span>Geometry</span>
+                              <span style={{ color: "#6E6E6A" }}>64%</span>
+                            </div>
+                            <div
+                              style={{
+                                marginTop: "5px",
+                                height: "6px",
+                                borderRadius: "9px",
+                                background: "#F3F1EC",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "64%",
+                                  height: "100%",
+                                  borderRadius: "9px",
+                                  background: "#E2AA2E",
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                          <div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "12px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <span>Standard English</span>
+                              <span style={{ color: "#6E6E6A" }}>52%</span>
+                            </div>
+                            <div
+                              style={{
+                                marginTop: "5px",
+                                height: "6px",
+                                borderRadius: "9px",
+                                background: "#F3F1EC",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "52%",
+                                  height: "100%",
+                                  borderRadius: "9px",
+                                  background: "#FF6A1A",
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      {/* willo */}
                       <div
                         style={{
-                          alignSelf: "flex-start",
-                          fontSize: "12px",
-                          fontWeight: "800",
-                          color: "#C2410C",
+                          background: "#FFF1E8",
+                          borderRadius: "16px",
+                          padding: "20px 22px",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
                         }}
                       >
-                        Start drill →
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              flex: "none",
+                              width: "36px",
+                              height: "36px",
+                              position: "relative",
+                              display: "inline-block",
+                            }}
+                          >
+                            <LiveWillo
+                              src="/mascot/formats/avatar-wink.png"
+                              alt=""
+                              mood="idle"
+                              style={{
+                                position: "absolute",
+                                left: "0",
+                                bottom: "0",
+                                width: "36px",
+                              }}
+                            />
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "900",
+                              letterSpacing: "-0.03em",
+                            }}
+                          >
+                            Willo
+                          </span>
+                        </div>
+                        <div
+                          style={{
+                            background: "#FFFFFF",
+                            borderRadius: "12px 12px 12px 4px",
+                            padding: "11px 13px",
+                            fontSize: "13px",
+                            lineHeight: "1.45",
+                            fontWeight: "500",
+                            color: "#2A2A2A",
+                          }}
+                        >
+                          You keep picking “however” where the sentences agree.
+                          Want a 5-minute drill on contrast words?
+                        </div>
+                        <div
+                          style={{
+                            alignSelf: "flex-start",
+                            fontSize: "12px",
+                            fontWeight: "800",
+                            color: "#C2410C",
+                          }}
+                        >
+                          Start drill →
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <Link
-            href="/login"
-            className="btn-o"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              height: "56px",
-              marginTop: "48px",
-              padding: "0 32px",
-              borderRadius: "999px",
-              background: "#FF6A1A",
-              color: "#FFFFFF",
-              fontSize: "15px",
-              fontWeight: "800",
-              letterSpacing: "0.04em",
-              boxShadow: "0 12px 32px -6px rgba(255,106,26,0.5)",
-            }}
-          >
-            START PREPARING <span aria-hidden="true">→</span>
-          </Link>
-        </section>
+            <Link
+              href="/login"
+              className="btn-o"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                height: "56px",
+                marginTop: "48px",
+                padding: "0 32px",
+                borderRadius: "999px",
+                background: "#FF6A1A",
+                color: "#FFFFFF",
+                fontSize: "15px",
+                fontWeight: "800",
+                letterSpacing: "0.04em",
+                boxShadow: "0 12px 32px -6px rgba(255,106,26,0.5)",
+              }}
+            >
+              START PREPARING <span aria-hidden="true">→</span>
+            </Link>
+          </section>
+        </ScrollScene>
         {/* ============ TRY A QUESTION (warm band) ============ */}
         <section
           id="try"
@@ -5488,310 +5502,315 @@ export function ReferenceLanding({
           </div>
         </section>
         {/* ============ HOW IT WORKS ============ */}
-        <section
-          style={{
-            maxWidth: "1176px",
-            margin: "0 auto",
-            padding: "128px 32px 0",
-            boxSizing: "content-box",
-          }}
-        >
-          <div
+        <ScrollScene name="steps" length={150} mobileLength={90}>
+          <section
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              gap: "24px",
-              flexWrap: "wrap",
+              maxWidth: "1176px",
+              margin: "0 auto",
+              padding: "128px 32px 0",
+              boxSizing: "content-box",
             }}
           >
-            <div>
-              <div
-                style={{
-                  fontSize: "12px",
-                  fontWeight: "800",
-                  letterSpacing: "0.14em",
-                  color: "#A9730E",
-                }}
-              >
-                THREE STEPS
-              </div>
-              <h2
-                style={{
-                  margin: "12px 0 0",
-                  fontSize: "44px",
-                  lineHeight: "1.05",
-                  fontWeight: "900",
-                  letterSpacing: "-0.05em",
-                }}
-              >
-                How it works
-              </h2>
-            </div>
-            <p
-              style={{
-                margin: "0",
-                maxWidth: "380px",
-                fontSize: "16px",
-                lineHeight: "1.55",
-                fontWeight: "500",
-                color: "#5E5E5B",
-              }}
-            >
-              No 400-page book. You do a little every day, and the plan rewrites
-              itself around what you get wrong.
-            </p>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "20px",
-              marginTop: "44px",
-            }}
-          >
-            {/* step 1 */}
             <div
               style={{
-                background: "#F7F7F4",
-                border: "1px solid #ECE9E3",
-                borderRadius: "24px",
-                padding: "10px 10px 30px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                gap: "24px",
+                flexWrap: "wrap",
               }}
             >
-              <div
-                aria-hidden="true"
+              <div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "800",
+                    letterSpacing: "0.14em",
+                    color: "#A9730E",
+                  }}
+                >
+                  THREE STEPS
+                </div>
+                <h2
+                  style={{
+                    margin: "12px 0 0",
+                    fontSize: "44px",
+                    lineHeight: "1.05",
+                    fontWeight: "900",
+                    letterSpacing: "-0.05em",
+                  }}
+                >
+                  How it works
+                </h2>
+              </div>
+              <p
                 style={{
-                  position: "relative",
-                  height: "190px",
-                  borderRadius: "18px",
-                  overflow: "hidden",
+                  margin: "0",
+                  maxWidth: "380px",
+                  fontSize: "16px",
+                  lineHeight: "1.55",
+                  fontWeight: "500",
+                  color: "#5E5E5B",
                 }}
               >
-                <svg
-                  width="100%"
-                  height="190"
-                  viewBox="0 0 280 150"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{ display: "block" }}
-                >
-                  <use href="#il-diag"></use>
-                </svg>
-                <div
-                  style={{
-                    position: "absolute",
-                    left: "0",
-                    right: "0",
-                    bottom: "0",
-                    height: "56px",
-                    background: "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
-                  }}
-                ></div>
-              </div>
-              <div style={{ padding: "0 20px" }}>
-                <div
-                  style={{
-                    marginTop: "24px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    background: "#FF6A1A",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: "900",
-                  }}
-                >
-                  1
-                </div>
-                <h3
-                  style={{
-                    margin: "14px 0 0",
-                    fontSize: "21px",
-                    fontWeight: "900",
-                    letterSpacing: "-0.035em",
-                  }}
-                >
-                  Take a short diagnostic
-                </h3>
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    fontSize: "15px",
-                    lineHeight: "1.55",
-                    fontWeight: "500",
-                    color: "#5E5E5B",
-                  }}
-                >
-                  A quick adaptive check across Reading and Writing and Math
-                  shows where your points are hiding.
-                </p>
-              </div>
+                No 400-page book. You do a little every day, and the plan
+                rewrites itself around what you get wrong.
+              </p>
             </div>
-            {/* step 2 */}
             <div
               style={{
-                background: "#F7F7F4",
-                border: "1px solid #ECE9E3",
-                borderRadius: "24px",
-                padding: "10px 10px 30px",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "20px",
+                marginTop: "44px",
               }}
             >
+              {/* step 1 */}
               <div
-                aria-hidden="true"
                 style={{
-                  position: "relative",
-                  height: "190px",
-                  borderRadius: "18px",
-                  overflow: "hidden",
+                  background: "#F7F7F4",
+                  border: "1px solid #ECE9E3",
+                  borderRadius: "24px",
+                  padding: "10px 10px 30px",
                 }}
               >
-                <svg
-                  width="100%"
-                  height="190"
-                  viewBox="0 0 280 150"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{ display: "block" }}
-                >
-                  <use href="#il-plan"></use>
-                </svg>
                 <div
+                  aria-hidden="true"
                   style={{
-                    position: "absolute",
-                    left: "0",
-                    right: "0",
-                    bottom: "0",
-                    height: "56px",
-                    background: "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
-                  }}
-                ></div>
-              </div>
-              <div style={{ padding: "0 20px" }}>
-                <div
-                  style={{
-                    marginTop: "24px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    background: "#FF6A1A",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: "900",
+                    position: "relative",
+                    height: "190px",
+                    borderRadius: "18px",
+                    overflow: "hidden",
                   }}
                 >
-                  2
+                  <svg
+                    width="100%"
+                    height="190"
+                    viewBox="0 0 280 150"
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ display: "block" }}
+                  >
+                    <use href="#il-diag"></use>
+                  </svg>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      right: "0",
+                      bottom: "0",
+                      height: "56px",
+                      background:
+                        "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
+                    }}
+                  ></div>
                 </div>
-                <h3
-                  style={{
-                    margin: "14px 0 0",
-                    fontSize: "21px",
-                    fontWeight: "900",
-                    letterSpacing: "-0.035em",
-                  }}
-                >
-                  Follow your daily plan
-                </h3>
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    fontSize: "15px",
-                    lineHeight: "1.55",
-                    fontWeight: "500",
-                    color: "#5E5E5B",
-                  }}
-                >
-                  Every morning you get a short list built from yesterday&apos;s
-                  mistakes. Stuck? Ask Willo why.
-                </p>
+                <div style={{ padding: "0 20px" }}>
+                  <div
+                    style={{
+                      marginTop: "24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: "#FF6A1A",
+                      color: "#FFFFFF",
+                      fontSize: "14px",
+                      fontWeight: "900",
+                    }}
+                  >
+                    1
+                  </div>
+                  <h3
+                    style={{
+                      margin: "14px 0 0",
+                      fontSize: "21px",
+                      fontWeight: "900",
+                      letterSpacing: "-0.035em",
+                    }}
+                  >
+                    Take a short diagnostic
+                  </h3>
+                  <p
+                    style={{
+                      margin: "8px 0 0",
+                      fontSize: "15px",
+                      lineHeight: "1.55",
+                      fontWeight: "500",
+                      color: "#5E5E5B",
+                    }}
+                  >
+                    A quick adaptive check across Reading and Writing and Math
+                    shows where your points are hiding.
+                  </p>
+                </div>
               </div>
-            </div>
-            {/* step 3 */}
-            <div
-              style={{
-                background: "#F7F7F4",
-                border: "1px solid #ECE9E3",
-                borderRadius: "24px",
-                padding: "10px 10px 30px",
-              }}
-            >
+              {/* step 2 */}
               <div
-                aria-hidden="true"
                 style={{
-                  position: "relative",
-                  height: "190px",
-                  borderRadius: "18px",
-                  overflow: "hidden",
+                  background: "#F7F7F4",
+                  border: "1px solid #ECE9E3",
+                  borderRadius: "24px",
+                  padding: "10px 10px 30px",
                 }}
               >
-                <svg
-                  width="100%"
-                  height="190"
-                  viewBox="0 0 280 150"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{ display: "block" }}
-                >
-                  <use href="#il-trophy"></use>
-                </svg>
                 <div
+                  aria-hidden="true"
                   style={{
-                    position: "absolute",
-                    left: "0",
-                    right: "0",
-                    bottom: "0",
-                    height: "56px",
-                    background: "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
-                  }}
-                ></div>
-              </div>
-              <div style={{ padding: "0 20px" }}>
-                <div
-                  style={{
-                    marginTop: "24px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    background: "#FF6A1A",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: "900",
+                    position: "relative",
+                    height: "190px",
+                    borderRadius: "18px",
+                    overflow: "hidden",
                   }}
                 >
-                  3
+                  <svg
+                    width="100%"
+                    height="190"
+                    viewBox="0 0 280 150"
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ display: "block" }}
+                  >
+                    <use href="#il-plan"></use>
+                  </svg>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      right: "0",
+                      bottom: "0",
+                      height: "56px",
+                      background:
+                        "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
+                    }}
+                  ></div>
                 </div>
-                <h3
+                <div style={{ padding: "0 20px" }}>
+                  <div
+                    style={{
+                      marginTop: "24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: "#FF6A1A",
+                      color: "#FFFFFF",
+                      fontSize: "14px",
+                      fontWeight: "900",
+                    }}
+                  >
+                    2
+                  </div>
+                  <h3
+                    style={{
+                      margin: "14px 0 0",
+                      fontSize: "21px",
+                      fontWeight: "900",
+                      letterSpacing: "-0.035em",
+                    }}
+                  >
+                    Follow your daily plan
+                  </h3>
+                  <p
+                    style={{
+                      margin: "8px 0 0",
+                      fontSize: "15px",
+                      lineHeight: "1.55",
+                      fontWeight: "500",
+                      color: "#5E5E5B",
+                    }}
+                  >
+                    Every morning you get a short list built from
+                    yesterday&apos;s mistakes. Stuck? Ask Willo why.
+                  </p>
+                </div>
+              </div>
+              {/* step 3 */}
+              <div
+                style={{
+                  background: "#F7F7F4",
+                  border: "1px solid #ECE9E3",
+                  borderRadius: "24px",
+                  padding: "10px 10px 30px",
+                }}
+              >
+                <div
+                  aria-hidden="true"
                   style={{
-                    margin: "14px 0 0",
-                    fontSize: "21px",
-                    fontWeight: "900",
-                    letterSpacing: "-0.035em",
+                    position: "relative",
+                    height: "190px",
+                    borderRadius: "18px",
+                    overflow: "hidden",
                   }}
                 >
-                  Check yourself with mocks
-                </h3>
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    fontSize: "15px",
-                    lineHeight: "1.55",
-                    fontWeight: "500",
-                    color: "#5E5E5B",
-                  }}
-                >
-                  Full two-module adaptive tests with the real timer and Desmos,
-                  then a score report by skill.
-                </p>
+                  <svg
+                    width="100%"
+                    height="190"
+                    viewBox="0 0 280 150"
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ display: "block" }}
+                  >
+                    <use href="#il-trophy"></use>
+                  </svg>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      right: "0",
+                      bottom: "0",
+                      height: "56px",
+                      background:
+                        "linear-gradient(rgba(247,247,244,0), #F7F7F4)",
+                    }}
+                  ></div>
+                </div>
+                <div style={{ padding: "0 20px" }}>
+                  <div
+                    style={{
+                      marginTop: "24px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: "#FF6A1A",
+                      color: "#FFFFFF",
+                      fontSize: "14px",
+                      fontWeight: "900",
+                    }}
+                  >
+                    3
+                  </div>
+                  <h3
+                    style={{
+                      margin: "14px 0 0",
+                      fontSize: "21px",
+                      fontWeight: "900",
+                      letterSpacing: "-0.035em",
+                    }}
+                  >
+                    Check yourself with mocks
+                  </h3>
+                  <p
+                    style={{
+                      margin: "8px 0 0",
+                      fontSize: "15px",
+                      lineHeight: "1.55",
+                      fontWeight: "500",
+                      color: "#5E5E5B",
+                    }}
+                  >
+                    Full two-module adaptive tests with the real timer and
+                    Desmos, then a score report by skill.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </ScrollScene>
         {/* ============ FEATURES (dark teal band) ============ */}
         <section
           style={{
