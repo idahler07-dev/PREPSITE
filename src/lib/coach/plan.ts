@@ -11,6 +11,10 @@ export interface PlanTask {
   minutes: number;
   skill?: string;
   count?: number;
+  /** A past study day with no practice: this task was not done. */
+  missed?: boolean;
+  /** Moved here from a missed day earlier in the week. */
+  carried?: boolean;
 }
 
 export interface PlanDay {
@@ -24,6 +28,8 @@ export interface WeeklyPlan {
   minutesPerDay: number;
   focusSkills: string[];
   days: PlanDay[];
+  /** Skills from missed days that did not fit in the rest of this week. */
+  carryOver?: string[];
 }
 
 export interface CoachInput {
@@ -34,6 +40,10 @@ export interface CoachInput {
   dueReviews: number;
   /** Can the student start a practice test this week (premium, or free tests left)? */
   canTakeTest: boolean;
+  /** Days (YYYY-MM-DD) the student answered at least one question; earlier study days without practice count as missed. */
+  activeDays?: string[];
+  /** Keep these focus skills instead of re-picking them (free plans keep the week's focus). */
+  focusSkills?: string[];
 }
 
 const addDays = (day: string, n: number) => {
@@ -41,7 +51,12 @@ const addDays = (day: string, n: number) => {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 };
-const diffDays = (a: string, b: string) => Math.round((new Date(`${b}T00:00:00Z`).getTime() - new Date(`${a}T00:00:00Z`).getTime()) / 86_400_000);
+const diffDays = (a: string, b: string) =>
+  Math.round(
+    (new Date(`${b}T00:00:00Z`).getTime() -
+      new Date(`${a}T00:00:00Z`).getTime()) /
+      86_400_000,
+  );
 
 export function mondayOf(day: string): string {
   const dow = new Date(`${day}T00:00:00Z`).getUTCDay(); // 0 = Sunday
@@ -50,23 +65,43 @@ export function mondayOf(day: string): string {
 
 /** Weakest skills first: low accuracy with enough answers, then skills never practised. */
 export function weakestSkills(skills: CoachInput["skills"], n = 3): string[] {
-  const tried = skills.filter((s) => s.answered >= 3).sort((a, b) => a.correct / a.answered - b.correct / b.answered || b.answered - a.answered);
-  const weak = tried.filter((s) => s.correct / s.answered < 0.8).map((s) => s.skill);
-  const seen = new Set(skills.filter((s) => s.answered > 0).map((s) => s.skill));
+  const tried = skills
+    .filter((s) => s.answered >= 3)
+    .sort(
+      (a, b) =>
+        a.correct / a.answered - b.correct / b.answered ||
+        b.answered - a.answered,
+    );
+  const weak = tried
+    .filter((s) => s.correct / s.answered < 0.8)
+    .map((s) => s.skill);
+  const seen = new Set(
+    skills.filter((s) => s.answered > 0).map((s) => s.skill),
+  );
   // Alternate sections so both get attention.
   const untouched: string[] = [];
   const rw = DOMAINS.filter((d) => d.section === "RW").flatMap((d) => d.skills);
-  const math = DOMAINS.filter((d) => d.section === "MATH").flatMap((d) => d.skills);
-  for (let i = 0; i < Math.max(rw.length, math.length); i++) for (const s of [rw[i], math[i]]) if (s && !seen.has(s)) untouched.push(s);
-  return [...new Set([...weak, ...untouched, ...tried.map((s) => s.skill)])].slice(0, n);
+  const math = DOMAINS.filter((d) => d.section === "MATH").flatMap(
+    (d) => d.skills,
+  );
+  for (let i = 0; i < Math.max(rw.length, math.length); i++)
+    for (const s of [rw[i], math[i]]) if (s && !seen.has(s)) untouched.push(s);
+  return [
+    ...new Set([...weak, ...untouched, ...tried.map((s) => s.skill)]),
+  ].slice(0, n);
 }
 
 export function buildWeeklyPlan(input: CoachInput): WeeklyPlan {
   const weekStart = mondayOf(input.today);
-  const daysToTest = input.testDate ? diffDays(input.today, input.testDate) : null;
-  const minutesPerDay = daysToTest === null || daysToTest > 90 ? 30 : daysToTest > 30 ? 45 : 60;
+  const daysToTest = input.testDate
+    ? diffDays(input.today, input.testDate)
+    : null;
+  const minutesPerDay =
+    daysToTest === null || daysToTest > 90 ? 30 : daysToTest > 30 ? 45 : 60;
   const studyDays = daysToTest !== null && daysToTest <= 90 ? 6 : 5;
-  const focusSkills = weakestSkills(input.skills);
+  const focusSkills = input.focusSkills?.length
+    ? input.focusSkills
+    : weakestSkills(input.skills);
   let reviewLeft = input.dueReviews;
   let focus = 0;
   let mockPlaced = false;
@@ -93,7 +128,13 @@ export function buildWeeklyPlan(input: CoachInput): WeeklyPlan {
     }
     // One full practice test on Saturday (or Friday on 5-day weeks), not in the last 3 days before the test.
     const mockDay = studyDays === 5 ? 4 : 5;
-    if (i === mockDay && input.canTakeTest && !past && (untilTest === null || untilTest > 3) && !mockPlaced) {
+    if (
+      i === mockDay &&
+      input.canTakeTest &&
+      !past &&
+      (untilTest === null || untilTest > 3) &&
+      !mockPlaced
+    ) {
       tasks.push({ kind: "mock", minutes: 140 });
       mockPlaced = true;
       days.push({ date, tasks });
@@ -110,9 +151,73 @@ export function buildWeeklyPlan(input: CoachInput): WeeklyPlan {
     minutes -= 5;
     if (minutes >= 5 && focusSkills.length) {
       const skill = focusSkills[focus++ % focusSkills.length]!;
-      tasks.push({ kind: "drill", skill, minutes, count: Math.max(5, Math.round(minutes / 1.5)) });
+      tasks.push({
+        kind: "drill",
+        skill,
+        minutes,
+        count: Math.max(5, Math.round(minutes / 1.5)),
+      });
     }
     days.push({ date, tasks });
   }
-  return { weekStart, daysToTest, minutesPerDay, focusSkills, days };
+  const carryOver = input.activeDays
+    ? carryMissed(days, input.today, new Set(input.activeDays), minutesPerDay)
+    : [];
+  return {
+    weekStart,
+    daysToTest,
+    minutesPerDay,
+    focusSkills,
+    days,
+    ...(carryOver.length ? { carryOver } : {}),
+  };
+}
+
+/**
+ * Missed days roll forward: a past study day with no practice has its tasks
+ * marked missed, and its practice time moves to the next study days (today
+ * on), at most half a day's minutes extra per day so no day gets overloaded.
+ * Returns the skills that did not fit (no study day left this week), so next
+ * week's plan can lead with them.
+ */
+function carryMissed(
+  days: PlanDay[],
+  today: string,
+  active: Set<string>,
+  minutesPerDay: number,
+): string[] {
+  const owed: { skill?: string; minutes: number }[] = [];
+  for (const d of days) {
+    if (d.date >= today || active.has(d.date)) continue;
+    const study = d.tasks.filter(
+      (t) => t.kind === "drill" || t.kind === "review" || t.kind === "vocab",
+    );
+    if (!study.length) continue;
+    for (const t of study) {
+      t.missed = true;
+      if (t.kind === "drill") owed.push({ skill: t.skill, minutes: t.minutes });
+    }
+  }
+  if (!owed.length) return [];
+  const cap = Math.round(minutesPerDay / 2);
+  for (const d of days) {
+    if (d.date < today || !owed.length) continue;
+    if (!d.tasks.some((t) => t.kind === "drill")) continue; // only onto study days
+    let room = cap;
+    while (room >= 5 && owed.length) {
+      const o = owed[0]!;
+      const m = Math.min(o.minutes, room);
+      d.tasks.push({
+        kind: "drill",
+        skill: o.skill,
+        minutes: m,
+        count: Math.max(3, Math.round(m / 1.5)),
+        carried: true,
+      });
+      room -= m;
+      o.minutes -= m;
+      if (o.minutes < 5) owed.shift();
+    }
+  }
+  return [...new Set(owed.map((o) => o.skill).filter((x): x is string => !!x))];
 }

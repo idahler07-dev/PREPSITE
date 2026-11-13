@@ -80,13 +80,13 @@ A = core, B = high value, C = optional, D = future, E = reject.
 | Area | Decision | Class | Free / Premium | Status |
 |---|---|---|---|---|
 | Dashboard answering the four questions | Keep 8-section dashboard; "today" first | A | Free | Built (v3) |
-| Question bank: filters, timed, mixed, bookmarks, history | Keep; add "weakness mix" | A | Free (20 q/day), Premium unlimited | Exists |
+| Question bank: filters, timed, mixed, bookmarks, history | Keep; add "weakness mix" | A | Free (20 q/day), Premium unlimited | Built (weak-spot mix in Quick start) |
 | Explanations (stored, official) | Always free; the answer key is the source of truth | A | Free | Exists |
 | Adaptive engine: weak skills, recurring mistakes, next step | One engine feeds plan, dashboard, notebook | A | Free basic, Premium adaptive re-plan | Exists in coach; extend |
 | AI tutor: Explain, Hint, Teach, Challenge | Four modes, grounded in stored answers, off during mocks, no photos | B | **Premium only** | Rework modes now |
 | Full adaptive mocks | Bluebook-faithful runner, results, next steps | A | Free 1, Premium unlimited | Exists |
-| Mistake notebook | Auto-save, spaced review, tags, recurring patterns | A | Free | Exists; add tags/patterns |
-| Study planner | Goal + date + time available → week plan; auto re-spread | A | Free plan, Premium adapts weekly | Exists; add reschedule |
+| Mistake notebook | Auto-save, spaced review, tags, recurring patterns | A | Free | Built (why-missed tags, recurring patterns) |
+| Study planner | Goal + date + time available → week plan; auto re-spread | A | Free plan, Premium adapts weekly | Built (missed days roll forward daily; Premium re-picks focus) |
 | Vocabulary flashcards | Keep the SRS deck; no big investment (the SAT tests words in context) | C | Free | Exists |
 | Analytics and readiness | Trend, per-skill, pace; forecast only with 4+ scores, labelled | A | Free core, Premium deep (timing, patterns) | Exists |
 | Gamification | Streak + weekly goal only; no leaderboards, no XP in the chrome | C | Free | Simplified in v3 |

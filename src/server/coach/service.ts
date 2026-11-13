@@ -14,7 +14,7 @@ import { dayInZone } from "@/lib/stats/streak";
 import { LOCALE_ENGLISH_NAMES } from "@/i18n/locales";
 import { aiAvailable, models } from "@/server/ai/client";
 import { generateJson } from "@/server/ai/structured";
-import { usageSummary } from "@/server/billing/entitlement";
+import { getEntitlement, usageSummary } from "@/server/billing/entitlement";
 
 const skillNames = en.taxonomy.skills as Record<string, string>;
 
@@ -31,7 +31,11 @@ async function coachInput(userId: string, now: Date) {
         answer: { not: null },
         module: { attempt: { userId } },
       },
-      select: { isCorrect: true, question: { select: { skill: true } } },
+      select: {
+        isCorrect: true,
+        gradedAt: true,
+        question: { select: { skill: true } },
+      },
       orderBy: { gradedAt: "desc" },
       take: 3000,
     }),
@@ -58,9 +62,20 @@ async function coachInput(userId: string, now: Date) {
     if (r.isCorrect) s.correct++;
     bySkill.set(r.question.skill, s);
   }
+  // days with any practice, for marking missed study days
+  const activeDays = [
+    ...new Set(
+      responses
+        .map((r) =>
+          r.gradedAt ? dayInZone(r.gradedAt, siteConfig.defaultTimeZone) : null,
+        )
+        .filter((d): d is string => !!d),
+    ),
+  ];
   return {
     user,
     input: {
+      activeDays,
       today: dayInZone(now, siteConfig.defaultTimeZone),
       testDate: user.testDate ? user.testDate.toISOString().slice(0, 10) : null,
       skills: [...bySkill.values()],
@@ -142,11 +157,11 @@ async function latestEstimate(userId: string): Promise<number | null> {
 export async function generatePlan(
   userId: string,
   reason: string,
-  opts: { withMessage?: boolean; now?: Date } = {},
+  opts: { withMessage?: boolean; now?: Date; keepFocus?: string[] } = {},
 ) {
   const now = opts.now ?? new Date();
   const { user, input } = await coachInput(userId, now);
-  const plan = buildWeeklyPlan(input);
+  const plan = buildWeeklyPlan({ ...input, focusSkills: opts.keepFocus });
   const message = opts.withMessage
     ? await coachMessage(userId, plan, {
         locale: user.locale ?? "en",
@@ -168,12 +183,41 @@ export async function generatePlan(
 }
 
 /** This week's plan, creating it the first time it is looked at. */
+/**
+ * This week's plan, creating it the first time it is looked at and rebuilding it
+ * on the first look each day, so missed days roll forward. Premium plans also
+ * re-pick their focus skills from the latest results; free plans keep the week's.
+ */
 export async function currentPlan(userId: string, now = new Date()) {
-  const weekStart = mondayOf(dayInZone(now, siteConfig.defaultTimeZone));
+  const today = dayInZone(now, siteConfig.defaultTimeZone);
+  const weekStart = mondayOf(today);
   const existing = await db.studyPlan.findUnique({
     where: { userId_weekStart: { userId, weekStart } },
   });
-  return existing ?? generatePlan(userId, "week", { now });
+  if (!existing) {
+    // a new week leads with skills last week's missed days couldn't fit
+    const prev = await db.studyPlan.findFirst({
+      where: { userId, weekStart: { lt: weekStart } },
+      orderBy: { weekStart: "desc" },
+      select: { plan: true },
+    });
+    const carry =
+      (prev?.plan as unknown as WeeklyPlan | undefined)?.carryOver ?? [];
+    const { input } = carry.length
+      ? await coachInput(userId, now)
+      : { input: null };
+    const keepFocus = input
+      ? [...new Set([...carry, ...weakestSkills(input.skills)])].slice(0, 3)
+      : undefined;
+    return generatePlan(userId, "week", { now, keepFocus });
+  }
+  if (dayInZone(existing.generatedAt, siteConfig.defaultTimeZone) === today)
+    return existing;
+  const { premium } = await getEntitlement(userId, now);
+  const keepFocus = premium
+    ? undefined
+    : (existing.plan as unknown as WeeklyPlan).focusSkills;
+  return generatePlan(userId, "daily", { now, keepFocus });
 }
 
 /** The student's weakest skills right now (same ranking the weekly plan uses), for a one-click weak-spot drill. */

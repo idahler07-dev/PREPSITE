@@ -1991,7 +1991,9 @@
     "quick": "Quick practice",
     "dailyQuestion": "Question of the day",
     "reviewDue": "{count, plural, =0 {Mistake notebook} one {# question to review} other {# questions to review}}",
-    "vocabDue": "{count, plural, =0 {Vocabulary cards} one {# word card} other {# word cards}}"
+    "vocabDue": "{count, plural, =0 {Vocabulary cards} one {# word card} other {# word cards}}",
+    "missed": "missed",
+    "carried": "moved from a missed day"
   },
   "notifications": {
     "footer": "{name}. Change which messages you get: {settings}",
