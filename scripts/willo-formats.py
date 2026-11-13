@@ -210,7 +210,7 @@ if __name__ == "__main__":
         icon(p, out)  # wink keeps its thumb out of frame
     for p in ("stand", "wink", "think"):
         avatar(p, out)
-    for p in ("wink", "cheer", "stand"):
+    for p in ("wink", "cheer", "stand", "sad"):
         sticker(p, out)
     for p in ("stand", "idea"):
         peek(p, out)

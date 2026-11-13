@@ -1594,44 +1594,7 @@ html.lenis body {
   .lp-marquee:hover .lp-marquee-track { animation-play-state: paused; }
 }
 
-/* ---- LiveWillo: paper-cut stop motion at 24 fps (steps = one change per frame) ---- */
+/* ---- LiveWillo: the puppet canvas (puppet.ts) sits over the art, a little larger so a swinging hand is never cut ---- */
 .willo-live { position: relative; display: inline-block; line-height: 0; }
-.willo-live .wl-body, .willo-live .wl-boil { position: relative; display: block; transform-origin: 50% 100%; }
 .willo-live .wl-img { display: block; width: 100%; height: auto; }
-.willo-live .wl-over { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.willo-live .wl-lid { transform: translateY(0); }
-.willo-live .wl-tears, .willo-live .wl-spark { transform-box: fill-box; }
-.willo-live .wl-drop { opacity: 0; }
-.willo-live .wl-shut { opacity: 0; }
-.willo-live .wl-stream { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
-@media (prefers-reduced-motion: no-preference) {
-  .willo-live[data-live="on"] .wl-body { animation: wl-breathe 3.4s steps(41, end) infinite; }
-  .willo-live[data-live="on"] .wl-boil { animation: wl-boil 0.5s steps(1, end) infinite; }
-  .willo-live .wl-lid-blink { animation: wl-blink 0.25s steps(1, end) 1 both; }
-  .willo-live .wl-shut-blink { animation: wl-shut 0.25s steps(1, end) 1 both; }
-  .willo-live[data-mood="happy"][data-live="on"] .wl-body { animation: wl-hop 1.6s steps(19, end) infinite; }
-  .willo-live[data-mood="happy"] .wl-spark { animation: wl-spark 1.6s steps(19, end) infinite; transform-origin: center; }
-  .willo-live[data-mood="cry"][data-live="on"] .wl-body { animation: wl-sob 1.25s steps(15, end) infinite; }
-  .willo-live[data-mood="cry"] .wl-lid { transform: translateY(calc(var(--lid) * 0.62)); }
-  .willo-live[data-mood="cry"] .wl-lid-blink { animation: wl-blink-sad 0.25s steps(1, end) 1 both; }
-  .willo-live[data-mood="cry"] .wl-stream { animation: wl-stream 0.9s steps(22, end) both; }
-  .willo-live[data-mood="cry"] .wl-drop { animation: wl-drop 1.5s steps(36, end) infinite; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .willo-live[data-mood="cry"] .wl-lid { transform: translateY(calc(var(--lid) * 0.62)); }
-  .willo-live[data-mood="cry"] .wl-drop:first-of-type { opacity: 1; transform: translateY(calc(var(--fall) * 0.3)); }
-  .willo-live[data-mood="cry"] .wl-stream { stroke-dashoffset: 0; }
-}
-@keyframes wl-breathe { 0%, 100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(-0.5%) scale(1.004, 1.014); } }
-/* paper boil, "on twos": four held poses, 12 changes a second */
-@keyframes wl-boil { 0% { transform: rotate(0.18deg) translate(0.3px, 0); } 25% { transform: rotate(-0.12deg) translate(-0.3px, 0.2px); } 50% { transform: rotate(0.1deg) translate(0, -0.2px); } 75% { transform: rotate(-0.16deg) translate(0.2px, 0.2px); } }
-/* blink: 6 frames: half, closed, closed, half, open */
-@keyframes wl-blink { 0% { transform: translateY(0); } 17% { transform: translateY(calc(var(--lid) * 0.9)); } 33%, 50% { transform: translateY(calc(var(--lid) * 2.3)); } 67% { transform: translateY(calc(var(--lid) * 0.95)); } 84%, 100% { transform: translateY(0); } }
-@keyframes wl-shut { 0%, 32% { opacity: 0; } 33%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-@keyframes wl-blink-sad { 0% { transform: translateY(calc(var(--lid) * 0.62)); } 33%, 50% { transform: translateY(calc(var(--lid) * 2.3)); } 67%, 100% { transform: translateY(calc(var(--lid) * 0.62)); } }
-@keyframes wl-hop { 0%, 55%, 100% { transform: translateY(0) scale(1, 1); } 8% { transform: translateY(0) scale(1.05, 0.93); } 22% { transform: translateY(-13%) scale(0.96, 1.05); } 34% { transform: translateY(0) scale(1.04, 0.95); } 42% { transform: translateY(0) scale(1, 1); } }
-@keyframes wl-spark { 0%, 100% { opacity: 0; transform: scale(0.2) rotate(0deg); } 18% { opacity: 1; transform: scale(1.15) rotate(15deg); } 40% { opacity: 1; transform: scale(0.9) rotate(30deg); } 60% { opacity: 0; transform: scale(0.4) rotate(45deg); } }
-@keyframes wl-sob { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 12% { transform: translate(0, 0.6%) rotate(-0.6deg); } 24% { transform: translate(0, -0.3%) rotate(0.4deg); } 36% { transform: translate(0, 0.5%) rotate(-0.4deg); } 50% { transform: translate(0, 0) rotate(0deg); } }
-@keyframes wl-stream { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-/* a tear wells up, runs down the cheek, then drops away */
-@keyframes wl-drop { 0% { opacity: 0; transform: translateY(0) scale(0.2); } 14% { opacity: 1; transform: translateY(0) scale(0.75); } 28% { opacity: 1; transform: translateY(calc(var(--fall) * 0.08)) scale(1); } 70% { opacity: 1; transform: translateY(calc(var(--fall) * 0.7)) scale(1, 1.08); } 100% { opacity: 0; transform: translateY(var(--fall)) scale(0.85, 1.2); } }
+.willo-live .wl-canvas { position: absolute; pointer-events: none; }
