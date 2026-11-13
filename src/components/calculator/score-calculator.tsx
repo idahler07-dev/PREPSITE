@@ -342,9 +342,9 @@ function ShareButton({ total, rw, math }: { total: number; rw: number; math: num
     ctx.fillText(t("shareFooter"), W / 2, 980);
     ctx.globalAlpha = 1;
     const owl = new Image();
-    owl.src = "/mascot/owl-correct.svg";
+    owl.src = "/mascot/willo-happy.svg";
     await owl.decode().catch(() => {});
-    if (owl.complete && owl.naturalWidth) ctx.drawImage(owl, 70, 60, 180, 150);
+    if (owl.complete && owl.naturalWidth) ctx.drawImage(owl, 70, 50, 170, 178);
     const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/png"));
     if (!blob) return;
     const file = new File([blob], `sat-score-${total}.png`, { type: "image/png" });

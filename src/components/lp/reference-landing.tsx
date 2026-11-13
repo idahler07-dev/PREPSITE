@@ -1053,11 +1053,11 @@ export function ReferenceLanding({
             </g>
             <g id="il-core-willo">
               <image
-                href="/mascot/formats/sticker-wink.png"
-                x="58"
-                y="6"
-                width="104"
-                height="104"
+                href="/mascot/willo-wink.svg"
+                x="60"
+                y="4"
+                width="100"
+                height="105"
               />
               <path
                 d="M176 26 h52 a18 18 0 0 1 18 18 v6 a18 18 0 0 1 -18 18 h-36 l-14 12 l2 -12 a18 18 0 0 1 -18 -18 v-6 a18 18 0 0 1 18 -18z"
