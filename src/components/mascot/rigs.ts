@@ -32,6 +32,8 @@ export interface Rig {
   wink?: [number, number, number, number];
   /** the idea bulb's glass [x, y, r] */
   bulb?: [number, number, number];
+  /** props held in a hand move rigidly with it: [x, y, radius, limb index] */
+  props?: [number, number, number, number][];
   /** celebratory poses hop now and then */
   hop?: boolean;
 }
@@ -232,6 +234,14 @@ for (const k of [
   "/mascot/formats/sticker-cheer",
 ])
   RIGS[k] = { ...RIGS[k], hop: true };
+RIGS["/mascot/deer-trophy"] = {
+  ...RIGS["/mascot/deer-trophy"],
+  props: [[0.82, 0.3, 0.17, 0]],
+};
+RIGS["/mascot/deer-heart"] = {
+  ...RIGS["/mascot/deer-heart"],
+  props: [[0.72, 0.66, 0.17, 0]],
+};
 RIGS["/mascot/deer-idea"] = {
   ...RIGS["/mascot/deer-idea"],
   bulb: [0.83, 0.165, 0.08],

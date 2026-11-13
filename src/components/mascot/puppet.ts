@@ -36,6 +36,8 @@ uniform sampler2D uTex, uAlt;
 uniform vec2 uImg, uN, uHeadT, uHeadC, uLift;
 uniform float uPad, uBreath, uSquash, uLean, uFoot, uBand, uHead, uHeadR, uPx, uWinkK, uRays, uGlow;
 uniform vec4 uWink, uBulb;
+uniform vec4 uProp[2];
+uniform vec2 uPropP[2];
 uniform vec4 uL[${MAX_LIMBS}];
 uniform vec3 uLp[${MAX_LIMBS}];
 uniform vec4 uEye[2];
@@ -80,6 +82,13 @@ void main(){
     if (P.z > 0.5) w *= smoothstep(0.0, 0.45, t);
     q = mix(q, L.xy + rot(pb - L.xy, -P.y), w);
   }
+  // props (a trophy, a heart) move as one rigid piece with the hand that holds them
+  for (int i = 0; i < 2; i++) {
+    vec4 P = uProp[i]; // x, y, radius, angle
+    if (P.z <= 0.0) continue;
+    float w = smoothstep(P.z, P.z*0.82, length(pb - P.xy));
+    q = mix(q, uPropP[i] + rot(pb - uPropP[i], -P.w), w);
+  }
   vec4 col = tex(q);
   // lids, drawn on the bent art so they ride with the head
   for (int i = 0; i < 2; i++) {
@@ -116,13 +125,9 @@ void main(){
     vec3 off = mix(col.rgb, vec3(0.97, 0.95, 0.9)*(0.78 + 0.25*lum), 0.62); // clear, unlit glass
     vec3 on = mix(col.rgb, vec3(1.0, 0.97, 0.8), 0.42 + 0.18*smoothstep(0.7, 0.0, d));
     col.rgb = mix(col.rgb, mix(off, on, lit), glass);
-    // rays: the drawn yellow marks around the bulb only show while it is lit
-    // everything in the ring around the glass is the rays and their outline (the
-    // ear is kept by its fur colour)
-    float fur = smoothstep(0.7, 0.85, col.r)*smoothstep(0.75, 0.6, col.g)*smoothstep(0.45, 0.3, col.b);
-    float ray = (1.0 - fur)*smoothstep(1.15, 1.3, d)*smoothstep(2.6, 2.2, d)*step(-1.4, bv.x)*step(bv.y, 0.55);
-    col *= 1.0 - ray*(1.0 - uRays);
-    col.rgb = mix(col.rgb, vec3(1.0, 0.9, 0.5), ray*uRays*0.35);
+    // rays: the drawn marks around the bulb warm up while it is lit
+    float ray = yel*smoothstep(1.15, 1.3, d)*smoothstep(2.6, 2.2, d)*(1.0 - glass);
+    col.rgb = mix(col.rgb, vec3(1.0, 0.86, 0.35), ray*uRays*0.45);
     glow = uGlow*exp(-pow(max(d - 0.55, 0.0)/0.85, 2.0));
   }
   // a single tear rolling from a drawn one
@@ -337,18 +342,20 @@ class Motion {
 
   /** A hop: anticipation (crouch), lift with stretch, land with squash, settle. */
   hop(t: number): [number, number] {
+    // continuous at every phase change, so no frame ever jumps
     const h = t - this.hopAt;
-    if (h < 0 || h > 0.95) return [0, 0];
-    if (h < 0.14) return [0, -0.05 * Math.sin((Math.PI / 2) * (h / 0.14))];
-    if (h < 0.6) {
-      const x = (h - 0.14) / 0.46;
-      return [
-        0.075 * Math.sin(Math.PI * x),
-        0.045 * Math.cos(Math.PI * x) - 0.01,
-      ];
-    }
-    const x = (h - 0.6) / 0.35;
-    return [0, -0.045 * Math.sin(Math.PI * x) * (1 - x)];
+    if (h <= 0 || h >= 0.95) return [0, 0];
+    const lift =
+      h > 0.16 && h < 0.62 ? 0.05 * Math.sin((Math.PI * (h - 0.16)) / 0.46) : 0;
+    let sq: number;
+    if (h < 0.16)
+      sq = -0.025 * Math.sin((Math.PI / 2) * (h / 0.16)); // crouch
+    else if (h < 0.26)
+      sq = -0.025 + 0.045 * ease((h - 0.16) / 0.1); // spring up into a stretch
+    else if (h < 0.62)
+      sq = 0.02 * Math.cos((Math.PI / 2) * ((h - 0.26) / 0.36)); // stretch eases out in the air
+    else sq = -0.022 * Math.sin((Math.PI * (h - 0.62)) / 0.33); // land, settle
+    return [lift, sq];
   }
 
   at(t: number, rig: Rig): Pose {
@@ -379,13 +386,11 @@ class Motion {
       this.glanceDir = Math.random() < 0.5 ? -1 : 1;
     }
     const gt = t - this.glanceAt;
+    // a small turn the other way, then the swing over with a soft overshoot (continuous)
     const glance =
-      gt < 0
-        ? 0
-        : gt < 0.12
-          ? -0.2 * Math.sin((Math.PI / 2) * (gt / 0.12))
-          : back((gt - 0.12) / 0.45) * (1 - ease((gt - 1.7) / 0.6));
-    head += this.glanceDir * 6 * D * glance;
+      -0.15 * Math.sin(Math.PI * Math.min(1, Math.max(0, gt / 0.24))) +
+      back((gt - 0.08) / 0.5) * (1 - ease((gt - 1.7) / 0.6));
+    head += this.glanceDir * 4 * D * glance;
     lean += this.glanceDir * 1.2 * D * glance;
     // wink: lid down fast, hold the drawn wink with a head tilt, open again
     let wink = 0;
@@ -394,18 +399,11 @@ class Motion {
       const w = t - this.winkAt;
       if (w > 1.5) this.winkAt = t + rnd(2.5, 4.5);
       else if (w > 0) {
-        winkLid = w < 0.09 ? w / 0.09 : w < 1.0 ? 1 : 1 - (w - 1.0) / 0.12;
-        winkLid = Math.max(0, Math.min(1, winkLid));
-        wink =
-          w < 0.08
-            ? 0
-            : w < 0.11
-              ? (w - 0.08) / 0.03
-              : w < 0.97
-                ? 1
-                : Math.max(0, 1 - (w - 0.97) / 0.06);
+        winkLid = ease(w / 0.09) * (1 - ease((w - 1.0) / 0.12));
+        // the drawn wink fades in once the lid is down, and out before it lifts
+        wink = ease((w - 0.07) / 0.07) * (1 - ease((w - 0.92) / 0.09));
         const tilt = ease(w / 0.18) * (1 - ease((w - 0.95) / 0.35));
-        head += (rig.wink[0] < 0.5 ? 1 : -1) * 4.5 * D * tilt;
+        head += (rig.wink[0] < 0.5 ? 1 : -1) * 3 * D * tilt;
       }
     }
     const lag =
@@ -425,7 +423,7 @@ class Motion {
         this.gestureAt[i] = t + rnd(2.5, 5.5);
       const ev = t - (this.gestureAt[i] ?? 0);
       // arms also follow through after a hop
-      const follow = -squash * 60 * D * side;
+      const follow = -squash * 50 * D * side;
       if (kind === "sway") {
         const lift = ev < 0 ? 0 : back(ev / 0.4) * (1 - ease((ev - 1.1) / 0.6));
         return (
@@ -438,7 +436,7 @@ class Motion {
         const env = Math.max(bump(ev, 0, 1.8), happyBurst);
         return (
           side * 4 * D * Math.sin((TAU * ph) / 1.9) +
-          side * 16 * D * env * Math.sin(TAU * 2.3 * Math.max(0, ev)) +
+          side * 9 * D * env * Math.sin(TAU * 2.1 * Math.max(0, ev)) +
           follow
         );
       }
@@ -629,6 +627,24 @@ function draw(i: Inst, now: number) {
     P.set([l[4] * iw, still ? 0 : (pose.limbs[k] ?? 0), l[5] ? 1 : 0], k * 3);
   });
   g.uniform4fv(u("uL"), L);
+  const PR = new Float32Array(8);
+  const PP = new Float32Array(4);
+  (rig.props ?? []).slice(0, 2).forEach((pr, k) => {
+    const limb = rig.limbs?.[pr[3]];
+    if (!limb) return;
+    PR.set(
+      [
+        pr[0] * iw,
+        pr[1] * ih,
+        pr[2] * iw,
+        still ? 0 : (pose.limbs[pr[3]] ?? 0),
+      ],
+      k * 4,
+    );
+    PP.set([limb[0] * iw, limb[1] * ih], k * 2);
+  });
+  g.uniform4fv(u("uProp"), PR);
+  g.uniform2fv(u("uPropP"), PP);
   g.uniform3fv(u("uLp"), P);
   const eyes = i.eyes();
   const E = new Float32Array(8);
@@ -671,7 +687,10 @@ function draw(i: Inst, now: number) {
   }
 }
 
-function loop(now: number) {
+function loop(rafNow: number) {
+  // tests can step time frame by frame through window.__willoClock
+  const clock = (globalThis as { __willoClock?: () => number }).__willoClock;
+  const now = clock ? clock() : rafNow;
   if (!document.hidden) for (const i of insts) draw(i, now);
   raf = insts.size ? requestAnimationFrame(loop) : 0;
 }
