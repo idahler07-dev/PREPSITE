@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { getCurrentUser, isOwner } from "@/server/auth/session";
-import { AppShell, ShellMenuButton, type ShellGroup, type ShellItem } from "@/components/layout/app-shell";
+import {
+  AppShell,
+  ShellMenuButton,
+  type ShellGroup,
+  type ShellItem,
+} from "@/components/layout/app-shell";
 import { TopStats } from "@/components/layout/top-stats";
 import { CountdownChip } from "@/components/layout/countdown-chip";
 import { topBarStats } from "@/server/stats/topbar";
@@ -15,11 +20,9 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CookieNotice } from "@/components/layout/cookie-notice";
 import { DemoBanner, showDemoBanner } from "@/components/layout/demo-banner";
-import { ArrowRight, Crown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getEntitlement } from "@/server/billing/entitlement";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
-import { Waves } from "@/components/illustration/spots";
 
 /** Signed-in app pages: a grouped sidebar (desktop) or five bottom tabs (phones), and a top bar with search, the test countdown, streak and the account menu. */
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -47,10 +50,20 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const groups: ShellGroup[] = [
     {
       items: [
-        { key: "dashboard", href: "/dashboard", label: t("dashboard"), match: ["/onboarding"] },
+        {
+          key: "dashboard",
+          href: "/dashboard",
+          label: t("dashboard"),
+          match: ["/onboarding"],
+        },
         { key: "plan", href: "/plan", label: t("studyPlan") },
         { key: "focus", href: "/focus", label: t("focusShort") },
-        { key: "practice", href: "/practice", label: t("practice"), match: ["/attempts"] },
+        {
+          key: "practice",
+          href: "/practice",
+          label: t("practice"),
+          match: ["/attempts"],
+        },
         { key: "mocks", href: "/mocks", label: t("mockTests") },
         { key: "review", href: "/review", label: t("mistakes") },
         { key: "vocab", href: "/vocab", label: t("vocab") },
@@ -70,14 +83,36 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     { key: "settings", href: "/settings", label: t("settings") },
     { key: "billing", href: "/billing", label: t("billing") },
     { key: "resources", href: "/resources", label: t("resources") },
-    ...(isOwner(user) ? [{ key: "admin", href: "/manage", label: t("manage") } as const] : []),
+    ...(isOwner(user)
+      ? [{ key: "admin", href: "/manage", label: t("manage") } as const]
+      : []),
   ];
   const mobile: ShellItem[] = [
-    { key: "dashboard", href: "/dashboard", label: t("home"), match: ["/onboarding"] },
+    {
+      key: "dashboard",
+      href: "/dashboard",
+      label: t("home"),
+      match: ["/onboarding"],
+    },
     { key: "plan", href: "/plan", label: t("study"), match: ["/focus"] },
-    { key: "practice", href: "/practice", label: t("practice"), match: ["/attempts", "/mocks", "/review", "/question-bank", "/vocab"] },
-    { key: "analytics", href: "/analytics", label: t("insights"), match: ["/sat", "/history"] },
-    { key: "me", href: "/settings", label: t("me"), match: ["/billing", "/resources"] },
+    {
+      key: "practice",
+      href: "/practice",
+      label: t("practice"),
+      match: ["/attempts", "/mocks", "/review", "/question-bank", "/vocab"],
+    },
+    {
+      key: "analytics",
+      href: "/analytics",
+      label: t("insights"),
+      match: ["/sat", "/history"],
+    },
+    {
+      key: "me",
+      href: "/settings",
+      label: t("me"),
+      match: ["/billing", "/resources"],
+    },
   ];
   // Phones: the pages inside each bottom tab, as a row under the top bar.
   const main = groups[0]!.items;
@@ -91,40 +126,50 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const premium = isOwner(user) || (await getEntitlement(user.id)).premium;
   const tb = await getTranslations("shell.upgrade");
   const sidebarSlot = premium ? null : (
-    <div className="relative overflow-hidden rounded-[24px] bg-linear-to-br from-tint-peach to-surface p-5">
-      <Waves className="absolute inset-x-0 bottom-0 h-16 w-full opacity-70" a="var(--energy-soft)" b="var(--energy-soft)" />
-      <div className="relative">
-        <Crown className="size-6 text-energy" aria-hidden />
-        <p className="mt-2 font-display text-[17px] leading-tight font-extrabold">{tb("title")}</p>
-        <p className="mt-1 text-[13px] leading-snug text-muted-foreground">{tb("body")}</p>
-        <Button asChild size="sm" className="mt-3">
-          <Link href="/pricing">
+    <Link
+      href="/pricing"
+      className="group block rounded-[14px] border border-border bg-surface-2 p-4 transition-colors hover:border-energy/40"
+    >
+      <div className="flex items-center gap-3">
+        <img
+          src="/illustrations/fluent/rocket.svg"
+          alt=""
+          className="size-9 shrink-0"
+        />
+        <div className="min-w-0">
+          <p className="text-[14px] leading-tight font-extrabold">
+            {tb("title")}
+          </p>
+          <p className="mt-0.5 flex items-center gap-1 text-[13px] font-semibold text-energy-ink">
             {tb("cta")}
-            <ArrowRight aria-hidden />
-          </Link>
-        </Button>
+            <ArrowRight
+              className="size-3.5 transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            />
+          </p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 
   const c = await getTranslations("common");
   const stats = await topBarStats(user.id, user.timeZone);
 
   const topBar = (
-    <header className="sticky top-0 z-30 bg-background/75 backdrop-blur-md">
+    <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:start-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
       >
         {c("skipToContent")}
       </a>
-      <div className="mx-auto flex h-[76px] max-w-[1240px] items-center gap-2 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[64px] max-w-[1240px] items-center gap-2 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-1 lg:hidden">
           <ShellMenuButton />
           <Logo href="/dashboard" compact className="sm:hidden" />
           <Logo href="/dashboard" className="hidden sm:inline-flex" />
         </div>
-        <CommandPaletteButton className="hidden h-12 w-[340px] justify-start border-white/80 px-5 shadow-[var(--shadow-card)] md:inline-flex dark:border-white/5 [&>kbd]:ms-auto" />
+        <CommandPaletteButton className="hidden h-10 w-[300px] justify-start rounded-full border-border bg-surface-2 px-4 shadow-none md:inline-flex [&>kbd]:ms-auto" />
         <div className="ms-auto flex items-center gap-1 sm:gap-2">
           <CountdownChip testDate={user.testDate} />
           <TopStats stats={stats} />
@@ -132,14 +177,26 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <ThemeOrb signedIn />
           </span>
           <ThemeSync theme={user.theme} />
-          <UserMenu name={user.name} email={user.email} isOwner={isOwner(user)} />
+          <UserMenu
+            name={user.name}
+            email={user.email}
+            isOwner={isOwner(user)}
+          />
         </div>
       </div>
     </header>
   );
 
   return (
-    <AppShell groups={groups} footer={footer} sidebarSlot={sidebarSlot} mobile={mobile} tabs={tabs} topBar={topBar} banner={demo}>
+    <AppShell
+      groups={groups}
+      footer={footer}
+      sidebarSlot={sidebarSlot}
+      mobile={mobile}
+      tabs={tabs}
+      topBar={topBar}
+      banner={demo}
+    >
       <PageTransition>{children}</PageTransition>
       <CommandPaletteHost signedIn />
     </AppShell>

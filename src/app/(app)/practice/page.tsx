@@ -36,11 +36,18 @@ export default async function PracticePage({
     },
   });
   return (
-    <Container className="max-w-4xl">
-      <PageHeader art="bank" title={t("title")} />
+    <Container className="max-w-5xl">
+      <PageHeader
+        art="bank"
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("subtitle")}
+      />
       {open.length > 0 && (
-        <section className="glass-card mb-6 rounded-2xl p-4">
-          <h2 className="mb-2 font-semibold">{t("inProgress")}</h2>
+        <section className="mb-8 rounded-[20px] border border-border bg-surface px-5 py-4">
+          <h2 className="mb-1 text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+            {t("inProgress")}
+          </h2>
           <ul className="divide-y divide-border/60">
             {open.slice(0, 1).map((a) => (
               <li

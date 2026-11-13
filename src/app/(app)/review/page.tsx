@@ -1,4 +1,3 @@
-import { EmptyState } from "@/components/layout/empty-state";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -7,21 +6,11 @@ import { requireUser } from "@/server/auth/session";
 import { notebookCounts } from "@/server/review/service";
 import { Container, PageHeader } from "@/components/layout/page-header";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
   MistakeCauseSelect,
   RemoveFromNotebook,
   StartReviewButton,
 } from "@/components/learning/review-actions";
-import { Owl } from "@/components/mascot/owl";
 import { recurringMistakes } from "@/lib/srs/patterns";
-import { Spot } from "@/components/illustrations/spot";
 
 export async function generateMetadata() {
   const t = await getTranslations("review");
@@ -77,99 +66,94 @@ export default async function ReviewPage() {
   );
   const anyTagged = history.some((h) => h.cause);
 
+  const eyebrow = (k: string) => (
+    <p className="text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+      {k}
+    </p>
+  );
+
   return (
-    <Container className="max-w-4xl space-y-6">
-      <PageHeader art="review" title={t("title")} description={t("subtitle")} />
-      {/* Hero: how many are due today, or all caught up. */}
-      <div
-        className={`flex flex-col items-center gap-5 overflow-hidden rounded-[32px] p-6 text-center sm:flex-row sm:p-8 sm:text-start ${counts.due > 0 ? "bg-review text-primary-foreground shadow-[0_6px_0_color-mix(in_oklab,var(--review),black_25%)]" : "border border-border bg-surface"}`}
-      >
-        <Owl
-          pose={counts.due > 0 ? "thinking" : "correct"}
-          className="w-24 shrink-0"
+    <Container className="max-w-5xl space-y-12">
+      <PageHeader
+        art="review"
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("subtitle")}
+      />
+
+      {/* Today: what is due, one action */}
+      <section className="flex flex-col items-center gap-6 rounded-[24px] border border-border bg-surface p-7 text-center sm:flex-row sm:p-8 sm:text-start">
+        <img
+          src={
+            counts.due > 0
+              ? "/illustrations/fluent/alarm-clock.svg"
+              : "/illustrations/fluent/trophy.svg"
+          }
+          alt=""
+          className="size-20 shrink-0"
         />
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           {counts.due > 0 ? (
             <>
-              <p className="font-display text-5xl leading-none font-extrabold tabular-nums">
-                {counts.due} <span className="text-2xl">{t("hero.due")}</span>
+              <p className="font-display text-[44px] leading-none font-extrabold tracking-[-0.04em] tabular-nums">
+                {counts.due}{" "}
+                <span className="text-[22px] tracking-[-0.02em]">
+                  {t("hero.due")}
+                </span>
               </p>
-              <p className="mt-2 opacity-90">
-                {t("hero.dueLabel", { count: counts.due })}
-              </p>
+              <p className="mt-2 text-muted-foreground">{t("hero.dueShort")}</p>
             </>
           ) : (
             <>
-              <p className="font-display text-3xl font-extrabold">
+              <p className="font-display text-[28px] font-extrabold tracking-[-0.03em]">
                 {t("hero.caught")}
               </p>
               <p className="mt-1 text-muted-foreground">
-                {t("hero.caughtBody")}
+                {t("hero.caughtShort")}
               </p>
             </>
           )}
         </div>
         {counts.due > 0 && (
-          <div className="shrink-0 [&_button]:bg-white [&_button]:text-[#6d28d9] [&_button]:shadow-[0_4px_0_rgb(15_23_42/0.25)]">
-            <StartReviewButton
-              source="due"
-              disabled={false}
-              label={t("start")}
-            />
-          </div>
+          <StartReviewButton source="due" disabled={false} label={t("start")} />
         )}
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            {t("bookmarksTitle", { count: counts.bookmarks })}
-          </CardTitle>
-          <CardDescription>{t("bookmarksHelp")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <StartReviewButton
-            source="bookmarks"
-            disabled={counts.bookmarks === 0}
-            label={t("practiceBookmarks")}
-          />
-        </CardContent>
-      </Card>
+      </section>
 
       {patterns.length > 0 && (
-        <section
-          aria-labelledby="patterns-title"
-          className="group rounded-2xl border bg-surface p-5 sm:p-6"
-        >
-          <div className="flex items-start gap-4">
-            <div className="min-w-0 flex-1">
-              <h2 id="patterns-title" className="text-lg font-semibold">
-                {t("patterns.title")}
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t("patterns.body")}
-              </p>
-            </div>
-            <Spot name="target" className="hidden w-24 shrink-0 sm:block" />
+        <section aria-labelledby="patterns-title" className="space-y-5">
+          <div className="space-y-2">
+            {eyebrow(t("patterns.eyebrow"))}
+            <h2
+              id="patterns-title"
+              className="font-display text-[26px] font-extrabold tracking-[-0.03em]"
+            >
+              {t("patterns.title")}
+            </h2>
           </div>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-3">
-            {patterns.map((p) => (
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {patterns.map((p, k) => (
               <li
                 key={p.skill}
-                className="flex flex-col gap-2 rounded-xl border bg-background p-4"
+                className="group flex flex-col gap-4 rounded-[20px] border border-border bg-surface p-5"
               >
-                <span className="font-medium">
-                  {tx(`skills.${p.skill as "INFERENCES"}`)}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {t("patterns.count", { count: p.count })}
+                <div className="flex items-center justify-between">
+                  <span className="font-display text-[34px] leading-none font-extrabold tracking-[-0.04em] text-energy tabular-nums">
+                    {p.count}
+                  </span>
+                  <span className="rounded-full bg-surface-2 px-2.5 py-1 text-[12px] font-bold text-muted-foreground">
+                    #{k + 1}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[16px] leading-snug font-extrabold tracking-[-0.01em]">
+                    {tx(`skills.${p.skill as "INFERENCES"}`)}
+                  </p>
                   {p.cause && (
-                    <>
-                      {" "}
-                      ·{" "}
-                      {t("patterns.mostly", { cause: t(`causes.${p.cause}`) })}
-                    </>
+                    <p className="mt-1 text-[13px] text-muted-foreground">
+                      {t(`causes.${p.cause}`)}
+                    </p>
                   )}
-                </span>
+                </div>
                 <Button
                   asChild
                   size="sm"
@@ -184,49 +168,70 @@ export default async function ReviewPage() {
             ))}
           </ul>
           {!anyTagged && (
-            <p className="mt-3 text-xs text-muted-foreground">
+            <p className="text-[13px] text-muted-foreground">
               {t("patterns.tagHint")}
             </p>
           )}
         </section>
       )}
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">{t("notebook")}</h2>
+      <section aria-labelledby="nb-title" className="space-y-5">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="space-y-2">
+            {eyebrow(t("notebookEyebrow"))}
+            <h2
+              id="nb-title"
+              className="font-display text-[26px] font-extrabold tracking-[-0.03em]"
+            >
+              {t("notebook")}
+            </h2>
+          </div>
+          {counts.bookmarks > 0 && (
+            <StartReviewButton
+              source="bookmarks"
+              disabled={false}
+              label={t("practiceBookmarks")}
+            />
+          )}
+        </div>
         {items.length === 0 ? (
-          <EmptyState
-            pose="cheer"
-            body={t("empty")}
-            action={
-              <Button asChild>
-                <Link href="/practice">{t("emptyCta")}</Link>
-              </Button>
-            }
-          />
+          <div className="flex flex-col items-center gap-4 rounded-[24px] border border-dashed border-border px-6 py-12 text-center">
+            <img
+              src="/illustrations/fluent/notebook.svg"
+              alt=""
+              className="size-16"
+            />
+            <p className="text-muted-foreground">{t("emptyShort")}</p>
+            <Button asChild>
+              <Link href="/practice">{t("emptyCta")}</Link>
+            </Button>
+          </div>
         ) : (
-          <ul className="divide-y rounded-lg border">
+          <ul className="divide-y divide-border overflow-hidden rounded-[20px] border border-border bg-surface">
             {items.map((i) => (
               <li
                 key={i.id}
-                className="flex flex-wrap items-center gap-3 p-3 text-sm"
+                className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-4 text-sm"
               >
-                <span className="font-medium">
+                <span
+                  className={`size-2 shrink-0 rounded-full ${i.reason === "WRONG" ? "bg-energy" : i.reason === "FLAGGED" ? "bg-primary" : "bg-[#F2C14E]"}`}
+                  aria-hidden
+                />
+                <span className="min-w-0 flex-1 font-semibold">
                   {tx(`skills.${i.question.skill as "INFERENCES"}`)}
                 </span>
-                <Badge variant="secondary">
-                  {t(`reasons.${i.reason as "WRONG"}`)}
-                </Badge>
                 {i.reason !== "BOOKMARK" && (
                   <MistakeCauseSelect
                     questionId={i.question.id}
                     value={i.cause}
                   />
                 )}
-                <span className="ms-auto text-muted-foreground">
+                <span className="w-24 text-end text-[13px] text-muted-foreground">
                   {i.dueAt <= now
                     ? t("dueNow")
-                    : t("dueOn", {
-                        date: format.dateTime(i.dueAt, { dateStyle: "medium" }),
+                    : format.dateTime(i.dueAt, {
+                        day: "numeric",
+                        month: "short",
                       })}
                 </span>
                 <RemoveFromNotebook questionId={i.question.id} />
@@ -236,21 +241,30 @@ export default async function ReviewPage() {
         )}
       </section>
 
-      {bookmarks.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold">{t("notes")}</h2>
-          <ul className="space-y-2">
-            {bookmarks.map((b) => (
-              <li key={b.id} className="rounded-lg border p-3 text-sm">
-                <span className="font-medium">
-                  {tx(`skills.${b.question.skill as "INFERENCES"}`)}
-                </span>
-                {b.bookmarked && (
-                  <Badge className="ms-2">{t("bookmarked")}</Badge>
-                )}
-                {b.note && <p className="mt-1 whitespace-pre-wrap">{b.note}</p>}
-              </li>
-            ))}
+      {bookmarks.some((b) => b.note) && (
+        <section aria-labelledby="notes-title" className="space-y-5">
+          <h2
+            id="notes-title"
+            className="font-display text-[26px] font-extrabold tracking-[-0.03em]"
+          >
+            {t("notes")}
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {bookmarks
+              .filter((b) => b.note)
+              .map((b) => (
+                <li
+                  key={b.id}
+                  className="rounded-[20px] border border-border bg-surface-2 p-5 text-sm"
+                >
+                  <p className="font-semibold">
+                    {tx(`skills.${b.question.skill as "INFERENCES"}`)}
+                  </p>
+                  <p className="mt-2 whitespace-pre-wrap text-muted-foreground">
+                    {b.note}
+                  </p>
+                </li>
+              ))}
           </ul>
         </section>
       )}

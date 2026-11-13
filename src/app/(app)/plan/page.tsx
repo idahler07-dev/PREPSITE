@@ -6,8 +6,7 @@ import { dayInZone } from "@/lib/stats/streak";
 import type { WeeklyPlan } from "@/lib/coach/plan";
 import { Link } from "@/i18n/navigation";
 import { Container, PageHeader } from "@/components/layout/page-header";
-import { Card, CardContent } from "@/components/ui/card";
-import { WeekView } from "@/components/learning/plan-view";
+import { TodayCard, WeekStrip } from "@/components/learning/plan-view";
 import { RefreshPlanButton } from "@/components/learning/refresh-plan";
 
 export async function generateMetadata() {
@@ -22,10 +21,12 @@ export default async function PlanPage() {
   const row = await currentPlan(user.id);
   const plan = row.plan as unknown as WeeklyPlan;
   const today = dayInZone(new Date(), siteConfig.defaultTimeZone);
+  const todayTasks = plan.days.find((d) => d.date === today)?.tasks ?? [];
   return (
-    <Container className="max-w-6xl space-y-6">
+    <Container className="max-w-5xl space-y-12">
       <PageHeader
         art="plan"
+        eyebrow={t("eyebrow")}
         title={t("title")}
         description={
           plan.daysToTest !== null
@@ -35,33 +36,42 @@ export default async function PlanPage() {
               })
             : t("subtitle", { minutes: plan.minutesPerDay })
         }
-        actions={<RefreshPlanButton />}
+        actions={
+          <>
+            <RefreshPlanButton />
+            {plan.daysToTest === null && (
+              <Link
+                href="/settings"
+                className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                {t("setTestDate")}
+              </Link>
+            )}
+          </>
+        }
       />
-      {row.message && (
-        <Card>
-          <CardContent className="pt-6 text-sm">{row.message}</CardContent>
-        </Card>
-      )}
       {plan.focusSkills.length > 0 && (
-        <p className="text-sm">
-          {t("focus")}:{" "}
-          <strong>
-            {plan.focusSkills
-              .map((s) => tx(`skills.${s as "INFERENCES"}`))
-              .join(", ")}
-          </strong>
+        <div className="-mt-6 flex flex-wrap items-center gap-2">
+          <span className="text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+            {t("focusShort")}
+          </span>
+          {plan.focusSkills.map((s) => (
+            <span
+              key={s}
+              className="rounded-full border border-border bg-surface px-3 py-1.5 text-[13px] font-semibold"
+            >
+              {tx(`skills.${s as "INFERENCES"}`)}
+            </span>
+          ))}
+        </div>
+      )}
+      {row.message && (
+        <p className="rounded-[20px] border border-border bg-surface-2 p-5 text-[15px] leading-relaxed">
+          {row.message}
         </p>
       )}
-      {plan.daysToTest === null && (
-        <p className="text-sm text-muted-foreground">
-          {t("noTestDate")}{" "}
-          <Link href="/settings" className="underline">
-            {t("setTestDate")}
-          </Link>
-        </p>
-      )}
-      <WeekView plan={plan} today={today} />
-      <p className="text-xs text-muted-foreground">{t("howItWorks")}</p>
+      <TodayCard tasks={todayTasks} />
+      <WeekStrip plan={plan} today={today} />
     </Container>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ChevronRight, Loader2, Play, Zap } from "lucide-react";
+import { ChevronRight, Loader2, Play } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { DOMAINS, type SectionKey } from "@/lib/taxonomy";
 import { MAX_DRILL_QUESTIONS } from "@/lib/practice/drill";
@@ -119,14 +119,16 @@ export function DrillBuilder({
     label: string;
     hint?: string;
     cfg: Record<string, unknown>;
+    art: string;
   }[] = [
     ...(weakSkills.length
       ? [
           {
+            art: "brain",
             label: t("quickWeak"),
             hint: t("quickWeakHint", {
               skills: weakSkills
-                .slice(0, 3)
+                .slice(0, 2)
                 .map((s) => tx(`skills.${s as "INFERENCES"}`))
                 .join(", "),
             }),
@@ -134,244 +136,291 @@ export function DrillBuilder({
           },
         ]
       : []),
-    { label: t("quickMixed"), cfg: { count: 10 } },
-    { label: t("quickMath"), cfg: { section: "MATH", count: 10 } },
-    { label: t("quickRw"), cfg: { section: "RW", count: 10 } },
+    { art: "books", label: t("quickMixed"), cfg: { count: 10 } },
+    {
+      art: "compass",
+      label: t("quickMath"),
+      cfg: { section: "MATH", count: 10 },
+    },
+    {
+      art: "open-book",
+      label: t("quickRw"),
+      cfg: { section: "RW", count: 10 },
+    },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <section aria-labelledby="quick-start">
         <h2
           id="quick-start"
-          className="mb-3 flex items-center gap-2 text-base font-semibold"
+          className="mb-4 text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase"
         >
-          <Zap className="size-4 text-primary" aria-hidden /> {t("quickStart")}
+          {t("quickStart")}
         </h2>
-        <div
-          className={`grid gap-2 ${quick.length > 3 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
-        >
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {quick.map((q) => (
-            <Button
+            <button
               key={q.label}
-              variant={q.hint ? "default" : "secondary"}
-              className="h-auto min-h-12 justify-between px-4 py-2 text-left"
+              type="button"
               disabled={pending}
               onClick={() =>
                 launch({ ...q.cfg, feedback: "IMMEDIATE", unseenFirst: true })
               }
+              className={cn(
+                "group flex flex-col items-start gap-4 rounded-[20px] border p-5 text-start transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--elev-md)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-60",
+                q.hint
+                  ? "border-energy/30 bg-energy-soft"
+                  : "border-border bg-surface",
+              )}
             >
-              <span className="flex min-w-0 flex-col">
-                <span>{q.label}</span>
+              <img
+                src={`/illustrations/fluent/${q.art}.svg`}
+                alt=""
+                className="size-12 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3"
+              />
+              <span className="min-w-0">
+                <span className="block text-[16px] leading-snug font-extrabold tracking-[-0.01em]">
+                  {q.label}
+                </span>
                 {q.hint && (
-                  <span className="truncate text-xs font-normal opacity-85">
+                  <span className="mt-1 line-clamp-2 block text-[13px] text-muted-foreground">
                     {q.hint}
                   </span>
                 )}
               </span>
-              <ChevronRight className="shrink-0 opacity-70" aria-hidden />
-            </Button>
+            </button>
           ))}
         </div>
       </section>
 
-      <Card>
-        <CardContent className="space-y-6 pt-6">
-          <fieldset>
-            <legend className="mb-2 text-sm font-medium">{t("section")}</legend>
-            <div className="flex flex-wrap gap-2">
-              {([null, "RW", "MATH"] as const).map((s) => (
-                <Chip
-                  key={s ?? "both"}
-                  active={section === s}
-                  onClick={() => {
-                    setSection(s);
-                    setDomains([]);
-                    setSkills([]);
-                  }}
-                >
-                  {s ? tx(`sections.${s}`) : t("bothSections")}
-                </Chip>
-              ))}
-            </div>
-          </fieldset>
+      <details className="group/b rounded-[20px] border border-border bg-surface">
+        <summary className="flex cursor-pointer list-none items-center gap-4 p-5 [&::-webkit-details-marker]:hidden">
+          <img
+            src="/illustrations/fluent/card-index-dividers.svg"
+            alt=""
+            className="size-10"
+          />
+          <span className="flex-1">
+            <span className="block text-[16px] font-extrabold tracking-[-0.01em]">
+              {t("buildTitle")}
+            </span>
+            <span className="block text-[13px] text-muted-foreground">
+              {t("buildHint")}
+            </span>
+          </span>
+          <ChevronRight
+            className="size-5 text-muted-foreground transition-transform group-open/b:rotate-90"
+            aria-hidden
+          />
+        </summary>
+        <div className="border-t border-border">
+          <Card className="border-0 shadow-none">
+            <CardContent className="space-y-6 pt-6">
+              <fieldset>
+                <legend className="mb-2 text-sm font-medium">
+                  {t("section")}
+                </legend>
+                <div className="flex flex-wrap gap-2">
+                  {([null, "RW", "MATH"] as const).map((s) => (
+                    <Chip
+                      key={s ?? "both"}
+                      active={section === s}
+                      onClick={() => {
+                        setSection(s);
+                        setDomains([]);
+                        setSkills([]);
+                      }}
+                    >
+                      {s ? tx(`sections.${s}`) : t("bothSections")}
+                    </Chip>
+                  ))}
+                </div>
+              </fieldset>
 
-          <fieldset>
-            <legend className="mb-2 text-sm font-medium">{t("domains")}</legend>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {visibleDomains.map((d) => (
-                <Chip
-                  key={d.key}
-                  active={domains.includes(d.key)}
-                  onClick={() => {
-                    toggle(domains, d.key, setDomains);
-                    setSkills((s) =>
-                      s.filter(
-                        (sk) => !(d.skills as readonly string[]).includes(sk),
-                      ),
-                    );
-                  }}
-                >
-                  {tx(`domains.${d.key}`)}
-                </Chip>
-              ))}
-            </div>
-          </fieldset>
+              <fieldset>
+                <legend className="mb-2 text-sm font-medium">
+                  {t("domains")}
+                </legend>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {visibleDomains.map((d) => (
+                    <Chip
+                      key={d.key}
+                      active={domains.includes(d.key)}
+                      onClick={() => {
+                        toggle(domains, d.key, setDomains);
+                        setSkills((s) =>
+                          s.filter(
+                            (sk) =>
+                              !(d.skills as readonly string[]).includes(sk),
+                          ),
+                        );
+                      }}
+                    >
+                      {tx(`domains.${d.key}`)}
+                    </Chip>
+                  ))}
+                </div>
+              </fieldset>
 
-          <details className="group" open={!!initial?.skills?.length}>
-            <summary className="cursor-pointer text-sm font-medium">
-              {t("skills")}
-              <span className="ms-2 text-muted-foreground">
-                {skills.length
-                  ? c("selected", { count: skills.length })
-                  : t("allSkills")}
-              </span>
-            </summary>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {visibleSkills.map((s) => (
-                <Chip
-                  key={s}
-                  active={skills.includes(s)}
-                  onClick={() => toggle(skills, s, setSkills)}
-                  small
-                >
-                  {tx(`skills.${s as "INFERENCES"}`)}
-                </Chip>
-              ))}
-            </div>
-          </details>
+              <details className="group" open={!!initial?.skills?.length}>
+                <summary className="cursor-pointer text-sm font-medium">
+                  {t("skills")}
+                  <span className="ms-2 text-muted-foreground">
+                    {skills.length
+                      ? c("selected", { count: skills.length })
+                      : t("allSkills")}
+                  </span>
+                </summary>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {visibleSkills.map((s) => (
+                    <Chip
+                      key={s}
+                      active={skills.includes(s)}
+                      onClick={() => toggle(skills, s, setSkills)}
+                      small
+                    >
+                      {tx(`skills.${s as "INFERENCES"}`)}
+                    </Chip>
+                  ))}
+                </div>
+              </details>
 
-          <fieldset>
-            <legend className="mb-2 text-sm font-medium">
-              {t("difficulty")}
-            </legend>
-            <div className="flex flex-wrap gap-2">
-              {(["EASY", "MEDIUM", "HARD"] as const).map((d) => (
-                <Chip
-                  key={d}
-                  active={difficulties.includes(d)}
-                  onClick={() => toggle(difficulties, d, setDifficulties)}
-                >
-                  {te(`difficulty.${d}`)}
-                </Chip>
-              ))}
-            </div>
-          </fieldset>
+              <fieldset>
+                <legend className="mb-2 text-sm font-medium">
+                  {t("difficulty")}
+                </legend>
+                <div className="flex flex-wrap gap-2">
+                  {(["EASY", "MEDIUM", "HARD"] as const).map((d) => (
+                    <Chip
+                      key={d}
+                      active={difficulties.includes(d)}
+                      onClick={() => toggle(difficulties, d, setDifficulties)}
+                    >
+                      {te(`difficulty.${d}`)}
+                    </Chip>
+                  ))}
+                </div>
+              </fieldset>
 
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="count">{t("count")}</Label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="count"
-                  type="range"
-                  min={1}
-                  max={MAX_DRILL_QUESTIONS}
-                  value={count}
-                  onChange={(e) => setCount(Number(e.target.value))}
-                  className="w-full accent-[var(--primary)]"
-                />
-                <span className="w-8 text-end font-semibold tabular-nums">
-                  {count}
-                </span>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="count">{t("count")}</Label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      id="count"
+                      type="range"
+                      min={1}
+                      max={MAX_DRILL_QUESTIONS}
+                      value={count}
+                      onChange={(e) => setCount(Number(e.target.value))}
+                      className="w-full accent-[var(--primary)]"
+                    />
+                    <span className="w-8 text-end font-semibold tabular-nums">
+                      {count}
+                    </span>
+                  </div>
+                </div>
+                <fieldset>
+                  <legend className="mb-2 text-sm font-medium">
+                    {t("timing")}
+                  </legend>
+                  <div className="flex flex-wrap gap-2">
+                    <Chip active={!timed} onClick={() => setTimed(false)}>
+                      {t("untimed")}
+                    </Chip>
+                    <Chip active={timed} onClick={() => setTimed(true)}>
+                      {t("timed")}
+                    </Chip>
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend className="mb-2 text-sm font-medium">
+                    {t("feedback")}
+                  </legend>
+                  <div className="flex flex-wrap gap-2">
+                    <Chip
+                      active={feedback === "IMMEDIATE"}
+                      onClick={() => setFeedback("IMMEDIATE")}
+                    >
+                      {t("feedbackImmediate")}
+                    </Chip>
+                    <Chip
+                      active={feedback === "END"}
+                      onClick={() => setFeedback("END")}
+                    >
+                      {t("feedbackEnd")}
+                    </Chip>
+                  </div>
+                </fieldset>
+                <label className="flex items-center gap-2 self-end text-sm">
+                  <input
+                    type="checkbox"
+                    checked={unseenFirst}
+                    onChange={(e) => setUnseenFirst(e.target.checked)}
+                    className="size-4"
+                  />
+                  {t("unseenFirst")}
+                </label>
               </div>
-            </div>
-            <fieldset>
-              <legend className="mb-2 text-sm font-medium">
-                {t("timing")}
-              </legend>
-              <div className="flex flex-wrap gap-2">
-                <Chip active={!timed} onClick={() => setTimed(false)}>
-                  {t("untimed")}
-                </Chip>
-                <Chip active={timed} onClick={() => setTimed(true)}>
-                  {t("timed")}
-                </Chip>
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend className="mb-2 text-sm font-medium">
-                {t("feedback")}
-              </legend>
-              <div className="flex flex-wrap gap-2">
-                <Chip
-                  active={feedback === "IMMEDIATE"}
-                  onClick={() => setFeedback("IMMEDIATE")}
-                >
-                  {t("feedbackImmediate")}
-                </Chip>
-                <Chip
-                  active={feedback === "END"}
-                  onClick={() => setFeedback("END")}
-                >
-                  {t("feedbackEnd")}
-                </Chip>
-              </div>
-            </fieldset>
-            <label className="flex items-center gap-2 self-end text-sm">
-              <input
-                type="checkbox"
-                checked={unseenFirst}
-                onChange={(e) => setUnseenFirst(e.target.checked)}
-                className="size-4"
-              />
-              {t("unseenFirst")}
-            </label>
-          </div>
 
-          <details>
-            <summary className="cursor-pointer text-sm font-medium">
-              {t("codeRange")}
-            </summary>
-            <div className="mt-2 grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1">
-                <Label htmlFor="codeFrom">{t("codeFrom")}</Label>
-                <Input
-                  id="codeFrom"
-                  value={codeFrom}
-                  onChange={(e) => setCodeFrom(e.target.value.toUpperCase())}
-                  className="font-mono"
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="codeTo">{t("codeTo")}</Label>
-                <Input
-                  id="codeTo"
-                  value={codeTo}
-                  onChange={(e) => setCodeTo(e.target.value.toUpperCase())}
-                  className="font-mono"
-                />
-              </div>
-            </div>
-          </details>
+              <details>
+                <summary className="cursor-pointer text-sm font-medium">
+                  {t("codeRange")}
+                </summary>
+                <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="codeFrom">{t("codeFrom")}</Label>
+                    <Input
+                      id="codeFrom"
+                      value={codeFrom}
+                      onChange={(e) =>
+                        setCodeFrom(e.target.value.toUpperCase())
+                      }
+                      className="font-mono"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="codeTo">{t("codeTo")}</Label>
+                    <Input
+                      id="codeTo"
+                      value={codeTo}
+                      onChange={(e) => setCodeTo(e.target.value.toUpperCase())}
+                      className="font-mono"
+                    />
+                  </div>
+                </div>
+              </details>
 
-          <div className="flex flex-wrap items-center gap-4 border-t pt-4">
-            <Button
-              size="lg"
-              disabled={pending || matching === 0}
-              onClick={() => launch(config)}
-            >
-              {pending ? (
-                <Loader2 className="animate-spin" aria-hidden />
-              ) : (
-                <Play aria-hidden />
-              )}
-              {pending ? t("starting") : t("start")}
-            </Button>
-            <p className="text-sm text-muted-foreground" aria-live="polite">
-              {matching === null
-                ? c("loading")
-                : matching === 0
-                  ? t("noQuestions")
-                  : t("matching", { count: matching })}
-              {matching !== null &&
-                matching > 0 &&
-                matching < count &&
-                ` ${t("lessThanRequested", { count: matching })}`}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+              <div className="flex flex-wrap items-center gap-4 border-t pt-4">
+                <Button
+                  size="lg"
+                  disabled={pending || matching === 0}
+                  onClick={() => launch(config)}
+                >
+                  {pending ? (
+                    <Loader2 className="animate-spin" aria-hidden />
+                  ) : (
+                    <Play aria-hidden />
+                  )}
+                  {pending ? t("starting") : t("start")}
+                </Button>
+                <p className="text-sm text-muted-foreground" aria-live="polite">
+                  {matching === null
+                    ? c("loading")
+                    : matching === 0
+                      ? t("noQuestions")
+                      : t("matching", { count: matching })}
+                  {matching !== null &&
+                    matching > 0 &&
+                    matching < count &&
+                    ` ${t("lessThanRequested", { count: matching })}`}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </details>
     </div>
   );
 }

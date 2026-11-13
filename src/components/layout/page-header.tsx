@@ -6,21 +6,10 @@ import { Spot, type SpotName } from "@/components/illustrations/spot";
  * App page header: title, one-line description, primary action on the right.
  * Every app page uses this so headers line up across the product.
  */
-const ART_TINT: Record<SpotName, string> = {
-  bank: "--tint-aqua",
-  mocks: "--tint-peach",
-  review: "--tint-sky",
-  vocab: "--tint-mint",
-  plan: "--tint-peach",
-  progress: "--tint-aqua",
-  target: "--tint-peach",
-  focus: "--tint-sky",
-};
-
 /**
- * Page title, one line of description and actions. With `art`, it becomes a tinted
- * banner with a spot illustration on the right (the illustration hides on narrow
- * screens).
+ * Page title in the landing page's style: a small gold label, a large tight
+ * heading, one short line and the page's actions. With `art`, it sits on a cream
+ * panel with the page's illustration on the right (hidden on narrow screens).
  */
 export function PageHeader({
   title,
@@ -35,54 +24,38 @@ export function PageHeader({
   eyebrow?: ReactNode;
   art?: SpotName;
 }) {
+  const text = (
+    <div className="min-w-0 space-y-3">
+      {eyebrow && (
+        <p className="text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+          {eyebrow}
+        </p>
+      )}
+      <h1 className="font-display text-[34px] leading-[1.05] font-extrabold tracking-[-0.035em] sm:text-[42px]">
+        {title}
+      </h1>
+      {description && (
+        <p className="max-w-[52ch] text-[16px] leading-relaxed text-muted-foreground">
+          {description}
+        </p>
+      )}
+      {actions && (
+        <div className="flex flex-wrap items-center gap-2 pt-2">{actions}</div>
+      )}
+    </div>
+  );
   if (art)
     return (
-      <header
-        className="group relative mb-8 grid items-center gap-4 overflow-hidden rounded-[24px] px-6 py-6 sm:grid-cols-[minmax(0,1fr)_240px] lg:grid-cols-[minmax(0,1fr)_280px] sm:px-8 sm:py-7"
-        style={{ background: `var(${ART_TINT[art]})` }}
-      >
-        <div className="min-w-0 space-y-2">
-          {eyebrow && (
-            <p className="text-small font-semibold tracking-wide text-primary uppercase">
-              {eyebrow}
-            </p>
-          )}
-          <h1 className="text-h2 font-extrabold lg:text-h1">{title}</h1>
-          {description && (
-            <p className="max-w-[60ch] text-lead text-muted-foreground">
-              {description}
-            </p>
-          )}
-          {actions && (
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              {actions}
-            </div>
-          )}
-        </div>
+      <header className="group relative mb-10 grid items-center gap-6 overflow-hidden rounded-[24px] border border-border bg-surface-2 px-7 py-8 sm:grid-cols-[minmax(0,1fr)_220px] sm:px-10 sm:py-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+        {text}
         <div className="relative hidden sm:block" aria-hidden>
-          <div className="absolute inset-x-8 top-1/2 aspect-square -translate-y-1/2 rounded-full bg-surface/55" />
-          <Spot name={art} className="relative -my-4 scale-110" />
+          <Spot name={art} className="relative" />
         </div>
       </header>
     );
   return (
-    <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-      <div className="min-w-0 space-y-2">
-        {eyebrow && (
-          <p className="text-small font-semibold tracking-wide text-primary uppercase">
-            {eyebrow}
-          </p>
-        )}
-        <h1 className="text-h2 font-extrabold lg:text-h1">{title}</h1>
-        {description && (
-          <p className="max-w-[70ch] text-lead text-muted-foreground">
-            {description}
-          </p>
-        )}
-      </div>
-      {actions && (
-        <div className="flex flex-wrap items-center gap-2">{actions}</div>
-      )}
+    <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
+      {text}
     </header>
   );
 }

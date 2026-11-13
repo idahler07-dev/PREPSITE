@@ -3,7 +3,11 @@
 ## Microsoft Fluent Emoji
 
 Used in `src/components/illustrations/spot.tsx` (the target in the "target" spot
-illustration: the "bullseye" emoji's face and rings, with the dart removed).
+illustration: the "bullseye" emoji's face and rings, with the dart removed), and
+as object illustrations in `public/illustrations/fluent/` (books, laptop,
+calendar, chart, light bulb, trophy, alarm clock, memo, brain, graduation cap,
+open book, bookmark tabs, card dividers, notebook, pencil, stopwatch, notepad,
+label, rocket, compass; flat style, unmodified).
 Source: https://github.com/microsoft/fluentui-emoji
 
 MIT License

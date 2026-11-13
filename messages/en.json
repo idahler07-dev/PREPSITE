@@ -504,8 +504,8 @@
     "range": "Range {low}–{high}"
   },
   "practice": {
-    "title": "Practice",
-    "subtitle": "Build a drill from our published questions.",
+    "title": "What should we practise?",
+    "subtitle": "Ten questions, explained as you go.",
     "section": "Section",
     "bothSections": "Both sections",
     "domains": "Domains",
@@ -540,7 +540,10 @@
     "drillStarted": "Drill started. Good luck!",
     "moreInProgress": "{count, plural, one {# more in progress} other {# more in progress}}",
     "quickWeak": "Weak-spot mix",
-    "quickWeakHint": "10 questions on {skills}"
+    "quickWeakHint": "10 questions on {skills}",
+    "buildTitle": "Build your own",
+    "buildHint": "Pick sections, skills, difficulty and timing",
+    "eyebrow": "Practice"
   },
   "test": {
     "drillTitle": "Practice drill",
@@ -1889,15 +1892,15 @@
     }
   },
   "review": {
-    "title": "Mistake notebook",
-    "subtitle": "Questions you got wrong or marked come back on a spaced schedule until you get them right several times in a row.",
+    "title": "Every miss comes back",
+    "subtitle": "Until you get it right.",
     "dueTitle": "{count, plural, =0 {Nothing to review today} one {# question to review} other {# questions to review}}",
     "dueHelp": "{total, plural, =0 {Your notebook is empty.} one {# question in your notebook.} other {# questions in your notebook.}}",
     "start": "Start review",
     "bookmarksTitle": "{count, plural, =0 {No bookmarks} one {# bookmark} other {# bookmarks}}",
     "bookmarksHelp": "Questions you saved to look at again.",
     "practiceBookmarks": "Practise bookmarks",
-    "notebook": "In your notebook",
+    "notebook": "Saved questions",
     "empty": "No questions yet. Wrong answers in drills and tests are added automatically.",
     "reasons": {
       "WRONG": "answered wrong",
@@ -1907,7 +1910,7 @@
     "dueNow": "due now",
     "dueOn": "next on {date}",
     "remove": "Remove from notebook",
-    "notes": "Bookmarks and notes",
+    "notes": "Your notes",
     "bookmarked": "Bookmarked",
     "bookmark": "Bookmark",
     "myNote": "My note",
@@ -1918,7 +1921,9 @@
       "due": "due today",
       "dueLabel": "{count, plural, one {question is} other {questions are}} ready for another try.",
       "caught": "All caught up",
-      "caughtBody": "Nothing to review today. Wrong answers come back here on a schedule."
+      "caughtBody": "Nothing to review today. Wrong answers come back here on a schedule.",
+      "dueShort": "Ready for another try.",
+      "caughtShort": "Nothing due today."
     },
     "causeLabel": "Why did you miss it?",
     "causeNone": "Not tagged",
@@ -1930,13 +1935,17 @@
       "GUESS": "Guessed"
     },
     "patterns": {
-      "title": "Patterns in your mistakes",
+      "title": "What keeps tripping you up",
       "body": "Skills you keep missing. A short drill on one of them pays off most.",
       "count": "{count, plural, one {# mistake} other {# mistakes}}",
       "mostly": "mostly: {cause}",
       "drill": "Drill this skill",
-      "tagHint": "Tag why you missed each question below to see what trips you up."
-    }
+      "tagHint": "Tag why you missed each question below to see what trips you up.",
+      "eyebrow": "Patterns"
+    },
+    "eyebrow": "Mistakes",
+    "notebookEyebrow": "Notebook",
+    "emptyShort": "Wrong answers land here automatically."
   },
   "vocab": {
     "title": "Vocabulary",
@@ -1967,9 +1976,9 @@
     "keys": "Keys 1 to 4"
   },
   "coach": {
-    "title": "Study plan",
-    "subtitle": "Your plan for this week: about {minutes} minutes a day.",
-    "subtitleDays": "{days, plural, one {# day} other {# days}} to your test. About {minutes} minutes a day this week.",
+    "title": "Your week, planned",
+    "subtitle": "About {minutes} minutes a day.",
+    "subtitleDays": "{days, plural, one {# day} other {# days}} to test day. About {minutes} minutes a day.",
     "focus": "Focus this week",
     "noTestDate": "Add your test date to get a plan that counts down to it.",
     "setTestDate": "Set test date",
@@ -1993,7 +2002,19 @@
     "reviewDue": "{count, plural, =0 {Mistake notebook} one {# question to review} other {# questions to review}}",
     "vocabDue": "{count, plural, =0 {Vocabulary cards} one {# word card} other {# word cards}}",
     "missed": "missed",
-    "carried": "moved from a missed day"
+    "carried": "moved from a missed day",
+    "eyebrow": "Study plan",
+    "todayEyebrow": "Today",
+    "todayTitle": "{minutes} minutes",
+    "todayRest": "Rest day",
+    "weekEyebrow": "This week",
+    "weekTitle": "At a glance",
+    "restShort": "Rest",
+    "short": {
+      "review": "Review {count, plural, one {# question} other {# questions}}",
+      "drill": "{count, plural, one {# question} other {# questions}}"
+    },
+    "focusShort": "Focus"
   },
   "notifications": {
     "footer": "{name}. Change which messages you get: {settings}",
@@ -2814,7 +2835,7 @@
     "resume": "Resume your unfinished session",
     "resumeCta": "Resume",
     "newTitle": "Find your starting score",
-    "newBody": "Take a practice test for a full estimate, or log a score you already have. Then your plan, trend and topic breakdown fill in.",
+    "newBody": "Take a short test or log a score you have. Your plan builds itself from there.",
     "newTest": "Take a practice test",
     "newHave": "I have a score",
     "newSkip": "Just practise for now",

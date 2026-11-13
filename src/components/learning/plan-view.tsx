@@ -151,3 +151,188 @@ export async function WeekView({
     </ol>
   );
 }
+
+const ART: Record<PlanTask["kind"], string> = {
+  drill: "pencil",
+  review: "notebook",
+  mock: "laptop",
+  vocab: "bookmark-tabs",
+  rest: "light-bulb",
+};
+
+/** Today's tasks, one row each with its illustration. */
+export async function TodayCard({ tasks }: { tasks: PlanTask[] }) {
+  const t = await getTranslations("coach");
+  const tx = await getTranslations("taxonomy");
+  const total = tasks.reduce((s, k) => s + (k.missed ? 0 : k.minutes), 0);
+  return (
+    <section
+      aria-labelledby="today-title"
+      className="rounded-[24px] border border-border bg-surface p-6 sm:p-8"
+    >
+      <div className="mb-5 flex items-end justify-between gap-3">
+        <div className="space-y-2">
+          <p className="text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+            {t("todayEyebrow")}
+          </p>
+          <h2
+            id="today-title"
+            className="font-display text-[26px] font-extrabold tracking-[-0.03em]"
+          >
+            {total > 0 ? t("todayTitle", { minutes: total }) : t("todayRest")}
+          </h2>
+        </div>
+      </div>
+      {tasks.length === 0 ? (
+        <p className="text-muted-foreground">{t("nothing")}</p>
+      ) : (
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {tasks.map((task, i) => {
+            const label =
+              task.kind === "drill"
+                ? task.skill
+                  ? tx(`skills.${task.skill as "INFERENCES"}`)
+                  : t("tasks.mock")
+                : task.kind === "review"
+                  ? t("short.review", { count: task.count ?? 0 })
+                  : t(`tasks.${task.kind}`);
+            const sub =
+              task.kind === "drill"
+                ? t("short.drill", { count: task.count ?? 10 })
+                : task.minutes > 0
+                  ? t("minutes", { count: task.minutes })
+                  : null;
+            const href = HREF[task.kind](task);
+            const body = (
+              <>
+                <img
+                  src={`/illustrations/fluent/${ART[task.kind]}.svg`}
+                  alt=""
+                  className="size-11 shrink-0 transition-transform group-hover:scale-110"
+                />
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={cn(
+                      "block truncate text-[15.5px] font-extrabold tracking-[-0.01em]",
+                      task.missed && "text-muted-foreground line-through",
+                    )}
+                  >
+                    {label}
+                  </span>
+                  <span className="block text-[13px] text-muted-foreground">
+                    {task.carried
+                      ? t("carried")
+                      : task.missed
+                        ? t("missed")
+                        : sub}
+                  </span>
+                </span>
+                {href && (
+                  <ChevronRight
+                    className="size-4 shrink-0 text-muted-foreground/60"
+                    aria-hidden
+                  />
+                )}
+              </>
+            );
+            return (
+              <li key={i}>
+                {href ? (
+                  <Link
+                    href={href}
+                    className="group flex items-center gap-4 rounded-[16px] border border-border bg-surface-2 px-4 py-3.5 transition-colors hover:border-energy/40 hover:bg-energy-soft"
+                  >
+                    {body}
+                  </Link>
+                ) : (
+                  <span className="flex items-center gap-4 rounded-[16px] border border-border bg-surface-2 px-4 py-3.5">
+                    {body}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/** The week at a glance: day, date, minutes; missed days marked, today highlighted. */
+export async function WeekStrip({
+  plan,
+  today,
+}: {
+  plan: WeeklyPlan;
+  today: string;
+}) {
+  const t = await getTranslations("coach");
+  const format = await getFormatter();
+  return (
+    <section aria-labelledby="week-title" className="space-y-5">
+      <div className="space-y-2">
+        <p className="text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase">
+          {t("weekEyebrow")}
+        </p>
+        <h2
+          id="week-title"
+          className="font-display text-[26px] font-extrabold tracking-[-0.03em]"
+        >
+          {t("weekTitle")}
+        </h2>
+      </div>
+      <ol className="grid grid-cols-4 gap-3 sm:grid-cols-7">
+        {plan.days.map((d) => {
+          const date = new Date(`${d.date}T12:00:00Z`);
+          const rest =
+            d.tasks.length === 0 || d.tasks.every((k) => k.kind === "rest");
+          const mock = d.tasks.some((k) => k.kind === "mock");
+          const missed = d.tasks.some((k) => k.missed);
+          const mins = d.tasks.reduce(
+            (s, k) => s + (k.missed ? 0 : k.minutes),
+            0,
+          );
+          const isToday = d.date === today;
+          return (
+            <li
+              key={d.date}
+              className={cn(
+                "flex flex-col items-center gap-2 rounded-[18px] border px-2 py-4 text-center",
+                isToday
+                  ? "border-energy bg-energy-soft"
+                  : "border-border bg-surface",
+                d.date < today && "opacity-80",
+              )}
+            >
+              <span className="text-[12px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
+                {format.dateTime(date, { weekday: "short" })}
+              </span>
+              <span className="font-display text-[24px] leading-none font-extrabold tracking-[-0.03em]">
+                {format.dateTime(date, { day: "numeric" })}
+              </span>
+              <img
+                src={`/illustrations/fluent/${rest ? "light-bulb" : mock ? "laptop" : "pencil"}.svg`}
+                alt=""
+                className={cn("size-7", rest && "opacity-40 grayscale")}
+              />
+              <span
+                className={cn(
+                  "text-[12px] font-semibold",
+                  missed
+                    ? "text-muted-foreground line-through"
+                    : "text-foreground",
+                )}
+              >
+                {rest
+                  ? t("restShort")
+                  : missed
+                    ? t("missed")
+                    : t("minutes", { count: mins })}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}

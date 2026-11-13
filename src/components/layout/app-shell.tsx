@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, m, type Variants } from "motion/react";
 import { LiquidGroup } from "@/components/motion/liquid-group";
@@ -85,7 +91,10 @@ function activeIn(pathname: string, items: ShellItem[]) {
   return best;
 }
 
-const MenuContext = createContext<{ open: boolean; setOpen: (open: boolean) => void } | null>(null);
+const MenuContext = createContext<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+} | null>(null);
 
 /** The ☰ button in the phone and tablet top bar; opens the full menu. */
 export function ShellMenuButton() {
@@ -108,11 +117,27 @@ export function ShellMenuButton() {
   );
 }
 
-const listVariants: Variants = { closed: {}, open: { transition: { staggerChildren: 0.02, delayChildren: 0.05 } } };
-const itemVariants: Variants = { closed: { opacity: 0, x: -10 }, open: { opacity: 1, x: 0, transition: spring.soft } };
+const listVariants: Variants = {
+  closed: {},
+  open: { transition: { staggerChildren: 0.02, delayChildren: 0.05 } },
+};
+const itemVariants: Variants = {
+  closed: { opacity: 0, x: -10 },
+  open: { opacity: 1, x: 0, transition: spring.soft },
+};
 
 /** One sidebar row. */
-function NavRow({ item, active, onClick, size = "md" }: { item: ShellItem; active: boolean; onClick?: () => void; size?: "md" | "lg" }) {
+function NavRow({
+  item,
+  active,
+  onClick,
+  size = "md",
+}: {
+  item: ShellItem;
+  active: boolean;
+  onClick?: () => void;
+  size?: "md" | "lg";
+}) {
   const Icon = ICONS[item.key] ?? Route;
   return (
     <Link
@@ -121,12 +146,23 @@ function NavRow({ item, active, onClick, size = "md" }: { item: ShellItem; activ
       data-liquid-key={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "group relative flex items-center gap-3.5 rounded-[18px] px-4 text-[15px] font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        size === "lg" ? "h-12" : "h-[46px]",
-        active ? "font-bold text-energy-ink" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
+        "group relative flex items-center gap-3 rounded-[10px] px-3 text-[14.5px] font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        size === "lg" ? "h-11" : "h-10",
+        active
+          ? "text-foreground"
+          : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
       )}
     >
-      <Icon className={cn("relative size-5 shrink-0", active ? "text-energy" : "text-muted-foreground/80 group-hover:text-foreground")} strokeWidth={active ? 2.3 : 2} aria-hidden />
+      <Icon
+        className={cn(
+          "relative size-[18px] shrink-0",
+          active
+            ? "text-energy"
+            : "text-muted-foreground/70 group-hover:text-foreground",
+        )}
+        strokeWidth={2}
+        aria-hidden
+      />
       <span className="relative truncate">{item.label}</span>
     </Link>
   );
@@ -168,31 +204,53 @@ export function AppShell({
   const all = [...groups.flatMap((g) => g.items), ...footer];
   const active = activeIn(pathname, all);
   const mobileActive = activeIn(pathname, mobile);
-  const sectionTabs = tabs.find((g) => g.items.some((i) => isActive(pathname, i)));
+  const sectionTabs = tabs.find((g) =>
+    g.items.some((i) => isActive(pathname, i)),
+  );
 
   return (
     <MenuContext.Provider value={{ open: menuOpen, setOpen: setMenuOpen }}>
-      <div className="relative isolate flex min-h-dvh flex-col">
+      <div className="app-lp relative isolate flex min-h-dvh flex-col">
         <div className="app-ambient" aria-hidden />
         <div className="flex flex-1">
           {/* Desktop sidebar */}
-          <aside className="sticky top-0 hidden h-dvh w-[264px] shrink-0 p-4 pe-0 lg:block" aria-label={t("appNavigation")}>
-            <div className="flex h-full flex-col overflow-hidden rounded-[30px] border border-white/80 bg-surface/90 shadow-[var(--shadow-card)] dark:border-white/5">
-              <div className="flex h-[76px] items-center px-6">
+          <aside
+            className="sticky top-0 hidden h-dvh w-[248px] shrink-0 border-e border-border bg-surface lg:block"
+            aria-label={t("appNavigation")}
+          >
+            <div className="flex h-full flex-col overflow-hidden">
+              <div className="flex h-[72px] items-center px-6">
                 <Logo href="/dashboard" />
               </div>
-              <LiquidGroup as="nav" activeKey={active?.href ?? null} className="flex-1 space-y-4 overflow-y-auto px-3 pb-3" indicatorClassName="rounded-[18px] bg-(image:--grad-nav)">
+              <LiquidGroup
+                as="nav"
+                activeKey={active?.href ?? null}
+                className="flex-1 space-y-6 overflow-y-auto px-3 pt-2 pb-3"
+                indicatorClassName="rounded-[10px] bg-(image:--grad-nav)"
+              >
                 {groups.map((g, gi) => (
-                  <div key={g.label ?? gi} className="space-y-1">
-                    {g.label && <p className="px-4 pt-1 pb-1 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/70 uppercase">{g.label}</p>}
+                  <div key={g.label ?? gi} className="space-y-0.5">
+                    {g.label && (
+                      <p className="px-3 pb-1.5 text-[11px] font-bold tracking-[0.12em] text-muted-foreground/70 uppercase">
+                        {g.label}
+                      </p>
+                    )}
                     {g.items.map((i) => (
-                      <NavRow key={i.href} item={i} active={active?.href === i.href} />
+                      <NavRow
+                        key={i.href}
+                        item={i}
+                        active={active?.href === i.href}
+                      />
                     ))}
                   </div>
                 ))}
-                <div className="space-y-1 border-t border-border pt-3">
+                <div className="space-y-0.5 border-t border-border pt-4">
                   {footer.map((i) => (
-                    <NavRow key={i.href} item={i} active={active?.href === i.href} />
+                    <NavRow
+                      key={i.href}
+                      item={i}
+                      active={active?.href === i.href}
+                    />
                   ))}
                 </div>
               </LiquidGroup>
@@ -203,28 +261,66 @@ export function AppShell({
           <div className="flex min-w-0 flex-1 flex-col">
             {banner}
             {topBar}
-            {sectionTabs && <SectionTabs items={sectionTabs.items} pathname={pathname} />}
-            <main id="main" className="flex flex-1 flex-col pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-0">
+            {sectionTabs && (
+              <SectionTabs items={sectionTabs.items} pathname={pathname} />
+            )}
+            <main
+              id="main"
+              className="flex flex-1 flex-col pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-0"
+            >
               {children}
             </main>
           </div>
         </div>
 
         {/* Phones and tablets: bottom tabs */}
-        <nav aria-label={t("appNavigation")} className="glass fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] lg:hidden">
-          <LiquidGroup as="ul" activeKey={mobileActive?.href ?? null} className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2" indicatorClassName="rounded-full bg-energy-soft">
+        <nav
+          aria-label={t("appNavigation")}
+          className="glass fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] lg:hidden"
+        >
+          <LiquidGroup
+            as="ul"
+            activeKey={mobileActive?.href ?? null}
+            className="mx-auto grid h-[68px] max-w-[560px] grid-cols-5 px-2"
+            indicatorClassName="rounded-full bg-energy-soft"
+          >
             {mobile.map((i) => {
               const Icon = ICONS[i.key] ?? Route;
               const on = mobileActive?.href === i.href;
               return (
                 <li key={i.href} className="flex">
-                  <Link href={i.href} aria-current={on ? "page" : undefined} className="relative flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none">
-                    <span data-liquid-key={i.href} className="relative grid h-8 w-14 place-items-center">
-                      <m.span className="relative" animate={on && !reduce ? { y: [0, -2, 0] } : { y: 0 }} transition={{ duration: 0.3 }}>
-                        <Icon className={cn("size-[22px]", on ? "text-energy" : "text-muted-foreground")} strokeWidth={on ? 2.4 : 2} aria-hidden />
+                  <Link
+                    href={i.href}
+                    aria-current={on ? "page" : undefined}
+                    className="relative flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:outline-none"
+                  >
+                    <span
+                      data-liquid-key={i.href}
+                      className="relative grid h-8 w-14 place-items-center"
+                    >
+                      <m.span
+                        className="relative"
+                        animate={on && !reduce ? { y: [0, -2, 0] } : { y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Icon
+                          className={cn(
+                            "size-[22px]",
+                            on ? "text-energy" : "text-muted-foreground",
+                          )}
+                          strokeWidth={on ? 2.4 : 2}
+                          aria-hidden
+                        />
                       </m.span>
                     </span>
-                    <span className={cn("text-[11px] font-semibold", on ? "text-energy-ink" : "text-muted-foreground")}>{i.label}</span>
+                    <span
+                      className={cn(
+                        "text-[11px] font-semibold",
+                        on ? "text-energy-ink" : "text-muted-foreground",
+                      )}
+                    >
+                      {i.label}
+                    </span>
                   </Link>
                 </li>
               );
@@ -238,7 +334,13 @@ export function AppShell({
             {menuOpen && (
               <Dialog.Portal forceMount>
                 <Dialog.Overlay asChild forceMount>
-                  <m.div className="fixed inset-0 z-50 bg-overlay backdrop-blur-[2px] lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade} />
+                  <m.div
+                    className="fixed inset-0 z-50 bg-overlay backdrop-blur-[2px] lg:hidden"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={fade}
+                  />
                 </Dialog.Overlay>
                 <Dialog.Content asChild forceMount aria-describedby={undefined}>
                   <m.div
@@ -251,12 +353,15 @@ export function AppShell({
                     dragConstraints={{ left: 0, right: 0 }}
                     dragElastic={{ left: 0.5, right: 0 }}
                     onDragEnd={(_, info) => {
-                      if (info.offset.x < -80 || info.velocity.x < -500) setMenuOpen(false);
+                      if (info.offset.x < -80 || info.velocity.x < -500)
+                        setMenuOpen(false);
                     }}
                   >
                     <div className="flex h-16 items-center justify-between border-b px-4">
                       <Logo href="/dashboard" />
-                      <Dialog.Title className="sr-only">{t("menu")}</Dialog.Title>
+                      <Dialog.Title className="sr-only">
+                        {t("menu")}
+                      </Dialog.Title>
                       <Dialog.Close asChild>
                         <m.button
                           type="button"
@@ -269,14 +374,42 @@ export function AppShell({
                         </m.button>
                       </Dialog.Close>
                     </div>
-                    <m.nav className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4" aria-label={t("menu")} variants={reduce ? undefined : listVariants} initial="closed" animate="open">
+                    <m.nav
+                      className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4"
+                      aria-label={t("menu")}
+                      variants={reduce ? undefined : listVariants}
+                      initial="closed"
+                      animate="open"
+                    >
                       {[...groups, { items: footer }].map((g, gi) => (
-                        <div key={g.label ?? `g${gi}`} className={cn(!g.label && gi > 0 && "border-t border-border pt-3")}>
-                          {g.label && <p className="px-3 pb-1 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/80 uppercase">{g.label}</p>}
+                        <div
+                          key={g.label ?? `g${gi}`}
+                          className={cn(
+                            !g.label && gi > 0 && "border-t border-border pt-3",
+                          )}
+                        >
+                          {g.label && (
+                            <p className="px-3 pb-1 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground/80 uppercase">
+                              {g.label}
+                            </p>
+                          )}
                           {g.items.map((i) => (
-                            <m.div key={i.href} variants={reduce ? undefined : itemVariants}>
-                              <div className={cn("rounded-[18px]", active?.href === i.href && "bg-energy-soft")}>
-                                <NavRow item={i} active={active?.href === i.href} size="lg" onClick={() => setMenuOpen(false)} />
+                            <m.div
+                              key={i.href}
+                              variants={reduce ? undefined : itemVariants}
+                            >
+                              <div
+                                className={cn(
+                                  "rounded-[18px]",
+                                  active?.href === i.href && "bg-energy-soft",
+                                )}
+                              >
+                                <NavRow
+                                  item={i}
+                                  active={active?.href === i.href}
+                                  size="lg"
+                                  onClick={() => setMenuOpen(false)}
+                                />
                               </div>
                             </m.div>
                           ))}
@@ -295,11 +428,22 @@ export function AppShell({
 }
 
 /** Phones and tablets: the pages inside a tab, as a row under the top bar. */
-function SectionTabs({ items, pathname }: { items: ShellItem[]; pathname: string }) {
+function SectionTabs({
+  items,
+  pathname,
+}: {
+  items: ShellItem[];
+  pathname: string;
+}) {
   const on = activeIn(pathname, items);
   return (
     <div className="border-b border-border bg-background/80 lg:hidden">
-      <LiquidGroup as="nav" activeKey={on?.href ?? null} className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6" indicatorClassName="rounded-full bg-energy-soft">
+      <LiquidGroup
+        as="nav"
+        activeKey={on?.href ?? null}
+        className="swipe-row mx-auto flex max-w-[1200px] gap-1 overflow-x-auto px-4 py-2 sm:px-6"
+        indicatorClassName="rounded-full bg-energy-soft"
+      >
         {items.map((i) => {
           const Icon = ICONS[i.key] ?? Route;
           const active = on?.href === i.href;
@@ -309,7 +453,12 @@ function SectionTabs({ items, pathname }: { items: ShellItem[]; pathname: string
               href={i.href}
               data-liquid-key={i.href}
               aria-current={active ? "page" : undefined}
-              className={cn("relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold transition-colors", active ? "text-energy-ink" : "text-muted-foreground hover:text-foreground")}
+              className={cn(
+                "relative flex h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold transition-colors",
+                active
+                  ? "text-energy-ink"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
             >
               <Icon className="relative size-4" aria-hidden />
               <span className="relative">{i.label}</span>

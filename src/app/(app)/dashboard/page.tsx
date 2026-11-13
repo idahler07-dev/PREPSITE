@@ -5,10 +5,6 @@ import {
   Check,
   Clock,
   Pencil,
-  Sparkles,
-  Target,
-  TrendingUp,
-  CalendarDays,
 } from "lucide-react";
 import { requireUser } from "@/server/auth/session";
 import { getDashboardStats } from "@/server/stats/dashboard";
@@ -41,11 +37,11 @@ export async function generateMetadata() {
 
 const DAY = 86_400_000;
 const card =
-  "relative overflow-hidden rounded-2xl border bg-surface shadow-[var(--elev-sm)]";
+  "relative overflow-hidden rounded-[20px] border border-border bg-surface";
 const eyebrow =
-  "text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase";
+  "text-[12px] font-bold tracking-[0.14em] text-[#A9730E] uppercase";
 const h2 =
-  "font-display text-[19px] leading-tight font-extrabold tracking-[-0.02em]";
+  "font-display text-[24px] leading-tight font-extrabold tracking-[-0.03em]";
 const TASK_HREF: Record<PlanTask["kind"], (t: PlanTask) => string> = {
   drill: (t) => (t.skill ? `/practice?skill=${t.skill}` : "/practice"),
   review: () => "/review",
@@ -77,19 +73,19 @@ function Kpi({
       href={href}
       className={cn(
         card,
-        "flex items-center gap-4 p-4 transition-colors hover:border-foreground/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "group flex items-center gap-4 p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--elev-md)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
       )}
     >
       <span
-        className="grid size-14 shrink-0 place-items-center rounded-2xl"
-        style={{ background: `var(${tone})` }}
+        className="grid size-14 shrink-0 place-items-center"
+        data-tone={tone}
       >
         {icon}
       </span>
       <span className="min-w-0 flex-1">
         <span className={eyebrow}>{label}</span>
         <span className="mt-1 flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[22px] leading-none font-semibold tracking-[-0.03em] whitespace-nowrap tabular-nums">
+          <span className="font-display text-[30px] leading-none font-extrabold tracking-[-0.04em] whitespace-nowrap tabular-nums">
             {value}
           </span>
           {extra}
@@ -265,9 +261,17 @@ export default async function DashboardPage({
   });
 
   const greeting = (
-    <header className="flex flex-wrap items-end justify-between gap-5">
+    <header className="flex flex-wrap items-end justify-between gap-5 pt-4">
       <div>
-        <h1 className="font-display text-[30px] leading-tight font-extrabold tracking-[-0.03em] sm:text-[34px]">
+        <p className={eyebrow}>
+          {format.dateTime(now, {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            timeZone: tz,
+          })}
+        </p>
+        <h1 className="mt-3 font-display text-[36px] leading-[1.05] font-extrabold tracking-[-0.035em] sm:text-[44px]">
           {t(`hello.${part}`)}{" "}
           {first && <span>{t("helloName", { name: first })}</span>}
         </h1>
@@ -285,20 +289,20 @@ export default async function DashboardPage({
 
   if (isNew) {
     return (
-      <div className="mx-auto w-full max-w-[1120px] space-y-8 px-4 pb-10 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1120px] space-y-10 px-4 py-8 sm:px-6 lg:px-8">
         {greeting}
         <section
-          className={cn(card, "flex flex-wrap items-center gap-8 p-7 sm:p-10")}
+          className="flex flex-wrap items-center gap-10 rounded-[24px] border border-border bg-surface-2 p-8 sm:p-12"
           aria-labelledby="new-title"
         >
           <LiveWillo
             src="/mascot/deer-stand-sm.webp"
-            className="w-[150px] shrink-0 max-sm:hidden"
+            className="w-[170px] shrink-0 max-sm:hidden"
           />
           <div className="max-w-[34rem]">
             <h2
               id="new-title"
-              className="font-display text-3xl font-extrabold tracking-tight"
+              className="font-display text-[32px] leading-tight font-extrabold tracking-[-0.035em]"
             >
               {t("newTitle")}
             </h2>
@@ -350,7 +354,7 @@ export default async function DashboardPage({
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1120px] space-y-8 px-4 pb-10 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-[1120px] space-y-10 px-4 py-8 sm:px-6 lg:px-8">
       {greeting}
 
       {/* Three key numbers */}
@@ -358,7 +362,13 @@ export default async function DashboardPage({
         <Kpi
           href="/plan"
           tone="--tint-peach"
-          icon={<CalendarDays aria-hidden className="size-6 text-energy-ink" />}
+          icon={
+            <img
+              src="/illustrations/fluent/spiral-calendar.svg"
+              alt=""
+              className="size-12 transition-transform group-hover:scale-110"
+            />
+          }
           label={t("daysLabel")}
           value={days != null && days >= 0 ? days : "—"}
           extra={
@@ -381,7 +391,13 @@ export default async function DashboardPage({
         <Kpi
           href="/settings"
           tone="--tint-sky"
-          icon={<Target aria-hidden className="size-6 text-primary" />}
+          icon={
+            <img
+              src="/illustrations/fluent/graduation-cap.svg"
+              alt=""
+              className="size-12 transition-transform group-hover:scale-110"
+            />
+          }
           label={t("target")}
           value={user.targetScore ?? "—"}
           extra={
@@ -396,7 +412,13 @@ export default async function DashboardPage({
         <Kpi
           href="/analytics"
           tone="--tint-mint"
-          icon={<TrendingUp aria-hidden className="size-6 text-correct-ink" />}
+          icon={
+            <img
+              src="/illustrations/fluent/chart-increasing.svg"
+              alt=""
+              className="size-12 transition-transform group-hover:scale-110"
+            />
+          }
           label={t("estimated")}
           value={latest ?? "—"}
           extra={
@@ -427,7 +449,7 @@ export default async function DashboardPage({
       <section
         className={cn(
           card,
-          "flex items-start gap-5 bg-linear-to-r from-[color-mix(in_oklab,var(--tint-peach),var(--surface)_55%)] to-surface p-6",
+          "flex items-center gap-5 border-energy/25 bg-energy-soft p-6",
         )}
         aria-labelledby="focus-note"
       >
@@ -438,15 +460,10 @@ export default async function DashboardPage({
           />
         </div>
         <div>
-          <p
-            className={cn(eyebrow, "flex items-center gap-1.5 text-energy-ink")}
-          >
-            <Sparkles aria-hidden className="size-3.5" />
-            {t("focusTitle")}
-          </p>
+          <p className={eyebrow}>{t("focusTitle")}</p>
           <h2
             id="focus-note"
-            className="mt-1.5 font-display text-lg font-extrabold tracking-[-0.015em]"
+            className="mt-2 font-display text-[20px] leading-snug font-extrabold tracking-[-0.02em]"
           >
             {weakTop
               ? t("focusWeak", {
@@ -455,9 +472,6 @@ export default async function DashboardPage({
                 })
               : t("focusNew")}
           </h2>
-          <p className="mt-1.5 max-w-[640px] text-[14.5px] leading-relaxed text-muted-foreground">
-            {weakTop ? t("focusWeakBody") : t("focusNewBody")}
-          </p>
         </div>
       </section>
 
@@ -469,9 +483,6 @@ export default async function DashboardPage({
               <h2 id="today-title" className={h2}>
                 {t("goalsTitle")}
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t("goalsSub")}
-              </p>
             </div>
             <Link
               href="/plan"

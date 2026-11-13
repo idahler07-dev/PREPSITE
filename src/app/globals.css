@@ -2187,3 +2187,60 @@ html.lenis body {
   .willo-box .wb-tap-r { animation: wb-tap 1.6s ease-in-out 0.4s infinite; }
 }
 @keyframes wb-tap { 0%, 60%, 100% { transform: translateY(0); } 70% { transform: translateY(-4px); } 80% { transform: translateY(0); } 88% { transform: translateY(-3px); } }
+
+/* ---- App in the landing page's look (light mode): white, near-black ink, teal and orange,
+   warm hairlines, cream panels, flat surfaces. Applied by the app shell (.app-lp). ---- */
+:root:not(.dark) .app-lp {
+  --background: #ffffff;
+  --foreground: #0b0b0c;
+  --card: #ffffff;
+  --card-foreground: #0b0b0c;
+  --popover: #ffffff;
+  --popover-foreground: #0b0b0c;
+  --surface: #ffffff;
+  --surface-2: #faf8f4;
+  --muted: #faf8f4;
+  --muted-foreground: #6e6e6a;
+  --border: #ece9e3;
+  --input: #e2ddd3;
+  --line-200: #ece9e3;
+  --primary: #0f6b78;
+  --primary-hover: #0c5964;
+  --primary-edge: #0a4d57;
+  --primary-soft: #e7f1f2;
+  --primary-foreground: #ffffff;
+  --ring: #0f6b78;
+  --energy: #ff6a1a;
+  --energy-2: #ff6a1a;
+  --energy-cta: #ff6a1a;
+  --energy-cta-2: #ff6a1a;
+  --energy-ink: #c2410c;
+  --energy-soft: #fff1e8;
+  --grad-cta: linear-gradient(#ff6a1a, #ff6a1a);
+  --grad-energy: linear-gradient(#ff6a1a, #ff6a1a);
+  --grad-nav: linear-gradient(#f4f1eb, #f4f1eb);
+  --tint-aqua: #eef6f6;
+  --tint-peach: #fff4ec;
+  --tint-sky: #f1f5f9;
+  --tint-mint: #f0f7f1;
+  --section-tint: #faf8f4;
+  --review: #0f6b78;
+  --review-soft: #e7f1f2;
+  --shadow-card: 0 1px 2px rgb(11 11 12 / 0.04);
+  --elev-sm: 0 1px 2px rgb(11 11 12 / 0.04);
+  --elev-md: 0 6px 18px -10px rgb(11 11 12 / 0.12);
+  --elev-lg: 0 18px 40px -20px rgb(11 11 12 / 0.18);
+  --glass: #ffffff;
+  --radius-panel: 18px;
+  --radius-large: 18px;
+  --radius-hero: 24px;
+  --radius-input: 10px;
+  --mesh-opacity: 0;
+  background: #ffffff;
+  color: #0b0b0c;
+}
+:root:not(.dark) body:has(.app-lp) { background: #ffffff; }
+:root:not(.dark) .app-lp .app-ambient, :root:not(.dark) .app-lp .glass-card::before { display: none; }
+:root:not(.dark) .app-lp .glass-card { background: #ffffff; border: 1px solid #ece9e3; box-shadow: none; backdrop-filter: none; }
+.app-lp h1 { letter-spacing: -0.03em; }
+:root:not(.dark) .app-lp { --glow-energy: 0 6px 16px -8px rgb(255 106 26 / 0.55); }
