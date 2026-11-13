@@ -2845,7 +2845,51 @@
     "dueToday": "due for review today",
     "savedTotal": "{n, plural, =0 {Missed questions are saved here.} one {# question saved} other {# questions saved}}",
     "reviewNow": "Review now",
-    "openNotebook": "Open notebook"
+    "openNotebook": "Open notebook",
+    "streakLine": "{n, plural, =0 {Start a streak today with one short session.} one {You have a # day streak. One session today keeps it going.} other {You have a # day streak. One session today keeps it going.}}",
+    "weekdayLit": "{day}: studied",
+    "weekdayDim": "{day}: no study",
+    "focusTitle": "Willo's focus for today",
+    "focusWeak": "Your weakest skill is {skill}, at {pct}% correct.",
+    "focusWeakBody": "Start with it while you are fresh. Your plan already gives it extra time.",
+    "focusNew": "Answer a few questions and I will pick your focus.",
+    "focusNewBody": "After about twenty answers I can tell which skills cost you the most points.",
+    "goalsTitle": "Your goals",
+    "goalsSub": "In the order of today's plan.",
+    "tagDrill": "Practice",
+    "tagReview": "Review",
+    "tagMock": "Mock test",
+    "tagVocab": "Vocabulary",
+    "predictedTitle": "Estimated score",
+    "predictedSub": "From your practice tests and official scores",
+    "focusNext": "Focus next",
+    "practiceTitle": "Practice your way",
+    "cards": {
+      "bank": {
+        "t": "Question bank",
+        "d": "By skill and difficulty"
+      },
+      "mocks": {
+        "t": "Mock tests",
+        "d": "Full adaptive, timed"
+      },
+      "review": {
+        "t": "Mistake notebook",
+        "d": "{n, plural, =0 {Nothing due today} one {# card due today} other {# cards due today}}"
+      },
+      "vocab": {
+        "t": "Vocabulary",
+        "d": "Short daily cards"
+      },
+      "plan": {
+        "t": "Study plan",
+        "d": "Your week at a glance"
+      },
+      "progress": {
+        "t": "Progress report",
+        "d": "Skills and score trend"
+      }
+    }
   },
   "focus": {
     "title": "Focus sessions",
