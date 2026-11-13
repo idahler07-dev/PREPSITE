@@ -4,14 +4,14 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import EYES from "./eyes.json";
 import { cn } from "@/lib/utils";
 import { PUPPET_PAD, startPuppet, type Eye } from "./puppet";
-import { moodSrc } from "./rigs";
+import { moodSrc, openSrc } from "./rigs";
 
 /**
- * Any Willo image, alive: a paper puppet animated at 24 fps (see puppet.ts).
+ * Any Willo image, alive: a puppet animated every frame (see puppet.ts).
  * He breathes, his head drifts and glances, his arms swing and gesture, the
  * scarf tail trails, and he blinks.
  *  - idle: as above
- *  - happy: his cheering pose, a small hop and a wave
+ *  - happy: his cheering pose, a hop (crouch, lift, land) and a wave
  *  - cry: his own sad pose (drawn tears, soft brows), slower breaths with a
  *    sniffle, and now and then one fresh tear rolling down
  * The plain image renders first (and stays for reduced motion or no WebGL).
@@ -46,8 +46,8 @@ export function LiveWillo({
   sizes?: string;
   loading?: "eager" | "lazy";
 }) {
-  const src = moodSrc(baseSrc, mood);
-  const srcSet = baseSrcSet ? moodSrc(baseSrcSet, mood) : undefined;
+  const src = openSrc(moodSrc(baseSrc, mood));
+  const srcSet = baseSrcSet ? openSrc(moodSrc(baseSrcSet, mood)) : undefined;
   const info = DATA[src];
   const ref = useRef<HTMLSpanElement>(null);
   const img = useRef<HTMLImageElement>(null);

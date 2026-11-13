@@ -1,5 +1,5 @@
 /**
- * Willo as a paper puppet, animated on twos-and-ones at 24 fps.
+ * Willo as a puppet, animated every display frame (60 fps on most screens).
  *
  * One flat illustration, bent by a small rig (rigs.ts): the body breathes up from
  * the ground line, the head turns about the neck, each arm swings about its
@@ -7,8 +7,10 @@
  * with a soft seam, so nothing tears or slides apart. Lids are drawn on the bent
  * art, so blinks follow the head. A sad pose can let a single tear roll.
  *
- * Motion is kept small and human: a few degrees at most, eased, with the arms
- * lagging the breath and the head drifting on two slow, unrelated rhythms.
+ * Motion follows classic character animation: anticipation before a hop,
+ * squash on landing, overlapping action (arms and scarf trail the body), and
+ * eased holds. Wink poses start from open eyes and wink into the drawn wink.
+ * The idea bulb fills with light from its base up, then glows and sends rays.
  * One shared WebGL context renders every Willo on the page.
  */
 import { RIGS, rigKey, type Rig } from "./rigs";
@@ -22,7 +24,6 @@ export interface Eye {
   fur: string;
 }
 
-const FPS = 24;
 const PAD = 0.08; // room around the art for a hand that swings past its edge
 const MAX_LIMBS = 4;
 
@@ -31,9 +32,10 @@ void main(){ vUv = vec2(aPos.x*0.5+0.5, 0.5-aPos.y*0.5); gl_Position = vec4(aPos
 
 const FS = `precision highp float;
 varying vec2 vUv;
-uniform sampler2D uTex;
+uniform sampler2D uTex, uAlt;
 uniform vec2 uImg, uN, uHeadT, uHeadC, uLift;
-uniform float uPad, uBreath, uFoot, uBand, uHead, uHeadR, uPx;
+uniform float uPad, uBreath, uSquash, uLean, uFoot, uBand, uHead, uHeadR, uPx, uWinkK, uRays, uGlow;
+uniform vec4 uWink, uBulb;
 uniform vec4 uL[${MAX_LIMBS}];
 uniform vec3 uLp[${MAX_LIMBS}];
 uniform vec4 uEye[2];
@@ -46,11 +48,21 @@ vec4 tex(vec2 q){
   if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return vec4(0.0);
   return texture2D(uTex, uv);
 }
+vec4 alt(vec2 q){
+  vec2 uv = q/uImg;
+  if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return vec4(0.0);
+  return texture2D(uAlt, uv);
+}
 void main(){
   vec2 p = ((vUv*(1.0 + 2.0*uPad)) - uPad)*uImg - uLift;
-  // breathing: the body rises from the ground line and fills out a little
   float cx = uImg.x*0.5;
-  vec2 pb = vec2(cx + (p.x - cx)/(1.0 + 0.35*uBreath), uFoot + (p.y - uFoot)/(1.0 + uBreath));
+  vec2 F = vec2(cx, uFoot);
+  // the whole body leans from the feet
+  p = F + rot(p - F, -uLean);
+  // breathing and squash-and-stretch from the ground line (volume kept: wider when shorter)
+  float sy = (1.0 + uBreath)*(1.0 + uSquash);
+  float sx = (1.0 + 0.35*uBreath)*(1.0 - 0.5*uSquash);
+  vec2 pb = vec2(cx + (p.x - cx)/sx, uFoot + (p.y - uFoot)/sy);
   vec2 q = pb;
   // head: everything above the neck seam turns about the neck
   float wh = smoothstep(uN.y + uBand, uN.y - uBand, pb.y);
@@ -85,6 +97,31 @@ void main(){
     float lash = smoothstep(lw + aa, lw - aa, abs(v.y - edge))*smoothstep(1.02, 0.86, r)*step(0.02, k);
     col = mix(col, vec4(0.227, 0.141, 0.086, 1.0), lash*inside);
   }
+  // wink: once the lid is down, the drawn wink takes over around that eye
+  if (uWinkK > 0.001) {
+    vec2 v = (q - uWink.xy)/(uWink.zw*vec2(1.5, 1.6));
+    float m = smoothstep(1.0, 0.72, length(v));
+    col = mix(col, alt(q), m*uWinkK);
+  }
+  // the idea bulb: dim when off, light fills the glass from the base up, rays when full
+  float glow = 0.0;
+  if (uBulb.z > 0.0) {
+    vec2 bv = (q - uBulb.xy)/uBulb.z;
+    float d = length(bv);
+    float yel = step(0.5, col.a)*smoothstep(0.55, 0.75, col.r)*smoothstep(0.42, 0.6, col.g)*smoothstep(0.6, 0.4, col.b);
+    float glass = yel*smoothstep(1.12, 1.0, d);
+    float fy = clamp((1.0 - bv.y)*0.5, 0.0, 1.0); // 0 at the base, 1 at the top
+    float lit = smoothstep(uBulb.w + 0.08, uBulb.w - 0.08, fy)*step(0.001, uBulb.w);
+    float lum = dot(col.rgb, vec3(0.3, 0.55, 0.15));
+    vec3 off = mix(col.rgb, vec3(lum*0.95, lum*0.88, lum*0.62)*0.86, 0.6);
+    vec3 on = mix(col.rgb, vec3(1.0, 0.97, 0.8), 0.42 + 0.18*smoothstep(0.7, 0.0, d));
+    col.rgb = mix(col.rgb, mix(off, on, lit), glass);
+    // rays: the drawn yellow marks around the bulb only show while it is lit
+    float ray = yel*smoothstep(1.15, 1.3, d)*smoothstep(2.6, 2.2, d);
+    col *= 1.0 - ray*(1.0 - uRays);
+    col.rgb = mix(col.rgb, vec3(1.0, 0.9, 0.5), ray*uRays*0.35);
+    glow = uGlow*exp(-pow(max(d - 0.55, 0.0)/0.85, 2.0));
+  }
   // a single tear rolling from a drawn one
   for (int i = 0; i < 2; i++) {
     vec4 T = uTear[i]; // x, y, radius, alpha
@@ -99,11 +136,15 @@ void main(){
     c = mix(c, vec3(1.0), hi*0.85);
     col = mix(col, vec4(c, 1.0), body*T.w);
   }
-  gl_FragColor = vec4(col.rgb*col.a, col.a);
+  vec4 pm = vec4(col.rgb*col.a, col.a);
+  // warm light behind the art
+  pm += (1.0 - pm.a)*vec4(vec3(1.0, 0.82, 0.35)*glow*0.55, glow*0.55);
+  gl_FragColor = pm;
 }`;
 
 // ─── shared GL ──────────────────────────────────────────────────────────────
 let gl: WebGLRenderingContext | null = null;
+let gl2 = false;
 let glCanvas: HTMLCanvasElement | null = null;
 let prog: WebGLProgram | null = null;
 let failed = false;
@@ -114,12 +155,21 @@ function ensureGL(): boolean {
   if (failed) return false;
   try {
     glCanvas = document.createElement("canvas");
-    const g = glCanvas.getContext("webgl", {
+    const attrs = {
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
       preserveDrawingBuffer: true,
-    });
+    };
+    // WebGL 2 can mipmap any image size: a crisp, clean line when the art is drawn small
+    const g2 = glCanvas.getContext(
+      "webgl2",
+      attrs,
+    ) as WebGLRenderingContext | null;
+    gl2 = !!g2;
+    const g =
+      g2 ??
+      (glCanvas.getContext("webgl", attrs) as WebGLRenderingContext | null);
     if (!g) throw new Error("no webgl");
     const sh = (type: number, src: string) => {
       const s = g.createShader(type)!;
@@ -160,25 +210,65 @@ function u(name: string) {
   return loc[name] ?? null;
 }
 
-const textures = new WeakMap<
-  HTMLImageElement,
-  { src: string; tex: WebGLTexture }
+/** The sharpest copy of a deer pose (-hd); other art is used as is. */
+function hiRes(url: string) {
+  return /\/mascot\/deer-[a-z-]+?(-sm)?\.webp$/.test(url) &&
+    !url.includes("-hd.")
+    ? url.replace(/(-sm)?\.webp$/, "-hd.webp")
+    : url;
+}
+const textures = new Map<
+  string,
+  { tex: WebGLTexture | null; img: HTMLImageElement; ready: boolean }
 >();
-function textureFor(img: HTMLImageElement): WebGLTexture | null {
+function upload(img: TexImageSource, tex: WebGLTexture) {
   const g = gl!;
-  const have = textures.get(img);
-  if (have && have.src === img.currentSrc) return have.tex;
-  if (have) g.deleteTexture(have.tex);
-  const tex = g.createTexture();
-  if (!tex) return null;
   g.bindTexture(g.TEXTURE_2D, tex);
   g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE);
   g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE);
-  g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR);
   g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
   g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, img);
-  textures.set(img, { src: img.currentSrc, tex });
-  return tex;
+  if (gl2) {
+    g.generateMipmap(g.TEXTURE_2D);
+    g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR_MIPMAP_LINEAR);
+  } else g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR);
+}
+/** The texture for `url`, loading the sharpest copy; `fallback` (already loaded) stands in meanwhile. */
+function textureFor(
+  url: string,
+  fallback?: HTMLImageElement,
+): WebGLTexture | null {
+  const want = hiRes(url);
+  let e = textures.get(want);
+  if (!e) {
+    const img = new Image();
+    img.decoding = "async";
+    const entry: {
+      tex: WebGLTexture | null;
+      img: HTMLImageElement;
+      ready: boolean;
+    } = { tex: null, img, ready: false };
+    img.onload = () => {
+      entry.tex = gl!.createTexture();
+      if (entry.tex) upload(img, entry.tex);
+      entry.ready = true;
+    };
+    img.src = want;
+    textures.set(want, entry);
+    e = entry;
+  }
+  if (e.ready) return e.tex;
+  if (fallback?.complete && fallback.naturalWidth) {
+    const key = "fb:" + url;
+    let f = textures.get(key);
+    if (!f) {
+      f = { tex: gl!.createTexture(), img: fallback, ready: true };
+      if (f.tex) upload(fallback, f.tex);
+      textures.set(key, f);
+    }
+    return f.tex;
+  }
+  return null;
 }
 
 // ─── motion ─────────────────────────────────────────────────────────────────
@@ -193,146 +283,245 @@ const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 
 interface Pose {
   breath: number;
+  squash: number;
+  lean: number;
   head: number;
   headT: [number, number];
   lift: number;
   limbs: number[];
   lids: [number, number];
+  wink: number; // 0..1: the lid is down and the drawn wink shows
+  winkLid: number; // the lid closing over the winking eye
+  bulb: [number, number, number]; // fill level, rays, glow
   tears: [number, number, number][]; // dy (fraction of height), alpha, which
 }
 
-/** The motion for one Willo: slow rhythms plus occasional, unhurried events. */
+/** Overshoot then settle: 0 → 1 with a small bounce past 1. */
+const back = (x: number) => {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const c = 1.6;
+  return 1 + (c + 1) * (x - 1) ** 3 + c * (x - 1) ** 2;
+};
+
+/** The motion for one Willo: rhythms that never quite line up, plus acted beats. */
 class Motion {
   phase = Math.random() * 10;
   blinkAt = rnd(0.8, 3);
   blinkTwice = false;
-  glanceAt = rnd(3, 7);
+  glanceAt = rnd(2, 5);
   glanceDir = 1;
   gestureAt: number[] = [];
   tearAt = rnd(0.6, 1.6);
   tearWhich = 0;
   hopAt = -10;
+  happyAt = -10;
+  winkAt = rnd(1.2, 2.4);
+  bulbAt = rnd(0.3, 1);
   mood: Mood = "idle";
 
   constructor(limbs: number) {
-    for (let i = 0; i < limbs; i++) this.gestureAt.push(rnd(2, 6) + i * 1.7);
+    for (let i = 0; i < limbs; i++) this.gestureAt.push(rnd(1.5, 4) + i * 1.3);
   }
 
   setMood(m: Mood, t: number) {
-    if (m === "happy" && this.mood !== "happy") this.hopAt = t;
+    if (m === "happy" && this.mood !== "happy") {
+      this.happyAt = t;
+      this.hopAt = t;
+    }
     this.mood = m;
+  }
+
+  /** A hop: anticipation (crouch), lift with stretch, land with squash, settle. */
+  hop(t: number): [number, number] {
+    const h = t - this.hopAt;
+    if (h < 0 || h > 0.95) return [0, 0];
+    if (h < 0.14) return [0, -0.05 * Math.sin((Math.PI / 2) * (h / 0.14))];
+    if (h < 0.6) {
+      const x = (h - 0.14) / 0.46;
+      return [
+        0.075 * Math.sin(Math.PI * x),
+        0.045 * Math.cos(Math.PI * x) - 0.01,
+      ];
+    }
+    const x = (h - 0.6) / 0.35;
+    return [0, -0.045 * Math.sin(Math.PI * x) * (1 - x)];
   }
 
   at(t: number, rig: Rig): Pose {
     const sad = this.mood === "cry" || !!rig.tears;
     const T = t + this.phase;
-    // breathing: in and out over ~3.6 s (slower and a touch deeper when sad)
-    const bp = sad ? 4.4 : 3.6;
-    let breath =
-      (sad ? 0.012 : 0.009) * (0.5 - 0.5 * Math.cos((2 * Math.PI * T) / bp));
-    // a sniffle when sad: two small catches in the breath
+    const TAU = 2 * Math.PI;
+    // breathing (slower and deeper when sad, with a sniffle)
+    const bp = sad ? 4.2 : 3.4;
+    let breath = (sad ? 0.018 : 0.014) * (0.5 - 0.5 * Math.cos((TAU * T) / bp));
     if (sad) {
-      const s = T % 4.6;
-      breath += 0.006 * (bump(s, 2.0, 0.22) + bump(s, 2.3, 0.22));
+      const s = T % 4.4;
+      breath += 0.012 * (bump(s, 1.8, 0.2) + bump(s, 2.08, 0.2));
     }
-    // head: two slow unrelated drifts, plus a glance (a gentle tilt held, then back)
+    // hops: celebratory poses hop now and then; turning happy hops at once
+    if (rig.hop && t > this.hopAt + 1) this.hopAt = t + rnd(2.2, 4.2);
+    const [lift, hopSq] = this.hop(t);
+    const squash = hopSq;
+    // the body leans and shifts its weight
+    let lean =
+      (sad ? 0.8 : 1.6) * D * Math.sin((TAU * T) / 4.6) +
+      0.6 * D * Math.sin((TAU * T) / 2.3 + 0.4);
+    // head: drifts, glances (anticipate a little the other way, swing over, overshoot, settle)
     let head =
-      (sad ? 0.9 : 1.3) * D * Math.sin((2 * Math.PI * T) / 5.3) +
-      0.6 * D * Math.sin((2 * Math.PI * T) / 2.9 + 1.1);
-    if (t > this.glanceAt + 2.4) {
-      this.glanceAt = t + rnd(4, 9);
+      (sad ? 1.6 : 2.6) * D * Math.sin((TAU * T) / 5.3) +
+      1.1 * D * Math.sin((TAU * T) / 2.9 + 1.1);
+    if (t > this.glanceAt + 2.6) {
+      this.glanceAt = t + rnd(2.5, 5.5);
       this.glanceDir = Math.random() < 0.5 ? -1 : 1;
     }
-    const g =
-      ease((t - this.glanceAt) / 0.5) *
-      (1 - ease((t - this.glanceAt - 1.5) / 0.6));
-    head += this.glanceDir * 2.6 * D * g;
-    // the head trails the breath a little, nodding with it
+    const gt = t - this.glanceAt;
+    const glance =
+      gt < 0
+        ? 0
+        : gt < 0.12
+          ? -0.2 * Math.sin((Math.PI / 2) * (gt / 0.12))
+          : back((gt - 0.12) / 0.45) * (1 - ease((gt - 1.7) / 0.6));
+    head += this.glanceDir * 6 * D * glance;
+    lean += this.glanceDir * 1.2 * D * glance;
+    // wink: lid down fast, hold the drawn wink with a head tilt, open again
+    let wink = 0;
+    let winkLid = 0;
+    if (rig.wink) {
+      const w = t - this.winkAt;
+      if (w > 1.5) this.winkAt = t + rnd(2.5, 4.5);
+      else if (w > 0) {
+        winkLid = w < 0.09 ? w / 0.09 : w < 1.0 ? 1 : 1 - (w - 1.0) / 0.12;
+        winkLid = Math.max(0, Math.min(1, winkLid));
+        wink =
+          w < 0.08
+            ? 0
+            : w < 0.11
+              ? (w - 0.08) / 0.03
+              : w < 0.97
+                ? 1
+                : Math.max(0, 1 - (w - 0.97) / 0.06);
+        const tilt = ease(w / 0.18) * (1 - ease((w - 0.95) / 0.35));
+        head += (rig.wink[0] < 0.5 ? 1 : -1) * 4.5 * D * tilt;
+      }
+    }
     const lag =
-      (sad ? 0.012 : 0.009) *
-      (0.5 - 0.5 * Math.cos((2 * Math.PI * (T - 0.3)) / bp));
-    const headT: [number, number] = [0, (sad ? 0.003 : 0) + lag * 0.35];
-    // a small hop when he turns happy (once, no squash)
-    const lift =
-      0.035 *
-      Math.sin(Math.PI * Math.min(1, Math.max(0, (t - this.hopAt) / 0.42)));
+      (sad ? 0.018 : 0.014) * (0.5 - 0.5 * Math.cos((TAU * (T - 0.35)) / bp));
+    const headT: [number, number] = [
+      0,
+      (sad ? 0.004 : 0) + lag * 0.6 - squash * 0.25,
+    ];
 
+    const happyBurst =
+      this.mood === "happy" ? bump(t - this.happyAt, 0.15, 2.2) : 0;
     const limbs = (rig.limbs ?? []).map((l, i) => {
       const kind = l[5];
       const side = l[2] < l[0] ? -1 : 1;
-      const ph = T - 0.35 - i * 0.4;
-      if (t > (this.gestureAt[i] ?? 0) + 2) this.gestureAt[i] = t + rnd(5, 10);
+      const ph = T - 0.4 - i * 0.45; // arms trail the body
+      if (t > (this.gestureAt[i] ?? 0) + 2.2)
+        this.gestureAt[i] = t + rnd(2.5, 5.5);
       const ev = t - (this.gestureAt[i] ?? 0);
+      // arms also follow through after a hop
+      const follow = -squash * 60 * D * side;
       if (kind === "sway") {
-        // hangs with the breath, now and then shifts out a little and settles
+        const lift = ev < 0 ? 0 : back(ev / 0.4) * (1 - ease((ev - 1.1) / 0.6));
         return (
-          side * 2.2 * D * Math.sin((2 * Math.PI * ph) / bp) +
-          side * 4.5 * D * bump(ev, 0, 1.6)
+          side * 3.5 * D * Math.sin((TAU * ph) / bp) +
+          side * 11 * D * lift +
+          follow
         );
       }
       if (kind === "wave") {
-        const burst =
-          this.mood === "happy" ? bump(t - this.hopAt, 0.1, 1.8) : 0;
-        const env = Math.max(bump(ev, 0, 1.6), burst);
+        const env = Math.max(bump(ev, 0, 1.8), happyBurst);
         return (
-          side * 2 * D * Math.sin((2 * Math.PI * ph) / 1.9) +
-          side * 6 * D * env * Math.sin(2 * Math.PI * 2.2 * ev)
+          side * 4 * D * Math.sin((TAU * ph) / 1.9) +
+          side * 16 * D * env * Math.sin(TAU * 2.3 * Math.max(0, ev)) +
+          follow
         );
       }
-      if (kind === "hold") return 1.4 * D * Math.sin((2 * Math.PI * ph) / 4.2);
-      // tap: short runs of light taps
-      const run = bump(ev, 0, 1.4);
-      return 3 * D * run * Math.abs(Math.sin(2 * Math.PI * 2.6 * ev));
+      if (kind === "hold")
+        return 3.2 * D * Math.sin((TAU * ph) / 3.8) + 2 * D * bump(ev, 0, 1.2);
+      // tap: runs of quick taps
+      const run = bump(ev, 0, 1.6);
+      return 6 * D * run * Math.abs(Math.sin(TAU * 3 * ev));
     });
-
-    // scarf tail: trails the head and breath
+    // scarf tail: overlaps the head and body, flutters
     if (rig.tail)
       limbs.push(
         (rig.tail[2] < rig.tail[0] ? 1 : -1) *
-          3 *
-          D *
-          Math.sin((2 * Math.PI * (T - 0.7)) / 2.6) +
-          head * 0.5,
+          (6 * D * Math.sin((TAU * (T - 0.8)) / 2.4) +
+            2 * D * Math.sin((TAU * T) / 0.9)) +
+          head * 0.8 +
+          lean * 1.5 -
+          squash * 40 * D,
       );
 
-    // blinks: ~0.2 s, every 2.5–6 s, sometimes twice
+    // blinks: quick, every 2–5 s, sometimes twice
     let lid = 0;
     const b = t - this.blinkAt;
     if (b > 0) {
-      lid = b < 0.21 ? Math.sin((Math.PI * b) / 0.21) : 0;
-      if (b > 0.21) {
-        if (this.blinkTwice || Math.random() > 0.2) {
+      lid = b < 0.16 ? Math.sin((Math.PI * b) / 0.16) : 0;
+      if (b > 0.16) {
+        if (this.blinkTwice || Math.random() > 0.25) {
           this.blinkTwice = false;
-          this.blinkAt = t + rnd(2.5, 6);
+          this.blinkAt = t + rnd(2, 5);
         } else {
           this.blinkTwice = true;
-          this.blinkAt = t + 0.12;
+          this.blinkAt = t + 0.1;
         }
       }
     }
-    lid = Math.min(1, lid * 1.15);
-    // sad: lids a touch lower all the time
-    const rest = sad ? 0.12 : 0;
-    const L = Math.max(rest, lid);
+    lid = Math.min(1, lid * 1.2);
+    const L = Math.max(sad ? 0.12 : 0, lid);
 
-    // tears: one drop at a time, alternating eyes, rolling slowly and fading
+    // the bulb: off, fills from the base up, glows with rays, fades
+    let bulb: [number, number, number] = [0, 0, 0];
+    if (rig.bulb) {
+      const c = t - this.bulbAt;
+      if (c > 4.4) this.bulbAt = t + 0.5;
+      else if (c > 0) {
+        const fill = ease(c / 0.9);
+        const out = ease((c - 3.5) / 0.6);
+        const pulse = 0.85 + 0.15 * Math.sin(TAU * 1.6 * c);
+        bulb = [
+          fill * (1 - out),
+          back((c - 0.85) / 0.35) * (1 - out),
+          fill * pulse * (1 - out),
+        ];
+      }
+    }
+
+    // tears: one drop at a time, alternating eyes, rolling and fading
     const tears: [number, number, number][] = [];
     if (rig.tears?.length) {
-      const k = (t - this.tearAt) / 1.7;
+      const k = (t - this.tearAt) / 1.6;
       if (k > 1) {
-        this.tearAt = t + rnd(1.6, 3.2);
+        this.tearAt = t + rnd(1.2, 2.6);
         this.tearWhich = (this.tearWhich + 1) % rig.tears.length;
       } else if (k > 0) {
-        const fall = ease(k) * 0.07;
+        const fall = ease(k) * 0.08;
         const alpha = Math.min(1, k * 6) * (1 - ease((k - 0.6) / 0.4));
         tears.push([fall, alpha, this.tearWhich]);
       }
     }
-    return { breath, head, headT, lift, limbs, lids: [L, L], tears };
+    return {
+      breath,
+      squash,
+      lean,
+      head,
+      headT,
+      lift,
+      limbs,
+      lids: [L, L],
+      wink,
+      winkLid,
+      bulb,
+      tears,
+    };
   }
 }
 
-// ─── instances and the 24 fps loop ──────────────────────────────────────────
+// ─── instances and the frame loop ──────────────────────────────────────────
 interface Inst {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -346,7 +535,6 @@ interface Inst {
 }
 const insts = new Set<Inst>();
 let raf = 0;
-let lastFrame = -1;
 
 function hex(c: string): [number, number, number] {
   const n = parseInt(c.slice(1), 16);
@@ -373,8 +561,12 @@ function draw(i: Inst, now: number) {
     glCanvas!.width = W;
     glCanvas!.height = H;
   }
-  const tex = textureFor(img);
+  const url = img.currentSrc || img.src;
+  const tex = textureFor(url, img);
   if (!tex) return;
+  const altTex = rig.wink
+    ? textureFor(url.replace("-wink-open", "-wink"))
+    : null;
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
   const still = rig.still;
@@ -382,8 +574,33 @@ function draw(i: Inst, now: number) {
   g.viewport(0, 0, W, H);
   g.clearColor(0, 0, 0, 0);
   g.clear(g.COLOR_BUFFER_BIT);
+  g.activeTexture(g.TEXTURE1);
+  g.bindTexture(g.TEXTURE_2D, altTex ?? tex);
+  g.activeTexture(g.TEXTURE0);
   g.bindTexture(g.TEXTURE_2D, tex);
   g.uniform1i(u("uTex"), 0);
+  g.uniform1i(u("uAlt"), 1);
+  g.uniform1f(u("uSquash"), still ? 0 : pose.squash);
+  g.uniform1f(u("uLean"), still || !rig.n ? 0 : pose.lean);
+  const wk = rig.wink;
+  g.uniform4f(
+    u("uWink"),
+    (wk?.[0] ?? 0) * iw,
+    (wk?.[1] ?? 0) * ih,
+    (wk?.[2] ?? 1) * iw,
+    (wk?.[3] ?? 1) * ih,
+  );
+  g.uniform1f(u("uWinkK"), altTex ? pose.wink : 0);
+  const bu = rig.bulb;
+  g.uniform4f(
+    u("uBulb"),
+    (bu?.[0] ?? 0) * iw,
+    (bu?.[1] ?? 0) * ih,
+    (bu?.[2] ?? 0) * iw,
+    pose.bulb[0],
+  );
+  g.uniform1f(u("uRays"), bu ? pose.bulb[1] : 1);
+  g.uniform1f(u("uGlow"), pose.bulb[2]);
   g.uniform2f(u("uImg"), iw, ih);
   g.uniform1f(u("uPad"), PAD);
   g.uniform1f(u("uPx"), iw / (W / (1 + 2 * PAD)));
@@ -414,10 +631,23 @@ function draw(i: Inst, now: number) {
   const E = new Float32Array(8);
   const F = new Float32Array(6);
   const lids = new Float32Array(2);
+  // the eye nearest the wink spot closes for the wink
+  const wi = wk
+    ? eyes
+        .slice(0, 2)
+        .reduce(
+          (best, e, k, a) =>
+            Math.hypot(e.x - wk[0], e.y - wk[1]) <
+            Math.hypot(a[best]!.x - wk[0], a[best]!.y - wk[1])
+              ? k
+              : best,
+          0,
+        )
+    : -1;
   eyes.slice(0, 2).forEach((e, k) => {
     E.set([e.x * iw, e.y * ih, e.rx * iw, e.ry * ih], k * 4);
     F.set(hex(e.fur), k * 3);
-    lids[k] = pose.lids[k] ?? 0;
+    lids[k] = Math.max(pose.lids[k] ?? 0, k === wi ? pose.winkLid : 0);
   });
   g.uniform4fv(u("uEye"), E);
   g.uniform3fv(u("uFur"), F);
@@ -439,13 +669,7 @@ function draw(i: Inst, now: number) {
 }
 
 function loop(now: number) {
-  const frame = Math.floor(now / (1000 / FPS));
-  if (frame !== lastFrame && !document.hidden) {
-    lastFrame = frame;
-    // time is held on whole frames, like stop-motion
-    const held = frame * (1000 / FPS);
-    for (const i of insts) draw(i, held);
-  }
+  if (!document.hidden) for (const i of insts) draw(i, now);
   raf = insts.size ? requestAnimationFrame(loop) : 0;
 }
 

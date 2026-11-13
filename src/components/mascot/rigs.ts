@@ -14,6 +14,7 @@
  *              "tap"  a paw on keys: small taps in short runs
  *  tail  the scarf tail: [knot x, y, end x, y, radius]
  *  tears drawn tears a fresh drop can roll from: [x, y]
+ *  wink, bulb, hop: see below
  */
 export type LimbKind = "sway" | "wave" | "hold" | "tap";
 export type Limb = [number, number, number, number, number, LimbKind];
@@ -27,6 +28,12 @@ export interface Rig {
   limbs?: Limb[];
   tail?: [number, number, number, number, number];
   tears?: [number, number][];
+  /** wink poses: the winking eye [x, y, rx, ry]; the base art is the -open copy */
+  wink?: [number, number, number, number];
+  /** the idea bulb's glass [x, y, r] */
+  bulb?: [number, number, number];
+  /** celebratory poses hop now and then */
+  hop?: boolean;
 }
 
 const bust = (c: [number, number], n: [number, number], R: number): Rig => ({
@@ -206,6 +213,34 @@ export const RIGS: Record<string, Rig> = {
     foot: 0.98,
   },
 };
+
+// Wink poses: the base art is the open-eyed copy (scripts/willo-open-eyes.py); it
+// winks into the drawn wink. Celebratory poses hop; the idea bulb lights up.
+const WINKS: Record<string, [number, number, number, number]> = {
+  "/mascot/deer-wink": [0.371, 0.452, 0.066, 0.067],
+  "/mascot/formats/sticker-wink": [0.385, 0.487, 0.061, 0.074],
+  "/mascot/formats/avatar-wink": [0.454, 0.786, 0.067, 0.061],
+  "/mascot/formats/behind-wink": [0.439, 0.606, 0.089, 0.099],
+  "/mascot/formats/icon-wink": [0.45, 0.697, 0.071, 0.083],
+};
+for (const [k, w] of Object.entries(WINKS))
+  RIGS[k + "-open"] = { ...RIGS[k], wink: w };
+for (const k of [
+  "/mascot/deer-cheer",
+  "/mascot/deer-jump",
+  "/mascot/deer-trophy",
+  "/mascot/formats/sticker-cheer",
+])
+  RIGS[k] = { ...RIGS[k], hop: true };
+RIGS["/mascot/deer-idea"] = {
+  ...RIGS["/mascot/deer-idea"],
+  bulb: [0.83, 0.165, 0.08],
+};
+
+/** The open-eyed base for a wink image (wink poses animate from open eyes). */
+export function openSrc(src: string): string {
+  return src.replace(/-wink(-sm|-hd)?\.(png|webp)/g, "-wink-open$1.$2");
+}
 
 /** The rig key for an image URL or path. */
 export function rigKey(src: string): string {
