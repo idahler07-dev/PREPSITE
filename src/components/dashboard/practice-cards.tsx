@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { LiveWillo } from "@/components/mascot/live-willo";
 
 type CardKey = "bank" | "mocks" | "review" | "vocab" | "plan" | "progress";
 const CARDS: { key: CardKey; href: string; pose: string; tint: string }[] = [
@@ -37,12 +38,8 @@ export async function PracticeCards({ due }: { due: number }) {
                   aria-hidden
                   className="absolute start-1/2 top-[62%] size-[130px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface/55"
                 />
-                {/* eslint-disable-next-line @next/next/no-img-element -- static mascot art */}
-                <img
+                <LiveWillo
                   src={`/mascot/deer-${c.pose}-sm.webp`}
-                  alt=""
-                  width={128}
-                  height={128}
                   className="absolute start-1/2 -bottom-6 w-[128px] -translate-x-1/2 transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
                 />
               </div>

@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-no-literals, @next/next/no-img-element -- generated from the approved design file (scripts/port-reference-landing.py); copy and values are kept exactly as designed */
 import { Fragment, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { LiveWillo } from "@/components/mascot/live-willo";
 
 const CSS =
   ".ref-lp,.ref-lp *,.ref-lp *::before,.ref-lp *::after{all:revert-layer}.ref-lp{display:block;line-height:normal;background:#fff}.ref-lp svg,.ref-lp img,.ref-lp video{display:inline;vertical-align:baseline;max-width:none;height:revert-layer}.ref-lp :is(h1,h2,h3,h4,h5,h6){font-family:inherit;font-weight:bold;letter-spacing:normal;word-spacing:normal;text-wrap:wrap}.ref-lp *{border-color:currentColor;font-variant-numeric:normal;text-wrap:wrap;hyphens:manual}\n\n.ref-lp a{color:#3A3A3C;text-decoration:none}.ref-lp a:hover{color:#0B0B0C}\n.btn-o{transition:transform .15s ease, box-shadow .15s ease}\n.btn-o:hover{color:#fff;transform:translateY(-1px)}\n.btn-w:hover{color:#0B0B0C;border-color:#C9C4BA}\n.faq-q:hover{background:#FCFBF8}\n.choice:hover{border-color:#C9C4BA}\n.feat{transition:transform .18s ease}\n.feat:hover{transform:translateY(-3px)}\n.dots{background-image:radial-gradient(#E3DED4 1.2px, transparent 1.2px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 40%, #000 30%, transparent 75%);mask-image:radial-gradient(ellipse 60% 70% at 50% 40%, #000 30%, transparent 75%)}\n@media (max-width: 1180px){.floaty{display:none}}\n@media (prefers-reduced-motion: no-preference){.bob{animation:bob 5s ease-in-out infinite}.bob2{animation:bob 6s ease-in-out -2s infinite}}\n@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -8px}}\n@keyframes rot{0%,18%{transform:translateY(0)}25%,43%{transform:translateY(-1.08em)}50%,68%{transform:translateY(-2.16em)}75%,93%{transform:translateY(-3.24em)}100%{transform:translateY(-4.32em)}}\n@keyframes marquee{to{transform:translateX(calc(-50% - 20px))}}\n@media (prefers-reduced-motion: no-preference){.rot-track{animation:rot 11s cubic-bezier(.76,0,.24,1) infinite}.marquee-track{animation:marquee 80s linear infinite}}\n.marquee:hover .marquee-track{animation-play-state:paused}\n";
@@ -139,6 +140,8 @@ export function ReferenceLanding({
     };
   });
   const hasPick = !!picked;
+  const tryMood =
+    picked === null ? "idle" : picked === CORRECT ? "happy" : "cry";
   const reset = () => setPicked(null);
   const faqs = FAQ.map(([q, a], idx) => {
     const open = openFaq === idx;
@@ -2599,9 +2602,10 @@ export function ReferenceLanding({
                   display: "inline-block",
                 }}
               >
-                <img
-                  alt=""
+                <LiveWillo
                   src="/mascot/formats/avatar-wink.png"
+                  alt=""
+                  mood="idle"
                   style={{
                     position: "absolute",
                     left: "0",
@@ -4276,9 +4280,10 @@ export function ReferenceLanding({
               margin: "120px auto 0",
             }}
           >
-            <img
-              alt="Willo"
+            <LiveWillo
               src="/mascot/formats/behind-wink.png"
+              alt="Willo"
+              mood="idle"
               style={{
                 position: "absolute",
                 right: "96px",
@@ -5060,9 +5065,10 @@ export function ReferenceLanding({
                             display: "inline-block",
                           }}
                         >
-                          <img
-                            alt=""
+                          <LiveWillo
                             src="/mascot/formats/avatar-wink.png"
+                            alt=""
+                            mood="idle"
                             style={{
                               position: "absolute",
                               left: "0",
@@ -5268,9 +5274,10 @@ export function ReferenceLanding({
                   Tomorrow&apos;s plan brings it back
                 </div>
               </div>
-              <img
-                alt="Willo"
+              <LiveWillo
                 src="/mascot/formats/sticker-stand.png"
+                alt="Willo"
+                mood={tryMood}
                 style={{
                   marginTop: "28px",
                   width: "210px",
@@ -5428,9 +5435,10 @@ export function ReferenceLanding({
                           display: "inline-block",
                         }}
                       >
-                        <img
-                          alt=""
+                        <LiveWillo
                           src="/mascot/formats/avatar-wink.png"
+                          alt=""
+                          mood={tryMood}
                           style={{
                             position: "absolute",
                             left: "0",
@@ -6571,9 +6579,10 @@ export function ReferenceLanding({
                     display: "inline-block",
                   }}
                 >
-                  <img
-                    alt=""
+                  <LiveWillo
                     src="/mascot/formats/avatar-wink.png"
+                    alt=""
+                    mood="idle"
                     style={{
                       position: "absolute",
                       left: "0",
@@ -7619,9 +7628,10 @@ export function ReferenceLanding({
                   "drop-shadow(0 18px 24px rgba(122,74,35,0.22)) drop-shadow(0 2px 3px rgba(0,0,0,0.12))",
               }}
             >
-              <img
-                alt="Willo, the WilloPrep deer mascot"
+              <LiveWillo
                 src="/mascot/formats/sticker-cheer.png"
+                alt="Willo, the WilloPrep deer mascot"
+                mood="happy"
                 style={{ width: "300px", display: "block" }}
               />
             </div>

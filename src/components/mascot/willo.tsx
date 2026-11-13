@@ -59,10 +59,14 @@ let last = 0;
 const pointer = { x: 0, y: 0, t: -1e9 };
 let listening = false;
 
+/** Willo moves at 24 frames a second, like stop-motion paper animation (not the screen's 60+). */
+const FRAME = 1 / 24;
 function loop(now: number) {
-  const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
-  last = now;
-  if (!document.hidden) for (const i of insts) if (i.visible) i.tick(dt);
+  const dt = Math.min(0.1, (now - last) / 1000 || FRAME);
+  if (dt >= FRAME) {
+    last = now;
+    if (!document.hidden) for (const i of insts) if (i.visible) i.tick(dt);
+  }
   raf = insts.size ? requestAnimationFrame(loop) : 0;
 }
 function addInst(i: Inst) {

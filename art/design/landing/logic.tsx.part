@@ -47,6 +47,7 @@ export function ReferenceLanding({ nextLabel, daysLeft, regBy }: { nextLabel: st
     return { letter: c.letter, text: c.text, boxStyle, letterStyle, tag, tagColor, pressed: isPicked, pick: () => setPicked(c.letter) };
   });
   const hasPick = !!picked;
+  const tryMood = picked === null ? "idle" : picked === CORRECT ? "happy" : "cry";
   const reset = () => setPicked(null);
   const faqs = FAQ.map(([q, a], idx) => {
     const open = openFaq === idx;

@@ -136,6 +136,13 @@ class Conv(HTMLParser):
             self.stack.append("a")
             self.out.append(("<a", attrs))
             return
+        if tag == "img" and (d.get("src") or "").startswith(("assets/", "/mascot/")):
+            src = d["src"].replace("assets/", "/mascot/formats/")
+            mood = '{tryMood}' if ("sticker-stand" in src or "sc-if" in self.stack) else ('"happy"' if "sticker-cheer" in src else '"idle"')
+            st = d.get("style", "")
+            alt = json.dumps(d.get("alt", ""))
+            self.out.append(f"<LiveWillo src={json.dumps(src)} alt={alt} mood={mood} style={style_obj(st)} />")
+            return
         if tag == "button" and "type" not in d:
             attrs = [("type", "button")] + list(attrs)
         a = " ".join(self.attrs_jsx(tag, attrs))
@@ -208,7 +215,7 @@ assert not c.stack, c.stack
 tsx = (
     '"use client";\n\n'
     "/* eslint-disable react/jsx-no-literals, @next/next/no-img-element -- generated from the approved design file (scripts/port-reference-landing.py); copy and values are kept exactly as designed */\n"
-    'import { Fragment, useState } from "react";\nimport { Link } from "@/i18n/navigation";\n\n'
+    'import { Fragment, useState } from "react";\nimport { Link } from "@/i18n/navigation";\nimport { LiveWillo } from "@/components/mascot/live-willo";\n\n'
     "const CSS = " + json.dumps(css) + ";\n\n"
     "function camel(p: string) {\n  return p.startsWith(\"-webkit-\") ? \"Webkit\" + p.slice(8).replace(/-([a-z])/g, (_, c: string) => c.toUpperCase()).replace(/^./, (c) => c.toUpperCase()) : p.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());\n}\n"
     "/** Style strings computed at runtime (quiz states, FAQ rows) to React style objects. */\n"

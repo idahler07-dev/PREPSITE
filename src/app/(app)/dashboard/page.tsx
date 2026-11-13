@@ -29,6 +29,7 @@ import {
   ScoreChart,
   type ScorePoint,
 } from "@/components/dashboard/score-chart";
+import { LiveWillo } from "@/components/mascot/live-willo";
 import { PracticeCards } from "@/components/dashboard/practice-cards";
 import { StreakFlames } from "@/components/dashboard/streak-flames";
 import { cn } from "@/lib/utils";
@@ -290,12 +291,8 @@ export default async function DashboardPage({
           className={cn(card, "flex flex-wrap items-center gap-8 p-7 sm:p-10")}
           aria-labelledby="new-title"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- static mascot art */}
-          <img
+          <LiveWillo
             src="/mascot/deer-stand-sm.webp"
-            alt=""
-            width={180}
-            height={211}
             className="w-[150px] shrink-0 max-sm:hidden"
           />
           <div className="max-w-[34rem]">
@@ -435,12 +432,8 @@ export default async function DashboardPage({
         aria-labelledby="focus-note"
       >
         <div className="relative size-16 shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element -- static avatar */}
-          <img
+          <LiveWillo
             src="/mascot/formats/avatar-wink.png"
-            alt=""
-            width={64}
-            height={83}
             className="absolute start-0 bottom-0 w-16"
           />
         </div>
@@ -490,12 +483,8 @@ export default async function DashboardPage({
           </div>
           {tasks.length === 0 ? (
             <div className={cn(card, "mt-3.5 flex items-center gap-5 p-6")}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- static mascot art */}
-              <img
+              <LiveWillo
                 src="/mascot/deer-sleep-sm.webp"
-                alt=""
-                width={120}
-                height={90}
                 className="w-28 shrink-0"
               />
               <div>

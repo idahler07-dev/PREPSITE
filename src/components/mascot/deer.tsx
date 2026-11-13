@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { LiveWillo, type WilloMood } from "./live-willo";
 
 /**
  * Willo, the WilloPrep deer. Illustrated poses in /public/mascot
@@ -31,29 +32,29 @@ export function Deer({
   label,
   float = false,
   priority = false,
+  mood = "idle",
 }: {
   pose?: DeerPose;
   className?: string;
   label?: string;
   float?: boolean;
   priority?: boolean;
+  /** idle (breathe and blink), happy (hop and sparkles) or cry (tears). */
+  mood?: WilloMood;
 }) {
   const [w, h] = DEER_POSES[pose];
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- small static WebP with srcset; next/image adds nothing here
-    <img
+    <LiveWillo
       src={`/mascot/deer-${pose}.webp`}
       srcSet={`/mascot/deer-${pose}-sm.webp 360w, /mascot/deer-${pose}.webp 720w, /mascot/deer-${pose}-hd.webp 1080w`}
       sizes="(max-width: 640px) 50vw, 240px"
       width={w}
       height={h}
       alt={label ?? ""}
-      aria-hidden={label ? undefined : true}
       loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      draggable={false}
+      mood={mood}
       className={cn(
-        "inline-block h-auto w-24 shrink-0 select-none",
+        "w-24 shrink-0 select-none",
         float && "deer-float",
         className,
       )}
