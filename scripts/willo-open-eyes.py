@@ -73,7 +73,7 @@ def open_eye(path):
     bx0, by0 = int(ex - rx * 1.15), int(ey - ry * 1.15)
     bx1, by1 = int(ex + rx * 1.15), int(ey + ry * 1.15)
     patch = Image.fromarray(a[by0:by1, bx0:bx1].astype(np.uint8), "RGBA").transpose(Image.FLIP_LEFT_RIGHT)
-    s = arc["w"] * 1.02 / (2 * rx)
+    s = 1.08  # the same eye, a touch larger as the nearer one (as in the two-eyed poses)
     pw, ph = round(patch.width * s), round(patch.height * s)
     patch = patch.resize((pw, ph), Image.LANCZOS)
     mask = Image.new("L", (pw * 4, ph * 4), 0)

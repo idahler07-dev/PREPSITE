@@ -68,7 +68,7 @@ export const RIGS: Record<string, Rig> = {
     foot: 0.94,
     limbs: [[0.66, 0.75, 0.78, 0.7, 0.08, "wave"]],
     tail: [0.25, 0.72, 0.08, 0.75, 0.1],
-    wink: [0.382, 0.548, 0.0625, 0.0846],
+    wink: [0.382, 0.548, 0.0739, 0.1],
   },
   "/mascot/formats/sticker-sad": {
     n: [0.5, 0.68],
@@ -84,7 +84,7 @@ export const RIGS: Record<string, Rig> = {
   "/mascot/formats/avatar-stand": bust([0.42, 0.78], [0.42, 0.9], 0.28),
   "/mascot/formats/avatar-wink-open": {
     ...bust([0.4, 0.78], [0.42, 0.9], 0.28),
-    wink: [0.388, 0.788, 0.0667, 0.0611],
+    wink: [0.388, 0.788, 0.0809, 0.074],
   },
   "/mascot/formats/avatar-think": bust([0.45, 0.8], [0.45, 0.92], 0.26),
   "/mascot/formats/behind-stand": { n: [0.5, 0.78], band: 0.04, foot: 1 },
@@ -92,7 +92,7 @@ export const RIGS: Record<string, Rig> = {
     n: [0.5, 0.78],
     band: 0.04,
     foot: 1,
-    wink: [0.359, 0.611, 0.072, 0.0994],
+    wink: [0.359, 0.611, 0.0866, 0.1196],
   },
   "/mascot/formats/peek-stand": { n: [0.5, 0.78], band: 0.03, foot: 1 },
   "/mascot/formats/peek-idea": { n: [0.48, 0.76], band: 0.03, foot: 1 },
@@ -118,7 +118,7 @@ export const RIGS: Record<string, Rig> = {
       [0.34, 0.66, 0.35, 0.76, 0.07, "sway"],
     ],
     tail: [0.28, 0.6, 0.04, 0.64, 0.1],
-    wink: [0.361, 0.4415, 0.0708, 0.0705],
+    wink: [0.361, 0.4415, 0.0854, 0.085],
   },
   "/mascot/deer-cheer": {
     n: [0.5, 0.55],
