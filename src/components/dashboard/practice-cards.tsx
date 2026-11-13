@@ -36,16 +36,16 @@ export async function PracticeCards({ due }: { due: number }) {
               className="group block h-full rounded-2xl border bg-surface p-2.5 shadow-[var(--elev-sm)] transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <div
-                className="relative h-[150px] overflow-hidden rounded-xl"
+                className="relative h-[168px] overflow-hidden rounded-xl"
                 style={{ background: `var(${c.tint})` }}
               >
                 <div
                   aria-hidden
-                  className="absolute start-1/2 top-1/2 size-[118px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface/50"
+                  className="absolute start-1/2 top-1/2 size-[132px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface/50"
                 />
                 <Spot
                   name={c.spot}
-                  className="absolute start-1/2 top-1/2 w-[150px] -translate-x-1/2 -translate-y-1/2"
+                  className="absolute start-1/2 top-1/2 w-[178px] -translate-x-1/2 -translate-y-1/2"
                 />
               </div>
               <div className="px-1.5 pt-3 pb-1.5">

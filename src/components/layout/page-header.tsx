@@ -38,7 +38,7 @@ export function PageHeader({
   if (art)
     return (
       <header
-        className="group relative mb-8 grid items-center gap-4 overflow-hidden rounded-[24px] px-6 py-6 sm:grid-cols-[minmax(0,1fr)_200px] sm:px-8 sm:py-7"
+        className="group relative mb-8 grid items-center gap-4 overflow-hidden rounded-[24px] px-6 py-6 sm:grid-cols-[minmax(0,1fr)_240px] lg:grid-cols-[minmax(0,1fr)_280px] sm:px-8 sm:py-7"
         style={{ background: `var(${ART_TINT[art]})` }}
       >
         <div className="min-w-0 space-y-2">
@@ -60,8 +60,8 @@ export function PageHeader({
           )}
         </div>
         <div className="relative hidden sm:block" aria-hidden>
-          <div className="absolute inset-x-6 top-1/2 aspect-square -translate-y-1/2 rounded-full bg-surface/55" />
-          <Spot name={art} className="relative" />
+          <div className="absolute inset-x-8 top-1/2 aspect-square -translate-y-1/2 rounded-full bg-surface/55" />
+          <Spot name={art} className="relative -my-4 scale-110" />
         </div>
       </header>
     );
