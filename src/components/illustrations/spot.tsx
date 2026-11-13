@@ -889,7 +889,7 @@ const SPOTS: Record<SpotName, ReactNode> = {
     </>
   ),
 
-  /* Goal: a target standing on the ground, an arrow in the bullseye (feathers at the back) */
+  /* Goal: a target standing on the ground */
   target: (
     <>
       <Ground rx={44} />
@@ -905,7 +905,7 @@ const SPOTS: Record<SpotName, ReactNode> = {
         <circle cx={74} cy={64} r={38} fill={P.paper} />
         <circle cx={74} cy={64} r={29} fill={P.orange} />
         <circle cx={74} cy={64} r={20} fill={P.paper} />
-        <circle cx={74} cy={64} r={11} fill={P.teal} />
+        <circle className="sp-pop" cx={74} cy={64} r={11} fill={P.teal} />
         <path
           d="M45 50 A32 32 0 0 1 66 30"
           fill="none"
@@ -913,20 +913,6 @@ const SPOTS: Record<SpotName, ReactNode> = {
           strokeWidth={3}
           strokeLinecap="round"
         />
-      </g>
-      <g className="sp-lift">
-        {/* shaft from the bullseye out to the upper right, feathers at its end */}
-        <path
-          d="M76 62 L124 22"
-          stroke={P.ink}
-          strokeWidth={4.2}
-          strokeLinecap="round"
-        />
-        <path d="M76 62 L84 59 L80 55 Z" fill={P.inkSide} />
-        <path d="M118 27 L114 15 L124 18 Z" fill={P.goldSide} />
-        <path d="M119 26 L131 30 L128 20 Z" fill={P.gold} />
-        <path d="M113 32 L109 20 L119 23 Z" fill={P.gold} />
-        <path d="M114 31 L126 35 L123 25 Z" fill={P.goldSide} />
       </g>
       <Spark x={28} y={24} s={0.75} c={P.teal} d={0.7} />
       <Dot x={130} y={70} c={P.orange} d={0.2} />
