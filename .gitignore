@@ -35,3 +35,6 @@ next-env.d.ts
 npm-debug.log*
 pnpm-debug.log*
 .vercel
+
+__pycache__/
+*.pyc
