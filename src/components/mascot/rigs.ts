@@ -32,8 +32,8 @@ export interface Rig {
   wink?: [number, number, number, number];
   /** the idea bulb's glass [x, y, r] */
   bulb?: [number, number, number];
-  /** props held in a hand move rigidly with it: [x, y, radius, limb index] */
-  props?: [number, number, number, number][];
+  /** props held in a hand move rigidly with it: [x, y, half-width, limb index, half-height (of height)] */
+  props?: [number, number, number, number, number?][];
   /** celebratory poses hop now and then */
   hop?: boolean;
 }
@@ -236,7 +236,7 @@ for (const k of [
   RIGS[k] = { ...RIGS[k], hop: true };
 RIGS["/mascot/deer-trophy"] = {
   ...RIGS["/mascot/deer-trophy"],
-  props: [[0.82, 0.28, 0.115, 0]],
+  props: [[0.835, 0.285, 0.18, 0, 0.14]],
 };
 RIGS["/mascot/deer-heart"] = {
   ...RIGS["/mascot/deer-heart"],

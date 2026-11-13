@@ -37,7 +37,7 @@ uniform vec2 uImg, uN, uHeadT, uHeadC, uLift;
 uniform float uPad, uBreath, uSquash, uLean, uFoot, uBand, uHead, uHeadR, uPx, uWinkK, uRays, uGlow;
 uniform vec4 uWink, uBulb;
 uniform vec4 uProp[2];
-uniform vec2 uPropP[2];
+uniform vec4 uPropP[2]; // pivot x, y, vertical radius
 uniform vec4 uL[${MAX_LIMBS}];
 uniform vec3 uLp[${MAX_LIMBS}];
 uniform vec4 uEye[2];
@@ -86,8 +86,9 @@ void main(){
   for (int i = 0; i < 2; i++) {
     vec4 P = uProp[i]; // x, y, radius, angle
     if (P.z <= 0.0) continue;
-    float w = smoothstep(P.z, P.z*0.82, length(pb - P.xy));
-    q = mix(q, uPropP[i] + rot(pb - uPropP[i], -P.w), w);
+    vec2 e = (pb - P.xy)/vec2(P.z, uPropP[i].z); // an oval that fits the prop
+    float w = smoothstep(1.0, 0.8, length(e));
+    q = mix(q, uPropP[i].xy + rot(pb - uPropP[i].xy, -P.w), w);
   }
   vec4 col = tex(q);
   // lids, drawn on the bent art so they ride with the head
@@ -435,11 +436,15 @@ class Motion {
       if (kind === "wave") {
         const env = Math.max(bump(ev, 0, 1.8), happyBurst);
         // a hand raised beside the head turns with it, so the two never pull apart
-        const withHead = rig.n && l[3] < rig.n[1] ? head * 0.7 : 0;
+        const withHead = rig.n && l[3] < rig.n[1] ? head : 0;
         return (
           withHead +
           side * 2 * D * Math.sin((TAU * ph) / 1.9) +
-          side * 4.5 * D * env * Math.sin(TAU * 2.1 * Math.max(0, ev)) +
+          side *
+            (withHead ? 3 : 4.5) *
+            D *
+            env *
+            Math.sin(TAU * 2.1 * Math.max(0, ev)) +
           follow
         );
       }
@@ -631,7 +636,7 @@ function draw(i: Inst, now: number) {
   });
   g.uniform4fv(u("uL"), L);
   const PR = new Float32Array(8);
-  const PP = new Float32Array(4);
+  const PP = new Float32Array(8);
   (rig.props ?? []).slice(0, 2).forEach((pr, k) => {
     const limb = rig.limbs?.[pr[3]];
     if (!limb) return;
@@ -644,10 +649,13 @@ function draw(i: Inst, now: number) {
       ],
       k * 4,
     );
-    PP.set([limb[0] * iw, limb[1] * ih], k * 2);
+    PP.set(
+      [limb[0] * iw, limb[1] * ih, (pr[4] ?? pr[2] * (iw / ih)) * ih, 0],
+      k * 4,
+    );
   });
   g.uniform4fv(u("uProp"), PR);
-  g.uniform2fv(u("uPropP"), PP);
+  g.uniform4fv(u("uPropP"), PP);
   g.uniform3fv(u("uLp"), P);
   const eyes = i.eyes();
   const E = new Float32Array(8);
