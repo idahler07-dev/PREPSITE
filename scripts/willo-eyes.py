@@ -52,7 +52,7 @@ def eyes(path):
     return {"w": W, "h": H, "eyes": found}
 
 
-paths = sorted(glob.glob("public/mascot/formats/*.png") + glob.glob("public/mascot/deer-*.webp"))
+paths = sorted(p for p in glob.glob("public/mascot/formats/*.png") + glob.glob("public/mascot/deer-*.webp") if "-closed" not in p)
 data = {"/" + os.path.relpath(p, "public"): eyes(p) for p in paths if "deer-icon" not in p}
 json.dump(data, open(OUT, "w"), indent=1)
 for k, v in data.items():

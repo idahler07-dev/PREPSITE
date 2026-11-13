@@ -32,7 +32,8 @@ void main(){ vUv = vec2(aPos.x*0.5+0.5, 0.5-aPos.y*0.5); gl_Position = vec4(aPos
 
 const FS = `precision highp float;
 varying vec2 vUv;
-uniform sampler2D uTex, uAlt;
+uniform sampler2D uTex, uAlt, uShut;
+uniform float uHasShut;
 uniform vec2 uImg, uN, uHeadT, uHeadC, uLift;
 uniform float uPad, uBreath, uSquash, uLean, uFoot, uBand, uHead, uHeadR, uPx, uWinkK, uRays, uGlow;
 uniform vec4 uWink, uBulb;
@@ -49,6 +50,11 @@ vec4 tex(vec2 q){
   vec2 uv = q/uImg;
   if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return vec4(0.0);
   return texture2D(uTex, uv);
+}
+vec4 shut(vec2 q){
+  vec2 uv = q/uImg;
+  if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return vec4(0.0);
+  return texture2D(uShut, uv);
 }
 vec4 alt(vec2 q){
   vec2 uv = q/uImg;
@@ -91,21 +97,17 @@ void main(){
     q = mix(q, uPropP[i].xy + rot(pb - uPropP[i].xy, -P.w), w);
   }
   vec4 col = tex(q);
-  // lids, drawn on the bent art so they ride with the head
+  // blinks: the closed-eye copy of the art (eyes painted over from the fur around
+  // them, a relaxed closed line drawn in) wipes down over each eye like a lid
   for (int i = 0; i < 2; i++) {
     float k = uLid[i];
-    if (k <= 0.001) continue;
-    vec2 v = (q - uEye[i].xy)/(uEye[i].zw*vec2(1.16, 1.14));
-    float r = length(v);
-    float aa = uPx/(uEye[i].w*1.14);
-    float inside = smoothstep(1.0 + aa, 1.0 - aa, r);
-    float edge = mix(-1.1, 0.28, k) + 0.34*k*(1.0 - v.x*v.x);
-    float cover = smoothstep(edge + aa, edge - aa, v.y)*inside;
-    vec3 fur = uFur[i]*(0.9 + 0.1*clamp((v.y + 1.0)*0.5, 0.0, 1.0));
-    col = mix(col, vec4(fur, 1.0), cover);
-    float lw = 0.09 + 0.05*k;
-    float lash = smoothstep(lw + aa, lw - aa, abs(v.y - edge))*smoothstep(1.02, 0.86, r)*step(0.02, k);
-    col = mix(col, vec4(0.227, 0.141, 0.086, 1.0), lash*inside);
+    if (k <= 0.001 || uHasShut < 0.5) continue;
+    vec2 R2 = uEye[i].zw*vec2(1.72, 1.66);
+    vec2 v = (q - uEye[i].xy)/R2;
+    float aa = 2.0*uPx/R2.y;
+    float inside = smoothstep(1.0 + aa, 1.0 - aa, length(v));
+    float cover = step(0.45, k)*inside; // the closed drawing swaps in whole, like a drawn frame
+    col = mix(col, shut(q), cover);
   }
   // wink: once the lid is down, the drawn wink takes over around that eye
   if (uWinkK > 0.001) {
@@ -372,7 +374,10 @@ class Motion {
     }
     // hops: celebratory poses hop now and then; turning happy hops at once
     if (rig.hop && t > this.hopAt + 1) this.hopAt = t + rnd(2.2, 4.2);
-    const [lift, hopSq] = this.hop(t);
+    const [hopLift, hopSq] = this.hop(t);
+    // an idle bob with the breath, Duolingo style: the whole figure, never a part
+    const lift =
+      hopLift + (sad ? 0.004 : 0.008) * (0.5 - 0.5 * Math.cos((TAU * T) / bp));
     const squash = hopSq;
     // the body leans and shifts its weight
     let lean =
@@ -392,7 +397,7 @@ class Motion {
       -0.15 * Math.sin(Math.PI * Math.min(1, Math.max(0, gt / 0.24))) +
       back((gt - 0.08) / 0.5) * (1 - ease((gt - 1.7) / 0.6));
     head += this.glanceDir * 4 * D * glance;
-    lean += this.glanceDir * 1.2 * D * glance;
+    lean += this.glanceDir * 2.2 * D * glance;
     // wink: lid down fast, hold the drawn wink with a head tilt, open again
     let wink = 0;
     let winkLid = 0;
@@ -573,6 +578,11 @@ function draw(i: Inst, now: number) {
   const url = img.currentSrc || img.src;
   const tex = textureFor(url, img);
   if (!tex) return;
+  const shutUrl = url.replace(
+    /^(.*?)(-sm|-hd)?\.(png|webp)$/,
+    "$1-closed$2.$3",
+  );
+  const shutTex = i.eyes().length ? textureFor(shutUrl) : null;
   const altTex = rig.wink
     ? textureFor(url.replace("-wink-open", "-wink"))
     : null;
@@ -583,12 +593,16 @@ function draw(i: Inst, now: number) {
   g.viewport(0, 0, W, H);
   g.clearColor(0, 0, 0, 0);
   g.clear(g.COLOR_BUFFER_BIT);
+  g.activeTexture(g.TEXTURE2);
+  g.bindTexture(g.TEXTURE_2D, shutTex ?? tex);
   g.activeTexture(g.TEXTURE1);
   g.bindTexture(g.TEXTURE_2D, altTex ?? tex);
   g.activeTexture(g.TEXTURE0);
   g.bindTexture(g.TEXTURE_2D, tex);
   g.uniform1i(u("uTex"), 0);
   g.uniform1i(u("uAlt"), 1);
+  g.uniform1i(u("uShut"), 2);
+  g.uniform1f(u("uHasShut"), shutTex ? 1 : 0);
   g.uniform1f(u("uSquash"), still ? 0 : pose.squash);
   g.uniform1f(u("uLean"), still || !rig.n ? 0 : pose.lean);
   const wk = rig.wink;
@@ -619,8 +633,9 @@ function draw(i: Inst, now: number) {
   const n = rig.n;
   g.uniform2f(u("uN"), (n?.[0] ?? 0.5) * iw, (n?.[1] ?? -1) * ih);
   g.uniform1f(u("uBand"), (rig.band ?? 0.04) * ih);
-  g.uniform1f(u("uHead"), still || !n ? 0 : pose.head);
-  g.uniform2f(u("uHeadT"), 0, still || !n ? 0 : pose.headT[1] * ih);
+  // the art never bends: the whole figure moves as one piece
+  g.uniform1f(u("uHead"), 0);
+  g.uniform2f(u("uHeadT"), 0, 0);
   g.uniform2f(u("uHeadC"), (rig.c?.[0] ?? 0) * iw, (rig.c?.[1] ?? 0) * ih);
   g.uniform1f(u("uHeadR"), (rig.R ?? 0) * iw);
   const limbs = [...(rig.limbs ?? [])];
@@ -632,7 +647,7 @@ function draw(i: Inst, now: number) {
   if (rig.tail) all.push([...rig.tail, true]);
   all.slice(0, MAX_LIMBS).forEach((l, k) => {
     L.set([l[0] * iw, l[1] * ih, l[2] * iw, l[3] * ih], k * 4);
-    P.set([l[4] * iw, still ? 0 : (pose.limbs[k] ?? 0), l[5] ? 1 : 0], k * 3);
+    P.set([0, 0, 0], k * 3);
   });
   g.uniform4fv(u("uL"), L);
   const PR = new Float32Array(8);
@@ -640,15 +655,7 @@ function draw(i: Inst, now: number) {
   (rig.props ?? []).slice(0, 2).forEach((pr, k) => {
     const limb = rig.limbs?.[pr[3]];
     if (!limb) return;
-    PR.set(
-      [
-        pr[0] * iw,
-        pr[1] * ih,
-        pr[2] * iw,
-        still ? 0 : (pose.limbs[pr[3]] ?? 0),
-      ],
-      k * 4,
-    );
+    PR.set([pr[0] * iw, pr[1] * ih, 0, 0], k * 4);
     PP.set(
       [limb[0] * iw, limb[1] * ih, (pr[4] ?? pr[2] * (iw / ih)) * ih, 0],
       k * 4,
